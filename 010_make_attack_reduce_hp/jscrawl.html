@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Training: Crawl Game</title>
+    <style>
+      * { padding: 0; margin: 0; }
+      canvas { background: #eee; display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+<canvas id="mainCanvas" width="600" height="300"></canvas>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+var boardWidth = 10;
+var boardHeight = 10;
+var cellWidth = 20;
+var cellHeight = 22;
+var fontSize = 18;
+
+var playerC = boardWidth / 2;
+var playerR = boardHeight / 2;
+var boardXOffset = 3;
+var boardYOffset = 0;
+var messageRow = boardHeight;
+var messageHeight = 2;
+var messageColumn = 0;
+var statusRow = 0;
+var statusColumn = boardWidth + 1;
+var statusWidth = 10;
+var statusHeight = 2;
+
+const motionActions = {
+  move: {
+    display: "Move",
+    execute: playerRelativeMove
+  },
+  attack: {
+    display: "Attack",
+    execute: playerRelativeAttack
+  }
+};
+
+var currentAction = motionActions.move;
+
+var canvas = document.getElementById("mainCanvas");
+var ctx = canvas.getContext("2d");
+ctx.font = fontSize + "px Courier";
+var textHeight = fontSize;
+
+document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("keyup", keyUpHandler, false);
+
+var player = { name: 'player', showAs: '@', health: 10 };
+var newt = { name: 'newt', showAs: 'n', health: 2 };
+var dirtFloor = { showAs: '.' };
+var rockWall = { showAs: '#' };
+
+function setCellOccupiedBy(c, r, occupant) {
+  gameBoard[c][r].occupiedBy = occupant;
+}
+
+var gameBoard = [];
+for(var c = 0; c < boardWidth; c++) {
+  gameBoard[c] = [];
+  for(var r = 0; r < boardHeight; r++) {
+    if(c == 0 || r == 0 || c == boardWidth - 1 || r == boardHeight - 1) {
+      gameBoard[c][r] = { occupiedBy: rockWall, onFloor: null, floorType: dirtFloor }
+    } else {
+      gameBoard[c][r] = { occupiedBy: null, onFloor: null, floorType: dirtFloor }
+    }
+  }
+}
+
+setCellOccupiedBy(playerC, playerR, player);
+setCellOccupiedBy(2, 2, newt);
+setCellOccupiedBy(7, 7, newt);
+
+function toX(c) {
+  return c * cellWidth + boardXOffset;
+}
+
+function toY(r) {
+  return r * cellHeight + boardYOffset;
+}
+
+function drawText(c, r, characterToDraw) {
+  ctx.fillText(characterToDraw, toX(c), toY(r) + textHeight);
+}
+
+function clearCell(c, r) {
+  ctx.clearRect(toX(c), toY(r), cellWidth, cellHeight);
+}
+
+function drawCell(c, r) {
+  var cell = gameBoard[c][r];
+  var characterToDraw;
+  if(cell.occupiedBy != null) {
+    characterToDraw = cell.occupiedBy.showAs;
+  } else if(cell.onFloor != null) {
+    characterToDraw = cell.onFloor[0].showAs;
+  } else {
+    characterToDraw = cell.floorType.showAs;
+  }
+
+  drawText(c, r, characterToDraw);
+}
+
+function clearBoard() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function drawBoard() {
+  for(var c = 0; c < boardWidth; c++) {
+    for(var r = 0; r < boardHeight; r++) {
+      drawCell(c, r);
+    }
+  }
+}
+
+function updateStatus() {
+  ctx.clearRect(toX(statusColumn), toY(statusRow), statusWidth * cellWidth, statusHeight * cellHeight);
+  drawText(statusColumn, statusRow, "Action: " + currentAction.display);
+  drawText(statusColumn, statusRow + 1, "HP: " + player.health);
+}
+
+function clearMessage(row = 0) {
+  ctx.clearRect(toX(messageColumn), toY(messageRow + row), canvas.width, cellHeight);
+}
+
+function clearMessages() {
+  clearMessage(0);
+  clearMessage(1);
+}
+
+function drawMessage(message, row = 0) {
+  drawText(0, messageRow + row, message);
+}
+
+function setMessage(message, row = 0) {
+  clearMessage(row);
+  drawMessage(message, row);
+}
+
+function advanceTime() {
+  clearMessages();
+}
+
+function playerAbsoluteMove(newPlayerC, newPlayerR) {
+  var targetCell = gameBoard[newPlayerC][newPlayerR]
+  if(targetCell.occupiedBy != null) {
+    setMessage("That space is already occupied.");
+    return;
+  }
+
+  setCellOccupiedBy(playerC, playerR, null);
+  setCellOccupiedBy(newPlayerC, newPlayerR, player);
+
+  refreshCell(playerC, playerR);
+  refreshCell(newPlayerC, newPlayerR);
+
+  playerC = newPlayerC;
+  playerR = newPlayerR;
+
+  advanceTime();
+}
+
+function playerRelativeMove(rx, ry) {
+  playerAbsoluteMove(playerC + rx, playerR + ry);
+}
+
+function playerAbsoluteAttack(targetC, targetR) {
+  var targetCell = gameBoard[targetC][targetR]
+  if(targetCell.occupiedBy == null) {
+    setMessage("There is nothing there to attack.");
+    return;
+  }
+
+  var target = targetCell.occupiedBy
+  if(target.health == null) {
+    setMessage("You can't attack that.");
+    return;
+  }
+
+  target.health -= 1;
+  var message = "You hit the " + target.name + " for 1 damage.";
+  if(target.health <= 0) {
+    message += " The " + target.name + " is dead."; 
+    targetCell.occupiedBy = null;
+  } else {
+    message += " New hp is " + target.health;
+    player.health -= 1;
+    setMessage(target.name + " hit you for 1 damage.", 1);
+  }
+  setMessage(message);
+
+  refreshCell(targetC, targetR);
+  updateStatus();
+}
+
+function playerRelativeAttack(rx, ry) {
+  playerAbsoluteAttack(playerC + rx, playerR + ry);
+}
+
+function keyDownHandler(e) {
+}
+
+function keyUpHandler(e) {
+  advanceTime();
+
+  if(e.key == "h" || e.key == "ArrowLeft") {
+    currentAction.execute(-1, 0);
+  }
+  else if(e.key == "l" || e.key == "ArrowRight") {
+    currentAction.execute(1, 0);
+  }
+  else if(e.key == "j" || e.key == "ArrowDown") {
+    currentAction.execute(0, 1);
+  }
+  else if(e.key == "k" || e.key == "ArrowUp") {
+    currentAction.execute(0, -1);
+  }
+  else if(e.key == "a") {
+    currentAction = motionActions.attack;
+    updateStatus();
+  }
+  else if(e.key == "m") {
+    currentAction = motionActions.move;
+    updateStatus();
+  }
+}
+
+function refreshCell(c, r) {
+  clearCell(c, r);
+  drawCell(c, r);
+}
+
+function refresh() {
+  clearBoard();
+  drawBoard();
+  updateStatus();
+}
+
+refresh();
+
+</script>
+
+</body>
+</html>

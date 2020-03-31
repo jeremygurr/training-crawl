@@ -1,0 +1,64 @@
+help page
+class based windows and screens
+pan view
+help about specific components of interface
+emotions
+seed based randomization
+break out into multiple files
+everything destructable
+food based energy
+different times for actions
+auto generated levels
+  branching
+variable size browser windows
+smarter monsters
+attributes
+more sophisticated attack
+client / server
+multiple simultaneous clients
+save / load
+spawning monsters
+light mechanics
+multi senses
+  sight
+  hearing
+  smell
+  energy
+inventory
+spawned items
+  weapons
+  armor
+  potions: doesn't require energy or intelligence. Alters the user, or can affect weapons.
+  scrolls: can cast any spell without energy as long as there's enough intelligence
+  wands: convert energy into a single spell, without needing intelligence
+  runes: alters attribute of holder permanently while carrying it, or item it's installed into
+  gems: stores or converts energy
+random drops
+consume item
+adventure paths
+  adventurer
+    
+  wanderer
+    
+  raider
+    obtain the main treasure
+  conquerer
+    take out the main boss
+  annhilator
+    destory all bad creatures in the dungeon
+  explorer
+    to explore every part of the dungeon
+  entrepreneur
+    obtain 1 million gold
+multiple species
+spells
+friendly and neutral creatures
+multiplayer observation
+  messages
+  all actioned recorded
+  snapshots of variables
+  can rewind, fast forward, search
+multiplayer in same dungeon
+  taking over another player
+  forking another player
+  playing with a separate character

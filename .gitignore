@@ -1,0 +1,51 @@
+
+# Lines that start with '#' are comments.
+# exclude patterns (uncomment them if you want to use them):
+# --------------------------------
+# When adding lines to this file, add a comment next to the exclude path detailing what it's excluding
+# mac directory index files
+.DS_Store
+# eclipse IDE file
+.classpath
+# eclispse IDE file
+.project
+# IDEA project file
+.idea
+# eclipse project file?
+.settings
+# unix swap file
+*.sw*
+# compiled python script
+*.pyc
+# compiled java class
+*.class
+# potential log files
+*.log
+*.iml
+# haskell files
+*.hi
+*.o
+.stack-work
+
+Servers
+out
+target
+
+vim/bundle
+vim/plugin
+ghci_history
+
+lemon
+*.lst
+
+.netrwhist
+
+# remove inner copies of s
+**/s
+
+.netrwhist
+
+.gradle
+build
+
+**/infobases/**

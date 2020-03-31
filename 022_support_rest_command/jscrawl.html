@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Training: Crawl Game</title>
+    <style>
+      * { padding: 0; margin: 0; }
+      canvas { background: #eee; display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+<canvas id="mainCanvas" width="1000" height="350"></canvas>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+<script>
+
+var boardWidth = 30;
+var boardHeight = 30;
+var windowWidth = 20;
+var windowHeight = 10;
+var scrollMargin = 3;
+var cellWidth = 20;
+var cellHeight = 24;
+var fontSize = 18;
+
+var boardXOffset = 3;
+var boardYOffset = 0;
+var firstMessageRow = windowHeight;
+var messageRows = 4;
+var messageColumn = 0;
+var statusRow = 0;
+var statusColumn = windowWidth + 1;
+var statusWidth = 20;
+var statusHeight = 2;
+var windowC;
+var windowR;
+
+var needsFullRefresh;
+var currentMessageRow;
+
+const motionActions = {
+  move: {
+    display: "Move",
+    execute: playerMove
+  },
+  attack: {
+    display: "Attack",
+    execute: playerAttack
+  },
+  attackOrMove: {
+    display: "Attack or Move",
+    execute: playerAttackOrMove
+  }
+};
+
+var currentAction;
+
+var canvas = document.getElementById("mainCanvas");
+var ctx = canvas.getContext("2d");
+ctx.font = fontSize + "px Courier";
+var textHeight = fontSize;
+
+document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("keyup", keyUpHandler, false);
+
+function simplePursuit(actor) {
+  var adjacent = adjacentCells(actor.pos);
+  for(var i = 0; i < adjacent.length; i++) {
+    var pos = adjacent[i];
+    var cell = getCell(pos);
+    if(cell.occupiedBy == player) {
+      executeAttack(actor, player);
+      return;
+    }
+  }
+
+  if(random(3) == 0) {
+    var pos = adjacent[random(adjacent.length)];
+    var cell = getCell(pos);
+    if(cell.occupiedBy == null) {
+      executeMove(actor, pos);
+    }
+  }
+}
+
+var player = { name: 'player', showAs: '🙂', health: 10, attack: { min: 0, max: 2 }, pos: { c: 0, r: 0 } };
+var newt = { name: 'rat', showAs: '🐭', health: 2, attack: { min:0, max: 1 }, act: simplePursuit, pos: { c: 0, r: 0 } };
+var dirtFloor = { showAs: '.' };
+var rockWall = { showAs: '🀆' };
+
+var gameBoard;
+var actors;
+
+function restart() {
+  currentAction = motionActions.attackOrMove;
+  currentMessageRow = 0;
+  needsFullRefresh = false;
+  windowC = 0;
+  windowR = 0;
+
+  gameBoard = [];
+  for(var c = 0; c < boardWidth; c++) {
+    gameBoard[c] = [];
+    for(var r = 0; r < boardHeight; r++) {
+      if(c == 0 || r == 0 || c == boardWidth - 1 || r == boardHeight - 1) {
+        gameBoard[c][r] = { occupiedBy: rockWall, onFloor: null, floorType: dirtFloor }
+      } else {
+        gameBoard[c][r] = { occupiedBy: null, onFloor: null, floorType: dirtFloor }
+      }
+    }
+  }
+
+  actors = [];
+
+  setCellOccupiedBy(5, 5, player);
+  addActor(2, 2, newt);
+  addActor(7, 7, newt);
+
+  refresh();
+}
+
+function setCellOccupiedBy(c, r, occupant) {
+  gameBoard[c][r].occupiedBy = occupant;
+  if(occupant != null) {
+    occupant.pos.c = c;
+    occupant.pos.r = r;
+  }
+}
+
+function addActor(c, r, actor) {
+  actor = _.cloneDeep(actor);
+  actors.push(actor);
+  setCellOccupiedBy(c, r, actor);
+}
+
+function random(possibilities) {
+  return Math.floor(Math.random() * possibilities);
+}
+
+function getCell(pos) {
+  return gameBoard[pos.c][pos.r];
+}
+
+function adjacentCells(subjectPos) {
+  var result = [];
+  for(var c = subjectPos.c - 1; c <= subjectPos.c + 1; c++) {
+    if(c < 0 || c > boardWidth) continue;
+    for(var r = subjectPos.r - 1; r <= subjectPos.r + 1; r++) {
+      if(r < 0 || r > boardHeight) continue;
+      if(c == subjectPos.c && r == subjectPos.r) continue;
+      result.push({ c: c, r: r });
+    }
+  }
+
+  return result;
+}
+
+function executeMove(actor, pos) {
+  setCellOccupiedBy(actor.pos.c, actor.pos.r, null);
+  refreshCell(actor.pos);
+
+  setCellOccupiedBy(pos.c, pos.r, actor);
+  refreshCell(pos);
+}
+
+function executeAttack(source, target) {
+  damage = calculateDamageFrom(source);
+  target.health -= damage;
+
+  var message;
+  if(damage > 0) {
+    message = "The " + source.name + " hit you for " + damage + " damage.";
+    updateStatus();
+  } else {
+    message = "The " + source.name + " missed you.";
+  }
+
+  addMessage(message, 1);
+  if(target.health <= 0) {
+    if(target == player) {
+      alert("You died.");
+      restart();
+    }
+  }
+}
+
+function toX(c) {
+  return c * cellWidth + boardXOffset;
+}
+
+function toY(r) {
+  return r * cellHeight + boardYOffset;
+}
+
+function drawText(c, r, characterToDraw, centerWithin = 0) {
+  var xOffset = 0 
+  if(centerWithin > 0) {
+    var textWidth = ctx.measureText(characterToDraw);
+    if(textWidth.width < centerWithin) {
+      xOffset = Math.floor((centerWithin - textWidth.width) / 2);
+    }
+  }
+  ctx.fillText(characterToDraw, toX(c) + xOffset, toY(r) + textHeight);
+}
+
+function clearCell(windowPos) {
+  ctx.clearRect(toX(windowPos.c), toY(windowPos.r), cellWidth, cellHeight);
+}
+
+function log(message) {
+  console.log(message);
+}
+
+function isBoardPosValid(boardPos) {
+  return windowC >= 0
+    && windowC < boardWidth
+    && windowR >= 0
+    && windowR < boardHeight;
+}
+
+function isWindowPosValid(windowPos) {
+  return windowPos.c >= 0 
+    && windowPos.c < windowWidth
+    && windowPos.r >= 0
+    && windowPos.r < windowHeight;
+}
+
+function boardToWindowPos(boardPos) {
+  if(!isBoardPosValid(boardPos)) {
+    throw new Error("Invalid board pos: " + boardPos);
+  }
+
+  var windowPos = { c: boardPos.c - windowC, r: boardPos.r - windowR };
+
+  return windowPos;
+}
+
+function windowToBoardPos(windowPos) {
+  if(!isWindowPosValid(windowPos)) {
+    throw new Error("Invalid window pos: " + windowPos);
+  }
+
+  var boardPos = { c: windowPos.c + windowC, r: windowPos.r + windowR };
+
+  if(!isBoardPosValid(boardPos)) {
+    throw new Error("Invalid board pos: " + boardPos);
+  }
+
+  return boardPos;
+}
+
+function drawCell(windowPos) {
+  if(windowPos.c == null || windowPos.r == null) {
+    throw new Error("Invalid windowPos: " + windowPos);
+  }
+
+  if(windowPos.c < 0
+    || windowPos.c >= windowWidth
+    || windowPos.r < 0
+    || windowPos.r >= windowHeight) {
+    throw new Error("Invalid windowPos: " + windowPos);
+  }
+
+  var boardPos = windowToBoardPos(windowPos);
+  var cell = gameBoard[boardPos.c][boardPos.r];
+  var characterToDraw;
+  if(cell.occupiedBy != null) {
+    characterToDraw = cell.occupiedBy.showAs;
+  } else if(cell.onFloor != null) {
+    characterToDraw = cell.onFloor[0].showAs;
+  } else {
+    characterToDraw = cell.floorType.showAs;
+  }
+
+  drawText(windowPos.c, windowPos.r, characterToDraw, cellWidth);
+}
+
+function clearAll() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function clearBoard() {
+  ctx.clearRect(0, 0, windowWidth * cellWidth, windowHeight * cellHeight);
+}
+
+function drawBoard() {
+  for(var c = 0; c < windowWidth; c++) {
+    for(var r = 0; r < windowHeight; r++) {
+      drawCell({c: c, r: r});
+    }
+  }
+}
+
+function updateStatus() {
+  ctx.clearRect(toX(statusColumn), toY(statusRow), statusWidth * cellWidth, statusHeight * cellHeight);
+  drawText(statusColumn, statusRow, "Action: " + currentAction.display);
+  drawText(statusColumn, statusRow + 1, "HP: " + player.health);
+}
+
+function clearMessages() {
+  currentMessageRow = 0;
+  ctx.clearRect(toX(messageColumn), toY(firstMessageRow), canvas.width, cellHeight * messageRows);
+}
+
+function drawMessage(message, row) {
+  drawText(0, firstMessageRow + row, message);
+}
+
+function addMessage(message) {
+  drawMessage(message, currentMessageRow++);
+}
+
+function advanceTime() {
+  actors.forEach(function(actor) {
+    actor.act(actor);
+  });
+}
+
+function playerMove(targetC, targetR) {
+  targetC += player.pos.c;
+  targetR += player.pos.r;
+
+  needsFullRefresh = false;
+  if(targetC < windowC + scrollMargin && windowC > 0) {
+    windowC = Math.max(0, targetC - scrollMargin);
+    needsFullRefresh = true;
+  } else if(targetR < windowR + scrollMargin && windowR > 0) {
+    windowR = Math.max(0, targetR - scrollMargin);
+    needsFullRefresh = true;
+  } else if(targetC > windowC + windowWidth - scrollMargin && windowC + windowWidth < boardWidth) {
+    windowC = Math.min(boardWidth - windowWidth, targetC + scrollMargin - windowWidth);
+    needsFullRefresh = true;
+  } else if(targetR > windowR + windowHeight - scrollMargin && windowR + windowHeight < boardHeight) {
+    windowR = Math.min(boardHeight - windowHeight, targetR + scrollMargin - windowHeight);
+    needsFullRefresh = true;
+  }
+
+  var targetCell = gameBoard[targetC][targetR]
+  if(targetCell.occupiedBy != null) {
+    addMessage("That space is already occupied.");
+    return;
+  }
+
+  setCellOccupiedBy(player.pos.c, player.pos.r, null);
+  if(!needsFullRefresh) refreshCell(player.pos);
+
+  setCellOccupiedBy(targetC, targetR, player);
+  if(!needsFullRefresh) refreshCell({c: targetC, r: targetR});
+
+  advanceTime();
+
+  if(needsFullRefresh) {
+    clearBoard();
+    drawBoard();
+  }
+}
+
+function calculateDamageFrom(attacker) {
+  var minDamage = 0;
+  var maxDamage = 0;
+  if(attacker.attack != null) {
+    minDamage = attacker.attack.min;
+    maxDamage = attacker.attack.max;
+  }
+
+  return Math.floor(Math.random() * (1 + maxDamage - minDamage)) + minDamage;
+}
+
+function playerAttack(targetC, targetR) {
+  targetC += player.pos.c;
+  targetR += player.pos.r;
+
+  var targetCell = gameBoard[targetC][targetR]
+  if(targetCell.occupiedBy == null) {
+    addMessage("There is nothing there to attack.");
+    return;
+  }
+
+  var target = targetCell.occupiedBy
+  if(target.health == null) {
+    addMessage("You can't attack that.");
+    return;
+  }
+
+  var damage = calculateDamageFrom(player);
+  target.health -= damage;
+  var message = "You hit the " + target.name + " for " + damage + " damage.";
+  if(damage > 0) {
+    message = "You hit the " + target.name + " for " + damage + " damage.";
+  } else {
+    message = "You miss the " + target.name + ".";
+  }
+
+  if(target.health <= 0) {
+    message += " The " + target.name + " is dead."; 
+    targetCell.occupiedBy = null;
+    actors = actors.filter(function(a) { return a != target; });
+  } else {
+    if(damage > 0) {
+      message += " New hp is " + target.health;
+    }
+  }
+  addMessage(message);
+
+  refreshCell({c: targetC, r: targetR});
+  updateStatus();
+
+  advanceTime();
+}
+
+function playerAttackOrMove(targetC, targetR) {
+  var targetCell = gameBoard[targetC + player.pos.c][targetR + player.pos.r]
+  if(targetCell.occupiedBy != null) {
+    playerAttack(targetC, targetR);
+  } else {
+    playerMove(targetC, targetR);
+  }
+}
+
+function keyDownHandler(e) {
+}
+
+function keyUpHandler(e) {
+  clearMessages();
+
+  if(e.key == "h" || e.key == "ArrowLeft") {
+    currentAction.execute(-1, 0);
+  }
+  else if(e.key == "l" || e.key == "ArrowRight") {
+    currentAction.execute(1, 0);
+  }
+  else if(e.key == "j" || e.key == "ArrowDown") {
+    currentAction.execute(0, 1);
+  }
+  else if(e.key == "k" || e.key == "ArrowUp") {
+    currentAction.execute(0, -1);
+  }
+  else if(e.key == "y") {
+    currentAction.execute(-1, -1);
+  }
+  else if(e.key == "u") {
+    currentAction.execute(1, -1);
+  }
+  else if(e.key == "b") {
+    currentAction.execute(-1, 1);
+  }
+  else if(e.key == "n") {
+    currentAction.execute(1, 1);
+  }
+  else if(e.key == ".") {
+    advanceTime();
+  }
+  else if(e.key == "A") {
+    currentAction = motionActions.attackOrMove;
+    updateStatus();
+  }
+  else if(e.key == "a") {
+    currentAction = motionActions.attack;
+    updateStatus();
+  }
+  else if(e.key == "m") {
+    currentAction = motionActions.move;
+    updateStatus();
+  }
+  else if(e.key == "R") {
+    if(confirm("Are you sure you want to restart this game? All progress will be lost.")) {
+      restart();
+    }
+  }
+}
+
+function refreshCell(boardPos) {
+  var windowPos = boardToWindowPos(boardPos);
+  if(!isWindowPosValid(windowPos)) {
+    return;
+  }
+  clearCell(windowPos);
+  drawCell(windowPos);
+}
+
+function refresh() {
+  clearAll();
+  drawBoard();
+  updateStatus();
+}
+
+restart();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Training: Crawl Game</title>
+    <style>
+      * { padding: 0; margin: 0; }
+      canvas { background: #eee; display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+<script>
+"use strict";
+
+const canvasProps = {
+  xOffset: 3,
+  yOffset: 0,
+  width: 1000,
+  height: 450,
+};
+
+document.write('<canvas id="mainCanvas" width="' + canvasProps.width + '" height="' + canvasProps.height + '"></canvas>');
+
+</script>
+
+<!-- provides _.cloneDeep() -->
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+
+<script>
+
+canvas = document.getElementById("mainCanvas");
+ctx = canvas.getContext("2d");
+
+class Controller {
+  constructor() {
+    this.backModel = _.cloneDeep(this.backModelTemplate);
+    this.buildLevel();
+  }
+
+  // These should never be altered. They are used to create other objects which may be altered.
+  objectTemplates = {
+    dirtFloor: { showAs: '.' },
+    rockWall: { showAs: '🀆' },
+  }
+
+  backModelTemplate = {
+    levelWidth: 30,
+    levelHeight: 30,
+    level: [],
+  }
+
+  buildLevel() {
+    const bm = this.backModel;
+    const ot = this.objectTemplates;
+
+    for(let c = 0; c < bm.levelWidth; c++) {
+      bm.level[c] = [];
+      for(let r = 0; r < bm.levelHeight; r++) {
+        if(c == 0 || r == 0 || c == bm.levelWidth - 1 || r == bm.levelHeight - 1) {
+          bm.level[c][r] = { occupiedBy: ot.rockWall, onFloor: null, levelType: ot.dirtFloor }
+        } else {
+          bm.level[c][r] = { occupiedBy: null, onFloor: null, levelType: ot.dirtFloor }
+        }
+      }
+    }
+  }
+}
+
+const controller = new Controller();
+
+</script>
+
+</body>
+</html>

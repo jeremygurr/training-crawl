@@ -94,7 +94,7 @@ let viewStructure = {
 
   window: {
     level: {
-      initialKeyMode: keyMode.main,
+      initialKeyMode: keyMode.base,
     },
 
     status: {
@@ -122,15 +122,17 @@ let keyMap = {
 
 let commandExecution = {
   moveLeft: () => {
-    controller.playerMove(-1,0)
+    controller.playerMoveRelative({c: -1, r: 0})
   },
 }
 
-class Controller {
+class TopController {
 
   constructor() {
     this.buildBackModel()
     this.buildFrontModel()
+    this.backController = new BackController(this.backModel)
+    this.frontController = new FrontController(this.frontModel)
   }
 
   buildBackModel() {
@@ -169,13 +171,26 @@ class Controller {
     }
 
     this.frontModel = [{
-      currentScreen = 
+      currentScreen: screen.main,
     }]
   }
 
+  playerMoveRelative(relPos) {
+    let playerOldPos = this.backController.getPlayerPosition()
+    let playerNewPos = sum(playerOldPos, relPos)
+
+    if(!this.backController.isFieldPosValid(playerNewPos) || this.backController.isFieldPosOccupied(playerNewPos)) {
+      this.frontController.addMessage("You can't move there. ")
+      return
+    }
+
+    this.backController.occupantMove(playerOldPos, playerNewPos)
+    this.frontController.fieldChangedAt(playerOldPos)
+    this.frontController.fieldChangedAt(playerNewPos)
+  }
 }
 
-const controller = new Controller();
+const topController = new TopController();
 
 </script>
 

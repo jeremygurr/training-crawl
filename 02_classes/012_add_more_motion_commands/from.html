@@ -71,12 +71,6 @@ const fontStyle = {
   compact: { name: "Ariel", size: 18 },
 }
 
-const keyMap = {
-  base: {
-    moveLeft: [ 'h', 'ArrowLeft' ],
-  },
-}
-
 // These should never be altered. They are used to create other objects which may be altered.
 const template = {
 
@@ -115,6 +109,13 @@ const template = {
               base: {
                 command: [
                   'moveLeft',
+                  'moveRight',
+                  'moveUp',
+                  'moveDown',
+                  'moveLeftUp',
+                  'moveLeftDown',
+                  'moveRightUp',
+                  'moveRightDown',
                 ],
               },
             },
@@ -141,9 +142,43 @@ const template = {
   },
 }
   
+const keyMap = {
+  base: {
+    moveLeft: [ 'h', 'ArrowLeft' ],
+    moveRight: [ 'l', 'ArrowRight' ],
+    moveUp: [ 'k', 'ArrowUp' ],
+    moveDown: [ 'j', 'ArrowDown' ],
+    moveLeftUp: [ 'y' ],
+    moveLeftDown: [ 'b' ],
+    moveRightUp: [ 'u' ],
+    moveRightDown: [ 'n' ],
+  },
+}
+
 const commandExecution = {
   moveLeft: () => {
     topController.playerMoveRelative(new Pair(-1, 0))
+  },
+  moveRight: () => {
+    topController.playerMoveRelative(new Pair(1, 0))
+  },
+  moveUp: () => {
+    topController.playerMoveRelative(new Pair(0, -1))
+  },
+  moveDown: () => {
+    topController.playerMoveRelative(new Pair(0, 1))
+  },
+  moveLeftUp: () => {
+    topController.playerMoveRelative(new Pair(-1, -1))
+  },
+  moveRightUp: () => {
+    topController.playerMoveRelative(new Pair(1, -1))
+  },
+  moveLeftDown: () => {
+    topController.playerMoveRelative(new Pair(-1, 1))
+  },
+  moveRightDown: () => {
+    topController.playerMoveRelative(new Pair(1, 1))
   },
 }
 
@@ -176,6 +211,7 @@ class TopController {
     }
 
     bc.occupantMove(playerOldPos, playerNewPos)
+    bc.setPlayerPosition(playerNewPos)
     fc.levelChangedAt(playerOldPos)
     fc.levelChangedAt(playerNewPos)
   }
@@ -241,6 +277,10 @@ class BackController {
 
   getPlayerPosition() {
     return this.backModel.playerPos
+  }
+
+  setPlayerPosition(cellPos) {
+    return this.backModel.playerPos = cellPos
   }
 
   isFieldPosValid(cellPos) {

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Training: Crawl Game</title>
+    <style>
+      * { padding: 0; margin: 0; }
+      canvas { background: #eee; display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+<script>
+"use strict";
+
+const canvasProps = {
+  xOffset: 3,
+  yOffset: 0,
+  width: 1000,
+  height: 450,
+};
+
+document.write('<canvas id="mainCanvas" width="' + canvasProps.width + '" height="' + canvasProps.height + '"></canvas>');
+
+</script>
+
+<!-- provides _.cloneDeep() -->
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+
+<script>
+
+canvas = document.getElementById("mainCanvas");
+ctx = canvas.getContext("2d");
+
+// constants that are used to provide primitive type checking
+let c = {
+  screen: {
+    main: 'main',
+  },
+
+  window: {
+    level: 'level',
+    status: 'status',
+    message: 'message',
+  },
+
+  keyMode: {
+    base: 'base',
+    empty: 'empty',
+  },
+
+  command: {
+    moveLeft: 'moveLeft',
+  },
+}
+
+// These should never be altered. They are used to create other objects which may be altered.
+let templates = {
+
+  objects: {
+    dirtFloor: { showAs: '.' },
+    rockWall: { showAs: '🀆' },
+  },
+
+  backModel: {
+    levelWidth: 30,
+    levelHeight: 30,
+    level: [],
+  },
+
+}
+
+// This should not be altered after setup. This is a one time setup with a permanent state.
+let viewStructure = {
+
+  initialScreen: c.screen.main,
+  screen: {
+    main: {
+      window: [
+        c.window.level,
+        c.window.status,
+        c.window.message,
+      ],
+      initialWindow: window.level,
+      cellWidth: 26,
+      cellHeight: 30,
+    },
+  },
+
+  window: {
+    level: {
+      initialKeyMode: c.keyMode.base,
+    },
+
+    status: {
+      initialKeyMode: c.keyMode.empty,
+    },
+
+    message: {
+      initialKeyMode: c.keyMode.empty,
+    },
+  },
+
+  keyMode: {
+    base: {
+      command: [
+        c.command.moveLeft,
+      ],
+    },
+  },
+
+}
+
+let keyMap = {
+  base: {
+    moveLeft: [ 'h', 'ArrowLeft' ],
+  },
+}
+
+let commandExecution = {
+  moveLeft: () => {
+    controller.playerMoveRelative({c: -1, r: 0})
+  },
+}
+
+class TopController {
+
+  constructor() {
+    this.backController = new BackController()
+    this.frontController = new FrontController()
+  }
+
+  playerMoveRelative(relPos) {
+    let bc = this.backController
+    let fc = this.frontController
+
+    let playerOldPos = bc.getPlayerPosition()
+    let playerNewPos = sum(playerOldPos, relPos)
+
+    if(!bc.isFieldPosValid(playerNewPos) || bc.isFieldPosOccupied(playerNewPos)) {
+      fc.addMessage("You can't move there. ")
+      return
+    }
+
+    bc.occupantMove(playerOldPos, playerNewPos)
+    fc.levelChangedAt(playerOldPos)
+    fc.levelChangedAt(playerNewPos)
+  }
+
+  clearMessages() {
+    this.frontController.clearMessages()
+  }
+
+  addMessage(message) {
+    this.frontController.addMessage(message)
+  }
+
+  getCurrentKeyMode() {
+    return this.frontController.getCurrentKeyMode()
+  }
+
+  update() {
+    this.frontController.update()
+  }
+
+}
+
+class BackController {
+
+  constructor(backModel) {
+    this.backModel = backModel
+    this.backModel = _.cloneDeep(templates.backModel)
+    this.buildLevel()
+  }
+
+  buildLevel() {
+    const bm = this.backModel
+    const ot = templates.objects
+
+    for(let c = 0; c < bm.levelWidth; c++) {
+      bm.level[c] = [];
+      for(let r = 0; r < bm.levelHeight; r++) {
+        if(c == 0 || r == 0 || c == bm.levelWidth - 1 || r == bm.levelHeight - 1) {
+          bm.level[c][r] = { occupiedBy: ot.rockWall, onFloor: null, levelType: ot.dirtFloor }
+        } else {
+          bm.level[c][r] = { occupiedBy: null, onFloor: null, levelType: ot.dirtFloor }
+        }
+      }
+    }
+  }
+
+  occupantMove(fromPos, toPos) {
+    let level = this.backModel.level
+    let occupant = level[fromPos.c][fromPos.r].occupiedBy
+    level[fromPos.c][fromPos.r].occupiedBy = null
+    level[toPos.c][toPos.r].occupiedBy = occupant
+  }
+
+}
+
+class FrontController {
+
+  constructor() {
+    let fm = {}
+    this.frontModel = fm
+    fm.currentScreen = viewStructure.initialScreen
+    fm.screen = {}
+
+    Object.keys(viewStructure.screen).forEach(screenName => {
+      let screenModel = {}
+      let currentScreen = viewStructure.screen[screenName]
+      const windowModel = {
+        changed: true,
+        cellsChanged: [],
+      }
+
+      screenModel.window = {}
+      currentScreen.window.forEach(windowName => {
+        let currentWindow = viewStructure.window[windowName]
+        let wm = _.cloneDeep(windowModel)
+        screenModel.window[windowName] = wm
+        windowModel.currentKeyMode = currentWindow.initialKeyMode
+      })
+
+      viewStructure.screen[screenName] = screenModel
+
+      fm.screen[this.frontModel.currentScreen] = {}
+      fm.screen[this.frontModel.currentScreen].currentWindow = currentScreen.initialWindow
+    })
+    
+    this.inController = new InController()
+    this.outController = new OutController()
+  }
+
+  levelChangedAt(pos) {
+    this.frontModel.screen.main.window.level.cellsChanged.push(pos);
+  }
+
+  addMessage(message) {
+    this.frontModel.screen.main.window.message.messages.push(message)
+  }
+
+  clearMessages() {
+    this.frontModel.screen.main.window.message.messages = []
+  }
+
+  getCurrentScreen() {
+    return this.frontModel.currentScreen
+  }
+
+  getCurrentWindow() {
+    let cs = getCurrentScreen()
+    let sm = this.frontModel.screen[cs]
+    return sm.currentWindow
+  }
+
+  getCurrentKeyMode() {
+    let cs = getCurrentScreen()
+    let sm = this.frontModel.screen[cs]
+    let wm = sm.window[cw]
+    return wm.currentKeyMode
+  }
+
+  update() {
+    this.outController.update(this.getCurrentScreen())
+  }
+}
+
+class InController {
+
+  constructor(initialKeyListener) {
+    this.currentKeyListener = null
+    this.setCurrentKeyListener(initialKeyListener)
+  }
+
+  setCurrentKeyListener(newListener) {
+    if(this.currentKeyListener != null) {
+      document.removeEventListener("keyup", currentKeyListener, false);
+    }
+
+    this.currentKeyListener = newListener;
+    document.addEventListener("keyup", this.currentKeyListener, false);
+  }
+
+  handleKey(event) {
+    controller.clearMessages()
+
+    let km = controller.getCurrentKeyMode()
+    viewStructure.keyMode[km].command.forEach(command => {
+      if(keyMap[km][command].some(x => event.key == x)) {
+        commandExecution[command]()
+      }
+    })
+
+    controller.update()
+  }
+
+}
+
+class OutController {
+
+  constructor() {
+  }
+
+
+}
+
+const topController = new TopController();
+
+</script>
+
+</body>
+</html>

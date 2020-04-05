@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Training: Crawl Game</title>
+    <style>
+      * { padding: 0; margin: 0; }
+      canvas { background: #eee; display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+<script>
+"use strict";
+
+const canvasProps = {
+  xOffset: 3,
+  yOffset: 0,
+  width: 1000,
+  height: 450,
+};
+
+document.write('<canvas id="mainCanvas" width="' + canvasProps.width + '" height="' + canvasProps.height + '"></canvas>');
+
+</script>
+
+<!-- provides _.cloneDeep() -->
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+
+<script>
+
+const canvas = document.getElementById("mainCanvas");
+const ctx = canvas.getContext("2d");
+let previousFontStyle = null
+
+// immutable
+class Pair {
+  constructor(x, y) {
+    this.x = x
+    this.y = y
+  }
+
+  add(pair) {
+    return new Pair(this.x + pair.x, this.y + pair.y)
+  }
+
+  subtract(pair) {
+    return new Pair(this.x - pair.x, this.y - pair.y)
+  }
+
+  multiply(pair) {
+    return new Pair(this.x * pair.x, this.y * pair.y)
+  }
+}
+
+const fontStyle = {
+  fixed: { name: "Courier", size: 24 },
+  compact: { name: "Ariel", size: 18 },
+}
+
+const keyMap = {
+  base: {
+    moveLeft: [ 'h', 'ArrowLeft' ],
+  },
+}
+
+// These should never be altered. They are used to create other objects which may be altered.
+const template = {
+
+  objects: {
+    dirtFloor: { showAs: '.' },
+    rockWall: { showAs: '🀆' },
+  },
+
+  backModel: {
+    levelDimensions: new Pair(30, 30),
+    level: [],
+  },
+
+  frontModel: {
+
+    initialScreen: 'main',
+    fontStyle: fontStyle.fixed,
+
+    screen: {
+      main: {
+        window: {
+
+          level: {
+            cellPos: new Pair(0, 0),
+            dimensions: new Pair(10, 10),
+            columnCount: 10,
+            rowCount: 10,
+            panCellOffset: new Pair(0, 0),
+            initialKeyMode: 'base',
+            keyMode: {
+              base: {
+                command: [
+                  'moveLeft',
+                ],
+              },
+            },
+          },
+
+          status: {
+            cellPos: new Pair(10, 0),
+            dimensions: new Pair(10, 10),
+          },
+
+          message: {
+            cellPos: new Pair(0, 10),
+            dimensions: new Pair(20, 4),
+            fontStyle: fontStyle.compact,
+          },
+        },
+
+        initialWindow: 'level',
+        cellPixelDimensions: new Pair(26, 30),
+        screenCellDimensions: new Pair(20, 14),
+      },
+    },
+
+  },
+
+  command: {
+    moveLeft: () => {
+      controller.playerMoveRelative(new Pair(-1, 0))
+    },
+  },
+}
+
+function warn(message) {
+  console.log(message)
+}
+
+function err(message) {
+  throw new Error(message)
+}
+
+class TopController {
+
+  constructor() {
+    this.backController = new BackController()
+    this.frontController = new FrontController(this.backController.backModel)
+    this.refresh()
+  }
+
+  playerMoveRelative(relPos) {
+    let bc = this.backController
+    let fc = this.frontController
+
+    let playerOldPos = bc.getPlayerPosition()
+    let playerNewPos = playerOldPos.add(relPos)
+
+    if(!bc.isFieldPosValid(playerNewPos) || bc.isFieldPosOccupied(playerNewPos)) {
+      fc.addMessage("You can't move there. ")
+      return
+    }
+
+    bc.occupantMove(playerOldPos, playerNewPos)
+    fc.levelChangedAt(playerOldPos)
+    fc.levelChangedAt(playerNewPos)
+  }
+
+  clearMessages() {
+    this.frontController.clearMessages()
+  }
+
+  addMessage(message) {
+    this.frontController.addMessage(message)
+  }
+
+  getCurrentKeyMode() {
+    return this.frontController.getCurrentKeyMode()
+  }
+
+  update() {
+    this.frontController.update()
+  }
+
+  refresh() {
+    this.frontController.refresh()
+  }
+
+}
+
+class BackController {
+
+  constructor() {
+    this.backModel = _.cloneDeep(template.backModel)
+    this.buildLevel()
+  }
+
+  buildLevel() {
+    const bm = this.backModel
+    const ot = template.objects
+
+    for(let c = 0; c < bm.levelDimensions.x; c++) {
+      bm.level[c] = [];
+      for(let r = 0; r < bm.levelDimensions.y; r++) {
+        if(c == 0 || r == 0 || c == bm.levelDimensions.x - 1 || r == bm.levelDimensions.y - 1) {
+          bm.level[c][r] = { occupiedBy: ot.rockWall, onFloor: null, floorType: ot.dirtFloor }
+        } else {
+          bm.level[c][r] = { occupiedBy: null, onFloor: null, floorType: ot.dirtFloor }
+        }
+      }
+    }
+  }
+
+  occupantMove(fromPos, toPos) {
+    let level = this.backModel.level
+    let occupant = level[fromPos.c][fromPos.r].occupiedBy
+    level[fromPos.c][fromPos.r].occupiedBy = null
+    level[toPos.c][toPos.r].occupiedBy = occupant
+  }
+
+}
+
+class FrontController {
+
+  constructor(backModel) {
+    this.backModel = backModel
+
+    let fm = _.cloneDeep(template.frontModel)
+    this.frontModel = fm
+
+    for(const [screenName, screen] of Object.entries(fm.screen)) {
+      for(const [windowName, window] of Object.entries(screen.window)) {
+        window.currentKeyMode = window.initialKeyMode
+        window.changed = true
+        window.cellsChanged = []
+        window.name = windowName
+      }
+      screen.currentWindow = screen.initialWindow
+      screen.name = screenName
+    }
+
+    fm.currentScreen = fm.initialScreen
+    
+    this.inController = new InController(this.frontModel)
+    this.outController = new OutController(this.frontModel, backModel)
+  }
+
+  levelPosToWindowPos(levelPos) {
+    const panOffset = fm.screen.main.window.level.panOffset
+    return levelPos.subtract(panOffset)
+  }
+
+  levelChangedAt(levelPos) {
+    const windowPos = levelPosToWindowPos(levelPos)
+    this.frontModel
+      .screen.main
+      .window.level
+      .cellsChanged.push(windowPos)
+  }
+
+  addMessage(message) {
+    this.frontModel
+      .screen.main
+      .window.message
+      .messages.push(message)
+  }
+
+  clearMessages() {
+    this.frontModel
+      .screen.main
+      .window.message
+      .messages = []
+  }
+
+  getCurrentKeyMode() {
+    const cs = this.frontModel.currentScreen
+    const screen = this.frontModel.screen[cs]
+    const cw = screen.currentWindow
+    const window = screen.window[cw]
+    return window.currentKeyMode
+  }
+
+  update() {
+    const cs = this.frontModel.currentScreen
+    const screen = this.frontModel.screen[cs]
+    this.outController.updateScreen(screen)
+  }
+
+  refresh() {
+    const cs = this.frontModel.currentScreen
+    const screen = this.frontModel.screen[cs]
+    this.outController.refreshScreen(screen)
+  }
+
+}
+
+class InController {
+
+  constructor(frontModel) {
+    this.frontModel = frontModel
+    document.removeEventListener("keyup", this.handleKey, false);
+    document.addEventListener("keyup", this.handleKey, false);
+  }
+
+  handleKey(event) {
+    controller.clearMessages()
+
+    const km = controller.getCurrentKeyMode()
+    viewStructure.keyMode[km].command.forEach(command => {
+      if(keyMap[km][command].some(x => event.key == x)) {
+        commandExecution[command]()
+      }
+    })
+
+    controller.update()
+  }
+
+}
+
+class OutController {
+
+  constructor(frontModel, backModel) {
+    this.frontModel = frontModel
+    this.backModel = backModel
+  }
+
+  updateScreen(screen) {
+    for(const window of Object.values(screen.window)) {
+      if(window.changed) {
+        this.updateWindow(window)
+      } else if(window.cellsChanged.length) {
+        clearWindowCells(window, window.cellsChanged)
+        drawWindowCells(window, window.cellsChanged)
+        window.cellsChanged = []
+      }
+    }
+  }
+
+  refreshScreen(screen) {
+    for(const window of Object.values(screen.window)) {
+      this.refreshWindow(screen, window)
+    }
+  }
+
+  updateWindow(screen, window) {
+    if(window.changed) {
+      this.clearWindow(screen, window)
+      this.drawWindow(screen, window)
+    } else if(window.cellsChanged.length) {
+      this.clearWindowCells(screen, window, window.cellsChanged)
+      this.drawWindowCells(screen, window, window.cellsChanged)
+    }
+
+    window.changed = false
+    window.cellsChanged = []
+  }
+
+  refreshWindow(screen, window) {
+    this.clearWindow(screen, window)
+    this.drawWindow(screen, window)
+
+    window.changed = false
+    window.cellsChanged = []
+  }
+
+  windowCellPosToScreenCellPos(screen, window, windowPos) {
+    const screenPos = windowPos.add(window.cellPos)
+    return screenPos
+  }
+
+  windowCellPosToScreenPixelPos(screen, window, windowPos) {
+    const screenCellPos = this.windowCellPosToScreenCellPos(screen, window, windowPos)
+    const screenPixelPos = screenCellPos.multiply(screen.cellPixelDimensions)
+    return screenPixelPos
+  }
+
+  windowCellPosToLevel(window, windowCellPos) {
+    return windowCellPos.add(window.panCellOffset)
+  }
+
+  clearWindow(screen, window) {
+    const screenPixelPos = this.windowCellPosToScreenPixelPos(
+      screen,
+      window,
+      window.cellPos,
+      )
+
+    ctx.clearRect(
+      screenPixelPos.x, 
+      screenPixelPos.y, 
+      window.dimensions.x * screen.cellPixelDimensions.x, 
+      window.dimensions.y * screen.cellPixelDimensions.y,
+      );
+  }
+
+  windowToWindowName(screen, window) {
+    let windowName
+
+    for(const [testName, testWindow] of Object.entries(screen.window)) {
+      if(testWindow == window) {
+        windowName = testName
+      }
+    }
+
+    return windowName
+  }
+
+  drawWindow(screen, window) {
+    const fm = this.frontModel
+
+    if(window == fm.screen.main.window.level) {
+      
+      // if(this.trackPlayer) {
+      //   adjustPan()
+      // }
+
+      for(let c = 0; c < window.dimensions.x; c++) {
+        for(let r = 0; r < window.dimensions.y; r++) {
+          this.drawWindowCells(screen, window, [new Pair(c, r)])
+        }
+      }
+    } else {
+      const windowName = this.windowToWindowName(screen, window)
+      warn("Don't know how to draw this window yet: " + windowName)
+    }
+  }
+
+  clearWindowCells(screen, window, cells) {
+    for(const cellPos of cells) {
+      const screenPixelPos = this.windowCellPosToScreenPixelPos(
+        screen,
+        window,
+        cellPos,
+        )
+
+      ctx.clearRect(
+        screenPixelPos.x, 
+        screenPixelPos.y, 
+        screen.cellPixelDimensions.x, 
+        screen.cellPixelDimensions.y,
+        )
+    }
+  }
+
+  drawWindowCells(screen, window, cells) {
+    for(const windowPos of cells) {
+      const levelPos = this.windowCellPosToLevel(window, windowPos)
+      const cell = this.backModel.level[levelPos.x][levelPos.y]
+      let characterToDraw
+
+      if(cell.occupiedBy) {
+        characterToDraw = cell.occupiedBy.showAs;
+      } else if(cell.onFloor) {
+        characterToDraw = cell.onFloor[0].showAs;
+      } else {
+        characterToDraw = cell.floorType.showAs;
+      }
+
+      this.drawText(
+        screen,
+        window,
+        windowPos, 
+        characterToDraw, 
+        screen.cellPixelDimensions.x
+      )
+    }
+  }
+
+  getFontStyle(screen, window) {
+    if(window.fontStyle) {
+      return window.fontStyle
+    }
+
+    if(screen.fontStyle) {
+      return screen.fontStyle
+    }
+
+    if(this.frontModel.fontStyle) {
+      return this.frontModel.fontStyle
+    }
+
+    return fontStyle.fixed
+  }
+
+  drawText(screen, window, windowPos, textToDraw, centerWithin = 0) {
+    let xOffset = 0 
+
+    const fontStyle = this.getFontStyle(screen, window)
+    if(previousFontStyle != fontStyle) {
+      ctx.font = fontStyle.size + "px " + fontStyle.name;
+    }
+    previousFontStyle = fontStyle
+
+    if(centerWithin > 0) {
+      let textWidth = ctx.measureText(textToDraw);
+      if(textWidth.width < centerWithin) {
+        xOffset = Math.floor((centerWithin - textWidth.width) / 2);
+      }
+    }
+
+    const screenPixelPos = this.windowCellPosToScreenPixelPos(
+      screen,
+      window,
+      windowPos
+    )
+
+    ctx.fillText(
+      textToDraw, 
+      screenPixelPos.x + xOffset, 
+      screenPixelPos.y + fontStyle.size,
+    )
+  }
+
+}
+
+const topController = new TopController()
+
+</script>
+
+</body>
+</html>

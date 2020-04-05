@@ -67,10 +67,6 @@ let templates = {
     level: [],
   },
 
-  frontModel: {
-    viewStack: [],
-  },
-
 }
 
 // This should not be altered after setup. This is a one time setup with a permanent state.
@@ -78,7 +74,7 @@ let viewStructure = {
 
   initialScreen: mainScreen,
   screen: {
-    level: {
+    main: {
       window: {
         window.level,
         window.status,
@@ -87,8 +83,6 @@ let viewStructure = {
       initialWindow: window.level,
       cellWidth: 26,
       cellHeight: 30,
-      columnCount: null,  // calculated
-      rowCount: null,     // calculated
     },
   },
 
@@ -157,7 +151,6 @@ class TopController {
   }
 
   buildFrontModel() {
-    this.frontModel = _.cloneDeep(templates.frontModel)
     let levelWindow = buildLevelWindow()
     let statusWindow = buildStatusWindow()
     let messageWindow = buildMessageWindow()
@@ -172,6 +165,24 @@ class TopController {
 
     this.frontModel = [{
       currentScreen: screen.main,
+      screen: {
+        main: {
+          window: {
+            level: {
+              changed: true,
+              cellsChanged: [],
+            },
+            status: {
+              changed: true,
+              cellsChanged: [],
+            },
+            message: {
+              changed: true,
+              cellsChanged: [],
+            },
+          },
+        },
+      },
     }]
   }
 
@@ -204,6 +215,18 @@ class BackController {
     let occupant = level[fromPos[c]][fromPos[r]].occupiedBy
     level[fromPos[c]][fromPos[r]].occupiedBy = null
     level[toPos[c]][toPos[r]].occupiedBy = occupant
+  }
+
+}
+
+class FrontController {
+
+  constructor(frontModel) {
+    this.frontModel = frontModel
+  }
+
+  levelChangedAt(pos) {
+    this.frontModel.screen.main.window.level.cellsChanged.push(pos);
   }
 
 }

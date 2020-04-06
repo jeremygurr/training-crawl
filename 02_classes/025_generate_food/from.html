@@ -148,9 +148,209 @@ const template = {
     rockWall: { showAs: '🀆' },
   },
 
-  creature: {
-    rat:  { name: 'rat',   generatorChance: 0.6, showAs: '🐭', health: 2,  attack: { min: 0, max: 1 }, act: 'simplePursuit' },
-    lion: { name: 'lion',  generatorChance: 0.3, showAs: '🦁', health: 10, attack: { min: 0, max: 4 }, act: 'simplePursuit' },
+  generated: {
+    fillRatio: 0.020,
+
+    sub: {
+
+      creature: {
+        name: 'creature',
+        chanceWeight: 100,
+        sub: {
+          rat:  { name: 'rat',   chanceWeight: 100, showAs: '🐭', health: 2,  attack: { min: 0, max: 1 }, act: 'simplePursuit' },
+          lion: { name: 'lion',  chanceWeight: 30, showAs: '🦁', health: 10, attack: { min: 0, max: 4 }, act: 'simplePursuit' },
+        }
+      },
+
+      food: {
+        name: 'food',
+        chanceWeight: 100,
+        showAs: '%',
+        sub: {
+          beef: { 
+            name: 'beef',
+            chanceWeight: 100,
+            energy: {
+              red: 20,
+            },
+          },
+          pork: { 
+            name: 'pork',
+            chanceWeight: 100,
+            energy: {
+              red: 15,
+              orange: 5,
+            },
+          },
+          fish: { 
+            name: 'fish',
+            chanceWeight: 100,
+            energy: {
+              red: 15,
+              blue: 5,
+            },
+          },
+          chicken: { 
+            name: 'chicken',
+            chanceWeight: 100,
+            energy: {
+              red: 15,
+              yellow: 5,
+            },
+          },
+          bread: { 
+            name: 'bread',
+            chanceWeight: 200,
+            energy: {
+              red: 5,
+              orange: 15,
+            },
+          },
+          rice: { 
+            chanceWeight: 200,
+            name: 'rice',
+            energy: {
+              orange: 10,
+              green: 10,
+            },
+          },
+          oats: { 
+            name: 'oats',
+            chanceWeight: 200,
+            energy: {
+              red: 5,
+              orange: 10,
+              yellow: 5,
+            },
+          },
+          cheese: { 
+            name: 'cheese',
+            chanceWeight: 50,
+            energy: {
+              yellow: 10,
+              indigo: 10,
+            },
+          },
+          milk: { 
+            name: 'milk',
+            chanceWeight: 50,
+            energy: {
+              red: 5,
+              indigo: 15,
+            },
+          },
+          apple: { 
+            name: 'apple',
+            chanceWeight: 50,
+            energy: {
+              red: 10,
+              yellow: 10,
+            },
+          },
+          banana: { 
+            name: 'banana',
+            chanceWeight: 50,
+            energy: {
+              orange: 5,
+              yellow: 15,
+            },
+          },
+          brocolli: { 
+            name: 'brocolli',
+            chanceWeight: 50,
+            energy: {
+              yellow: 5,
+              green: 15,
+            },
+          },
+          spinach: { 
+            name: 'brocolli',
+            chanceWeight: 50,
+            energy: {
+              red: 5,
+              green: 15,
+            },
+          },
+          carrot: { 
+            name: 'orange',
+            chanceWeight: 50,
+            energy: {
+              orange: 15,
+              green: 5,
+            },
+          },
+          orange: { 
+            name: 'orange',
+            chanceWeight: 50,
+            energy: {
+              orange: 15,
+              yellow: 5,
+            },
+          },
+          mango: { 
+            name: 'mango',
+            chanceWeight: 50,
+            energy: {
+              yellow: 20,
+            },
+          },
+          grapes: { 
+            name: 'grapes',
+            chanceWeight: 50,
+            energy: {
+              yellow: 5,
+              green: 10,
+              violet: 5,
+            },
+          },
+          strawberries: { 
+            name: 'strawberries',
+            chanceWeight: 50,
+            energy: {
+              red: 15,
+              yellow: 5,
+            },
+          },
+          tomato: { 
+            name: 'tomato',
+            chanceWeight: 50,
+            energy: {
+              red: 10,
+              orange: 5,
+              yellow: 5,
+            },
+          },
+          blueberries: { 
+            name: 'blueberries',
+            chanceWeight: 50,
+            energy: {
+              yellow: 5,
+              blue: 15,
+            },
+          },
+          pizza: { 
+            name: 'pizza',
+            chanceWeight: 50,
+            energy: {
+              red: 3,
+              orange: 3,
+              yellow: 3,
+              green: 3,
+              blue: 3,
+              indigo: 3,
+              violet: 2,
+            },
+          },
+          chocolate: { 
+            name: 'chocolate',
+            chanceWeight: 50,
+            energy: {
+              black: 20,
+            },
+          },
+        },
+      },
+    },
   },
 
   backModel: {
@@ -304,7 +504,7 @@ class SeededRandomizer {
   }
 }
 
-function log(message) {
+function debug(message) {
   console.log(message)
 }
 
@@ -527,7 +727,8 @@ class BackController {
 
   constructor() {
     this.backModel = _.cloneDeep(template.backModel)
-    this.buildLevel()
+    const randomizer = new SeededRandomizer(this.backModel.seed)
+    this.buildLevel(randomizer)
   }
 
   getCell(pos) {
@@ -692,7 +893,7 @@ class BackController {
       }
 
       if(removed > 0) {
-        log("Removed " + removed + " stray walls.")
+        debug("Removed " + removed + " stray walls.")
         fromMap = toMap
         iterationsLeft--
         if(iterationsLeft > 0) {
@@ -798,12 +999,11 @@ class BackController {
     return null
   }
 
-  buildLevel() {
+  buildLevel(randomizer) {
     const bm = this.backModel
 
-    const randomizer = new SeededRandomizer(bm.seed)
     this.generateLevelSimpleCaves(bm.level, bm.levelSize, randomizer)
-    this.placeCreatures(bm.level) 
+    this.placeStuffInLevel(randomizer) 
 
     const target = this.findEmptyCellCentrally(bm.level, randomizer)
     if(target == null) {
@@ -830,19 +1030,82 @@ class BackController {
     return this.backModel.actor
   }
 
-  placeCreatures(level) {
-    const randomizer = new SeededRandomizer(this.backModel.seed)
-    for(let actor of Object.values(template.creature)) {
-      while(randomizer.next() < actor.generatorChance) {
-        let pos = this.findEmptyCellCentrally(level, randomizer)
-        if(pos == null) {
-          break
+  countEmptyCells() {
+    const bm = this.backModel
+    const level = bm.level
+    let emptyCellCount = 0
+    for(let x = 0; x < level.length; x++) {
+      for(let y = 0; y < level[0].length; y++) {
+        let cell = level[x][y]
+        if(cell.occupiedBy == null) {
+          emptyCellCount++
         }
-        const newActor = _.cloneDeep(actor)
-        this.addActor(newActor, pos)
-
-        log("Placed " + actor.name)
       }
+    }
+
+    debug("Found " + emptyCellCount + "/" + (level.length * level[0].length) + " empty cells")
+    return emptyCellCount
+  }
+  
+  pickSomethingToGenerate(inheritedProperties, group, randomizer) {
+    let totalWeight = 0
+    for(const subject of Object.values(group)) {
+      let weight = subject.chanceWeight
+      if(weight == null) {
+        weight = inheritedProperties.chanceWeight
+      }
+      if(weight == null) {
+        err("Missing chanceWeight for " + subject.name)
+      }
+      totalWeight += weight
+    }
+
+    let selected = null
+    let remainingWeight = randomizer.next(totalWeight)
+    for(const subject of Object.values(group)) {
+      let weight = subject.chanceWeight
+      if(weight == null) {
+        weight = inheritedProperties.chanceWeight
+      }
+      remainingWeight -= weight
+      if(remainingWeight < 0) {
+        selected = subject
+        break
+      }
+    }
+
+    if(selected == null) {
+      err("Failed to select subject")
+    }
+
+    if(selected.sub) {
+      inheritedProperties = { ...inheritedProperties, ...selected }
+      inheritedProperties.sub = null
+
+      selected = this.pickSomethingToGenerate(inheritedProperties, selected.sub, randomizer)
+    }
+
+    let merged = { ...inheritedProperties, ...selected }
+    return merged
+  }
+
+  placeStuffInLevel(randomizer) {
+    const bm = this.backModel
+    const level = bm.level
+    const stuffCount = Math.floor(this.countEmptyCells() * template.generated.fillRatio)
+    debug("Placing " + stuffCount + " things in this level.")
+
+    for(let n = 0; n < stuffCount; n++) {
+      let subject = this.pickSomethingToGenerate({}, template.generated.sub, randomizer)
+      subject = _.cloneDeep(subject)
+      let pos = this.findEmptyCellCentrally(level, randomizer)
+      if(subject.act) {
+        this.addActor(subject, pos)
+      } else {
+        level[pos.x][pos.y].occupiedBy = subject
+        subject.pos = pos
+      }
+      debug("Placed " + subject.name)
     }
   }
 

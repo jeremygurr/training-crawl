@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Training: Crawl Game</title>
+    <style>
+      * { padding: 0; margin: 0; }
+      canvas { background: #eee; display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+<script>
+"use strict";
+
+const canvasProps = {
+  xOffset: 3,
+  yOffset: 0,
+  width: 1000,
+  height: 450,
+};
+
+document.write('<canvas id="mainCanvas" width="' + canvasProps.width + '" height="' + canvasProps.height + '"></canvas>');
+
+</script>
+
+<!-- provides _.cloneDeep() -->
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+
+<script>
+
+const canvas = document.getElementById("mainCanvas")
+const ctx = canvas.getContext("2d")
+let previousFontStyle = null
+
+// immutable
+class Pair {
+  constructor(x, y) {
+    this.x = x
+    this.y = y
+  }
+
+  add(pair) {
+    return new Pair(this.x + pair.x, this.y + pair.y)
+  }
+
+  subtract(pair) {
+    return new Pair(this.x - pair.x, this.y - pair.y)
+  }
+
+  multiply(pair) {
+    return new Pair(this.x * pair.x, this.y * pair.y)
+  }
+
+  lessThan(pair) {
+    return this.x < pair.x && this.y < pair.y
+  }
+
+  lessThanOrEqualTo(pair) {
+    return this.x <= pair.x && this.y <= pair.y
+  }
+
+  within(minPair, maxPairExclusive) {
+    return minPair.lessThanOrEqualTo(this) && this.lessThan(maxPairExclusive)
+  }
+}
+
+const fontStyle = {
+  fixed: { name: "Courier", size: 24 },
+  compact: { name: "Ariel", size: 18 },
+}
+
+// These should never be altered. They are used to create other objects which may be altered.
+const template = {
+
+  objects: {
+    dirtFloor: { showAs: '.' },
+    rockWall: { showAs: '🀆' },
+  },
+
+  creatures: {
+    player: { name: 'player', showAs: '🙂', attack: { min: 0, max: 2 } },
+  },
+
+  backModel: {
+    seed: 0,
+    levelSize: new Pair(15, 15),
+    level: [],
+    player: { 
+      name: 'player', 
+      showAs: '🙂', 
+      pos: new Pair(0,0), 
+      health: 20, 
+      attack: { min: 0, max: 2 } 
+    },
+  },
+
+  frontModel: {
+
+    currentActionMode: 'moveOrAttack',
+    initialScreen: 'main',
+    fontStyle: fontStyle.fixed,
+
+    screen: {
+      main: {
+        window: {
+
+          level: {
+            cellPos: new Pair(0, 0),
+            size: new Pair(10, 10),
+            panCellOffset: new Pair(0, 0),
+            panScrollMargin: 4,
+            initialKeyMode: 'base',
+            trackPlayer: true,
+            keyMode: {
+              base: {
+                command: [
+                  'moveLeft',
+                  'moveRight',
+                  'moveUp',
+                  'moveDown',
+                  'moveLeftUp',
+                  'moveLeftDown',
+                  'moveRightUp',
+                  'moveRightDown',
+                ],
+              },
+            },
+          },
+
+          status: {
+            cellPos: new Pair(11, 0),
+            size: new Pair(9, 10),
+          },
+
+          message: {
+            cellPos: new Pair(0, 10),
+            size: new Pair(20, 4),
+            fontStyle: fontStyle.compact,
+            messages: [],
+          },
+        },
+
+        initialWindow: 'level',
+        cellPixelDimensions: new Pair(26, 30),
+        screenCellDimensions: new Pair(20, 14),
+      },
+    },
+
+  },
+}
+  
+const keyMap = {
+  base: {
+    moveLeft: [ 'h', 'ArrowLeft' ],
+    moveRight: [ 'l', 'ArrowRight' ],
+    moveUp: [ 'k', 'ArrowUp' ],
+    moveDown: [ 'j', 'ArrowDown' ],
+    moveLeftUp: [ 'y' ],
+    moveLeftDown: [ 'b' ],
+    moveRightUp: [ 'u' ],
+    moveRightDown: [ 'n' ],
+  },
+}
+
+const commandExecution = {
+  moveLeft: () => {
+    topController.playerMoveRelative(new Pair(-1, 0))
+  },
+  moveRight: () => {
+    topController.playerMoveRelative(new Pair(1, 0))
+  },
+  moveUp: () => {
+    topController.playerMoveRelative(new Pair(0, -1))
+  },
+  moveDown: () => {
+    topController.playerMoveRelative(new Pair(0, 1))
+  },
+  moveLeftUp: () => {
+    topController.playerMoveRelative(new Pair(-1, -1))
+  },
+  moveRightUp: () => {
+    topController.playerMoveRelative(new Pair(1, -1))
+  },
+  moveLeftDown: () => {
+    topController.playerMoveRelative(new Pair(-1, 1))
+  },
+  moveRightDown: () => {
+    topController.playerMoveRelative(new Pair(1, 1))
+  },
+}
+
+function warn(message) {
+  console.log(message)
+}
+
+function err(message) {
+  throw new Error(message)
+}
+
+class TopController {
+
+  constructor() {
+    this.backController = new BackController()
+    this.frontController = new FrontController(this.backController.backModel)
+    this.refresh()
+  }
+
+  playerMoveRelative(relPos) {
+    let bc = this.backController
+    let fc = this.frontController
+
+    let playerOldPos = bc.getPlayerPosition()
+    let playerNewPos = playerOldPos.add(relPos)
+
+    if(!bc.isFieldPosValid(playerNewPos) || bc.isFieldPosOccupied(playerNewPos)) {
+      fc.addMessage("You can't move there. ")
+      return
+    }
+
+    bc.occupantMove(playerOldPos, playerNewPos)
+    bc.setPlayerPosition(playerNewPos)
+    fc.levelChangedAt(playerOldPos)
+    fc.levelChangedAt(playerNewPos)
+  }
+
+  clearMessages() {
+    this.frontController.clearMessages()
+  }
+
+  addMessage(message) {
+    this.frontController.addMessage(message)
+  }
+
+  getCurrentKeyMode() {
+    return this.frontController.getCurrentKeyMode()
+  }
+
+  update() {
+    this.frontController.update()
+  }
+
+  refresh() {
+    this.frontController.refresh()
+  }
+
+  getFrontModel() {
+    return this.frontController.frontModel
+  }
+
+}
+
+class BackController {
+
+  constructor() {
+    this.backModel = _.cloneDeep(template.backModel)
+    this.buildLevel()
+  }
+
+  generateLevelEmptyRoom(level, size, seed = 0) {
+    const ot = template.objects
+    for(let c = 0; c < size.x; c++) {
+      level[c] = []
+      for(let r = 0; r < size.y; r++) {
+        if(c == 0 || r == 0 || c == size.x - 1 || r == size.y - 1) {
+          level[c][r] = { occupiedBy: ot.rockWall, onFloor: null, floorType: ot.dirtFloor }
+        } else {
+          level[c][r] = { occupiedBy: null, onFloor: null, floorType: ot.dirtFloor }
+        }
+      }
+    }
+  }
+
+  generateLevelSimpleCaves(level, size, seed = 0) {
+  }
+
+  // returns false if it fails to find an empty place for the occupant
+  placeOccupantSomewhereSimple(level, occupant) {
+    for(let c = 0; c < level.length; c++) {
+      let column = level[c]
+      for(let r = 0; r < column.length; r++) {
+        let cell = column[r]
+        if(cell.occupiedBy == null) {
+          cell.occupiedBy = occupant
+          occupant.pos = new Pair(c, r)
+          return true
+        }
+      }
+    }
+
+    return false
+  }
+
+  buildLevel() {
+    const bm = this.backModel
+
+    this.generateLevelEmptyRoom(bm.level, bm.levelSize, bm.seed)
+
+    if(!this.placeOccupantSomewhereSimple(bm.level, bm.player)) {
+      err("Could not find an empty spot in the level to place the player.")
+    }
+  }
+
+  occupantMove(fromPos, toPos) {
+    let level = this.backModel.level
+    let occupant = level[fromPos.x][fromPos.y].occupiedBy
+    level[fromPos.x][fromPos.y].occupiedBy = null
+    level[toPos.x][toPos.y].occupiedBy = occupant
+  }
+
+  getPlayerPosition() {
+    return this.backModel.player.pos
+  }
+
+  setPlayerPosition(cellPos) {
+    return this.backModel.player.pos = cellPos
+  }
+
+  isFieldPosValid(cellPos) {
+    return cellPos.within(new Pair(0, 0), this.backModel.levelSize)
+  }
+
+  isFieldPosOccupied(cellPos) {
+    return this.backModel.level[cellPos.x][cellPos.y].occupiedBy != null
+  }
+
+}
+
+class FrontController {
+
+  constructor(backModel) {
+    this.backModel = backModel
+
+    let fm = _.cloneDeep(template.frontModel)
+    this.frontModel = fm
+
+    for(const [screenName, screen] of Object.entries(fm.screen)) {
+      for(const [windowName, window] of Object.entries(screen.window)) {
+        window.currentKeyMode = window.initialKeyMode
+        window.changed = true
+        window.cellsChanged = []
+        window.name = windowName
+      }
+      screen.currentWindow = screen.initialWindow
+      screen.name = screenName
+    }
+
+    fm.currentScreen = fm.initialScreen
+    
+    this.inController = new InController(this.frontModel)
+    this.outController = new OutController(this.frontModel, backModel)
+  }
+
+  levelPosToWindowPos(levelPos) {
+    const panOffset = this.frontModel.screen.main.window.level.panCellOffset
+    return levelPos.subtract(panOffset)
+  }
+
+  levelChangedAt(levelPos) {
+    const windowPos = this.levelPosToWindowPos(levelPos)
+    this.frontModel
+      .screen.main
+      .window.level
+      .cellsChanged.push(windowPos)
+  }
+
+  addMessage(message) {
+    const messageWindow = 
+      this.frontModel
+        .screen.main
+        .window.message
+    messageWindow.messages.push(message)
+    messageWindow.changed = true
+  }
+
+  clearMessages() {
+    const messageWindow = 
+      this.frontModel
+        .screen.main
+        .window.message
+    if(messageWindow.messages.length) {
+      messageWindow.messages = []
+      messageWindow.changed = true
+    }
+  }
+
+  getCurrentKeyMode() {
+    const cs = this.frontModel.currentScreen
+    const screen = this.frontModel.screen[cs]
+    const cw = screen.currentWindow
+    const window = screen.window[cw]
+    return window.currentKeyMode
+  }
+
+  update() {
+    const cs = this.frontModel.currentScreen
+    const screen = this.frontModel.screen[cs]
+    this.outController.updateScreen(screen)
+  }
+
+  refresh() {
+    const cs = this.frontModel.currentScreen
+    const screen = this.frontModel.screen[cs]
+    this.outController.refreshScreen(screen)
+  }
+
+}
+
+class InController {
+
+  constructor(frontModel) {
+    this.frontModel = frontModel
+    document.removeEventListener("keyup", this.handleKey, false);
+    document.addEventListener("keyup", this.handleKey, false);
+  }
+
+  handleKey(event) {
+    topController.clearMessages()
+
+    const fm = topController.getFrontModel()
+    const cs = fm.currentScreen
+    const screen = fm.screen[cs]
+    const cw = screen.currentWindow
+    const window = screen.window[cw]
+    const km = window.currentKeyMode
+
+    window.keyMode[km].command.forEach(command => {
+      if(keyMap[km][command].some(x => event.key == x)) {
+        commandExecution[command]()
+      }
+    })
+
+    topController.update()
+  }
+
+}
+
+class OutController {
+
+  constructor(frontModel, backModel) {
+    this.frontModel = frontModel
+    this.backModel = backModel
+  }
+
+  updateScreen(screen) {
+    for(const window of Object.values(screen.window)) {
+      this.updateWindow(screen, window)
+    }
+  }
+
+  refreshScreen(screen) {
+    for(const window of Object.values(screen.window)) {
+      this.refreshWindow(screen, window)
+    }
+  }
+
+  checkPan(window) {
+    if(window == this.frontModel.screen.main.window.level) {
+      if(window.trackPlayer) {
+        this.adjustLevelPan(window, this.backModel.player.pos, this.backModel.levelSize)
+      }
+    }
+  }
+
+  updateWindow(screen, window) {
+    this.checkPan(window)
+
+    if(window.changed) {
+      this.clearWindow(screen, window)
+      this.drawWindow(screen, window)
+    } else if(window.cellsChanged.length) {
+      this.clearWindowCells(screen, window, window.cellsChanged)
+      this.drawWindowCells(screen, window, window.cellsChanged)
+    }
+
+    window.changed = false
+    window.cellsChanged = []
+  }
+
+  refreshWindow(screen, window) {
+    this.checkPan(window)
+
+    this.clearWindow(screen, window)
+    this.drawWindow(screen, window)
+
+    window.changed = false
+    window.cellsChanged = []
+  }
+
+  windowCellPosToScreenCellPos(screen, window, windowPos) {
+    const screenPos = windowPos.add(window.cellPos)
+    return screenPos
+  }
+
+  windowCellPosToScreenPixelPos(screen, window, windowPos) {
+    const screenCellPos = this.windowCellPosToScreenCellPos(screen, window, windowPos)
+    const screenPixelPos = screenCellPos.multiply(screen.cellPixelDimensions)
+    return screenPixelPos
+  }
+
+  windowCellPosToLevel(window, windowCellPos) {
+    return windowCellPos.add(window.panCellOffset)
+  }
+
+  clearWindow(screen, window) {
+    const screenPixelPos = this.windowCellPosToScreenPixelPos(
+      screen,
+      window,
+      window.cellPos,
+      )
+
+    ctx.clearRect(
+      screenPixelPos.x, 
+      screenPixelPos.y, 
+      window.size.x * screen.cellPixelDimensions.x, 
+      window.size.y * screen.cellPixelDimensions.y,
+      );
+  }
+
+  windowToWindowName(screen, window) {
+    let windowName
+
+    for(const [testName, testWindow] of Object.entries(screen.window)) {
+      if(testWindow == window) {
+        windowName = testName
+      }
+    }
+
+    return windowName
+  }
+
+  adjustLevelPan(levelWindow, pos, levelSize) {
+    if(pos.x < levelWindow.panCellOffset.x + levelWindow.panScrollMargin 
+      && levelWindow.panCellOffset.x > 0
+      ) {
+      levelWindow.panCellOffset.x = Math.max(0, pos.x - levelWindow.panScrollMargin);
+      levelWindow.changed = true;
+    } 
+
+    if(pos.y < levelWindow.panCellOffset.y + levelWindow.panScrollMargin 
+      && levelWindow.panCellOffset.y > 0
+      ) {
+      levelWindow.panCellOffset.y = Math.max(0, pos.y - levelWindow.panScrollMargin);
+      levelWindow.changed = true;
+    } 
+
+    if(pos.x > levelWindow.panCellOffset.x + levelWindow.size.x - levelWindow.panScrollMargin 
+      && levelWindow.panCellOffset.x + levelWindow.size.x < levelSize.x
+      ) {
+      levelWindow.panCellOffset.x = Math.min(levelSize.x - levelWindow.size.x, pos.x + levelWindow.panScrollMargin - levelWindow.size.x);
+      levelWindow.changed = true;
+    } 
+
+    if(pos.y > levelWindow.panCellOffset.y + levelWindow.size.y - levelWindow.panScrollMargin 
+      && levelWindow.panCellOffset.y + levelWindow.size.y < levelSize.y
+      ) {
+      levelWindow.panCellOffset.y = Math.min(levelSize.y - levelWindow.size.y, pos.y + levelWindow.panScrollMargin - levelWindow.size.y);
+      levelWindow.changed = true;
+    }
+  }
+
+  actionModeToMessage(actionMode) {
+    let actionMessage = 'Unknown'
+    if(actionMode == 'moveOrAttack') {
+      actionMessage = 'Move / Attack'
+    } else if(actionMode == 'move') {
+      actionMessage = 'Move'
+    } else if(actionMode == 'attack') {
+      actionMessage = 'Attack'
+    } 
+
+    return actionMessage
+  }
+
+  drawWindow(screen, window) {
+    const fm = this.frontModel
+
+    if(window == fm.screen.main.window.level) {
+      for(let c = 0; c < window.size.x; c++) {
+        for(let r = 0; r < window.size.y; r++) {
+          this.drawWindowCells(screen, window, [new Pair(c, r)])
+        }
+      }
+    } else if(window == fm.screen.main.window.message) {
+      for(let row = 0; row < window.messages.length; row++) {
+        let message = window.messages[row]
+        this.drawText(screen, window, new Pair(0, row), message, 0, screen.cellPixelDimensions.y)
+      }
+    } else if(window == fm.screen.main.window.status) {
+      const actionMessage = this.actionModeToMessage(this.frontModel.currentActionMode)
+      this.drawText(screen, window, new Pair(0, 0), 'Action: ' + actionMessage, 0, screen.cellPixelDimensions.y)
+      this.drawText(screen, window, new Pair(0, 1), 'HP: ' + this.backModel.player.health, 0, screen.cellPixelDimensions.y)
+    } else {
+      const windowName = this.windowToWindowName(screen, window)
+      warn("Don't know how to draw this window yet: " + windowName)
+    }
+  }
+
+  windowPosIsValid(window, windowPos) {
+    return windowPos.x >= 0 
+      && windowPos.y >= 0
+      && windowPos.x < window.size.x
+      && windowPos.y < window.size.y
+  }
+
+  clearWindowCells(screen, window, cells) {
+    for(const cellPos of cells) {
+      if(this.windowPosIsValid(window, cellPos)) {
+        const screenPixelPos = this.windowCellPosToScreenPixelPos(
+          screen,
+          window,
+          cellPos,
+          )
+
+        ctx.clearRect(
+          screenPixelPos.x, 
+          screenPixelPos.y, 
+          screen.cellPixelDimensions.x, 
+          screen.cellPixelDimensions.y,
+          )
+      }
+    }
+  }
+
+  drawWindowCells(screen, window, cells) {
+    for(const windowPos of cells) {
+      if(this.windowPosIsValid(window, windowPos)) {
+        const levelPos = this.windowCellPosToLevel(window, windowPos)
+        const cell = this.backModel.level[levelPos.x][levelPos.y]
+        let characterToDraw
+
+        if(cell.occupiedBy) {
+          characterToDraw = cell.occupiedBy.showAs;
+        } else if(cell.onFloor) {
+          characterToDraw = cell.onFloor[0].showAs;
+        } else {
+          characterToDraw = cell.floorType.showAs;
+        }
+
+        this.drawText(
+          screen,
+          window,
+          windowPos, 
+          characterToDraw, 
+          screen.cellPixelDimensions.x
+        )
+      }
+    }
+  }
+
+  getFontStyle(screen, window) {
+    if(window.fontStyle) {
+      return window.fontStyle
+    }
+
+    if(screen.fontStyle) {
+      return screen.fontStyle
+    }
+
+    if(this.frontModel.fontStyle) {
+      return this.frontModel.fontStyle
+    }
+
+    return fontStyle.fixed
+  }
+
+  drawText(screen, window, windowPos, textToDraw, centerWithinX = 0, centerWithinY = 0) {
+    let xOffset = 0 
+    let yOffset = 0
+
+    const fontStyle = this.getFontStyle(screen, window)
+    if(previousFontStyle != fontStyle) {
+      ctx.font = fontStyle.size + "px " + fontStyle.name;
+    }
+    previousFontStyle = fontStyle
+
+    const textSize = ctx.measureText(textToDraw);
+    if(centerWithinX > 0 && textSize.width < centerWithinX) {
+      xOffset = Math.floor((centerWithinX - textSize.width) / 2)
+    }
+    // const textHeight = textSize.actualBoundingBoxAscent // + textSize.actualBoundingBoxDescent
+    const textHeight = fontStyle.size
+    if(centerWithinY > 0 && textHeight < centerWithinY) {
+      yOffset = Math.floor((centerWithinY - textHeight) / 2)
+    }
+
+    const screenPixelPos = this.windowCellPosToScreenPixelPos(
+      screen,
+      window,
+      windowPos
+    )
+
+    ctx.fillText(
+      textToDraw, 
+      screenPixelPos.x + xOffset, 
+      screenPixelPos.y + fontStyle.size + yOffset,
+    )
+  }
+
+}
+
+const topController = new TopController()
+
+</script>
+
+</body>
+</html>

@@ -115,6 +115,21 @@ class Pair {
   within(minPair, maxPairExclusive) {
     return minPair.lessThanOrEqualTo(this) && this.lessThan(maxPairExclusive)
   }
+
+  // returns a list of adjacent positions that fit within the given size
+  adjacent(size) {
+    let result = []
+    for(let c = this.x - 1; c <= this.x + 1; c++) {
+      if(c < 0 || c >= size.x) continue;
+      for(let r = this.y - 1; r <= this.y + 1; r++) {
+        if(r < 0 || r >= size.y) continue;
+        if(c == this.x && r == this.y) continue;
+        result.push(new Pair(c, r));
+      }
+    }
+
+    return result
+  }
 }
 
 const ai = {
@@ -141,7 +156,11 @@ const template = {
   backModel: {
     actor: [],
     seed: 'test3',
-    levelCaveGeneratorOpenness: 0.6,
+    levelCaveGenerator: {
+      openness: 0.2,
+      wallThreshold: 0.5,
+      requireSurroundingWalls: 2,
+    },
     levelSize: new Pair(30, 30),
     level: [],
     player: { 
@@ -155,12 +174,15 @@ const template = {
 
   frontModel: {
 
-    currentActionMode: 'moveOrAttack',
+    motionMode: 'attackOrMove',
     initialScreen: 'main',
     fontStyle: fontStyle.fixed,
 
     screen: {
       main: {
+        initialWindow: 'level',
+        cellPixelDimensions: new Pair(26, 30),
+        screenCellDimensions: new Pair(40, 14),
         window: {
 
           level: {
@@ -181,6 +203,10 @@ const template = {
                   'moveLeftDown',
                   'moveRightUp',
                   'moveRightDown',
+                  'wait',
+                  'setMotionModeMove',
+                  'setMotionModeAttack',
+                  'setMotionModeAttackOrMove',
                 ],
               },
             },
@@ -188,7 +214,7 @@ const template = {
 
           status: {
             cellPos: new Pair(21, 0),
-            size: new Pair(9, 10),
+            size: new Pair(19, 10),
           },
 
           message: {
@@ -198,10 +224,6 @@ const template = {
             messages: [],
           },
         },
-
-        initialWindow: 'level',
-        cellPixelDimensions: new Pair(26, 30),
-        screenCellDimensions: new Pair(20, 14),
       },
     },
 
@@ -218,33 +240,49 @@ const keyMap = {
     moveLeftDown: [ 'b' ],
     moveRightUp: [ 'u' ],
     moveRightDown: [ 'n' ],
+    wait: [ '.' ],
+    setMotionModeAttackOrMove: [ 'A' ],
+    setMotionModeAttack: [ 'a' ],
+    setMotionModeMove: [ 'm' ],
   },
 }
 
 const commandExecution = {
   moveLeft: () => {
-    topController.playerMoveRelative(new Pair(-1, 0))
+    topController.playerMotionRelative(new Pair(-1, 0))
   },
   moveRight: () => {
-    topController.playerMoveRelative(new Pair(1, 0))
+    topController.playerMotionRelative(new Pair(1, 0))
   },
   moveUp: () => {
-    topController.playerMoveRelative(new Pair(0, -1))
+    topController.playerMotionRelative(new Pair(0, -1))
   },
   moveDown: () => {
-    topController.playerMoveRelative(new Pair(0, 1))
+    topController.playerMotionRelative(new Pair(0, 1))
   },
   moveLeftUp: () => {
-    topController.playerMoveRelative(new Pair(-1, -1))
+    topController.playerMotionRelative(new Pair(-1, -1))
   },
   moveRightUp: () => {
-    topController.playerMoveRelative(new Pair(1, -1))
+    topController.playerMotionRelative(new Pair(1, -1))
   },
   moveLeftDown: () => {
-    topController.playerMoveRelative(new Pair(-1, 1))
+    topController.playerMotionRelative(new Pair(-1, 1))
   },
   moveRightDown: () => {
-    topController.playerMoveRelative(new Pair(1, 1))
+    topController.playerMotionRelative(new Pair(1, 1))
+  },
+  wait: () => {
+    topController.advanceTime()
+  },
+  setMotionModeMove: () => {
+    topController.setMotionMode('move')
+  },
+  setMotionModeAttack: () => {
+    topController.setMotionMode('attack')
+  },
+  setMotionModeAttackOrMove: () => {
+    topController.setMotionMode('attackOrMove')
   },
 }
 
@@ -286,19 +324,75 @@ class TopController {
     this.refresh()
   }
 
-  playerMoveRelative(relPos) {
-    let bc = this.backController
+  setMotionMode(mode) {
+    this.frontController.setMotionMode(mode)
+  }
 
-    let playerOldPos = bc.getPlayerPosition()
-    let playerNewPos = playerOldPos.add(relPos)
+  playerMotionRelative(relPos) {
+    const bc = this.backController
+    const fc = this.frontController
 
-    if(!bc.isFieldPosValid(playerNewPos) || bc.isFieldPosOccupied(playerNewPos)) {
-      this.addMessage("You can't move there. ")
+    const playerOldPos = bc.getPlayerPosition()
+    const playerNewPos = playerOldPos.add(relPos)
+
+    if(!bc.isFieldPosValid(playerNewPos)) {
+      this.addMessage("You can't move there.")
+      return
+    }
+      
+    if(bc.isFieldPosOccupied(playerNewPos)) {
+      if(fc.motionModeAttack()) {
+        this.playerAttack(playerNewPos)
+        return
+      } else {
+        this.addMessage("That space is already occupied.")
+        return
+      }
+    }
+
+    if(!fc.motionModeMove()) {
+      this.addMessage("There is nothing to attack there.")
       return
     }
 
     this.occupantSet(bc.getPlayer(), playerNewPos)
     this.advanceTime();
+  }
+
+  playerAttack(target) {
+    const bc = this.backController
+    const fc = this.frontController
+
+    const targetCell = bc.getCell(target)
+    const targetActor = targetCell.occupiedBy
+    if(targetActor.health == null) {
+      this.addMessage("You can't attack that.")
+      return
+    }
+
+    const player = this.backController.getPlayer()
+    const damage = this.calculateDamageFrom(player)
+    targetActor.health -= damage
+    let message = "You hit the " + targetActor.name + " for " + damage + " damage."
+    if(damage > 0) {
+      message = "You hit the " + targetActor.name + " for " + damage + " damage."
+    } else {
+      message = "You miss the " + targetActor.name + "."
+    }
+
+    if(targetActor.health <= 0) {
+      message += " The " + targetActor.name + " is dead."; 
+      targetCell.occupiedBy = null
+      bc.removeActor(targetActor)
+      fc.levelChangedAt(target)
+    } else {
+      if(damage > 0) {
+        message += " hp=" + targetActor.health
+      }
+    }
+    this.addMessage(message)
+
+    this.advanceTime()
   }
 
   clearMessages() {
@@ -443,16 +537,7 @@ class BackController {
   adjacentCells(subjectPos) {
     let result = []
     const bm = this.backModel
-    for(let c = subjectPos.x - 1; c <= subjectPos.x + 1; c++) {
-      if(c < 0 || c > bm.levelSize.x) continue;
-      for(let r = subjectPos.y - 1; r <= subjectPos.y + 1; r++) {
-        if(r < 0 || r > bm.levelSize.y) continue;
-        if(c == subjectPos.x && r == subjectPos.y) continue;
-        result.push(new Pair(c, r));
-      }
-    }
-
-    return result;
+    return subjectPos.adjacent(bm.levelSize)
   }
 
   generateLevelEmptyRoom(level, size, randomizer) {
@@ -469,7 +554,7 @@ class BackController {
     }
   }
 
-  generateDiamondSquareMap(fromMap, targetSize, randomizer) {
+  generateDiamondSquareMap(fromMap, randomizer) {
     let toMap = []
     let fromWidth = fromMap.length
     let fromHeight = fromMap[0].length
@@ -550,19 +635,98 @@ class BackController {
     return toMap
   }
 
+  reduceMap(fromMap) {
+    let toMap = []
+    let fromWidth = fromMap.length
+    let fromHeight = fromMap[0].length
+
+    for(let fromX = 0; fromX < fromWidth - 1; fromX += 2) {
+      let toMapColumn = []
+      toMap.push(toMapColumn)
+      for(let fromY = 0; fromY < fromHeight - 1; fromY += 2) {
+        let values = []
+        values.push(fromMap[fromX][fromY])
+        values.push(fromMap[fromX + 1][fromY])
+        values.push(fromMap[fromX][fromY + 1])
+        values.push(fromMap[fromX + 1][fromY + 1])
+
+        let minValue = values.reduce((a,b) => Math.min(a, b), 1)
+        toMapColumn.push(minValue)
+      }
+    }
+   
+    return toMap
+  }
+
+  removeIsolatedWalls(fromMap, wallThreshold, requireSurroundingWalls) {
+    let size = new Pair(fromMap.length, fromMap[0].length)
+    let iterationsLeft = 5
+
+    let toMap
+    let removed = 0
+    while(true) {
+      toMap = []
+      for(let fromX = 0; fromX < size.x; fromX++) {
+        let toMapColumn = []
+        toMap.push(toMapColumn)
+        for(let fromY = 0; fromY < size.y; fromY++) {
+          let adjacent = new Pair(fromX, fromY).adjacent(size)
+          let surroundingWalls = adjacent.reduce(
+            (a,b) => {
+              if(fromMap[b.x][b.y] > wallThreshold) {
+                return a + 1
+              } else {
+                return a
+              }
+            }, 0
+          )
+
+          let value = fromMap[fromX][fromY]
+          if(value > wallThreshold && surroundingWalls < requireSurroundingWalls) {
+            value = 0
+            removed++
+          }
+
+          toMapColumn.push(value)
+        }
+      }
+
+      if(removed > 0) {
+        log("Removed " + removed + " stray walls.")
+        fromMap = toMap
+        iterationsLeft--
+        if(iterationsLeft > 0) {
+          removed = 0
+          continue
+        }
+      }
+      break
+    } 
+     
+    return toMap
+  }
+
   generateLevelSimpleCaves(level, size, randomizer) {
     const ot = template.object
-    let b = 1 - this.backModel.levelCaveGeneratorOpenness
+    const bm = this.backModel
+    const b = 1 - bm.levelCaveGenerator.openness
+    const wallThreshold = bm.levelCaveGenerator.wallThreshold
+    const requireSurroundingWalls = bm.levelCaveGenerator.requireSurroundingWalls
+
     let map = [[b, b], [b, b]]
 
     while(map.length < size.x) {
-      map = this.generateDiamondSquareMap(map, size.x, randomizer)
+      map = this.generateDiamondSquareMap(map, randomizer)
     }
+
+    map = this.generateDiamondSquareMap(map, randomizer)
+    map = this.reduceMap(map)
+    map = this.removeIsolatedWalls(map, wallThreshold, requireSurroundingWalls)
 
     for(let c = 0; c < size.x; c++) {
       level[c] = []
       for(let r = 0; r < size.y; r++) {
-        if(map[c][r] > 0.5) {
+        if(map[c][r] > wallThreshold) {
           level[c][r] = { occupiedBy: ot.rockWall, onFloor: null, floorType: ot.dirtFloor }
         } else {
           level[c][r] = { occupiedBy: null, onFloor: null, floorType: ot.dirtFloor }
@@ -657,6 +821,11 @@ class BackController {
     actor.pos = pos
   }
 
+  removeActor(actor) {
+    const bm = this.backModel
+    bm.actor = bm.actor.filter(a => { return a != actor })
+  }
+
   getActors() {
     return this.backModel.actor
   }
@@ -724,6 +893,11 @@ class FrontController {
     this.outController = new OutController(this.frontModel, backModel)
   }
 
+  setMotionMode(mode) {
+    this.frontModel.motionMode = mode
+    this.statusChanged()
+  }
+
   levelPosToWindowPos(levelPos) {
     const panOffset = this.frontModel.screen.main.window.level.panCellOffset
     return levelPos.subtract(panOffset)
@@ -767,6 +941,16 @@ class FrontController {
     const cw = screen.currentWindow
     const window = screen.window[cw]
     return window.currentKeyMode
+  }
+
+  motionModeMove() {
+    const fm = this.frontModel
+    return fm.motionMode == 'attackOrMove' || fm.motionMode == 'move'
+  }
+
+  motionModeAttack() {
+    const fm = this.frontModel
+    return fm.motionMode == 'attackOrMove' || fm.motionMode == 'attack'
   }
 
   update() {
@@ -938,7 +1122,7 @@ class OutController {
 
   actionModeToMessage(actionMode) {
     let actionMessage = 'Unknown'
-    if(actionMode == 'moveOrAttack') {
+    if(actionMode == 'attackOrMove') {
       actionMessage = 'Move / Attack'
     } else if(actionMode == 'move') {
       actionMessage = 'Move'
@@ -964,7 +1148,7 @@ class OutController {
         this.drawText(screen, window, new Pair(0, row), message, 0, screen.cellPixelDimensions.y)
       }
     } else if(window == fm.screen.main.window.status) {
-      const actionMessage = this.actionModeToMessage(this.frontModel.currentActionMode)
+      const actionMessage = this.actionModeToMessage(this.frontModel.motionMode)
       this.drawText(screen, window, new Pair(0, 0), 'Action: ' + actionMessage, 0, screen.cellPixelDimensions.y)
       this.drawText(screen, window, new Pair(0, 1), 'HP: ' + this.backModel.player.health, 0, screen.cellPixelDimensions.y)
     } else {

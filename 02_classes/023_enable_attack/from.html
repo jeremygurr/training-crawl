@@ -155,7 +155,7 @@ const template = {
 
   frontModel: {
 
-    currentActionMode: 'moveOrAttack',
+    motionMode: 'attackOrMove',
     initialScreen: 'main',
     fontStyle: fontStyle.fixed,
 
@@ -181,6 +181,10 @@ const template = {
                   'moveLeftDown',
                   'moveRightUp',
                   'moveRightDown',
+                  'wait',
+                  'setMotionModeMove',
+                  'setMotionModeAttack',
+                  'setMotionModeAttackOrMove',
                 ],
               },
             },
@@ -188,7 +192,7 @@ const template = {
 
           status: {
             cellPos: new Pair(21, 0),
-            size: new Pair(9, 10),
+            size: new Pair(19, 10),
           },
 
           message: {
@@ -201,7 +205,7 @@ const template = {
 
         initialWindow: 'level',
         cellPixelDimensions: new Pair(26, 30),
-        screenCellDimensions: new Pair(20, 14),
+        screenCellDimensions: new Pair(40, 14),
       },
     },
 
@@ -218,33 +222,49 @@ const keyMap = {
     moveLeftDown: [ 'b' ],
     moveRightUp: [ 'u' ],
     moveRightDown: [ 'n' ],
+    wait: [ '.' ],
+    setMotionModeAttackOrMove: [ 'A' ],
+    setMotionModeAttack: [ 'a' ],
+    setMotionModeMove: [ 'm' ],
   },
 }
 
 const commandExecution = {
   moveLeft: () => {
-    topController.playerMoveRelative(new Pair(-1, 0))
+    topController.playerMotionRelative(new Pair(-1, 0))
   },
   moveRight: () => {
-    topController.playerMoveRelative(new Pair(1, 0))
+    topController.playerMotionRelative(new Pair(1, 0))
   },
   moveUp: () => {
-    topController.playerMoveRelative(new Pair(0, -1))
+    topController.playerMotionRelative(new Pair(0, -1))
   },
   moveDown: () => {
-    topController.playerMoveRelative(new Pair(0, 1))
+    topController.playerMotionRelative(new Pair(0, 1))
   },
   moveLeftUp: () => {
-    topController.playerMoveRelative(new Pair(-1, -1))
+    topController.playerMotionRelative(new Pair(-1, -1))
   },
   moveRightUp: () => {
-    topController.playerMoveRelative(new Pair(1, -1))
+    topController.playerMotionRelative(new Pair(1, -1))
   },
   moveLeftDown: () => {
-    topController.playerMoveRelative(new Pair(-1, 1))
+    topController.playerMotionRelative(new Pair(-1, 1))
   },
   moveRightDown: () => {
-    topController.playerMoveRelative(new Pair(1, 1))
+    topController.playerMotionRelative(new Pair(1, 1))
+  },
+  wait: () => {
+    topController.advanceTime()
+  },
+  setMotionModeMove: () => {
+    topController.setMotionMode('move')
+  },
+  setMotionModeAttack: () => {
+    topController.setMotionMode('attack')
+  },
+  setMotionModeAttackOrMove: () => {
+    topController.setMotionMode('attackOrMove')
   },
 }
 
@@ -286,19 +306,75 @@ class TopController {
     this.refresh()
   }
 
-  playerMoveRelative(relPos) {
-    let bc = this.backController
+  setMotionMode(mode) {
+    this.frontController.setMotionMode(mode)
+  }
 
-    let playerOldPos = bc.getPlayerPosition()
-    let playerNewPos = playerOldPos.add(relPos)
+  playerMotionRelative(relPos) {
+    const bc = this.backController
+    const fc = this.frontController
 
-    if(!bc.isFieldPosValid(playerNewPos) || bc.isFieldPosOccupied(playerNewPos)) {
-      this.addMessage("You can't move there. ")
+    const playerOldPos = bc.getPlayerPosition()
+    const playerNewPos = playerOldPos.add(relPos)
+
+    if(!bc.isFieldPosValid(playerNewPos)) {
+      this.addMessage("You can't move there.")
+      return
+    }
+      
+    if(bc.isFieldPosOccupied(playerNewPos)) {
+      if(fc.motionModeAttack()) {
+        this.playerAttack(playerNewPos)
+        return
+      } else {
+        this.addMessage("That space is already occupied.")
+        return
+      }
+    }
+
+    if(!fc.motionModeMove()) {
+      this.addMessage("There is nothing to attack there.")
       return
     }
 
     this.occupantSet(bc.getPlayer(), playerNewPos)
     this.advanceTime();
+  }
+
+  playerAttack(target) {
+    const bc = this.backController
+    const fc = this.frontController
+
+    const targetCell = bc.getCell(target)
+    const targetActor = targetCell.occupiedBy
+    if(targetActor.health == null) {
+      this.addMessage("You can't attack that.")
+      return
+    }
+
+    const player = this.backController.getPlayer()
+    const damage = this.calculateDamageFrom(player)
+    targetActor.health -= damage
+    let message = "You hit the " + targetActor.name + " for " + damage + " damage."
+    if(damage > 0) {
+      message = "You hit the " + targetActor.name + " for " + damage + " damage."
+    } else {
+      message = "You miss the " + targetActor.name + "."
+    }
+
+    if(targetActor.health <= 0) {
+      message += " The " + targetActor.name + " is dead."; 
+      targetCell.occupiedBy = null
+      bc.removeActor(targetActor)
+      fc.levelChangedAt(target)
+    } else {
+      if(damage > 0) {
+        message += " hp=" + targetActor.health
+      }
+    }
+    this.addMessage(message)
+
+    this.advanceTime()
   }
 
   clearMessages() {
@@ -657,6 +733,11 @@ class BackController {
     actor.pos = pos
   }
 
+  removeActor(actor) {
+    const bm = this.backModel
+    bm.actor = bm.actor.filter(a => { return a != actor })
+  }
+
   getActors() {
     return this.backModel.actor
   }
@@ -724,6 +805,11 @@ class FrontController {
     this.outController = new OutController(this.frontModel, backModel)
   }
 
+  setMotionMode(mode) {
+    this.frontModel.motionMode = mode
+    this.statusChanged()
+  }
+
   levelPosToWindowPos(levelPos) {
     const panOffset = this.frontModel.screen.main.window.level.panCellOffset
     return levelPos.subtract(panOffset)
@@ -767,6 +853,16 @@ class FrontController {
     const cw = screen.currentWindow
     const window = screen.window[cw]
     return window.currentKeyMode
+  }
+
+  motionModeMove() {
+    const fm = this.frontModel
+    return fm.motionMode == 'attackOrMove' || fm.motionMode == 'move'
+  }
+
+  motionModeAttack() {
+    const fm = this.frontModel
+    return fm.motionMode == 'attackOrMove' || fm.motionMode == 'attack'
   }
 
   update() {
@@ -938,7 +1034,7 @@ class OutController {
 
   actionModeToMessage(actionMode) {
     let actionMessage = 'Unknown'
-    if(actionMode == 'moveOrAttack') {
+    if(actionMode == 'attackOrMove') {
       actionMessage = 'Move / Attack'
     } else if(actionMode == 'move') {
       actionMessage = 'Move'
@@ -964,7 +1060,7 @@ class OutController {
         this.drawText(screen, window, new Pair(0, row), message, 0, screen.cellPixelDimensions.y)
       }
     } else if(window == fm.screen.main.window.status) {
-      const actionMessage = this.actionModeToMessage(this.frontModel.currentActionMode)
+      const actionMessage = this.actionModeToMessage(this.frontModel.motionMode)
       this.drawText(screen, window, new Pair(0, 0), 'Action: ' + actionMessage, 0, screen.cellPixelDimensions.y)
       this.drawText(screen, window, new Pair(0, 1), 'HP: ' + this.backModel.player.health, 0, screen.cellPixelDimensions.y)
     } else {

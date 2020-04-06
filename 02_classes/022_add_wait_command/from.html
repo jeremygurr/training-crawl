@@ -181,6 +181,7 @@ const template = {
                   'moveLeftDown',
                   'moveRightUp',
                   'moveRightDown',
+                  'wait',
                 ],
               },
             },
@@ -218,6 +219,7 @@ const keyMap = {
     moveLeftDown: [ 'b' ],
     moveRightUp: [ 'u' ],
     moveRightDown: [ 'n' ],
+    wait: [ '.' ],
   },
 }
 
@@ -245,6 +247,9 @@ const commandExecution = {
   },
   moveRightDown: () => {
     topController.playerMoveRelative(new Pair(1, 1))
+  },
+  wait: () => {
+    topController.advanceTime()
   },
 }
 

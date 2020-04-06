@@ -1,4 +1,10 @@
-class based windows and screens
+food should be on ground
+examine floor
+inventory
+pick up
+drop
+energy management
+eat
 pan view
 help about specific components of interface
 emotions
@@ -23,7 +29,6 @@ multi senses
   hearing
   smell
   energy
-inventory
 spawned items
   weapons
   armor

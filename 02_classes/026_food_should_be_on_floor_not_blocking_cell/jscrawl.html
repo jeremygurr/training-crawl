@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Training: Crawl Game</title>
+    <style>
+      * { padding: 0; margin: 0; }
+      canvas { background: #eee; display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+<script>
+"use strict";
+
+const canvasProps = {
+  xOffset: 3,
+  yOffset: 0,
+  width: 1000,
+  height: 450,
+};
+
+document.write('<canvas id="mainCanvas" width="' + canvasProps.width + '" height="' + canvasProps.height + '"></canvas>');
+
+</script>
+
+<!-- provides _.cloneDeep() -->
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+<!-- provides Math.seedrandom -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
+
+<script>
+
+const canvas = document.getElementById("mainCanvas")
+const ctx = canvas.getContext("2d")
+let previousFontStyle = null
+
+// immutable
+class Rect {
+  // x1, y1 are inclusive
+  // x2, y2 are exclusive (are not part of this rectangle)
+  constructor(x1, y1, x2, y2) {
+    this.x1 = x1
+    this.y1 = y1
+    this.x2 = x2
+    this.y2 = y2
+
+    const xa = Math.floor((this.x1 + this.x2)/2)
+    const ya = Math.floor((this.y1 + this.y2)/2)
+    this.center = new Pair(xa, ya)
+    this.width = x2 - x1
+    this.height = y2 - y1
+  }
+
+  upperLeftQuarter() {
+    const newX1 = this.x1
+    const newY1 = this.y1
+    const newX2 = this.center.x
+    const newY2 = this.center.y
+    return new Rect(newX1, newY1, newX2, newY2)
+  }
+
+  upperRightQuarter() {
+    const newX1 = this.center.x
+    const newY1 = this.y1
+    const newX2 = this.x2
+    const newY2 = this.center.y
+    return new Rect(newX1, newY1, newX2, newY2)
+  }
+
+  lowerLeftQuarter() {
+    const newX1 = this.x1
+    const newY1 = this.center.y
+    const newX2 = this.center.x
+    const newY2 = this.y2
+    return new Rect(newX1, newY1, newX2, newY2)
+  }
+
+  lowerRightQuarter() {
+    const newX1 = this.center.x
+    const newY1 = this.center.y
+    const newX2 = this.x2
+    const newY2 = this.y2
+    return new Rect(newX1, newY1, newX2, newY2)
+  }
+}
+
+class Pair {
+  constructor(x, y) {
+    this.x = x
+    this.y = y
+  }
+
+  add(pair) {
+    return new Pair(this.x + pair.x, this.y + pair.y)
+  }
+
+  subtract(pair) {
+    return new Pair(this.x - pair.x, this.y - pair.y)
+  }
+
+  multiply(pair) {
+    return new Pair(this.x * pair.x, this.y * pair.y)
+  }
+
+  lessThan(pair) {
+    return this.x < pair.x && this.y < pair.y
+  }
+
+  lessThanOrEqualTo(pair) {
+    return this.x <= pair.x && this.y <= pair.y
+  }
+
+  within(minPair, maxPairExclusive) {
+    return minPair.lessThanOrEqualTo(this) && this.lessThan(maxPairExclusive)
+  }
+
+  // returns a list of adjacent positions that fit within the given size
+  adjacent(size) {
+    let result = []
+    for(let c = this.x - 1; c <= this.x + 1; c++) {
+      if(c < 0 || c >= size.x) continue;
+      for(let r = this.y - 1; r <= this.y + 1; r++) {
+        if(r < 0 || r >= size.y) continue;
+        if(c == this.x && r == this.y) continue;
+        result.push(new Pair(c, r));
+      }
+    }
+
+    return result
+  }
+}
+
+const ai = {
+};
+
+const fontStyle = {
+  fixed: { name: "Courier", size: 24 },
+  compact: { name: "Ariel", size: 18 },
+}
+
+// These should never be altered. They are used to create other objects which may be altered.
+const template = {
+
+  object: {
+    dirtFloor: { showAs: '.' },
+    rockWall: { showAs: '🀆' },
+  },
+
+  generated: {
+    fillRatio: 0.020,
+
+    sub: {
+
+      creature: {
+        name: 'creature',
+        chanceWeight: 100,
+        sub: {
+          rat:  { name: 'rat',   chanceWeight: 100, showAs: '🐭', health: 2,  attack: { min: 0, max: 1 }, act: 'simplePursuit' },
+          lion: { name: 'lion',  chanceWeight: 30, showAs: '🦁', health: 10, attack: { min: 0, max: 4 }, act: 'simplePursuit' },
+        }
+      },
+
+      food: {
+        name: 'food',
+        chanceWeight: 100,
+        showAs: '%',
+        sub: {
+          beef: { 
+            name: 'beef',
+            chanceWeight: 100,
+            energy: {
+              red: 20,
+            },
+          },
+          pork: { 
+            name: 'pork',
+            chanceWeight: 100,
+            energy: {
+              red: 15,
+              orange: 5,
+            },
+          },
+          fish: { 
+            name: 'fish',
+            chanceWeight: 100,
+            energy: {
+              red: 15,
+              blue: 5,
+            },
+          },
+          chicken: { 
+            name: 'chicken',
+            chanceWeight: 100,
+            energy: {
+              red: 15,
+              yellow: 5,
+            },
+          },
+          bread: { 
+            name: 'bread',
+            chanceWeight: 200,
+            energy: {
+              red: 5,
+              orange: 15,
+            },
+          },
+          rice: { 
+            chanceWeight: 200,
+            name: 'rice',
+            energy: {
+              orange: 10,
+              green: 10,
+            },
+          },
+          oats: { 
+            name: 'oats',
+            chanceWeight: 200,
+            energy: {
+              red: 5,
+              orange: 10,
+              yellow: 5,
+            },
+          },
+          cheese: { 
+            name: 'cheese',
+            chanceWeight: 50,
+            energy: {
+              yellow: 10,
+              indigo: 10,
+            },
+          },
+          milk: { 
+            name: 'milk',
+            chanceWeight: 50,
+            energy: {
+              red: 5,
+              indigo: 15,
+            },
+          },
+          apple: { 
+            name: 'apple',
+            chanceWeight: 50,
+            energy: {
+              red: 10,
+              yellow: 10,
+            },
+          },
+          banana: { 
+            name: 'banana',
+            chanceWeight: 50,
+            energy: {
+              orange: 5,
+              yellow: 15,
+            },
+          },
+          brocolli: { 
+            name: 'brocolli',
+            chanceWeight: 50,
+            energy: {
+              yellow: 5,
+              green: 15,
+            },
+          },
+          spinach: { 
+            name: 'brocolli',
+            chanceWeight: 50,
+            energy: {
+              red: 5,
+              green: 15,
+            },
+          },
+          carrot: { 
+            name: 'orange',
+            chanceWeight: 50,
+            energy: {
+              orange: 15,
+              green: 5,
+            },
+          },
+          orange: { 
+            name: 'orange',
+            chanceWeight: 50,
+            energy: {
+              orange: 15,
+              yellow: 5,
+            },
+          },
+          mango: { 
+            name: 'mango',
+            chanceWeight: 50,
+            energy: {
+              yellow: 20,
+            },
+          },
+          grapes: { 
+            name: 'grapes',
+            chanceWeight: 50,
+            energy: {
+              yellow: 5,
+              green: 10,
+              violet: 5,
+            },
+          },
+          strawberries: { 
+            name: 'strawberries',
+            chanceWeight: 50,
+            energy: {
+              red: 15,
+              yellow: 5,
+            },
+          },
+          tomato: { 
+            name: 'tomato',
+            chanceWeight: 50,
+            energy: {
+              red: 10,
+              orange: 5,
+              yellow: 5,
+            },
+          },
+          blueberries: { 
+            name: 'blueberries',
+            chanceWeight: 50,
+            energy: {
+              yellow: 5,
+              blue: 15,
+            },
+          },
+          pizza: { 
+            name: 'pizza',
+            chanceWeight: 50,
+            energy: {
+              red: 3,
+              orange: 3,
+              yellow: 3,
+              green: 3,
+              blue: 3,
+              indigo: 3,
+              violet: 2,
+            },
+          },
+          chocolate: { 
+            name: 'chocolate',
+            chanceWeight: 50,
+            energy: {
+              black: 20,
+            },
+          },
+        },
+      },
+    },
+  },
+
+  backModel: {
+    actor: [],
+    seed: 'test3',
+    levelCaveGenerator: {
+      openness: 0.2,
+      wallThreshold: 0.5,
+      requireSurroundingWalls: 2,
+    },
+    levelSize: new Pair(30, 30),
+    level: [],
+    player: { 
+      name: 'player', 
+      showAs: '🙂', 
+      pos: new Pair(0,0), 
+      health: 20, 
+      attack: { min: 0, max: 2 } 
+    },
+  },
+
+  frontModel: {
+
+    motionMode: 'attackOrMove',
+    initialScreen: 'main',
+    fontStyle: fontStyle.fixed,
+
+    screen: {
+      main: {
+        initialWindow: 'level',
+        cellPixelDimensions: new Pair(26, 30),
+        screenCellDimensions: new Pair(40, 14),
+        window: {
+
+          level: {
+            cellPos: new Pair(0, 0),
+            size: new Pair(20, 10),
+            panCellOffset: new Pair(0, 0),
+            panScrollMargin: 4,
+            initialKeyMode: 'base',
+            trackPlayer: true,
+            keyMode: {
+              base: {
+                command: [
+                  'moveLeft',
+                  'moveRight',
+                  'moveUp',
+                  'moveDown',
+                  'moveLeftUp',
+                  'moveLeftDown',
+                  'moveRightUp',
+                  'moveRightDown',
+                  'wait',
+                  'setMotionModeMove',
+                  'setMotionModeAttack',
+                  'setMotionModeAttackOrMove',
+                ],
+              },
+            },
+          },
+
+          status: {
+            cellPos: new Pair(21, 0),
+            size: new Pair(19, 10),
+          },
+
+          message: {
+            cellPos: new Pair(0, 10),
+            size: new Pair(30, 4),
+            fontStyle: fontStyle.compact,
+            messages: [],
+          },
+        },
+      },
+    },
+
+  },
+}
+  
+const keyMap = {
+  base: {
+    moveLeft: [ 'h', 'ArrowLeft' ],
+    moveRight: [ 'l', 'ArrowRight' ],
+    moveUp: [ 'k', 'ArrowUp' ],
+    moveDown: [ 'j', 'ArrowDown' ],
+    moveLeftUp: [ 'y' ],
+    moveLeftDown: [ 'b' ],
+    moveRightUp: [ 'u' ],
+    moveRightDown: [ 'n' ],
+    wait: [ '.' ],
+    setMotionModeAttackOrMove: [ 'A' ],
+    setMotionModeAttack: [ 'a' ],
+    setMotionModeMove: [ 'm' ],
+  },
+}
+
+const commandExecution = {
+  moveLeft: () => {
+    topController.playerMotionRelative(new Pair(-1, 0))
+  },
+  moveRight: () => {
+    topController.playerMotionRelative(new Pair(1, 0))
+  },
+  moveUp: () => {
+    topController.playerMotionRelative(new Pair(0, -1))
+  },
+  moveDown: () => {
+    topController.playerMotionRelative(new Pair(0, 1))
+  },
+  moveLeftUp: () => {
+    topController.playerMotionRelative(new Pair(-1, -1))
+  },
+  moveRightUp: () => {
+    topController.playerMotionRelative(new Pair(1, -1))
+  },
+  moveLeftDown: () => {
+    topController.playerMotionRelative(new Pair(-1, 1))
+  },
+  moveRightDown: () => {
+    topController.playerMotionRelative(new Pair(1, 1))
+  },
+  wait: () => {
+    topController.advanceTime()
+  },
+  setMotionModeMove: () => {
+    topController.setMotionMode('move')
+  },
+  setMotionModeAttack: () => {
+    topController.setMotionMode('attack')
+  },
+  setMotionModeAttackOrMove: () => {
+    topController.setMotionMode('attackOrMove')
+  },
+}
+
+function random(possibilities) {
+  return Math.floor(Math.random() * possibilities);
+}
+
+class SeededRandomizer {
+  constructor(seed) {
+    this.generator = new Math.seedrandom(seed)
+  }
+
+  next(possibilities = 0) {
+    if(possibilities == 0) {
+      return this.generator()
+    } else {
+      return Math.floor(this.generator() * possibilities)
+    }
+  }
+}
+
+function debug(message) {
+  console.log(message)
+}
+
+function warn(message) {
+  console.log(message)
+}
+
+function err(message) {
+  throw new Error(message)
+}
+
+class TopController {
+
+  constructor() {
+    this.backController = new BackController()
+    this.frontController = new FrontController(this.backController.backModel)
+    this.refresh()
+  }
+
+  setMotionMode(mode) {
+    this.frontController.setMotionMode(mode)
+  }
+
+  playerMotionRelative(relPos) {
+    const bc = this.backController
+    const fc = this.frontController
+
+    const playerOldPos = bc.getPlayerPosition()
+    const playerNewPos = playerOldPos.add(relPos)
+
+    if(!bc.isFieldPosValid(playerNewPos)) {
+      this.addMessage("You can't move there.")
+      return
+    }
+      
+    if(bc.isFieldPosOccupied(playerNewPos)) {
+      if(fc.motionModeAttack()) {
+        this.playerAttack(playerNewPos)
+        return
+      } else {
+        this.addMessage("That space is already occupied.")
+        return
+      }
+    }
+
+    if(!fc.motionModeMove()) {
+      this.addMessage("There is nothing to attack there.")
+      return
+    }
+
+    this.occupantSet(bc.getPlayer(), playerNewPos)
+    this.advanceTime();
+  }
+
+  playerAttack(target) {
+    const bc = this.backController
+    const fc = this.frontController
+
+    const targetCell = bc.getCell(target)
+    const targetActor = targetCell.occupiedBy
+    if(targetActor.health == null) {
+      this.addMessage("You can't attack that.")
+      return
+    }
+
+    const player = this.backController.getPlayer()
+    const damage = this.calculateDamageFrom(player)
+    targetActor.health -= damage
+    let message = "You hit the " + targetActor.name + " for " + damage + " damage."
+    if(damage > 0) {
+      message = "You hit the " + targetActor.name + " for " + damage + " damage."
+    } else {
+      message = "You miss the " + targetActor.name + "."
+    }
+
+    if(targetActor.health <= 0) {
+      message += " The " + targetActor.name + " is dead."; 
+      targetCell.occupiedBy = null
+      bc.removeActor(targetActor)
+      fc.levelChangedAt(target)
+    } else {
+      if(damage > 0) {
+        message += " hp=" + targetActor.health
+      }
+    }
+    this.addMessage(message)
+
+    this.advanceTime()
+  }
+
+  clearMessages() {
+    this.frontController.clearMessages()
+  }
+
+  addMessage(message) {
+    this.frontController.addMessage(message)
+  }
+
+  getCurrentKeyMode() {
+    return this.frontController.getCurrentKeyMode()
+  }
+
+  update() {
+    this.frontController.update()
+  }
+
+  refresh() {
+    this.frontController.refresh()
+  }
+
+  getFrontModel() {
+    return this.frontController.frontModel
+  }
+
+  advanceTime() {
+    this.backController.advanceTime()
+  }
+
+  levelChangedAt(pos) {
+    this.frontController.levelChangedAt(pos)
+  }
+
+  statusChanged() {
+    this.frontController.statusChanged()
+  }
+
+  advanceTime() {
+    this.backController.getActors().forEach(actor => {
+      this[actor.act](actor);
+    });
+  }
+  
+  simplePursuit(actor) {
+    const bc = this.backController
+    const adjacent = bc.adjacentCells(actor.pos)
+    const player = bc.getPlayer()
+    for(var i = 0; i < adjacent.length; i++) {
+      let pos = adjacent[i]
+      let cell = bc.getCell(pos)
+      if(cell.occupiedBy == player) {
+        this.executeAttack(actor, player)
+        return
+      }
+    }
+
+    if(random(3) == 0) {
+      var pos = adjacent[random(adjacent.length)]
+      var cell = bc.getCell(pos)
+      if(cell.occupiedBy == null) {
+        this.executeMove(actor, pos)
+      }
+    }
+  }
+
+  calculateDamageFrom(attacker) {
+    let minDamage = 0
+    let maxDamage = 0
+    if(attacker.attack != null) {
+      minDamage = attacker.attack.min
+      maxDamage = attacker.attack.max
+    }
+
+    return Math.floor(Math.random() * (1 + maxDamage - minDamage)) + minDamage
+  }
+
+  executeMove(actor, pos) {
+    this.occupantSet(actor, pos)
+  }
+
+  adjustHealth(target, change) {
+    target.health += change
+    const player = this.backController.getPlayer()
+
+    if(target.health <= 0) {
+      if(target == player) {
+        err("Not implemented yet")
+        // this.addMessage("You died. Press 'R' to restart.")
+        // setKeyListener(rKeyHandler, restart)
+      }
+    }
+
+    if(change != 0 && target == player) {
+      this.statusChanged()
+    }
+  }
+
+  executeAttack(source, target) {
+    let damage = this.calculateDamageFrom(source)
+
+    var message;
+    if(damage > 0) {
+      message = "The " + source.name + " hit you for " + damage + " damage."
+      this.addMessage(message)
+      this.adjustHealth(target, -damage)
+    } else {
+      message = "The " + source.name + " missed you.";
+      this.addMessage(message)
+    }
+  }
+
+  occupantSet(occupant, toPos) {
+    const bc = this.backController
+    const fromPos = occupant.pos
+    if(fromPos != null) {
+      bc.getCell(fromPos).occupiedBy = null
+      this.levelChangedAt(fromPos)
+    }
+    if(bc.getCell(toPos).occupiedBy != null) {
+      err('Cell at ' + toPos.x + ', ' + toPos.y + ' is already occupied')
+    }
+    bc.getCell(toPos).occupiedBy = occupant
+    this.levelChangedAt(toPos)
+
+    occupant.pos = toPos
+  }
+
+}
+
+class BackController {
+
+  constructor() {
+    this.backModel = _.cloneDeep(template.backModel)
+    const randomizer = new SeededRandomizer(this.backModel.seed)
+    this.buildLevel(randomizer)
+  }
+
+  getCell(pos) {
+    return this.backModel.level[pos.x][pos.y]
+  }
+
+  adjacentCells(subjectPos) {
+    let result = []
+    const bm = this.backModel
+    return subjectPos.adjacent(bm.levelSize)
+  }
+
+  generateLevelEmptyRoom(level, size, randomizer) {
+    const ot = template.object
+    for(let c = 0; c < size.x; c++) {
+      level[c] = []
+      for(let r = 0; r < size.y; r++) {
+        if(c == 0 || r == 0 || c == size.x - 1 || r == size.y - 1) {
+          level[c][r] = { occupiedBy: ot.rockWall, onFloor: null, floorType: ot.dirtFloor }
+        } else {
+          level[c][r] = { occupiedBy: null, onFloor: null, floorType: ot.dirtFloor }
+        }
+      }
+    }
+  }
+
+  generateDiamondSquareMap(fromMap, randomizer) {
+    let toMap = []
+    let fromWidth = fromMap.length
+    let fromHeight = fromMap[0].length
+
+    // calculate center of each square
+    for(let fromX = 0; fromX < fromWidth; fromX++) {
+
+      // even column
+      let toMapColumn = []
+      toMap.push(toMapColumn)
+      for(let fromY = 0; fromY < fromHeight; fromY++) {
+        let fromMapValue = fromMap[fromX][fromY]
+
+        // top left
+        toMapColumn[fromY * 2] = fromMapValue
+
+        // left: do nothing
+      }
+
+      if(fromX < fromWidth - 1) {
+        // odd column
+        toMapColumn = []
+        toMap.push(toMapColumn)
+        for(let fromY = 0; fromY < fromHeight; fromY++) {
+          let values = []
+          values.push(fromMap[fromX][fromY])
+          values.push(fromMap[fromX+1][fromY])
+          values.push(fromMap[fromX][fromY+1])
+          values.push(fromMap[fromX+1][fromY+1])
+
+          let randomValue = randomizer.next()
+          values.push(randomValue)
+
+          let averageValue = values.reduce((a,b) => a + b, 0) / values.length
+
+          // top: do nothing
+
+          if(fromY < fromHeight - 1) {
+            // center
+            toMapColumn[fromY * 2 + 1] = averageValue
+          }
+        }
+      }
+
+    }
+
+    // calculate sides of each square
+    const toWidth = toMap.length
+    const toHeight = toMap[0].length
+
+    for(let x = 0; x < toWidth; x++) {
+      for(let y = 0; y < toHeight; y++) {
+        if(toMap[x][y] == null) {
+          let values = []
+          if(x-1 > 0 && toMap[x-1][y] != null) {
+            values.push(toMap[x-1][y])
+          }
+          if(x+1 < toWidth && toMap[x+1][y] != null) {
+            values.push(toMap[x+1][y])
+          }
+          if(y-1 > 0 && toMap[x][y-1] != null) {
+            values.push(toMap[x][y-1])
+          }
+          if(y+1 < toHeight && toMap[x][y+1] != null) {
+            values.push(toMap[x][y+1])
+          }
+
+          let randomValue = randomizer.next()
+          values.push(randomValue)
+
+          let averageValue = values.reduce((a,b) => a + b, 0) / values.length
+
+          toMap[x][y] = averageValue
+        }
+      }
+    }
+
+    return toMap
+  }
+
+  reduceMap(fromMap) {
+    let toMap = []
+    let fromWidth = fromMap.length
+    let fromHeight = fromMap[0].length
+
+    for(let fromX = 0; fromX < fromWidth - 1; fromX += 2) {
+      let toMapColumn = []
+      toMap.push(toMapColumn)
+      for(let fromY = 0; fromY < fromHeight - 1; fromY += 2) {
+        let values = []
+        values.push(fromMap[fromX][fromY])
+        values.push(fromMap[fromX + 1][fromY])
+        values.push(fromMap[fromX][fromY + 1])
+        values.push(fromMap[fromX + 1][fromY + 1])
+
+        let minValue = values.reduce((a,b) => Math.min(a, b), 1)
+        toMapColumn.push(minValue)
+      }
+    }
+   
+    return toMap
+  }
+
+  removeIsolatedWalls(fromMap, wallThreshold, requireSurroundingWalls) {
+    let size = new Pair(fromMap.length, fromMap[0].length)
+    let iterationsLeft = 5
+
+    let toMap
+    let removed = 0
+    while(true) {
+      toMap = []
+      for(let fromX = 0; fromX < size.x; fromX++) {
+        let toMapColumn = []
+        toMap.push(toMapColumn)
+        for(let fromY = 0; fromY < size.y; fromY++) {
+          let adjacent = new Pair(fromX, fromY).adjacent(size)
+          let surroundingWalls = adjacent.reduce(
+            (a,b) => {
+              if(fromMap[b.x][b.y] > wallThreshold) {
+                return a + 1
+              } else {
+                return a
+              }
+            }, 0
+          )
+
+          let value = fromMap[fromX][fromY]
+          if(value > wallThreshold && surroundingWalls < requireSurroundingWalls) {
+            value = 0
+            removed++
+          }
+
+          toMapColumn.push(value)
+        }
+      }
+
+      if(removed > 0) {
+        debug("Removed " + removed + " stray walls.")
+        fromMap = toMap
+        iterationsLeft--
+        if(iterationsLeft > 0) {
+          removed = 0
+          continue
+        }
+      }
+      break
+    } 
+     
+    return toMap
+  }
+
+  generateLevelSimpleCaves(level, size, randomizer) {
+    const ot = template.object
+    const bm = this.backModel
+    const b = 1 - bm.levelCaveGenerator.openness
+    const wallThreshold = bm.levelCaveGenerator.wallThreshold
+    const requireSurroundingWalls = bm.levelCaveGenerator.requireSurroundingWalls
+
+    let map = [[b, b], [b, b]]
+
+    while(map.length < size.x) {
+      map = this.generateDiamondSquareMap(map, randomizer)
+    }
+
+    map = this.generateDiamondSquareMap(map, randomizer)
+    map = this.reduceMap(map)
+    map = this.removeIsolatedWalls(map, wallThreshold, requireSurroundingWalls)
+
+    for(let c = 0; c < size.x; c++) {
+      level[c] = []
+      for(let r = 0; r < size.y; r++) {
+        if(map[c][r] > wallThreshold) {
+          level[c][r] = { occupiedBy: ot.rockWall, onFloor: null, floorType: ot.dirtFloor }
+        } else {
+          level[c][r] = { occupiedBy: null, onFloor: null, floorType: ot.dirtFloor }
+        }
+      }
+    }
+  }
+
+  // returns an empty position, or null if no position can be found
+  findEmptyCellSimple(level) {
+    for(let c = 0; c < level.length; c++) {
+      let column = level[c]
+      for(let r = 0; r < column.length; r++) {
+        let cell = column[r]
+        if(cell.occupiedBy == null) {
+          return new Pair(c, r)
+        }
+      }
+    }
+
+    return null
+  }
+
+  // returns an empty position, or null if no position can be found
+  findEmptyCellCentrally(level, randomizer, bounds = null) {
+    if(bounds == null) {
+      const height = level.length
+      const width = level[0].length
+
+      bounds = new Rect(0, 0, width, height)
+    }
+
+    const middlePos = bounds.center
+    const cellToTest = level[middlePos.x][middlePos.y]
+
+    if(cellToTest.occupiedBy == null) {
+      return middlePos
+    }
+
+    if(bounds.width < 2 || bounds.height < 2) {
+      // too small to subdivide further
+      return null
+    }
+
+    let newBounds
+    let allResults = [] 
+    let result
+
+    newBounds = bounds.upperLeftQuarter()
+    result = this.findEmptyCellCentrally(level, randomizer, newBounds)
+    if(result) allResults.push(result)
+
+    newBounds = bounds.upperRightQuarter()
+    result = this.findEmptyCellCentrally(level, randomizer, newBounds)
+    if(result) allResults.push(result)
+
+    newBounds = bounds.lowerLeftQuarter()
+    result = this.findEmptyCellCentrally(level, randomizer, newBounds)
+    if(result) allResults.push(result)
+
+    newBounds = bounds.lowerRightQuarter()
+    result = this.findEmptyCellCentrally(level, randomizer, newBounds)
+    if(result) allResults.push(result)
+
+    if(allResults.length > 0) {
+      return allResults[randomizer.next(allResults.length)]
+    }
+
+    return null
+  }
+
+  buildLevel(randomizer) {
+    const bm = this.backModel
+
+    this.generateLevelSimpleCaves(bm.level, bm.levelSize, randomizer)
+    this.placeStuffInLevel(randomizer) 
+
+    const target = this.findEmptyCellCentrally(bm.level, randomizer)
+    if(target == null) {
+      err("Could not find an empty spot in the level to place the player.")
+    }
+
+    bm.level[target.x][target.y].occupiedBy = bm.player
+    bm.player.pos = target
+  }
+
+  addActor(actor, pos) {
+    const bm = this.backModel
+    bm.actor.push(actor)
+    bm.level[pos.x][pos.y].occupiedBy = actor
+    actor.pos = pos
+  }
+
+  removeActor(actor) {
+    const bm = this.backModel
+    bm.actor = bm.actor.filter(a => { return a != actor })
+  }
+
+  getActors() {
+    return this.backModel.actor
+  }
+
+  countEmptyCells() {
+    const bm = this.backModel
+    const level = bm.level
+    let emptyCellCount = 0
+    for(let x = 0; x < level.length; x++) {
+      for(let y = 0; y < level[0].length; y++) {
+        let cell = level[x][y]
+        if(cell.occupiedBy == null) {
+          emptyCellCount++
+        }
+      }
+    }
+
+    debug("Found " + emptyCellCount + "/" + (level.length * level[0].length) + " empty cells")
+    return emptyCellCount
+  }
+  
+  pickSomethingToGenerate(inheritedProperties, group, randomizer) {
+    let totalWeight = 0
+    for(const subject of Object.values(group)) {
+      let weight = subject.chanceWeight
+      if(weight == null) {
+        weight = inheritedProperties.chanceWeight
+      }
+      if(weight == null) {
+        err("Missing chanceWeight for " + subject.name)
+      }
+      totalWeight += weight
+    }
+
+    let selected = null
+    let remainingWeight = randomizer.next(totalWeight)
+    for(const subject of Object.values(group)) {
+      let weight = subject.chanceWeight
+      if(weight == null) {
+        weight = inheritedProperties.chanceWeight
+      }
+      remainingWeight -= weight
+      if(remainingWeight < 0) {
+        selected = subject
+        break
+      }
+    }
+
+    if(selected == null) {
+      err("Failed to select subject")
+    }
+
+    if(selected.sub) {
+      inheritedProperties = { ...inheritedProperties, ...selected }
+      inheritedProperties.sub = null
+
+      selected = this.pickSomethingToGenerate(inheritedProperties, selected.sub, randomizer)
+    }
+
+    let merged = { ...inheritedProperties, ...selected }
+    return merged
+  }
+
+  placeStuffInLevel(randomizer) {
+    const bm = this.backModel
+    const level = bm.level
+    const stuffCount = Math.floor(this.countEmptyCells() * template.generated.fillRatio)
+    debug("Placing " + stuffCount + " things in this level.")
+
+    for(let n = 0; n < stuffCount; n++) {
+      let subject = this.pickSomethingToGenerate({}, template.generated.sub, randomizer)
+      subject = _.cloneDeep(subject)
+      let pos = this.findEmptyCellCentrally(level, randomizer)
+      if(subject.act) {
+        this.addActor(subject, pos)
+      } else {
+        level[pos.x][pos.y].occupiedBy = subject
+        subject.pos = pos
+      }
+      debug("Placed " + subject.name)
+    }
+  }
+
+  getPlayer() {
+    return this.backModel.player
+  }
+
+  getPlayerPosition() {
+    return this.backModel.player.pos
+  }
+
+  setPlayerPosition(cellPos) {
+    return this.backModel.player.pos = cellPos
+  }
+
+  isFieldPosValid(cellPos) {
+    return cellPos.within(new Pair(0, 0), this.backModel.levelSize)
+  }
+
+  isFieldPosOccupied(cellPos) {
+    return this.backModel.level[cellPos.x][cellPos.y].occupiedBy != null
+  }
+
+}
+
+class FrontController {
+
+  constructor(backModel) {
+    this.backModel = backModel
+
+    let fm = _.cloneDeep(template.frontModel)
+    this.frontModel = fm
+
+    for(const [screenName, screen] of Object.entries(fm.screen)) {
+      for(const [windowName, window] of Object.entries(screen.window)) {
+        window.currentKeyMode = window.initialKeyMode
+        window.changed = true
+        window.cellsChanged = []
+        window.name = windowName
+      }
+      screen.currentWindow = screen.initialWindow
+      screen.name = screenName
+    }
+
+    fm.currentScreen = fm.initialScreen
+    
+    this.inController = new InController(this.frontModel)
+    this.outController = new OutController(this.frontModel, backModel)
+  }
+
+  setMotionMode(mode) {
+    this.frontModel.motionMode = mode
+    this.statusChanged()
+  }
+
+  levelPosToWindowPos(levelPos) {
+    const panOffset = this.frontModel.screen.main.window.level.panCellOffset
+    return levelPos.subtract(panOffset)
+  }
+
+  levelChangedAt(levelPos) {
+    const windowPos = this.levelPosToWindowPos(levelPos)
+    this.frontModel
+      .screen.main
+      .window.level
+      .cellsChanged.push(windowPos)
+  }
+
+  addMessage(message) {
+    const messageWindow = 
+      this.frontModel
+        .screen.main
+        .window.message
+    messageWindow.messages.push(message)
+    messageWindow.changed = true
+  }
+
+  statusChanged() {
+    this.frontModel.screen.main.window.status.changed = true
+  }
+
+  clearMessages() {
+    const messageWindow = 
+      this.frontModel
+        .screen.main
+        .window.message
+    if(messageWindow.messages.length) {
+      messageWindow.messages = []
+      messageWindow.changed = true
+    }
+  }
+
+  getCurrentKeyMode() {
+    const cs = this.frontModel.currentScreen
+    const screen = this.frontModel.screen[cs]
+    const cw = screen.currentWindow
+    const window = screen.window[cw]
+    return window.currentKeyMode
+  }
+
+  motionModeMove() {
+    const fm = this.frontModel
+    return fm.motionMode == 'attackOrMove' || fm.motionMode == 'move'
+  }
+
+  motionModeAttack() {
+    const fm = this.frontModel
+    return fm.motionMode == 'attackOrMove' || fm.motionMode == 'attack'
+  }
+
+  update() {
+    const cs = this.frontModel.currentScreen
+    const screen = this.frontModel.screen[cs]
+    this.outController.updateScreen(screen)
+  }
+
+  refresh() {
+    const cs = this.frontModel.currentScreen
+    const screen = this.frontModel.screen[cs]
+    this.outController.refreshScreen(screen)
+  }
+
+}
+
+class InController {
+
+  constructor(frontModel) {
+    this.frontModel = frontModel
+    document.removeEventListener("keyup", this.handleKey, false);
+    document.addEventListener("keyup", this.handleKey, false);
+  }
+
+  handleKey(event) {
+    topController.clearMessages()
+
+    const fm = topController.getFrontModel()
+    const cs = fm.currentScreen
+    const screen = fm.screen[cs]
+    const cw = screen.currentWindow
+    const window = screen.window[cw]
+    const km = window.currentKeyMode
+
+    window.keyMode[km].command.forEach(command => {
+      if(keyMap[km][command].some(x => event.key == x)) {
+        commandExecution[command]()
+      }
+    })
+
+    topController.update()
+  }
+
+}
+
+class OutController {
+
+  constructor(frontModel, backModel) {
+    this.frontModel = frontModel
+    this.backModel = backModel
+  }
+
+  updateScreen(screen) {
+    for(const window of Object.values(screen.window)) {
+      this.updateWindow(screen, window)
+    }
+  }
+
+  refreshScreen(screen) {
+    for(const window of Object.values(screen.window)) {
+      this.refreshWindow(screen, window)
+    }
+  }
+
+  checkPan(window) {
+    if(window == this.frontModel.screen.main.window.level) {
+      if(window.trackPlayer) {
+        this.adjustLevelPan(window, this.backModel.player.pos, this.backModel.levelSize)
+      }
+    }
+  }
+
+  updateWindow(screen, window) {
+    this.checkPan(window)
+
+    if(window.changed) {
+      this.clearWindow(screen, window)
+      this.drawWindow(screen, window)
+    } else if(window.cellsChanged.length) {
+      this.clearWindowCells(screen, window, window.cellsChanged)
+      this.drawWindowCells(screen, window, window.cellsChanged)
+    }
+
+    window.changed = false
+    window.cellsChanged = []
+  }
+
+  refreshWindow(screen, window) {
+    this.checkPan(window)
+
+    this.clearWindow(screen, window)
+    this.drawWindow(screen, window)
+
+    window.changed = false
+    window.cellsChanged = []
+  }
+
+  windowCellPosToScreenCellPos(screen, window, windowPos) {
+    const screenPos = windowPos.add(window.cellPos)
+    return screenPos
+  }
+
+  windowCellPosToScreenPixelPos(screen, window, windowPos) {
+    const screenCellPos = this.windowCellPosToScreenCellPos(screen, window, windowPos)
+    const screenPixelPos = screenCellPos.multiply(screen.cellPixelDimensions)
+    return screenPixelPos
+  }
+
+  windowCellPosToLevel(window, windowCellPos) {
+    return windowCellPos.add(window.panCellOffset)
+  }
+
+  clearWindow(screen, window) {
+    const screenPixelPos = this.windowCellPosToScreenPixelPos(
+      screen,
+      window,
+      new Pair(0, 0),
+      )
+
+    ctx.clearRect(
+      screenPixelPos.x, 
+      screenPixelPos.y, 
+      window.size.x * screen.cellPixelDimensions.x, 
+      window.size.y * screen.cellPixelDimensions.y,
+      );
+  }
+
+  windowToWindowName(screen, window) {
+    let windowName
+
+    for(const [testName, testWindow] of Object.entries(screen.window)) {
+      if(testWindow == window) {
+        windowName = testName
+      }
+    }
+
+    return windowName
+  }
+
+  adjustLevelPan(levelWindow, pos, levelSize) {
+    if(pos.x < levelWindow.panCellOffset.x + levelWindow.panScrollMargin 
+      && levelWindow.panCellOffset.x > 0
+      ) {
+      levelWindow.panCellOffset.x = Math.max(0, pos.x - levelWindow.panScrollMargin);
+      levelWindow.changed = true;
+    } 
+
+    if(pos.y < levelWindow.panCellOffset.y + levelWindow.panScrollMargin 
+      && levelWindow.panCellOffset.y > 0
+      ) {
+      levelWindow.panCellOffset.y = Math.max(0, pos.y - levelWindow.panScrollMargin);
+      levelWindow.changed = true;
+    } 
+
+    if(pos.x > levelWindow.panCellOffset.x + levelWindow.size.x - levelWindow.panScrollMargin 
+      && levelWindow.panCellOffset.x + levelWindow.size.x < levelSize.x
+      ) {
+      levelWindow.panCellOffset.x = Math.min(levelSize.x - levelWindow.size.x, pos.x + levelWindow.panScrollMargin - levelWindow.size.x);
+      levelWindow.changed = true;
+    } 
+
+    if(pos.y > levelWindow.panCellOffset.y + levelWindow.size.y - levelWindow.panScrollMargin 
+      && levelWindow.panCellOffset.y + levelWindow.size.y < levelSize.y
+      ) {
+      levelWindow.panCellOffset.y = Math.min(levelSize.y - levelWindow.size.y, pos.y + levelWindow.panScrollMargin - levelWindow.size.y);
+      levelWindow.changed = true;
+    }
+  }
+
+  actionModeToMessage(actionMode) {
+    let actionMessage = 'Unknown'
+    if(actionMode == 'attackOrMove') {
+      actionMessage = 'Move / Attack'
+    } else if(actionMode == 'move') {
+      actionMessage = 'Move'
+    } else if(actionMode == 'attack') {
+      actionMessage = 'Attack'
+    } 
+
+    return actionMessage
+  }
+
+  drawWindow(screen, window) {
+    const fm = this.frontModel
+
+    if(window == fm.screen.main.window.level) {
+      for(let c = 0; c < window.size.x; c++) {
+        for(let r = 0; r < window.size.y; r++) {
+          this.drawWindowCells(screen, window, [new Pair(c, r)])
+        }
+      }
+    } else if(window == fm.screen.main.window.message) {
+      for(let row = 0; row < window.messages.length; row++) {
+        let message = window.messages[row]
+        this.drawText(screen, window, new Pair(0, row), message, 0, screen.cellPixelDimensions.y)
+      }
+    } else if(window == fm.screen.main.window.status) {
+      const actionMessage = this.actionModeToMessage(this.frontModel.motionMode)
+      this.drawText(screen, window, new Pair(0, 0), 'Action: ' + actionMessage, 0, screen.cellPixelDimensions.y)
+      this.drawText(screen, window, new Pair(0, 1), 'HP: ' + this.backModel.player.health, 0, screen.cellPixelDimensions.y)
+    } else {
+      const windowName = this.windowToWindowName(screen, window)
+      warn("Don't know how to draw this window yet: " + windowName)
+    }
+  }
+
+  windowPosIsValid(window, windowPos) {
+    return windowPos.x >= 0 
+      && windowPos.y >= 0
+      && windowPos.x < window.size.x
+      && windowPos.y < window.size.y
+  }
+
+  clearWindowCells(screen, window, cells) {
+    for(const cellPos of cells) {
+      if(this.windowPosIsValid(window, cellPos)) {
+        const screenPixelPos = this.windowCellPosToScreenPixelPos(
+          screen,
+          window,
+          cellPos,
+          )
+
+        ctx.clearRect(
+          screenPixelPos.x, 
+          screenPixelPos.y, 
+          screen.cellPixelDimensions.x, 
+          screen.cellPixelDimensions.y,
+          )
+      }
+    }
+  }
+
+  drawWindowCells(screen, window, cells) {
+    for(const windowPos of cells) {
+      if(this.windowPosIsValid(window, windowPos)) {
+        const levelPos = this.windowCellPosToLevel(window, windowPos)
+        const cell = this.backModel.level[levelPos.x][levelPos.y]
+        let characterToDraw
+
+        if(cell.occupiedBy) {
+          characterToDraw = cell.occupiedBy.showAs;
+        } else if(cell.onFloor) {
+          characterToDraw = cell.onFloor[0].showAs;
+        } else {
+          characterToDraw = cell.floorType.showAs;
+        }
+
+        this.drawText(
+          screen,
+          window,
+          windowPos, 
+          characterToDraw, 
+          screen.cellPixelDimensions.x
+        )
+      }
+    }
+  }
+
+  getFontStyle(screen, window) {
+    if(window.fontStyle) {
+      return window.fontStyle
+    }
+
+    if(screen.fontStyle) {
+      return screen.fontStyle
+    }
+
+    if(this.frontModel.fontStyle) {
+      return this.frontModel.fontStyle
+    }
+
+    return fontStyle.fixed
+  }
+
+  drawText(screen, window, windowPos, textToDraw, centerWithinX = 0, centerWithinY = 0) {
+    let xOffset = 0 
+    let yOffset = 0
+
+    const fontStyle = this.getFontStyle(screen, window)
+    if(previousFontStyle != fontStyle) {
+      ctx.font = fontStyle.size + "px " + fontStyle.name;
+    }
+    previousFontStyle = fontStyle
+
+    const textSize = ctx.measureText(textToDraw);
+    if(centerWithinX > 0 && textSize.width < centerWithinX) {
+      xOffset = Math.floor((centerWithinX - textSize.width) / 2)
+    }
+    // const textHeight = textSize.actualBoundingBoxAscent // + textSize.actualBoundingBoxDescent
+    const textHeight = fontStyle.size
+    if(centerWithinY > 0 && textHeight < centerWithinY) {
+      yOffset = Math.floor((centerWithinY - textHeight) / 2)
+    }
+
+    const screenPixelPos = this.windowCellPosToScreenPixelPos(
+      screen,
+      window,
+      windowPos
+    )
+
+    ctx.fillText(
+      textToDraw, 
+      screenPixelPos.x + xOffset, 
+      screenPixelPos.y + fontStyle.size + yOffset,
+    )
+  }
+
+}
+
+const topController = new TopController()
+
+</script>
+
+</body>
+</html>

@@ -1,13 +1,96 @@
-food should be on ground
+get current code compiling
+make window use absolute pixel position instead of cell position
+support windows with different cell sizes
+move messages to right side, status on the left, and expand map
+make messages and status windows have a smaller cell size and font
 examine floor
+  keyMode is global, but screens have a default
+  target can focus on a specific window / cell / row
+  help associated with any given component
+  when screen is selected, global help is given
+  where to put the additional information?
+    [ ] overlay window
+    [ ] always use message window
 inventory
 pick up
 drop
 energy management
+  where does it come from?
+    dungeon core generates energy for the dungeon
+      always one color
+  tiers 0-3
+    1 tier 3 = 10 tier 2 = 100 tier 1 = 1000 tier 0
+  energy types
+    lumina
+      White (tier 3)
+        connects to any spectra
+      lighT gray (tier 2)
+        connects to any etherea
+      dArk gray (tier 1)
+        connects to any spectra or black
+      blacK (tier 0)
+        connects to any interna
+    etherea (tier 3)
+      Diamond
+      goLd
+      Silver
+      coPper
+    spectra (tier 2)
+      violet
+      indigo
+      blue
+      cyan
+      green
+      yellow
+      orange
+      red
+    interna (tier 1) (N)
+      critical_health (from violet)
+      major_health (from green)
+      minor_health (from red)
+      stamina (from orange)
+      mana (from yellow)
+  energy can flow both directions, but favors down (2x pressure on top)
+  willpower can be used to concentrate energy against the normal forces
+    effectively reduces the pressure of the targeted energy pool
+      1/2 = 1 willpower per aut
+      1/3 = 2 willpower per aut
+      1/4 = 3 willpower per aut
+      1/5 = 4 willpower per aut
+    willpower slowly charges over time
+  humans have a single spectra core, which continuously generates energy of that color
+    with normal adventure mode, spectra core isn't identified until later in the game (when magic awakening happens)
+      a second awakening may be possible, based on intelligence
+    ? with creature selection mode, spectra core may be chosen at the beginning, along with species, etc
+  energy should not pass from one pool to another unless the result would make the pressure difference lower
+  energy passes through cells of the dungeon
+    each cell may have containers for one or more energy types
+    adjacent cells are connected, and based on the cell flow rate, can share energy
+    levels have an energy core, unless it is dug up
+    plants derive energy from the floor
+    some kinds of energy can spawn monsters
+    some plants can convert one type of energy to another
+    some creatures convert energy
+    energy capacity of plants is lower than animals
 eat
-pan view
+  starvation constantly attempts to deplete HP, MP, SP (not WP)
+    red, orange, yellow energy is consumed to counter this, unless there is no energy available, in which case hp is lost
+    there is an idle rate that these deplete, although it is slow
+    HP = 0 : dead
+    MP = 0 : occasional confusion
+    SP = 0 : occasional fainting
+  critical health must be at max before major healing can happen
+  major health must be at max before minor healing can happen
+  normally major damage isn't done until minor health is 0
+  all 100/100/100 of 250
+  or 1/2 minor 1/4 major 1/4 critical
+  or 2/3 minor 1/3 of remaining major + critical, 1/3 of remaining critical
+  all health must be 0 before death occurs
+  critical strikes can bypass the normal damage order
 help about specific components of interface
 emotions
+monster enemy identification
+  smell, sight, energy, hearing, persuasion
 different times for actions
 seed based randomization
 break out into multiple files
@@ -37,13 +120,64 @@ spawned items
   wands: convert energy into a single spell, without needing intelligence
   runes: alters attribute of holder permanently while carrying it, or item it's installed into
   gems: stores or converts energy
+    if a player equips a gem in their hand, it connects with the native container of the player of the same color
+      generated with random level of charge?
+        either 
+          10  0 
+          3   0.5
+          1   1
+    L1  30 points of capacity
+    L2  100 points of capacity
+    L3  300 points of capacity
+    L4  1000 points of capacity
+    L5  3000 points of capacity
+    L6  10000 points of capacity
+    L7  30000 points
+    L8  100000
+    L9  300000
+    L10 1000000
+    opal: changes to the energy type of the highest pressure energy the user has at the time they first hold it
+    pearl: white
+    ruby: red
+shops
+  travelling merchants
+    prices are somewhat random
+    (but show average over 1 day, 1 week, etc)
+  fixed shops
+    They can buy and sell, but price is based on demand
+      each item has a container size, and min and max price, based on how full that capacity is
+    merchant level determines capacity
+      L1 = 10
+      L2 = 30
+      L3 = 100
+      L4 = 300
+      L5 = 1000
+    merchants must make profit (10%)
+    normal merchants get random buyers or sellers
+    pawn shops don't ever change stock. You will always be able to buy the item back
 random drops
 consume item
-adventure paths
+scenarios
+  (rich man)
+    mediocre skills, but vast wealth to be able to buy the finest equipment
+    starts with decent equip
+  prodigy (super talent)
+    meager starting equipment, but amazing talent from the beginning
   adventurer
-    
+    evenly balanced
   wanderer
-    
+    minimal equipment and skills, but highly adaptable
+  spirit
+    can't carry equipment unless possessing another creature
+    can move from one creature to another
+    must store up enough energy before dying to be able to possess another 
+    leaving before dying is better, since death causes a backlash greatly reducing the spirits power
+  time traveller
+    modest equip and skills, but can rewind time at any point using a special time energy
+    cheap power: foresight
+      can test a future, which automatically rewinds after time limit expires
+    strong power: checkpoint rewind (must happen before death)
+    super strong power: death pause (must be cast before dying), will rewind a short time before death should death occur
   raider
     obtain the main treasure
   conquerer
@@ -66,3 +200,9 @@ multiplayer in same dungeon
   taking over another player
   forking another player
   playing with a separate character
+  real time simultaneous changes, but each player that moves gives the level a turns also
+    maybe disabled when monsters are around?
+experience / levels
+  each level up gives growth points
+  growth points expand any given property by 20%
+  if species changes, then base changes, but same growth is applied to it

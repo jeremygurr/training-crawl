@@ -393,6 +393,15 @@ const template = {
               yellow: 5,
             },
           },
+          eggplant: { 
+            name: 'eggplant',
+            chanceWeight: 500,
+            energy: {
+              red: 5,
+              green: 5,
+              violet: 10,
+            },
+          },
           blueberries: { 
             name: 'blueberries',
             chanceWeight: 500,
@@ -429,6 +438,7 @@ const template = {
 
   backModel: {
     actor: [],
+    motionMode: 'attackOrMove',
     seed: 'test3',
     levelCaveGenerator: {
       openness: 0.2,
@@ -437,6 +447,11 @@ const template = {
     },
     levelSize: new Pair(30, 30),
     level: [],
+    levelCellsChanged: [],
+    levelChanged: false,
+    messages: [],
+    messagesChanged: false,
+    statusChanged: false,
     player: { 
       name: 'player', 
       showAs: '🙂', 
@@ -448,39 +463,46 @@ const template = {
 
   frontModel: {
 
-    motionMode: 'attackOrMove',
-    initialScreen: 'main',
-    fontStyle: fontStyle.fixed,
+    currentScreen: 'main',
+    currentKeyMode: 'base',
+    target: {
+      screen: null,
+      window: null,
+      pos: null,
+    },
 
     screen: {
       main: {
-        initialKeyMode: 'base',
+
+        cellPixelDimensions: new Pair(26, 30),
+        size: new Pair(40, 30),
 
         window: {
 
-          level: {
+          status: {
             pos: new Pair(0, 0),
-            size: new Pair(20, 10),
-            cellPixelDimensions: new Pair(26, 30),
-            panCellOffset: new Pair(0, 0),
-            panScrollMargin: 4,
-            target: null,
+            size: new Pair(10, 30),
+            cellPixelDimensions: new Pair(16, 16),
+            fontStyle: fontStyle.compact,
           },
 
-          status: {
-            pos: new Pair(21, 0),
-            size: new Pair(19, 10),
-            cellPixelDimensions: new Pair(16, 16),
+          level: {
+            pos: new Pair(10, 0),
+            size: new Pair(20, 30),
+            cellPixelDimensions: new Pair(26, 30),
+            fontStyle: fontStyle.fixed,
+            panCellOffset: new Pair(0, 0),
+            panScrollMargin: 4,
           },
 
           message: {
-            pos: new Pair(0, 10),
-            size: new Pair(30, 4),
+            pos: new Pair(30, 0),
+            size: new Pair(10, 30),
             cellPixelDimensions: new Pair(16, 16),
             fontStyle: fontStyle.compact,
-            messages: [],
           },
         },
+
       },
     },
 
@@ -602,6 +624,10 @@ class SeededRandomizer {
       return Math.floor(this.generator() * possibilities)
     }
   }
+
+  fork() {
+    return new SeededRandomizer(next())
+  }
 }
 
 function debug(message) {
@@ -620,48 +646,52 @@ class TopController {
 
   constructor() {
     this.backController = new BackController()
-    this.frontController = new FrontController(this.backController.backModel)
+    this.frontController = new FrontController()
     this.refresh()
-  }
-
-  setMotionMode(mode) {
-    this.frontController.setMotionMode(mode)
-  }
-
-  setTarget(pos) {
-    this.frontModel.screen.main.window.level.target = pos
-    this.frontModel.screen.main.window.changed = true
   }
 
   playerMotionRelative(relPos) {
     const bc = this.backController
     const fc = this.frontController
 
-    const playerOldPos = bc.getPlayer().pos
-    const playerNewPos = playerOldPos.add(relPos)
+    const target = fc.getTarget()
 
-    if(!bc.isFieldPosValid(playerNewPos)) {
-      this.addMessage("You can't move there.")
-      return
-    }
-      
-    if(bc.isFieldPosOccupied(playerNewPos)) {
-      if(fc.motionModeAttack()) {
-        this.playerAttack(playerNewPos)
-        return
-      } else {
-        this.addMessage("That space is already occupied.")
+    if(target.pos == null) {
+      const playerOldPos = bc.getPlayer().pos
+      const playerNewPos = playerOldPos.add(relPos)
+
+      if(!bc.isFieldPosValid(playerNewPos)) {
+        bc.addMessage("You can't move there.")
         return
       }
-    }
 
-    if(!fc.motionModeMove()) {
-      this.addMessage("There is nothing to attack there.")
-      return
-    }
+      if(bc.isFieldPosOccupied(playerNewPos)) {
+        if(bc.motionModeAttack()) {
+          this.playerAttack(playerNewPos)
+          return
+        } else {
+          bc.addMessage("That space is already occupied.")
+          return
+        }
+      }
 
-    this.occupantSet(bc.getPlayer(), playerNewPos)
-    this.advanceTime();
+      if(!bc.motionModeMove()) {
+        bc.addMessage("There is nothing to attack there.")
+        return
+      }
+
+      this.occupantSet(bc.getPlayer(), playerNewPos)
+      this.advanceTime();
+    } else {
+      // target mode is on
+      const targetNewPos = target.pos.add(relPos)
+
+      if(!bc.isFieldPosValid(targetNewPos)) {
+        return
+      }
+
+      fc.setTarget(targetNewPos)
+    }
   }
 
   playerAttack(target) {
@@ -671,11 +701,11 @@ class TopController {
     const targetCell = bc.getCell(target)
     const targetActor = targetCell.occupiedBy
     if(targetActor.health == null) {
-      this.addMessage("You can't attack that.")
+      bc.addMessage("You can't attack that.")
       return
     }
 
-    const player = this.backController.getPlayer()
+    const player = bc.getPlayer()
     const damage = this.calculateDamageFrom(player)
     targetActor.health -= damage
     let message = "You hit the " + targetActor.name + " for " + damage + " damage."
@@ -689,51 +719,72 @@ class TopController {
       message += " The " + targetActor.name + " is dead."; 
       targetCell.occupiedBy = null
       bc.removeActor(targetActor)
-      fc.levelChangedAt(target)
     } else {
       if(damage > 0) {
         message += " hp=" + targetActor.health
       }
     }
-    this.addMessage(message)
+    bc.addMessage(message)
 
     this.advanceTime()
   }
 
   clearMessages() {
-    this.frontController.clearMessages()
-  }
-
-  addMessage(message) {
-    this.frontController.addMessage(message)
+    this.backController.clearMessages()
   }
 
   getKeyMode() {
-    return this.frontController.getKeyMode()
+    return this.backController.getKeyMode()
   }
 
   setKeyMode(keyModeName) {
-    this.frontController.setKeyMode(keyModeName)
+    this.backController.setKeyMode(keyModeName)
   }
 
-  update() {
-    this.frontController.update()
+  update(forceRefresh = false) {
+    const screen = frontController.getCurrentScreen()
+    this.updateScreen(screen, forceRefresh)
   }
 
-  refresh() {
-    this.frontController.refresh()
+  updateScreen(screen, forceRefresh = false) {
+    for(const window of Object.values(screen.window)) {
+      this.updateWindow(screen, window, forceRefresh)
+    }
   }
 
-  advanceTime() {
-    this.backController.advanceTime()
-  }
+  updateWindow(screen, window, forceRefresh = false) {
 
-  levelChangedAt(pos) {
-    this.frontController.levelChangedAt(pos)
-  }
+    const fc = this.frontController
+    fc.checkPan(window)
 
-  statusChanged() {
-    this.frontController.statusChanged()
+    let changed = false
+    let cellsChanged = []
+    if(window.name == 'status') {
+      changed = bc.getStatusChanged() 
+    } else if(window.name == 'level') {
+      changed = bc.getLevelChanged() 
+      cellsChanged = bc.getLevelCellsChanged()
+    } else if(window.name == 'message') {
+      changed = bc.getMessageChanged() 
+    }
+
+    if(changed || forceRefresh) {
+      fc.clearWindow(screen, window)
+      fc.drawWindow(screen, window)
+    } else if(cellsChanged.length) {
+      fc.clearWindowCells(screen, window, cellsChanged)
+      fc.drawLevelWindowCells(screen, window, cellsChanged)
+    }
+
+    if(window.name == 'status') {
+      bc.setStatusChanged(false) 
+    } else if(window.name == 'level') {
+      bc.setLevelChanged(false) 
+      bc.clearLevelCellsChanged()
+    } else if(window.name == 'message') {
+      bc.setMessageChanged(false) 
+    }
+
   }
 
   advanceTime() {
@@ -786,13 +837,13 @@ class TopController {
     if(target.health <= 0) {
       if(target == player) {
         err("Not implemented yet")
-        // this.addMessage("You died. Press 'R' to restart.")
+        // bc.addMessage("You died. Press 'R' to restart.")
         // setKeyListener(rKeyHandler, restart)
       }
     }
 
     if(change != 0 && target == player) {
-      this.statusChanged()
+      this.backController.setStatusChanged()
     }
   }
 
@@ -802,11 +853,11 @@ class TopController {
     var message;
     if(damage > 0) {
       message = "The " + source.name + " hit you for " + damage + " damage."
-      this.addMessage(message)
+      this.backController.addMessage(message)
       this.adjustHealth(target, -damage)
     } else {
       message = "The " + source.name + " missed you.";
-      this.addMessage(message)
+      this.backController.addMessage(message)
     }
   }
 
@@ -815,13 +866,13 @@ class TopController {
     const fromPos = occupant.pos
     if(fromPos != null) {
       bc.getCell(fromPos).occupiedBy = null
-      this.levelChangedAt(fromPos)
+      bc.addLevelCellsChanged(fromPos)
     }
     if(bc.getCell(toPos).occupiedBy != null) {
       err('Cell at ' + toPos.x + ', ' + toPos.y + ' is already occupied')
     }
     bc.getCell(toPos).occupiedBy = occupant
-    this.levelChangedAt(toPos)
+    bc.addLevelCellsChanged(toPos)
 
     occupant.pos = toPos
   }
@@ -834,6 +885,64 @@ class BackController {
     this.backModel = _.cloneDeep(template.backModel)
     const randomizer = new SeededRandomizer(this.backModel.seed)
     this.buildLevel(randomizer)
+  }
+
+  setMotionMode(mode) {
+    this.backModel.motionMode = mode
+    this.setStatusChanged()
+  }
+
+  addMessage(message) {
+    const messageWindow = 
+      this.frontModel
+        .screen.main
+        .window.message
+    messageWindow.messages.push(message)
+    messageWindow.changed = true
+  }
+
+  setLevelChanged(changed) {
+    this.backModel.levelChanged = changed
+  }
+
+  getLevelChanged() {
+    return this.backModel.levelChanged 
+  }
+
+  getLevelCellsChanged() {
+    return this.backModel.levelCellsChanged
+  }
+
+  addLevelCellsChanged(pos) {
+    return this.backModel.levelCellsChanged.push(pos)
+  }
+
+  clearLevelCellsChanged() {
+    return this.backModel.levelCellsChanged = []
+  }
+
+  setMessagesChanged(changed) {
+    this.backModel.messagesChanged = changed
+  }
+
+  getMessagesChanged() {
+    return this.backModel.messagesChanged 
+  }
+
+  setStatusChanged(changed) {
+    this.backModel.statusChanged = changed
+  }
+
+  getStatusChanged() {
+    return this.backModel.statusChanged 
+  }
+
+  clearMessages() {
+    const bm = this.backModel
+    if(bm.messages.length) {
+      bm.messages = []
+      bm.messagesChanged = true
+    }
   }
 
   getCell(pos) {
@@ -1234,9 +1343,7 @@ class BackController {
 
 class FrontController {
 
-  constructor(backModel) {
-    this.backModel = backModel
-
+  constructor() {
     let fm = _.cloneDeep(template.frontModel)
     this.frontModel = fm
 
@@ -1255,51 +1362,18 @@ class FrontController {
     this.outController = new OutController()
   }
 
-  setScreen(screenName) {
-    this.frontModel.currentScreen = fm.initialScreen
-    setKeyMode(this.frontModel.screen[screenName].initialKeyMode)
+  setTarget(pos) {
+    this.frontModel.target.pos = pos
+    this.setLevelChanged(true)
   }
 
-  setMotionMode(mode) {
-    this.frontModel.motionMode = mode
-    this.statusChanged()
+  setScreen(screenName) {
+    this.frontModel.currentScreen = fm.initialScreen
   }
 
   levelPosToWindowPos(levelPos) {
     const panOffset = this.frontModel.screen.main.window.level.panCellOffset
     return levelPos.subtract(panOffset)
-  }
-
-  levelChangedAt(levelPos) {
-    const windowPos = this.levelPosToWindowPos(levelPos)
-    this.frontModel
-      .screen.main
-      .window.level
-      .cellsChanged.push(windowPos)
-  }
-
-  addMessage(message) {
-    const messageWindow = 
-      this.frontModel
-        .screen.main
-        .window.message
-    messageWindow.messages.push(message)
-    messageWindow.changed = true
-  }
-
-  statusChanged() {
-    this.frontModel.screen.main.window.status.changed = true
-  }
-
-  clearMessages() {
-    const messageWindow = 
-      this.frontModel
-        .screen.main
-        .window.message
-    if(messageWindow.messages.length) {
-      messageWindow.messages = []
-      messageWindow.changed = true
-    }
   }
 
   getKeyMode() {
@@ -1320,30 +1394,6 @@ class FrontController {
     return fm.motionMode == 'attackOrMove' || fm.motionMode == 'attack'
   }
 
-  update() {
-    const cs = this.frontModel.currentScreen
-    const screen = this.frontModel.screen[cs]
-    this.outController.updateScreen(screen)
-  }
-
-  refresh() {
-    const cs = this.frontModel.currentScreen
-    const screen = this.frontModel.screen[cs]
-    this.outController.refreshScreen(screen)
-  }
-
-  updateScreen(screen) {
-    for(const window of Object.values(screen.window)) {
-      this.updateWindow(screen, window)
-    }
-  }
-
-  refreshScreen(screen) {
-    for(const window of Object.values(screen.window)) {
-      this.refreshWindow(screen, window)
-    }
-  }
-
   checkPan(window) {
     if(window == this.frontModel.screen.main.window.level) {
       let pos
@@ -1355,31 +1405,6 @@ class FrontController {
 
       this.adjustLevelPan(window, pos, this.backModel.levelSize)
     }
-  }
-
-  updateWindow(screen, window) {
-    this.checkPan(window)
-
-    if(window.changed) {
-      this.clearWindow(screen, window)
-      this.drawWindow(screen, window)
-    } else if(window.cellsChanged.length) {
-      this.clearWindowCells(screen, window, window.cellsChanged)
-      this.drawLevelWindowCells(screen, window, window.cellsChanged)
-    }
-
-    window.changed = false
-    window.cellsChanged = []
-  }
-
-  refreshWindow(screen, window) {
-    this.checkPan(window)
-
-    this.clearWindow(screen, window)
-    this.drawWindow(screen, window)
-
-    window.changed = false
-    window.cellsChanged = []
   }
 
   windowCellPosToScreenCellPos(screen, window, windowPos) {
@@ -1592,6 +1617,12 @@ class FrontController {
     )
 
     outController.drawText(fontStyle, screenPixelPos, textToDraw, centerWithinX, centerWithinY)
+  }
+
+  getCurrentScreen() {
+    const cs = this.frontModel.currentScreen
+    const screen = this.frontModel.screen[cs]
+    return screen
   }
 
 }

@@ -755,7 +755,15 @@ class TopController {
   updateWindow(screen, window, forceRefresh = false) {
 
     const fc = this.frontController
-    fc.checkPan(window)
+
+    let pos
+    if(window.target) {
+      pos = window.target
+    } else {
+      pos = this.backController.getPlayer.pos
+    }
+
+    fc.checkPan(window, pos, this.backController.levelSize)
 
     let changed = false
     let cellsChanged = []
@@ -1384,26 +1392,9 @@ class FrontController {
     this.frontModel.currentKeyMode = keyModeName
   }
 
-  motionModeMove() {
-    const fm = this.frontModel
-    return fm.motionMode == 'attackOrMove' || fm.motionMode == 'move'
-  }
-
-  motionModeAttack() {
-    const fm = this.frontModel
-    return fm.motionMode == 'attackOrMove' || fm.motionMode == 'attack'
-  }
-
-  checkPan(window) {
+  checkPan(window, pos, size) {
     if(window == this.frontModel.screen.main.window.level) {
-      let pos
-      if(window.target) {
-        pos = window.target
-      } else {
-        pos = this.backModel.player.pos
-      }
-
-      this.adjustLevelPan(window, pos, this.backModel.levelSize)
+      this.adjustLevelPan(window, pos, size)
     }
   }
 
@@ -1493,13 +1484,15 @@ class FrontController {
   }
 
   getCellPixelRect(screen, window, windowPos) {
-    const posUpperLeft = windowCellPosToScreenPixelPos(screenm, window, windowPos)
+    const posUpperLeft = windowCellPosToScreenPixelPos(screen, window, windowPos)
     const posLowerRight = posUpperLeft.add(screen.cellPixelDimensions)
     return new Rect(posUpperLeft.x, posUpperLeft.y, posLowerRight.x, posLowerRight.y)
   }
 
   getWindowPixelRect(screen, window) {
-    --------------------
+    const posUpperLeft = windowCellPosToScreenPixelPos(screen, window, new Pair(0,0))
+    const posLowerRight = posUpperLeft.add(window.size.multiply(window.cellPixelDimensions))
+    return new Rect(posUpperLeft.x, posUpperLeft.y, posLowerRight.x, posLowerRight.y)
   }
 
   drawWindow(screen, window) {

@@ -106,8 +106,17 @@ eat
   critical strikes can bypass the normal damage order
 help about specific components of interface
 emotions
+  happy, sad, afraid, pain
 monster enemy identification
-  smell, sight, energy, hearing, persuasion
+  sight
+    changes quickly
+  hearing
+    changes a little quick
+  smell
+    changes slowly
+  energy
+    changes slowly
+  persuasion
 different times for actions
 seed based randomization
 break out into multiple files
@@ -124,11 +133,6 @@ multiple simultaneous clients
 save / load
 spawning monsters
 light mechanics
-multi senses
-  sight
-  hearing
-  smell
-  energy
 curses
   wear off over time, or can be immediately cancelled with a remove curse scroll
 spawned items
@@ -252,6 +256,7 @@ disciplines
     can sense things through walls, under ground, etc
   growth master
     allows adjusting growth points
+    faster growth rate, depending on level of discipline gained
   travel master
     provides teleportation abilities, even across dimensions
   time master
@@ -516,6 +521,7 @@ species
         wp
       weak:
         can't study disciplines
+        don't gain additional cores
     demon
       strong:
         demonic mutations

@@ -17,7 +17,7 @@
 const canvasProps = {
   xOffset: 3,
   yOffset: 0,
-  width: 1000,
+  width: 1440,
   height: 450,
 };
 
@@ -481,13 +481,13 @@ const template = {
 
           status: {
             pos: new Pair(0, 0),
-            size: new Pair(10, 30),
+            size: new Pair(6, 30),
             cellPixelDimensions: new Pair(16, 16),
             fontStyle: fontStyle.compact,
           },
 
           level: {
-            pos: new Pair(10, 0),
+            pos: new Pair(6, 0),
             size: new Pair(20, 30),
             cellPixelDimensions: new Pair(26, 30),
             fontStyle: fontStyle.fixed,
@@ -496,8 +496,8 @@ const template = {
           },
 
           message: {
-            pos: new Pair(30, 0),
-            size: new Pair(10, 30),
+            pos: new Pair(26, 0),
+            size: new Pair(15, 30),
             cellPixelDimensions: new Pair(16, 16),
             fontStyle: fontStyle.compact,
           },
@@ -650,6 +650,12 @@ class TopController {
     this.refresh()
   }
 
+  refresh() {
+    const screen = this.frontController.getCurrentScreen()
+    this.frontController.clear()
+    this.frontController.draw(screen, this.backController.backModel)
+  }
+
   playerMotionRelative(relPos) {
     const bc = this.backController
     const fc = this.frontController
@@ -734,11 +740,11 @@ class TopController {
   }
 
   getKeyMode() {
-    return this.backController.getKeyMode()
+    return this.frontController.getKeyMode()
   }
 
   setKeyMode(keyModeName) {
-    this.backController.setKeyMode(keyModeName)
+    this.frontController.setKeyMode(keyModeName)
   }
 
   update(forceRefresh = false) {
@@ -778,10 +784,10 @@ class TopController {
 
     if(changed || forceRefresh) {
       fc.clearWindow(screen, window)
-      fc.drawWindow(screen, window)
+      fc.drawWindow(screen, window, this.backController.backModel)
     } else if(cellsChanged.length) {
       fc.clearWindowCells(screen, window, cellsChanged)
-      fc.drawLevelWindowCells(screen, window, cellsChanged)
+      fc.drawLevelWindowCells(screen, window, cellsChanged, this.backModel.backModel.level)
     }
 
     if(window.name == 'status') {
@@ -1364,10 +1370,12 @@ class FrontController {
       screen.name = screenName
     }
 
-    this.setScreen(fm.initialScreen)
-    
     this.inController = new InController(this.frontModel)
     this.outController = new OutController()
+  }
+
+  getTarget() {
+    return this.frontModel.target
   }
 
   setTarget(pos) {
@@ -1376,7 +1384,7 @@ class FrontController {
   }
 
   setScreen(screenName) {
-    this.frontModel.currentScreen = fm.initialScreen
+    this.frontModel.currentScreen = screenName
   }
 
   levelPosToWindowPos(levelPos) {
@@ -1399,7 +1407,7 @@ class FrontController {
   }
 
   windowCellPosToScreenCellPos(screen, window, windowPos) {
-    const screenPos = windowPos.add(window.cellPos)
+    const screenPos = windowPos.add(window.pos)
     return screenPos
   }
 
@@ -1411,6 +1419,16 @@ class FrontController {
 
   windowCellPosToLevel(window, windowCellPos) {
     return windowCellPos.add(window.panCellOffset)
+  }
+
+  clear() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+  }
+
+  draw(screen, backModel) {
+    for(const window of Object.values(screen.window)) {
+      this.drawWindow(screen, window, backModel)
+    }
   }
 
   clearWindow(screen, window) {
@@ -1495,13 +1513,13 @@ class FrontController {
     return new Rect(posUpperLeft.x, posUpperLeft.y, posLowerRight.x, posLowerRight.y)
   }
 
-  drawWindow(screen, window) {
+  drawWindow(screen, window, backModel) {
     const fm = this.frontModel
 
     if(window == fm.screen.main.window.level) {
       for(let c = 0; c < window.size.x; c++) {
         for(let r = 0; r < window.size.y; r++) {
-          this.drawLevelWindowCell(screen, window, new Pair(c, r))
+          this.drawLevelWindowCell(screen, window, new Pair(c, r), backModel.level)
         }
       }
 
@@ -1510,19 +1528,18 @@ class FrontController {
         const cellBoundary = getCellPixelRect(screen, window, windowPos)
         const windowBoundary = getWindowPixelRect(screen, window)
         outController.drawEmptyRect(cellBoundary)
-        outController.drawFilledRect(---------------------)
-        --------------------
-        ctx.strokeRect()
+        outController.drawFilledRect(windowBoundary.x1, cellBoundary.y1, windowBoundary.x2, cellBoundary.y2)
+        outController.drawFilledRect(cellBoundary.x1, windowBoundary.y1, cellBoundary.x2, windowBoundary.y2)
       }
     } else if(window == fm.screen.main.window.message) {
-      for(let row = 0; row < window.messages.length; row++) {
-        let message = window.messages[row]
+      for(let row = 0; row < backModel.messages.length; row++) {
+        let message = backModel.messages[row]
         this.drawText(screen, window, new Pair(0, row), message, 0, screen.cellPixelDimensions.y)
       }
     } else if(window == fm.screen.main.window.status) {
       const actionMessage = this.actionModeToMessage(this.frontModel.motionMode)
       this.drawText(screen, window, new Pair(0, 0), 'Action: ' + actionMessage, 0, screen.cellPixelDimensions.y)
-      this.drawText(screen, window, new Pair(0, 1), 'HP: ' + this.backModel.player.health, 0, screen.cellPixelDimensions.y)
+      this.drawText(screen, window, new Pair(0, 1), 'HP: ' + backModel.player.health, 0, screen.cellPixelDimensions.y)
     } else {
       const windowName = this.windowToWindowName(screen, window)
       warn("Don't know how to draw this window yet: " + windowName)
@@ -1555,16 +1572,16 @@ class FrontController {
     }
   }
 
-  drawLevelWindowCells(screen, window, cells) {
+  drawLevelWindowCells(screen, window, cells, level) {
     for(const windowPos of cells) {
-      drawLevelWindowCell(screen, window, windowPos)
+      drawLevelWindowCell(screen, window, windowPos, level)
     }
   }
 
-  drawLevelWindowCell(screen, window, windowPos) {
-    if(this.windowPosIsValid(window, windowPos)) {
+  drawLevelWindowCell(screen, window, windowPos, level) {
+    if(this.windowPosIsValid(window, windowPos, level)) {
       const levelPos = this.windowCellPosToLevel(window, windowPos)
-      const cell = this.backModel.level[levelPos.x][levelPos.y]
+      const cell = level[levelPos.x][levelPos.y]
       let characterToDraw
 
       if(cell.occupiedBy) {
@@ -1601,7 +1618,7 @@ class FrontController {
     return fontStyle.fixed
   }
 
-  drawText(windowPos, textToDraw, centerWithinX = 0, centerWithinY = 0) {
+  drawText(screen, window, windowPos, textToDraw, centerWithinX = 0, centerWithinY = 0) {
     const fontStyle = this.getFontStyle(screen, window)
     const screenPixelPos = this.windowCellPosToScreenPixelPos(
       screen,
@@ -1609,7 +1626,7 @@ class FrontController {
       windowPos
     )
 
-    outController.drawText(fontStyle, screenPixelPos, textToDraw, centerWithinX, centerWithinY)
+    this.outController.drawText(fontStyle, screenPixelPos, textToDraw, centerWithinX, centerWithinY)
   }
 
   getCurrentScreen() {

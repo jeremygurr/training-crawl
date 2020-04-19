@@ -248,12 +248,19 @@ disciplines
     based on levels gained after starting the discipline study
     can only study one discipline at a time, but can change without loss
     provide permanent abilities (which usually cost some resource)
+    abilities do not require intelligence or mana, only ability points (which recover as player gains exp)
   slow master
     abilities based on speed difference
   equip master
+    can request a type of equipment periodically, randomly selected
   magic master
+    can request refill of mana
+  escape master
+    can create walls around self or target (only if spaces are empty)
+    repulse: push all neighboring creatures back a few spaces
   vision master
     can sense things through walls, under ground, etc
+    can search for a type of creature
   growth master
     allows adjusting growth points
     faster growth rate, depending on level of discipline gained
@@ -263,6 +270,7 @@ disciplines
     cheap power: foresight
       can test a future, which automatically rewinds after time limit expires
     strong power: checkpoint rewind (must happen before death)
+    time bubble: time slows down outside of bubble, but inside normal flow
     super strong power: second chance (must be cast before dying), will rewind a short time before death should death occur
   spirit master
     can't carry equipment unless possessing another creature
@@ -287,8 +295,6 @@ multiplayer in same dungeon
   real time simultaneous changes, but each player that moves gives the level a turn also
     maybe disabled when monsters are around?
 experience / levels
-  each level up gives growth points
-    5 per level?
   every 10 levels gives a chance of a energy core awakening
     one core becomes a producer, randomly chosen
       you can alter the chances to some degree
@@ -296,6 +302,30 @@ experience / levels
       may be the same core twice, which doubles the output of that energy
   growth points expand any given property by 10%
   if species changes, then base changes, but same growth is applied to it
+  experienced gained from
+    [ ] exploring a floor
+    [ ] killing monsters
+    [ ] getting deeper in the dungeon
+    [*] experience potions (one per floor)
+  one level up per experience potion
+    gives 10 growth points
+    1 gp = +1 attribute
+    1 gp = +apt skill (average being 4)
+
+challenge / defense calculation
+  diff = challenge - defense 
+  power = 2^(diff/4)
+  chance = power/(power+1)
+damage calculation
+  (damage_range * random + base_damage) * chance * 2
+  max_damage = (damage_range + base_damage) * 2
+  min_damage = 0
+defenses
+  dodge
+  deflect
+  block
+  magic armor
+  physical armor
 leaving a floor causes time to stop for that floor. When returning to that floor, time is advanced based on how much time the player was away, up to a maximum amount
 identification
   potions, scrolls, wands, weapons, armor, rings, etc.  are not identified at first

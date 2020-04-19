@@ -481,13 +481,13 @@ const template = {
 
           status: {
             pos: new Pair(0, 0),
-            size: new Pair(6, 15),
+            size: new Pair(7, 15),
             cellPixelDimensions: new Pair(16, 16),
             fontStyle: fontStyle.compact,
           },
 
           level: {
-            pos: new Pair(6, 0),
+            pos: new Pair(7, 0),
             size: new Pair(20, 15),
             cellPixelDimensions: new Pair(26, 30),
             fontStyle: fontStyle.fixed,
@@ -496,7 +496,7 @@ const template = {
           },
 
           message: {
-            pos: new Pair(26, 0),
+            pos: new Pair(27, 0),
             size: new Pair(15, 15),
             cellPixelDimensions: new Pair(16, 16),
             fontStyle: fontStyle.compact,
@@ -930,6 +930,10 @@ class TopController {
     occupant.pos = toPos
   }
 
+  setMotionMode(mode) {
+    this.backController.setMotionMode(mode)
+  }
+
 }
 
 class BackController {
@@ -942,7 +946,7 @@ class BackController {
 
   setMotionMode(mode) {
     this.backModel.motionMode = mode
-    this.setStatusChanged()
+    this.setStatusChanged(true)
   }
 
   motionModeAttack() {
@@ -1545,7 +1549,7 @@ class FrontController {
         this.drawText(screen, window, new Pair(0, row), message, 0, screen.cellPixelDimensions.y)
       }
     } else if(window == fm.screen.main.window.status) {
-      const actionMessage = this.actionModeToMessage(this.frontModel.motionMode)
+      const actionMessage = this.actionModeToMessage(backModel.motionMode)
       this.drawText(screen, window, new Pair(0, 0), 'Action: ' + actionMessage, 0, screen.cellPixelDimensions.y)
       this.drawText(screen, window, new Pair(0, 1), 'HP: ' + backModel.player.health, 0, screen.cellPixelDimensions.y)
     } else {

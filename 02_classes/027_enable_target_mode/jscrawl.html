@@ -475,20 +475,20 @@ const template = {
       main: {
 
         cellPixelDimensions: new Pair(26, 30),
-        size: new Pair(40, 30),
+        size: new Pair(40, 15),
 
         window: {
 
           status: {
             pos: new Pair(0, 0),
-            size: new Pair(6, 30),
+            size: new Pair(6, 15),
             cellPixelDimensions: new Pair(16, 16),
             fontStyle: fontStyle.compact,
           },
 
           level: {
             pos: new Pair(6, 0),
-            size: new Pair(20, 30),
+            size: new Pair(20, 15),
             cellPixelDimensions: new Pair(26, 30),
             fontStyle: fontStyle.fixed,
             panCellOffset: new Pair(0, 0),
@@ -497,7 +497,7 @@ const template = {
 
           message: {
             pos: new Pair(26, 0),
-            size: new Pair(15, 30),
+            size: new Pair(15, 15),
             cellPixelDimensions: new Pair(16, 16),
             fontStyle: fontStyle.compact,
           },
@@ -651,9 +651,7 @@ class TopController {
   }
 
   refresh() {
-    const screen = this.frontController.getCurrentScreen()
-    this.frontController.clear()
-    this.frontController.draw(screen, this.backController.backModel)
+    this.update(true)
   }
 
   playerMotionRelative(relPos) {
@@ -748,7 +746,7 @@ class TopController {
   }
 
   update(forceRefresh = false) {
-    const screen = frontController.getCurrentScreen()
+    const screen = this.frontController.getCurrentScreen()
     this.updateScreen(screen, forceRefresh)
   }
 
@@ -761,15 +759,16 @@ class TopController {
   updateWindow(screen, window, forceRefresh = false) {
 
     const fc = this.frontController
+    const bc = this.backController
 
     let pos
     if(window.target) {
       pos = window.target
     } else {
-      pos = this.backController.getPlayer.pos
+      pos = this.backController.getPlayer().pos
     }
 
-    fc.checkPan(window, pos, this.backController.levelSize)
+    this.checkPan(window, pos, bc.backModel.levelSize)
 
     let changed = false
     let cellsChanged = []
@@ -779,15 +778,15 @@ class TopController {
       changed = bc.getLevelChanged() 
       cellsChanged = bc.getLevelCellsChanged()
     } else if(window.name == 'message') {
-      changed = bc.getMessageChanged() 
+      changed = bc.getMessagesChanged() 
     }
 
     if(changed || forceRefresh) {
       fc.clearWindow(screen, window)
-      fc.drawWindow(screen, window, this.backController.backModel)
+      fc.drawWindow(screen, window, bc.backModel)
     } else if(cellsChanged.length) {
       fc.clearWindowCells(screen, window, cellsChanged)
-      fc.drawLevelWindowCells(screen, window, cellsChanged, this.backModel.backModel.level)
+      fc.drawLevelWindowCells(screen, window, cellsChanged, bc.backModel.level)
     }
 
     if(window.name == 'status') {
@@ -796,9 +795,47 @@ class TopController {
       bc.setLevelChanged(false) 
       bc.clearLevelCellsChanged()
     } else if(window.name == 'message') {
-      bc.setMessageChanged(false) 
+      bc.setMessagesChanged(false) 
     }
 
+  }
+
+  checkPan(window, pos, size) {
+    if(window == this.frontController.frontModel.screen.main.window.level) {
+      this.adjustLevelPan(window, pos, size)
+    }
+  }
+
+  adjustLevelPan(levelWindow, pos, levelSize) {
+    const bc = this.backController
+
+    if(pos.x < levelWindow.panCellOffset.x + levelWindow.panScrollMargin 
+      && levelWindow.panCellOffset.x > 0
+      ) {
+      levelWindow.panCellOffset.x = Math.max(0, pos.x - levelWindow.panScrollMargin);
+      bc.setLevelChanged(true)
+    } 
+
+    if(pos.y < levelWindow.panCellOffset.y + levelWindow.panScrollMargin 
+      && levelWindow.panCellOffset.y > 0
+      ) {
+      levelWindow.panCellOffset.y = Math.max(0, pos.y - levelWindow.panScrollMargin);
+      bc.setLevelChanged(true)
+    } 
+
+    if(pos.x > levelWindow.panCellOffset.x + levelWindow.size.x - levelWindow.panScrollMargin 
+      && levelWindow.panCellOffset.x + levelWindow.size.x < levelSize.x
+      ) {
+      levelWindow.panCellOffset.x = Math.min(levelSize.x - levelWindow.size.x, pos.x + levelWindow.panScrollMargin - levelWindow.size.x);
+      bc.setLevelChanged(true)
+    } 
+
+    if(pos.y > levelWindow.panCellOffset.y + levelWindow.size.y - levelWindow.panScrollMargin 
+      && levelWindow.panCellOffset.y + levelWindow.size.y < levelSize.y
+      ) {
+      levelWindow.panCellOffset.y = Math.min(levelSize.y - levelWindow.size.y, pos.y + levelWindow.panScrollMargin - levelWindow.size.y);
+      bc.setLevelChanged(true)
+    }
   }
 
   advanceTime() {
@@ -877,16 +914,18 @@ class TopController {
 
   occupantSet(occupant, toPos) {
     const bc = this.backController
+    const fc = this.frontController
+
     const fromPos = occupant.pos
     if(fromPos != null) {
       bc.getCell(fromPos).occupiedBy = null
-      bc.addLevelCellsChanged(fromPos)
+      bc.addLevelCellsChanged(fc.levelPosToWindowPos(fromPos))
     }
     if(bc.getCell(toPos).occupiedBy != null) {
       err('Cell at ' + toPos.x + ', ' + toPos.y + ' is already occupied')
     }
     bc.getCell(toPos).occupiedBy = occupant
-    bc.addLevelCellsChanged(toPos)
+    bc.addLevelCellsChanged(fc.levelPosToWindowPos(toPos))
 
     occupant.pos = toPos
   }
@@ -906,13 +945,20 @@ class BackController {
     this.setStatusChanged()
   }
 
+  motionModeAttack() {
+    const mode = this.backModel.motionMode
+    return mode == 'attack' || mode == 'attackOrMove'
+  }
+
+  motionModeMove() {
+    const mode = this.backModel.motionMode
+    return mode == 'move' || mode == 'attackOrMove'
+  }
+
   addMessage(message) {
-    const messageWindow = 
-      this.frontModel
-        .screen.main
-        .window.message
-    messageWindow.messages.push(message)
-    messageWindow.changed = true
+    const bm = this.backModel
+    bm.messages.push(message)
+    bm.messagesChanged = true
   }
 
   setLevelChanged(changed) {
@@ -1363,8 +1409,6 @@ class FrontController {
 
     for(const [screenName, screen] of Object.entries(fm.screen)) {
       for(const [windowName, window] of Object.entries(screen.window)) {
-        window.changed = true
-        window.cellsChanged = []
         window.name = windowName
       }
       screen.name = screenName
@@ -1398,12 +1442,6 @@ class FrontController {
 
   setKeyMode(keyModeName) {
     this.frontModel.currentKeyMode = keyModeName
-  }
-
-  checkPan(window, pos, size) {
-    if(window == this.frontModel.screen.main.window.level) {
-      this.adjustLevelPan(window, pos, size)
-    }
   }
 
   windowCellPosToScreenCellPos(screen, window, windowPos) {
@@ -1456,36 +1494,6 @@ class FrontController {
     }
 
     return windowName
-  }
-
-  adjustLevelPan(levelWindow, pos, levelSize) {
-    if(pos.x < levelWindow.panCellOffset.x + levelWindow.panScrollMargin 
-      && levelWindow.panCellOffset.x > 0
-      ) {
-      levelWindow.panCellOffset.x = Math.max(0, pos.x - levelWindow.panScrollMargin);
-      levelWindow.changed = true;
-    } 
-
-    if(pos.y < levelWindow.panCellOffset.y + levelWindow.panScrollMargin 
-      && levelWindow.panCellOffset.y > 0
-      ) {
-      levelWindow.panCellOffset.y = Math.max(0, pos.y - levelWindow.panScrollMargin);
-      levelWindow.changed = true;
-    } 
-
-    if(pos.x > levelWindow.panCellOffset.x + levelWindow.size.x - levelWindow.panScrollMargin 
-      && levelWindow.panCellOffset.x + levelWindow.size.x < levelSize.x
-      ) {
-      levelWindow.panCellOffset.x = Math.min(levelSize.x - levelWindow.size.x, pos.x + levelWindow.panScrollMargin - levelWindow.size.x);
-      levelWindow.changed = true;
-    } 
-
-    if(pos.y > levelWindow.panCellOffset.y + levelWindow.size.y - levelWindow.panScrollMargin 
-      && levelWindow.panCellOffset.y + levelWindow.size.y < levelSize.y
-      ) {
-      levelWindow.panCellOffset.y = Math.min(levelSize.y - levelWindow.size.y, pos.y + levelWindow.panScrollMargin - levelWindow.size.y);
-      levelWindow.changed = true;
-    }
   }
 
   actionModeToMessage(actionMode) {
@@ -1574,7 +1582,7 @@ class FrontController {
 
   drawLevelWindowCells(screen, window, cells, level) {
     for(const windowPos of cells) {
-      drawLevelWindowCell(screen, window, windowPos, level)
+      this.drawLevelWindowCell(screen, window, windowPos, level)
     }
   }
 

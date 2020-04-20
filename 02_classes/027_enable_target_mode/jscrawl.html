@@ -585,7 +585,7 @@ const commandExecution = {
     topController.setTarget(topController.getPlayer().pos)
   },
   exitTargetMode: () => {
-    topController.setKeyMode('main')
+    topController.setKeyMode('base')
     topController.setTarget(null)
   },
 }
@@ -1531,22 +1531,28 @@ class FrontController {
         const windowPos = this.levelPosToWindowPos(targetPos)
         const cellBoundary = this.getCellPixelRect(screen, window, windowPos).add(new Pair(0,-1))
         const windowBoundary = this.getWindowPixelRect(screen, window)
-        this.outController.drawEmptyRect(cellBoundary)
         const yMid = (cellBoundary.y1 + cellBoundary.y2) / 2
         const xMid = (cellBoundary.x1 + cellBoundary.x2) / 2
         const thickness = 2
+        const style = "#0000C080"
+        const heavyStyle = "#0000C0"
         this.outController.drawEmptyRect(
           new Rect(windowBoundary.x1, yMid - thickness, cellBoundary.x1, yMid + thickness)
+          , style
         )
         this.outController.drawEmptyRect(
           new Rect(cellBoundary.x2, yMid - thickness, windowBoundary.x2, yMid + thickness)
+          , style
         )
         this.outController.drawEmptyRect(
           new Rect(xMid - thickness, windowBoundary.y1, xMid + thickness, cellBoundary.y1)
+          , style
         )
         this.outController.drawEmptyRect(
           new Rect(xMid - thickness, cellBoundary.y2, xMid + thickness, windowBoundary.y2)
+          , style
         )
+        this.outController.drawEmptyRect(cellBoundary, heavyStyle)
       }
     } else if(window == fm.screen.main.window.message) {
       for(let row = 0; row < backModel.messages.length; row++) {
@@ -1726,7 +1732,10 @@ class OutController {
     )
   }
 
-  drawEmptyRect(rect) {
+  drawEmptyRect(rect, style = "#000000") {
+    if(style != ctx.stokeStyle) {
+      ctx.strokeStyle = style
+    }
     ctx.strokeRect(
       canvasProps.xOffset + rect.x1, 
       canvasProps.yOffset + rect.y1, 

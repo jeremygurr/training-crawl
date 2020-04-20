@@ -153,7 +153,7 @@ const template = {
 
   object: {
     dirtFloor: { showAs: '.' },
-    rockWall: { showAs: '🀆' },
+    rockWall: { showAs: '🀆', offset: new Pair(0, 1) },
   },
 
   generated: {
@@ -1531,19 +1531,32 @@ class FrontController {
         const windowPos = this.levelPosToWindowPos(targetPos)
         const cellBoundary = this.getCellPixelRect(screen, window, windowPos).add(new Pair(0,-1))
         const windowBoundary = this.getWindowPixelRect(screen, window)
-        // this.outController.drawEmptyRect(cellBoundary)
-        this.outController.drawEmptyRect(new Rect(windowBoundary.x1, cellBoundary.y1, windowBoundary.x2, cellBoundary.y2))
-        this.outController.drawEmptyRect(new Rect(cellBoundary.x1, windowBoundary.y1, cellBoundary.x2, windowBoundary.y2))
+        this.outController.drawEmptyRect(cellBoundary)
+        const yMid = (cellBoundary.y1 + cellBoundary.y2) / 2
+        const xMid = (cellBoundary.x1 + cellBoundary.x2) / 2
+        const thickness = 2
+        this.outController.drawEmptyRect(
+          new Rect(windowBoundary.x1, yMid - thickness, cellBoundary.x1, yMid + thickness)
+        )
+        this.outController.drawEmptyRect(
+          new Rect(cellBoundary.x2, yMid - thickness, windowBoundary.x2, yMid + thickness)
+        )
+        this.outController.drawEmptyRect(
+          new Rect(xMid - thickness, windowBoundary.y1, xMid + thickness, cellBoundary.y1)
+        )
+        this.outController.drawEmptyRect(
+          new Rect(xMid - thickness, cellBoundary.y2, xMid + thickness, windowBoundary.y2)
+        )
       }
     } else if(window == fm.screen.main.window.message) {
       for(let row = 0; row < backModel.messages.length; row++) {
         let message = backModel.messages[row]
-        this.drawText(screen, window, new Pair(0, row), message, 0, screen.cellPixelDimensions.y)
+        this.drawText(screen, window, new Pair(0, row), message, null, new Pair(0, screen.cellPixelDimensions.y))
       }
     } else if(window == fm.screen.main.window.status) {
       const actionMessage = this.actionModeToMessage(backModel.motionMode)
-      this.drawText(screen, window, new Pair(0, 0), 'Action: ' + actionMessage, 0, screen.cellPixelDimensions.y)
-      this.drawText(screen, window, new Pair(0, 1), 'HP: ' + backModel.player.health, 0, screen.cellPixelDimensions.y)
+      this.drawText(screen, window, new Pair(0, 0), 'Action: ' + actionMessage, null, new Pair(0, screen.cellPixelDimensions.y))
+      this.drawText(screen, window, new Pair(0, 1), 'HP: ' + backModel.player.health, null, new Pair(0, screen.cellPixelDimensions.y))
     } else {
       const windowName = this.windowToWindowName(screen, window)
       warn("Don't know how to draw this window yet: " + windowName)
@@ -1589,13 +1602,17 @@ class FrontController {
       const levelPos = this.windowCellPosToLevel(window, windowPos)
       const cell = level[levelPos.x][levelPos.y]
       let characterToDraw
+      let offset
 
       if(cell.occupiedBy) {
         characterToDraw = cell.occupiedBy.showAs;
+        offset = cell.occupiedBy.offset;
       } else if(cell.onFloor.length > 0) {
         characterToDraw = cell.onFloor[0].showAs;
+        offset = cell.onFloor[0].offset;
       } else {
         characterToDraw = cell.floorType.showAs;
+        offset = cell.floorType.offset;
       }
 
       this.drawText(
@@ -1603,8 +1620,8 @@ class FrontController {
         window,
         windowPos, 
         characterToDraw, 
-        window.cellPixelDimensions.x,
-        window.cellPixelDimensions.y,
+        offset,
+        window.cellPixelDimensions,
       )
     }
   }
@@ -1625,7 +1642,7 @@ class FrontController {
     return fontStyle.fixed
   }
 
-  drawText(screen, window, windowPos, textToDraw, centerWithinX = 0, centerWithinY = 0) {
+  drawText(screen, window, windowPos, textToDraw, offset = null, centerWithin = null) {
     const fontStyle = this.getFontStyle(screen, window)
     const screenPixelPos = this.windowCellPosToScreenPixelPos(
       screen,
@@ -1633,7 +1650,7 @@ class FrontController {
       windowPos
     )
 
-    this.outController.drawText(fontStyle, screenPixelPos, textToDraw, centerWithinX, centerWithinY)
+    this.outController.drawText(fontStyle, screenPixelPos, textToDraw, offset, centerWithin)
   }
 
   getCurrentScreen() {
@@ -1674,9 +1691,14 @@ class OutController {
     this.previousFontStyle = null
   }
 
-  drawText(fontStyle, screenPixelPos, textToDraw, centerWithinX = 0, centerWithinY = 0) {
+  drawText(fontStyle, screenPixelPos, textToDraw, offset = null, centerWithin = null) {
     let xOffset = canvasProps.xOffset 
     let yOffset = canvasProps.yOffset
+
+    if(offset) {
+      xOffset += offset.x
+      yOffset += offset.y
+    }
 
     if(this.previousFontStyle != fontStyle) {
       ctx.font = fontStyle.size + "px " + fontStyle.name;
@@ -1684,13 +1706,13 @@ class OutController {
     this.previousFontStyle = fontStyle
 
     const textSize = ctx.measureText(textToDraw);
-    if(centerWithinX > 0 && textSize.width < centerWithinX) {
-      xOffset += Math.floor((centerWithinX - textSize.width) / 2)
+    if(centerWithin.x > 0 && textSize.width < centerWithin.x) {
+      xOffset += Math.floor((centerWithin.x - textSize.width) / 2)
     }
     const textHeight = fontStyle.size
     //const textHeight = textSize.actualBoundingBoxAscent + textSize.actualBoundingBoxDescent
-    if(centerWithinY > 0 && textHeight < centerWithinY) {
-      yOffset += Math.floor((centerWithinY - textHeight) / 2)
+    if(centerWithin.y > 0 && textHeight < centerWithin.y) {
+      yOffset += Math.floor((centerWithin.y - textHeight) / 2)
     }
 
     ctx.fillText(

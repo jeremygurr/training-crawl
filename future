@@ -1,19 +1,7 @@
-get current code compiling
-make window use absolute pixel position instead of cell position
-support windows with different cell sizes
-move messages to right side, status on the left, and expand map
-make messages and status windows have a smaller cell size and font
-examine floor
-  keyMode is global
-  target can focus on a specific window / cell / row
-  help associated with any given component
-  when screen is selected, global help is given
-  where to put the additional information?
-    [ ] overlay window
-    [*] always use message window
-inventory
 pick up
+inventory
 drop
+different times for actions
 level generator: add hallways
   every open space must have a way to connect to other open spaces 
     connection may be teleporter or stairs
@@ -22,27 +10,30 @@ energy management
   where does it come from?
     dungeon core generates energy for the dungeon
       always one color
-  tiers 0-3
-    1 tier 3 = 10 tier 2 = 100 tier 1 = 1000 tier 0
+  tiers 0-4
+    1 tier 4 = 10 tier 3 = 100 tier 2 = 1000 tier 1 = 10000 tier 0
   energy types
     lumina
-      White (tier 3)
-        connects to any spectra
-        element = life
-      lighT gray (tier 2)
+      white: Sun (tier 4)
+        connects to *all* etherea
+        element = high life
+      white: Moon (tier 3)
+        connects to *all* spectra
+        element = low life
+      white: sTar (tier 2)
         connects to any etherea
         element = light
-      dArk gray (tier 1)
-        connects to any spectra or black
+      gray (tier 1)
+        connects to any spectra
         element = shadow
       blacK (tier 0)
         connects to any interna
         element = death
     etherea (tier 3)
-      Diamond
-      goLd
-      Silver
-      coPper
+      Diamond (cyan, blue, indigo, violet, red)
+      goLd (yellow, green, cyan, blue)
+      Silver (orange, yellow, green)
+      coPper (red, orange)
     spectra (tier 2)
       violet
         element = electric
@@ -66,6 +57,7 @@ energy management
       minor_health (from red)
       stamina (from orange)
       mana (from yellow)
+      willpower
   energy can flow both directions, but favors down (2x pressure on top)
   willpower can be used to concentrate energy against the normal forces
     effectively reduces the pressure of the targeted energy pool
@@ -74,7 +66,22 @@ energy management
       1/4 = 3 willpower per aut
       1/5 = 4 willpower per aut
       can only be applied to energy pools, not interna
-    willpower slowly charges over time
+    willpower is gained from successful activities
+      killing a monster
+      discovering valuable items
+      achievements
+      successful spell casting
+      successful weapon strike
+      successful dodge or deflect or block
+      scroll of motivation
+      most food gives a small amount of willpower
+      stealth success
+    willpower is drained by 
+      being hit
+      pain
+      spells failing
+      fear
+      stealth detection
   humans have a single spectra core, which continuously generates energy of that color
     with normal adventure mode, spectra core isn't identified until later in the game (when magic awakening happens)
       a second awakening may be possible, based on intelligence
@@ -117,7 +124,6 @@ monster enemy identification
   energy
     changes slowly
   persuasion
-different times for actions
 seed based randomization
 break out into multiple files
 everything destructable
@@ -140,9 +146,9 @@ spawned items
   armor ]
   ammo (
   shield )
-  potions !: doesn't require energy or intelligence. Alters the user, or can affect weapons.
-  scrolls @: can cast any spell without energy as long as there's enough intelligence
-  wands /: convert energy into a single spell, without needing intelligence
+  potions !: doesn't require energy or intelligence. Alters the user, or can affect weapons. Takes a medium amount of time
+  scrolls @: can cast any spell without energy as long as there's enough intelligence. But it takes more time than most actions
+  wands /: convert energy into a single spell, without needing intelligence. Takes very little time.
   rings =:
     attribute: boost that attribute
     pool: increase size of that pool
@@ -216,7 +222,19 @@ shops
   generated item count is fixed when level is generated, and is multiplied by store stability factor (10?)
 random drops
 consume item
+dungeon is a stack of 100 floors, but there are some branches and parallel dimensions
+branches
+  some number of floors which lead to a boss floor and a rune
+  20 runes total
+  branches have specialties, with some items spawning much more than others
+dimenions
+  potentially one per dungeon floor
+  abyss
+    no experience or items, only monsters that keep spawning
+    must find exit
+    gets more difficult the lower it is
 starting scenarios
+  choose at beginning
   (rich man)
     mediocre skills, but vast wealth to be able to buy the finest equipment
     starts with decent equip
@@ -229,6 +247,7 @@ starting scenarios
   adept
     low equip and skills, but high rate of experience gain
 game objectives
+  met by achievements. Must complete at least one achievement and exit dungeon safely to win
   raider
     obtain the main treasure
   conquerer
@@ -243,6 +262,8 @@ game objectives
     survive for a certain amount of time
   peacemaker
     to get to the bottom and return without killing any creature
+  seasoned
+    gain all experience potions in dungeon
 disciplines
   abilities are gained with experience, and don't come immediately
     based on levels gained after starting the discipline study
@@ -281,7 +302,6 @@ multiple species
   change species through polymorph potions
     normally they are temporary, but there are special scrolls that can make them permanent
       start with one permanent scroll
-spells
 friendly and neutral creatures
 multiplayer observation
   messages
@@ -368,6 +388,9 @@ scrolls
   treasure map: shows where all of the gold or high rarity items on the floor is 
   recharge
   remove curse
+  instant skill upgrades
+  contain info about spell recipes
+  contains a fundamental spell principle
 wands
   some wands auto-recharge, which boosts their value considerably
   some wands auto-discharge
@@ -395,12 +418,29 @@ potions
   stat altering: temporary effect
   mutations: temporary effect
   species altering: temporary effect
+  experience
+    one per floor
+    all experience comes from this
+    all give the same amount of experience, based on experience growth rate of current species: 
+      humans: 1.5 levels
+      other: 1 level
+      elf: 0.8 levels
+      orc: 1.0 levels
+      demigod: 0.4 levels
+    full restoration of all non-energy pools (hp, sp, mp, wp)
+item durability:
+  when it's used, it reduces durability
+  impossible to add durability
+  but you can slow down decay with runes or skill
+  typical durability loss is 1 per usage
+  wands, consumables, books don't have durability
+  only armor and weapons have durability
+  average durability is 100
+    low durability is 20
+    high durability is 500
 books
   can provide study disciplines
-  or instant skill upgrades
   or can boost skill aptitudes
-  or contain info about spell recipes
-  or contains a fundamental spell principle
 skills
   offense
     unarmed combat
@@ -443,6 +483,33 @@ spells
     item alteration
     item construction
     illusion
+    channeling
+  different ways of failing depending on what exactly fails
+    each component of a spell has it's own chance of success and energy costs
+  spells can be analyzed and altered
+    player has to turn analysis on (which consumes mp)
+    there is a chance that the spell can be analyzed, which allows the player to alter various parameters
+  a way to reinforce spells to make them harder to hack
+  alteration levels
+    duration
+      resist change
+      temp
+      perm
+    change class
+      alteration
+      replication
+      creation
+    size
+    distance
+    interference
+      direct touch
+      open air
+      through wall
+      through a creature
+    teleportation
+    info gathering
+    control
+    targetting
 macros
   can save keystrokes, especially for spells
 traps
@@ -454,6 +521,7 @@ species
       strong: 
         experience 
         sp
+        awaken a new spectra pool every 10 levels, max of 2 pools
     elf
       strong:
         dex
@@ -462,6 +530,7 @@ species
         spirit sensitivity
         mp
         immediate core awakening
+        awaken a new spectra pool every 15 levels, max of 4 pools
       weak:
         str
         experience gain
@@ -471,6 +540,7 @@ species
         str
         hp
         pain resistance
+        awaken a new spectra pool every 5 levels, max of 1 pool
       weak:
         int
         can't eat fruit
@@ -480,6 +550,7 @@ species
         sp
         night vision
         magic resistance
+        awaken a new spectra pool every 20 levels, max of 2 pools
       weak:
         low health regen (1/4)
       other:
@@ -490,6 +561,7 @@ species
         mutation resistance
         hearing sensitivity
         stealthy
+        awaken a new spectra pool every 7 levels, max of 2 pools
       weak:
         str
       other:
@@ -522,7 +594,7 @@ species
         size = large
     troll
       strong:
-        health regen
+        minor hp core
       weak:
         int
       other:
@@ -530,16 +602,16 @@ species
   rare
     mummy
       strong:
-        red core
+        no hp, mp, or sp decay
         no critical or major health, all minor
         high stealth
-      weak: 
-        can't eat
     vampire
       strong:
         can transform to a bat
-        can drain red energy from others
+        can drain red energy from others on contact
+        starts with violet core
       weak:
+        damaged by Sun energy
     demigod
       strong:
         str
@@ -598,8 +670,8 @@ species
         low hp
     vine stalker
       strong:
-        high health regen (large channel between red, orange, and yellow and hp)
-        mana shield: 2/3 damage comes from mp if that's available
+        gets a yellow or red core after level 5
+        mp / hp are linked
       weak:
         no potions
     formicid
@@ -641,8 +713,9 @@ species
     djinn
       strong:
         fly
-        hp, mp, sp all combined
+        hp, mp, sp all linked
       weak:
         can't use scrolls
       other:
         size = large
+

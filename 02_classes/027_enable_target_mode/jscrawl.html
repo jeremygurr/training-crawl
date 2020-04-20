@@ -18,7 +18,7 @@ const canvasProps = {
   xOffset: 3,
   yOffset: 0,
   width: 1440,
-  height: 450,
+  height: 453,
 };
 
 document.write('<canvas id="mainCanvas" width="' + canvasProps.width + '" height="' + canvasProps.height + '"></canvas>');
@@ -90,6 +90,10 @@ class Rect {
     const newX2 = this.x2 + pixels
     const newY2 = this.y2 + pixels
     return new Rect(newX1, newY1, newX2, newY2)
+  }
+
+  add(pair) {
+    return new Rect(this.x1 + pair.x, this.y1 + pair.y, this.x2 + pair.x, this.y2 + pair.y)
   }
 }
 
@@ -459,17 +463,18 @@ const template = {
       health: 20, 
       attack: { min: 0, max: 2 } 
     },
+
+    target: {
+      screen: null,
+      window: null,
+      pos: null,
+    },
   },
 
   frontModel: {
 
     currentScreen: 'main',
     currentKeyMode: 'base',
-    target: {
-      screen: null,
-      window: null,
-      pos: null,
-    },
 
     screen: {
       main: {
@@ -509,39 +514,6 @@ const template = {
   },
 }
   
-const keyMode = {
-  base: {
-    command: [
-      'moveLeft',
-      'moveRight',
-      'moveUp',
-      'moveDown',
-      'moveLeftUp',
-      'moveLeftDown',
-      'moveRightUp',
-      'moveRightDown',
-      'wait',
-      'setMotionModeMove',
-      'setMotionModeAttack',
-      'setMotionModeAttackOrMove',
-      'enterTargetMode',
-    ],
-  },
-  target: {
-    command: [
-      'moveLeft',
-      'moveRight',
-      'moveUp',
-      'moveDown',
-      'moveLeftUp',
-      'moveLeftDown',
-      'moveRightUp',
-      'moveRightDown',
-      'exitTargetMode',
-    ],
-  },
-}
-
 const keyMap = {
   base: {
     moveLeft: [ 'h', 'ArrowLeft' ],
@@ -557,6 +529,16 @@ const keyMap = {
     setMotionModeAttack: [ 'a' ],
     setMotionModeMove: [ 'm' ],
     enterTargetMode: [ 'x' ],
+  },
+  target: {
+    moveLeft: [ 'h', 'ArrowLeft' ],
+    moveRight: [ 'l', 'ArrowRight' ],
+    moveUp: [ 'k', 'ArrowUp' ],
+    moveDown: [ 'j', 'ArrowDown' ],
+    moveLeftUp: [ 'y' ],
+    moveLeftDown: [ 'b' ],
+    moveRightUp: [ 'u' ],
+    moveRightDown: [ 'n' ],
     exitTargetMode: [ 'Escape' ],
   },
 }
@@ -658,7 +640,7 @@ class TopController {
     const bc = this.backController
     const fc = this.frontController
 
-    const target = fc.getTarget()
+    const target = bc.getTarget()
 
     if(target.pos == null) {
       const playerOldPos = bc.getPlayer().pos
@@ -694,7 +676,7 @@ class TopController {
         return
       }
 
-      fc.setTarget(targetNewPos)
+      bc.setTarget(targetNewPos)
     }
   }
 
@@ -934,6 +916,13 @@ class TopController {
     this.backController.setMotionMode(mode)
   }
 
+  setTarget(pos) {
+    this.backController.setTarget(pos)
+  }
+
+  getPlayer() {
+    return this.backController.getPlayer()
+  }
 }
 
 class BackController {
@@ -1403,6 +1392,15 @@ class BackController {
     return this.backModel.level[cellPos.x][cellPos.y].occupiedBy != null
   }
 
+  getTarget() {
+    return this.backModel.target
+  }
+
+  setTarget(pos) {
+    this.backModel.target.pos = pos
+    this.setLevelChanged(true)
+  }
+
 }
 
 class FrontController {
@@ -1420,15 +1418,6 @@ class FrontController {
 
     this.inController = new InController(this.frontModel)
     this.outController = new OutController()
-  }
-
-  getTarget() {
-    return this.frontModel.target
-  }
-
-  setTarget(pos) {
-    this.frontModel.target.pos = pos
-    this.setLevelChanged(true)
   }
 
   setScreen(screenName) {
@@ -1464,7 +1453,7 @@ class FrontController {
   }
 
   clear() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    this.outController.clearRect(new Rect(0, 0, canvasProps.width - 1, canvasProps.height - 1))
   }
 
   draw(screen, backModel) {
@@ -1480,12 +1469,14 @@ class FrontController {
       new Pair(0, 0),
       )
 
-    ctx.clearRect(
-      screenPixelPos.x, 
-      screenPixelPos.y, 
-      window.size.x * screen.cellPixelDimensions.x, 
-      window.size.y * screen.cellPixelDimensions.y,
-      );
+    this.outController.clearRect(
+      new Rect(
+        screenPixelPos.x - 1, 
+        screenPixelPos.y - 1, 
+        screenPixelPos.x + window.size.x * screen.cellPixelDimensions.x + 1, 
+        screenPixelPos.y + window.size.y * screen.cellPixelDimensions.y + 1,
+      )
+    )
   }
 
   windowToWindowName(screen, window) {
@@ -1514,13 +1505,13 @@ class FrontController {
   }
 
   getCellPixelRect(screen, window, windowPos) {
-    const posUpperLeft = windowCellPosToScreenPixelPos(screen, window, windowPos)
+    const posUpperLeft = this.windowCellPosToScreenPixelPos(screen, window, windowPos)
     const posLowerRight = posUpperLeft.add(screen.cellPixelDimensions)
     return new Rect(posUpperLeft.x, posUpperLeft.y, posLowerRight.x, posLowerRight.y)
   }
 
   getWindowPixelRect(screen, window) {
-    const posUpperLeft = windowCellPosToScreenPixelPos(screen, window, new Pair(0,0))
+    const posUpperLeft = this.windowCellPosToScreenPixelPos(screen, window, new Pair(0,0))
     const posLowerRight = posUpperLeft.add(window.size.multiply(window.cellPixelDimensions))
     return new Rect(posUpperLeft.x, posUpperLeft.y, posLowerRight.x, posLowerRight.y)
   }
@@ -1535,13 +1526,14 @@ class FrontController {
         }
       }
 
-      if(window.target) {
-        const windowPos = levelPosToWindowPos(target)
-        const cellBoundary = getCellPixelRect(screen, window, windowPos)
-        const windowBoundary = getWindowPixelRect(screen, window)
-        outController.drawEmptyRect(cellBoundary)
-        outController.drawFilledRect(windowBoundary.x1, cellBoundary.y1, windowBoundary.x2, cellBoundary.y2)
-        outController.drawFilledRect(cellBoundary.x1, windowBoundary.y1, cellBoundary.x2, windowBoundary.y2)
+      const targetPos = backModel.target.pos
+      if(targetPos) {
+        const windowPos = this.levelPosToWindowPos(targetPos)
+        const cellBoundary = this.getCellPixelRect(screen, window, windowPos).add(new Pair(0,-1))
+        const windowBoundary = this.getWindowPixelRect(screen, window)
+        // this.outController.drawEmptyRect(cellBoundary)
+        this.outController.drawEmptyRect(new Rect(windowBoundary.x1, cellBoundary.y1, windowBoundary.x2, cellBoundary.y2))
+        this.outController.drawEmptyRect(new Rect(cellBoundary.x1, windowBoundary.y1, cellBoundary.x2, windowBoundary.y2))
       }
     } else if(window == fm.screen.main.window.message) {
       for(let row = 0; row < backModel.messages.length; row++) {
@@ -1574,12 +1566,14 @@ class FrontController {
           cellPos,
           )
 
-        ctx.clearRect(
-          screenPixelPos.x, 
-          screenPixelPos.y, 
-          screen.cellPixelDimensions.x, 
-          screen.cellPixelDimensions.y,
+        this.outController.clearRect(
+          new Rect(
+            screenPixelPos.x, 
+            screenPixelPos.y, 
+            screenPixelPos.x + screen.cellPixelDimensions.x, 
+            screenPixelPos.y + screen.cellPixelDimensions.y,
           )
+        )
       }
     }
   }
@@ -1609,7 +1603,8 @@ class FrontController {
         window,
         windowPos, 
         characterToDraw, 
-        screen.cellPixelDimensions.x
+        window.cellPixelDimensions.x,
+        window.cellPixelDimensions.y,
       )
     }
   }
@@ -1662,7 +1657,7 @@ class InController {
 
     const km = topController.getKeyMode()
 
-    keyMode[km].command.forEach(command => {
+    Object.keys(keyMap[km]).forEach(command => {
       if(keyMap[km][command].some(x => event.key == x)) {
         commandExecution[command]()
       }
@@ -1680,8 +1675,8 @@ class OutController {
   }
 
   drawText(fontStyle, screenPixelPos, textToDraw, centerWithinX = 0, centerWithinY = 0) {
-    let xOffset = 0 
-    let yOffset = 0
+    let xOffset = canvasProps.xOffset 
+    let yOffset = canvasProps.yOffset
 
     if(this.previousFontStyle != fontStyle) {
       ctx.font = fontStyle.size + "px " + fontStyle.name;
@@ -1690,18 +1685,50 @@ class OutController {
 
     const textSize = ctx.measureText(textToDraw);
     if(centerWithinX > 0 && textSize.width < centerWithinX) {
-      xOffset = Math.floor((centerWithinX - textSize.width) / 2)
+      xOffset += Math.floor((centerWithinX - textSize.width) / 2)
     }
     const textHeight = fontStyle.size
+    //const textHeight = textSize.actualBoundingBoxAscent + textSize.actualBoundingBoxDescent
     if(centerWithinY > 0 && textHeight < centerWithinY) {
-      yOffset = Math.floor((centerWithinY - textHeight) / 2)
+      yOffset += Math.floor((centerWithinY - textHeight) / 2)
     }
 
     ctx.fillText(
       textToDraw, 
       screenPixelPos.x + xOffset, 
-      screenPixelPos.y + fontStyle.size + yOffset,
+      screenPixelPos.y 
+        + fontStyle.size 
+        + yOffset 
+        - textSize.actualBoundingBoxDescent
+        - (textHeight - textSize.actualBoundingBoxAscent) / 2,
     )
+  }
+
+  drawEmptyRect(rect) {
+    ctx.strokeRect(
+      canvasProps.xOffset + rect.x1, 
+      canvasProps.yOffset + rect.y1, 
+      rect.width, 
+      rect.height
+      )
+  }
+
+  drawFilledRect(rect) {
+    ctx.fillRect(
+      canvasProps.xOffset + rect.x1, 
+      canvasProps.yOffset + rect.y1, 
+      rect.width, 
+      rect.height
+      )
+  }
+
+  clearRect(rect) {
+    ctx.clearRect(
+      canvasProps.xOffset + rect.x1, 
+      canvasProps.yOffset + rect.y1, 
+      rect.width, 
+      rect.height
+      )
   }
 
 }

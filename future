@@ -1,11 +1,9 @@
-pick up
-inventory
-drop
+refactor controllers
+multi-pickup choice
+  in BackController.pickupItem: check for multiple, allow multiselect
+support multi-select
+stacks of items
 different times for actions
-level generator: add hallways
-  every open space must have a way to connect to other open spaces 
-    connection may be teleporter or stairs
-  items and monsters are generated once? Unless there's a special generator entity on the floor which can generate more
 energy management
   where does it come from?
     dungeon core generates energy for the dungeon
@@ -82,10 +80,6 @@ energy management
       spells failing
       fear
       stealth detection
-  humans have a single spectra core, which continuously generates energy of that color
-    with normal adventure mode, spectra core isn't identified until later in the game (when magic awakening happens)
-      a second awakening may be possible, based on intelligence
-    ? with creature selection mode, spectra core may be chosen at the beginning, along with species, etc
   energy should not pass from one pool to another unless the result would make the pressure difference lower
   energy passes through cells of the dungeon
     each cell may have containers for one or more energy types
@@ -148,7 +142,7 @@ spawned items
   shield )
   potions !: doesn't require energy or intelligence. Alters the user, or can affect weapons. Takes a medium amount of time
   scrolls @: can cast any spell without energy as long as there's enough intelligence. But it takes more time than most actions
-  wands /: convert energy into a single spell, without needing intelligence. Takes very little time.
+  wands /: convert mp into a single spell, without needing intelligence. Takes very little time. No charges
   rings =:
     attribute: boost that attribute
     pool: increase size of that pool
@@ -159,8 +153,17 @@ spawned items
     mana shield
     stamina shield
     stasis
-
+    will (boost willpower generation)
+    hp (boost red -> hp regen)
+    mp (boost yellow -> mp regen)
+    sp (boost orange -> sp regen)
   runes ~: alters attribute of holder permanently while carrying it, or item it's installed into
+    always a simple attribute boost of whatever it's inserted in, or the user if they wield it
+    durability
+    accuracy
+    damage
+    defense
+    speed
   gems ~: stores energy
     if a player equips a gem in their hand, it connects with the native container of the player of the same color
       generated with random level of charge?
@@ -184,6 +187,8 @@ spawned items
 shops
   fixed shops
   monsters can't enter
+  player can't attack when inside of a shop
+  can they heal, read scrolls, etc?
   dropping item onto floor sells it
   picking item up buys it
   They can buy and sell, but price is based on demand

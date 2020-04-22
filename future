@@ -1,6 +1,8 @@
 pick up
 inventory
 drop
+multi-drop
+stacked items
 different times for actions
 level generator: add hallways
   every open space must have a way to connect to other open spaces 
@@ -82,10 +84,6 @@ energy management
       spells failing
       fear
       stealth detection
-  humans have a single spectra core, which continuously generates energy of that color
-    with normal adventure mode, spectra core isn't identified until later in the game (when magic awakening happens)
-      a second awakening may be possible, based on intelligence
-    ? with creature selection mode, spectra core may be chosen at the beginning, along with species, etc
   energy should not pass from one pool to another unless the result would make the pressure difference lower
   energy passes through cells of the dungeon
     each cell may have containers for one or more energy types

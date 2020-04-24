@@ -520,7 +520,6 @@ const template = {
     statusChanged: false,
 
     selectedInventoryType: null,
-    selectedInventoryItemIndex: null,
 
     selectTitle: [],
     selectIndexes: [],
@@ -608,15 +607,11 @@ const keyMap = {
     moveRightDown: [ 'n' ],
     exitTargetMode: [ 'Escape' ],
   },
-  inventory1: {
+  inventoryChooseType: {
     exitSimple: [ 'Escape' ],
     chooseType: [],
   },
-  inventory2: {
-    exitSimple: [ 'Escape' ],
-    chooseItem: [],
-  },
-  inventory3: {
+  inventoryChooseAction: {
     exitSimple: [ 'Escape' ],
     chooseAction: [],
   },
@@ -695,9 +690,6 @@ const commandExecution = {
   chooseType: (key) => {
     topController.chooseType(key)
   },
-  chooseItem: (key) => {
-    topController.chooseItem(key)
-  },
   chooseAction: (key) => {
     topController.chooseAction(key)
   },
@@ -771,23 +763,23 @@ class TopController {
     this.frontController.selectItem(key)
   }
 
-  dropItem(type, index) {
-    this.backController.dropItem(type, index)
-  }
-
   exitSimple() {
     this.frontController.exitSimple()
   }
 
   chooseAction(key) {
-    this.frontController.chooseAction(key)
+    const bc = this.backController
+    const fc = this.frontController
+
+    const inventoryGroup = bc.getInventoryGroup(
+      fc.getSelectedInventoryType()
+    )
+
+    fc.chooseAction(key, inventoryGroup)
   }
 
-  chooseItem(key) {
-    const inventoryGroup = this.backController.getInventoryGroup(
-      this.frontController.getSelectedInventoryType()
-    )
-    this.frontController.chooseItem(key, inventoryGroup)
+  chooseItem() {
+    this.frontController.chooseItem()
   }
 
   chooseType(key) {
@@ -826,7 +818,7 @@ class TopController {
       fc.addMessage("You aren't carrying anything.")
       fc.exitSimple()
     } else {
-      fc.setKeyMode('inventory1')
+      fc.setKeyMode('inventoryChooseType')
     }
 
   }
@@ -915,12 +907,21 @@ class TopController {
 
   }
 
-  dropItem(type, index) {
+  dropItem(type, item) {
     const bc = this.backController
     const fc = this.frontController
-    const item = bc.getInventoryGroup(type)[index]
-    bc.dropItem(type, index)
-    fc.addMessage('Dropped ' + getNameOf('a', item) + '.')
+    const group = bc.getInventoryGroup(type)
+    let index = null
+    for(let i = 0; i < group.length; i++) {
+      if(group[i] == item) {
+        index = i
+        break
+      }
+    }
+    if(index) {
+      bc.dropItem(type, index)
+      fc.addMessage('Dropped ' + getNameOf('a', item) + '.')
+    }
   }
 
   playerMotionRelative(relPos) {
@@ -1488,7 +1489,11 @@ class FrontController {
     }
 
     this.toggleSelectedItem(key)
-    this.showSelectedItems()
+    if(fm.selectMultiple) {
+      this.showSelectedItems()
+    } else {
+      fm.selectAction()
+    }
   }
 
   setSelectTitle(single, multiple) {
@@ -1546,8 +1551,10 @@ class FrontController {
   }
 
   invertSelectedItems() {
-    const selected = this.frontModel.selectIndexes
-    const list = this.frontModel.selectList
+    const fm = this.frontModel
+    const selected = fm.selectIndexes
+    const list = fm.selectList
+    fm.selectMultiple = true
     for(let i = 0; i < list.length; i++) {
       if(selected[i]) {
         selected[i] = false
@@ -1592,24 +1599,33 @@ class FrontController {
 
   showActions() {
     this.addMessage('Choose an action:')
-    const actions = getActionsFor(this.getSelectedInventoryType())
+    const selectedMultiple = this.frontModel.selectIndexes.length > 1
+    const actions = getActionsFor(this.getSelectedInventoryType(), selectedMultiple)
     for(let action of actions) {
       this.addMessage(action.key + ' - ' + action.name)
     }
   }
 
-  chooseAction(key) {
+  chooseAction(key, inventoryGroup) {
     const fm = this.frontModel
+    const items = _.clone(inventoryGroup)
 
-    let actions = getActionsFor(this.getSelectedInventoryType())
+    const selectedMultiple = this.frontModel.selectIndexes.length > 1
+    let actions = getActionsFor(
+      this.getSelectedInventoryType(), selectedMultiple
+    )
     actions = actions.filter(action => action.key == key)
 
     if(actions.length > 0) { 
       const action = actions[0]
-      action.execute(
-        fm.selectedInventoryType, 
-        fm.selectedInventoryItemIndex,
-      )
+      for(let i = 0; i < items.length; i++) {
+        if(fm.selectIndexes[i]) {
+          action.execute(
+            fm.selectedInventoryType, 
+            items[i],
+          )
+        }
+      }
       this.exitSimple()
     } else {
       this.addMessage('Unknown action.')
@@ -1621,32 +1637,28 @@ class FrontController {
     return this.frontModel.selectedInventoryType
   }
 
-  showItems(inventoryGroup) {
-    this.addMessage('Choose an item:')
-    for(let i = 0; i < inventoryGroup.length; i++) {
-      const item = inventoryGroup[i]
-      const key = this.indexToKey(i)
-      this.addMessage(key + ' - ' + getNameOf(null, item))
-    }
-  }
-
-  chooseItem(key, inventoryGroup) {
-    const index = this.keyToIndex(key)
-    if(index < 0 || index >= 52) {
-      this.addMessage('Invalid item')
-      this.showItems(inventoryGroup)
-      return
-    }
-
-    this.frontModel.selectedInventoryItemIndex = index
+  chooseItem() {
     this.showActions()
-    this.setKeyMode('inventory3')
+    this.setKeyMode('inventoryChooseAction')
   }
 
   chooseType(selectedInventoryType, inventoryGroup) {
     this.frontModel.selectedInventoryType = selectedInventoryType
-    this.showItems(inventoryGroup)
-    this.setKeyMode('inventory2')
+    this.setKeyMode('select')
+    this.setSelectMultiple(false)
+    this.setSelectTitle(
+      'Choose item:',
+      'Choose items:',
+    )
+    this.setSelectAction(
+      () => { topController.chooseItem() }
+    )
+    this.setSelectList(
+      inventoryGroup.map(
+        item => getNameOf(null, item)
+      )
+    )
+    this.showSelectedItems()
   }
 
   toggleSelectedItem(key) {
@@ -2118,13 +2130,14 @@ const actions = {
   drop: {
     key: 'd',
     name: 'drop',
+    supportMulti: true,
     execute: (type, index) => {
       topController.dropItem(type, index)
     },
   },
 }
 
-function getActionsFor(type) {
+function getActionsFor(type, allowMultiple) {
   switch(type) {
     case 'armor':
       return [ actions.drop ]

@@ -3,7 +3,18 @@ multi-pickup choice
   in BackController.pickupItem: check for multiple, allow multiselect
 support multi-select
 stacks of items
+select limited number of a stack
+money
+weapons
+equip
+  armor, books, jewelry, stone are equipped into slots
+  weapons and wands are selected, which doesn't take time, and only determine which item is used on next action
+    1 melee may be selected at a time
+    1 ranged
+    1 wand
 different times for actions
+game clock
+enemy actions don't execute until they have received enough time
 energy management
   where does it come from?
     dungeon core generates energy for the dungeon
@@ -26,7 +37,7 @@ energy management
         element = shadow
       blacK (tier 0)
         connects to any interna
-        element = death
+        element = void
     etherea (tier 3)
       Diamond (cyan, blue, indigo, violet, red)
       goLd (yellow, green, cyan, blue)
@@ -73,6 +84,7 @@ energy management
       successful dodge or deflect or block
       scroll of motivation
       most food gives a small amount of willpower
+        dessert food gives larger amount: chocolate, cake, etc
       stealth success
     willpower is drained by 
       being hit
@@ -105,6 +117,26 @@ eat
   or 2/3 minor 1/3 of remaining major + critical, 1/3 of remaining critical
   all health must be 0 before death occurs
   critical strikes can bypass the normal damage order
+magic
+  transformation tree
+    levels
+      subatomic
+      proton
+      electron
+      spirit
+      mind
+      body
+    sapling to small tree to large tree
+    dry tree to normal tree to wet tree
+    turning a wall into water
+  delayed execution
+  triggered execution
+  manipulating an existing spell or curse
+    easier to alter later words
+  forces hold forms in place
+    they can be weakened or reversed
+    must reduce the force resisting change before making a change
+    then increase force resisting change after, to make change persistent
 help about specific components of interface
 emotions
   happy, sad, afraid, pain
@@ -118,10 +150,7 @@ monster enemy identification
   energy
     changes slowly
   persuasion
-seed based randomization
-break out into multiple files
 everything destructable
-food based energy
 auto generated levels
   branching
 variable size browser windows
@@ -225,7 +254,6 @@ shops
   items are sorted by rarity
   shops half full
   generated item count is fixed when level is generated, and is multiplied by store stability factor (10?)
-random drops
 consume item
 dungeon is a stack of 100 floors, but there are some branches and parallel dimensions
 branches
@@ -303,6 +331,8 @@ disciplines
     can move from one creature to another
     must store up enough energy before dying to be able to possess another 
     leaving before dying is better, since death causes a backlash greatly reducing the spirits power
+alters
+  always require a certain kind of sacrifice in exchange for a temporary boost of some attribute or gifted item
 multiple species
   change species through polymorph potions
     normally they are temporary, but there are special scrolls that can make them permanent
@@ -450,15 +480,42 @@ skills
   offense
     unarmed combat
     polearm
+      can attack 2 spaces away
     axe
+      can attack all adjacent spaces
     mace
+      effective against armor, harder to deflect
     short blade
+      fast attack, high critical potential
     long blade
+      high damage, but weaker against armor
+      can ripost
     staves
+      high skill requirement
+      high versatility
+      can block or deflect
+      have magic effect
+        easily enchanted
+    blowgun
+      causes specific effects
+      requires high dex to hit accurately
     bow
+      faster ranged attack
+      negative time
+      high skill requirement
     crossbow
+      slow, but higher damage ranged attack
+      negative time
+      high skill requirement
     throwing
+      low skill requirement
+      damage heavily based on strength
+      lower accuracy
+      positive time
+      slow reload
+      requires stones or boulders to throw
     slings
+      high skill requirement
   defense
     dodge
     armor

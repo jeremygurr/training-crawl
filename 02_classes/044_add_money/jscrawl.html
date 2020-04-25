@@ -167,6 +167,33 @@ const template = {
 
     sub: {
 
+      money: {
+        type: 'money',
+        occupant: false,
+        chanceWeight: 1000,
+        count: 1,
+        sub: {
+          money: { 
+            name: 'money', 
+            chanceWeight: 1000, 
+            showAs: '$', 
+            count: 1,
+          },
+          money: { 
+            name: 'money', 
+            chanceWeight: 200, 
+            showAs: '$', 
+            count: 10,
+          },
+          money: { 
+            name: 'money', 
+            chanceWeight: 50, 
+            showAs: '$', 
+            count: 100,
+          },
+        },
+      },
+
       creature: {
         type: 'creature',
         occupant: true,
@@ -502,6 +529,7 @@ const template = {
       showAs: '🙂', 
       pos: Pair.empty(), 
       health: 20, 
+      money: 0,
       attack: { min: 0, max: 2 },
       equip: {
         head: null, // helmet or hat
@@ -906,6 +934,7 @@ class TopController {
     }
 
     if(count > 0) {
+      fc.setStatusChanged(true)
       fc.addMessage('Picked up ' + count + ' items.')
     }
 
@@ -928,6 +957,7 @@ class TopController {
     if(floorItems.length == 1) {
       const item = bc.removeItemFromFloor(playerPos, floorItems[0])
       bc.addItemToInventory(item)
+      fc.setStatusChanged(true)
       fc.addMessage('Picked up ' + getNameOf('a', item) + '.')
     } else {
       fc.setKeyMode('select')
@@ -1379,16 +1409,20 @@ class BackController {
   addItemToInventory(item) {
     const type = getItemInventoryGroup(item)
     const group = this.getInventoryGroup(type)
-    let found = false
-    for(let invItem of group) {
-      if(itemsEqual(invItem, item)) {
-        invItem.count += item.count
-        found = true
-        break
+    if(item.type == 'money') {
+      this.getPlayer().money += item.count
+    } else {
+      let found = false
+      for(let invItem of group) {
+        if(itemsEqual(invItem, item)) {
+          invItem.count += item.count
+          found = true
+          break
+        }
       }
-    }
-    if(!found) {
-      group.push(item)
+      if(!found) {
+        group.push(item)
+      }
     }
   }
 
@@ -1445,32 +1479,40 @@ class BackController {
     bm.level[target.x][target.y].occupiedBy = bm.player
     bm.player.pos = target
 
-    const bacon = this.generateItem(['food','bacon'])
-    const ham = this.generateItem(['food','ham'])
-    const fish = this.generateItem(['food','fish'])
+    const bacon = this.generateItem(1, ['food','bacon'])
+    const ham = this.generateItem(1, ['food','ham'])
+    const fish = this.generateItem(1, ['food','fish'])
 
     bm.level[target.x+1][target.y].occupiedBy = null
     bm.level[target.x+1][target.y].onFloor = [bacon, ham, fish]
 
-    const rock = this.generateItem(['weapon','rock'])
+    const rock = this.generateItem(10, ['weapon','rock'])
 
     bm.level[target.x][target.y-1].occupiedBy = null
     bm.level[target.x][target.y-1].onFloor = [rock]
+
+    const money = this.generateItem(20, ['money','money'])
     
+    bm.level[target.x][target.y+1].occupiedBy = null
+    bm.level[target.x][target.y+1].onFloor = [money]
   }
 
-  generateItem(path, currentItem = template.generated) {
+  generateItem(count, path, currentItem = template.generated) {
 
     const type = path.splice(0, 1)
     let newItem = currentItem.sub[type]
     newItem = { ...currentItem, ...newItem }
 
     if(path.length) {
-      newItem = this.generateItem(path, newItem)
+      newItem = this.generateItem(count, path, newItem)
     }
 
     if(newItem.sub) {
       newItem.sub = null
+    }
+
+    if(count) {
+      newItem.count = count
     }
 
     return newItem
@@ -2082,6 +2124,10 @@ class FrontController {
       this.drawText(
         screen, window, 
         new Pair(0, 1), 'HP: ' + player.health
+      )
+      this.drawText(
+        screen, window, 
+        new Pair(0, 2), '$: ' + player.money
       )
     } else {
       const windowName = this.windowToWindowName(screen, window)

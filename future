@@ -1,6 +1,3 @@
-move count out of items, making them more immutable
-combine stacks when dropping
-combine stacks when placing in inventory
 fix selecting wrong item bug
 money
 weapons

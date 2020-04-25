@@ -1,9 +1,7 @@
-multi-drop
-multi-pickup choice
-  in BackController.pickupItem: check for multiple, allow multiselect
-support multi-select
-stacks of items
-select limited number of a stack
+move count out of items, making them more immutable
+combine stacks when dropping
+combine stacks when placing in inventory
+fix selecting wrong item bug
 money
 weapons
 equip
@@ -442,6 +440,11 @@ wands
   disarm
   paralysis
 potions
+  have a magic world effect definition
+  can be applied to a weapon to add an effect (replaces other applied effects)
+  can be crafted from ingredients
+    alchemy skill boost effectiveness and success rate, and reduces side effects
+    most ingredients have positive and negative effects
   non-energy pools are much more likely
     healing (full)
       minor 
@@ -498,6 +501,12 @@ skills
         easily enchanted
     blowgun
       causes specific effects
+      can select ammo types, requiring different mp:
+        slow: 1
+        confusion: 1
+        poison: 2
+        sleep: 2
+        curarae: 10
       requires high dex to hit accurately
     bow
       faster ranged attack

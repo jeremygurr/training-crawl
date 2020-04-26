@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Test Randomness</title>
+    <style>
+      * { padding: 0; margin: 0; }
+      canvas { background: #eee; display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+<script>
+"use strict";
+
+const canvasProps = {
+  width: 400,
+  height: 400,
+};
+document.write('<canvas id="mainCanvas" width="' + canvasProps.width + '" height="' + canvasProps.height + '"></canvas>');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
+<script>
+
+canvas = document.getElementById("mainCanvas");
+ctx = canvas.getContext("2d");
+
+let generator = new Math.seedrandom(0)
+function random(possibilities, count = 1) {
+  return Math.floor(
+    average(
+      generator, count
+    ) * possibilities
+  );
+}
+
+function average(f, count) {
+  let result = 0
+  for(let i = 0; i < count; i++) {
+    result += f()
+  }
+  return result / count
+}
+
+function max(f, count) {
+  let result = 0
+  for(let i = 0; i < count; i++) {
+    const v = f()
+    if(v > result) result = v
+  }
+  return result
+}
+
+function draw(x, y) {
+  ctx.fillRect(x, y, 1, 1);
+}
+
+let value = []
+let buckets = 400
+ctx.fillStyle = "rgba(0,0,0,1)";
+for(let i = 0; i < 50000; i++) {
+  let n = random(buckets, 1)
+  if(value[n] == null) value[n] = 0
+  value[n]++
+  draw(n, value[n])
+}
+
+</script>
+
+</body>
+</html>

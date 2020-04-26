@@ -167,28 +167,22 @@ const template = {
 
     sub: {
 
-      money: {
-        type: 'money',
+      gold: {
+        type: 'gold',
+        showAs: '$', 
         occupant: false,
         chanceWeight: 1000,
-        count: 1,
         sub: {
-          money: { 
-            name: 'money', 
+          gold: { 
             chanceWeight: 1000, 
-            showAs: '$', 
             count: 1,
           },
-          money: { 
-            name: 'money', 
+          gold: { 
             chanceWeight: 200, 
-            showAs: '$', 
             count: 10,
           },
-          money: { 
-            name: 'money', 
+          gold: { 
             chanceWeight: 50, 
-            showAs: '$', 
             count: 100,
           },
         },
@@ -199,8 +193,20 @@ const template = {
         occupant: true,
         chanceWeight: 1000,
         sub: {
-          rat:  { name: 'rat',   chanceWeight: 1000, showAs: '🐭', health: 2,  attack: { min: 0, max: 1 }, act: 'simplePursuit' },
-          lion: { name: 'lion',  chanceWeight: 300, showAs: '🦁', health: 10, attack: { min: 0, max: 4 }, act: 'simplePursuit' },
+          rat:  { 
+            chanceWeight: 1000, 
+            showAs: '🐭', 
+            health: 2,  
+            attack: { min: 0, max: 1 }, 
+            act: 'simplePursuit',
+          },
+          lion: { 
+            chanceWeight: 300,
+            showAs: '🦁',
+            health: 10,
+            attack: { min: 0, max: 4 },
+            act: 'simplePursuit',
+          },
         },
       },
 
@@ -209,19 +215,114 @@ const template = {
         occupant: false,
         chanceWeight: 1000,
         count: 1,
+        slot: 'hand',
+        hands: 1,
+        durability: 100,
+        integrity: 1,
         sub: {
-          rock: { 
-            name: 'rock', 
-            slot: 'range',
-            chanceWeight: 1000, 
-            showAs: 'o', 
-            count: 10,
+          throwable: {
+            skill: 'throwing',
+            sub: {
+              rock: { 
+                chanceWeight: 1000, 
+                showAs: 'o', 
+                count: 10,
+                damage: [{
+                  type: 'bash',
+                  base: 3, 
+                  range: 2, 
+                  average: 2
+                }],
+                returnChance: 0,
+              },
+              boulder: { 
+                chanceWeight: 100, 
+                showAs: 'O',
+                hands: 2,
+                damage: [{
+                  type: 'bash',
+                  base: 20, 
+                  range: 10, 
+                  average: 2
+                }],
+                returnChance: 0.1,
+              },
+              boomerang: { 
+                chanceWeight: 100, 
+                showAs: ')',
+                damage: [{
+                  type: 'chop',
+                  base: 5, 
+                  range: 3, 
+                  average: 1
+                }],
+                returnChance: 0.3,
+              },
+            },
           },
-          boulder: { 
-            name: 'boulder', 
-            slot: 'range',
-            chanceWeight: 100, 
-            showAs: 'O',
+          
+          longBlade: { 
+            skill: 'longBlade',
+            sub: {
+              sword: {
+                chanceWeight: 100, 
+                showAs: '⚔️',
+                damage: [{
+                  type: 'chop',
+                  base: 8, 
+                  range: 4, 
+                  average: 1
+                }],
+              },
+            },
+          },
+
+          axe: {
+            skill: 'axe',
+            sub: {
+              handAxe: {
+                chanceWeight: 100, 
+                showAs: '🪓',
+                damage: [{
+                  type: 'chop',
+                  base: 8, 
+                  range: 4, 
+                  average: 2
+                }],
+              },
+            },
+          },
+
+          polearm: {
+            skill: 'polearm',
+            sub: {
+              handAxe: {
+                chanceWeight: 100, 
+                showAs: '𐃆',
+                damage: [{
+                  type: 'pierce',
+                  base: 8, 
+                  range: 8, 
+                  average: 2
+                }],
+              },
+            },
+          },
+
+          mace: {
+            skill: 'mace',
+            sub: {
+              mace: {
+                chanceWeight: 100, 
+                showAs: '⚒',
+                damage: [{
+                  type: 'bash',
+                  base: 8, 
+                  range: 4, 
+                  average: 2
+                }],
+              },
+            },
           },
         },
       },
@@ -230,18 +331,16 @@ const template = {
         type: 'food',
         occupant: false,
         chanceWeight: 1000,
-        showAs: '%',
+        showAs: '🍖',
         count: 1,
         sub: {
           beef: { 
-            name: 'beef',
             chanceWeight: 1000,
             energy: {
               red: 20,
             },
           },
           bacon: { 
-            name: 'bacon',
             chanceWeight: 300,
             energy: {
               red: 10,
@@ -250,7 +349,6 @@ const template = {
             },
           },
           ham: { 
-            name: 'ham',
             chanceWeight: 1000,
             energy: {
               red: 15,
@@ -258,7 +356,6 @@ const template = {
             },
           },
           fish: { 
-            name: 'fish',
             chanceWeight: 1000,
             energy: {
               red: 15,
@@ -266,7 +363,6 @@ const template = {
             },
           },
           chicken: { 
-            name: 'chicken',
             chanceWeight: 1000,
             energy: {
               red: 15,
@@ -274,7 +370,6 @@ const template = {
             },
           },
           egg: { 
-            name: 'egg',
             chanceWeight: 300,
             energy: {
               red: 5,
@@ -283,36 +378,31 @@ const template = {
               violet: 5,
             },
           },
-          copper_egg: { 
-            name: 'copper_egg',
+          copperEgg: { 
             chanceWeight: 20,
             energy: {
               copper: 20,
             },
           },
-          silver_egg: { 
-            name: 'silver_egg',
+          silverEgg: { 
             chanceWeight: 20,
             energy: {
               silver: 20,
             },
           },
-          gold_egg: { 
-            name: 'gold_egg',
+          goldEgg: { 
             chanceWeight: 20,
             energy: {
               gold: 20,
             },
           },
-          diamond_egg: { 
-            name: 'diamon_egg',
+          diamondEgg: { 
             chanceWeight: 1,
             energy: {
               diamond: 20,
             },
           },
           bread: { 
-            name: 'bread',
             chanceWeight: 2000,
             energy: {
               red: 5,
@@ -321,15 +411,13 @@ const template = {
           },
           rice: { 
             chanceWeight: 2000,
-            name: 'rice',
             energy: {
               orange: 10,
               green: 10,
             },
           },
-          sushi_roll: { 
+          sushiRoll: { 
             chanceWeight: 200,
-            name: 'sushi_roll',
             energy: {
               red: 5,
               orange: 5,
@@ -338,7 +426,6 @@ const template = {
             },
           },
           oats: { 
-            name: 'oats',
             chanceWeight: 2000,
             energy: {
               red: 5,
@@ -347,7 +434,6 @@ const template = {
             },
           },
           cheese: { 
-            name: 'cheese',
             chanceWeight: 500,
             energy: {
               yellow: 10,
@@ -355,7 +441,6 @@ const template = {
             },
           },
           milk: { 
-            name: 'milk',
             chanceWeight: 500,
             energy: {
               red: 5,
@@ -363,7 +448,6 @@ const template = {
             },
           },
           apple: { 
-            name: 'apple',
             chanceWeight: 500,
             energy: {
               red: 10,
@@ -371,7 +455,6 @@ const template = {
             },
           },
           banana: { 
-            name: 'banana',
             chanceWeight: 500,
             energy: {
               orange: 5,
@@ -379,7 +462,6 @@ const template = {
             },
           },
           brocolli: { 
-            name: 'brocolli',
             chanceWeight: 500,
             energy: {
               yellow: 5,
@@ -387,7 +469,6 @@ const template = {
             },
           },
           coconut: { 
-            name: 'coconut',
             chanceWeight: 500,
             energy: {
               yellow: 5,
@@ -397,7 +478,6 @@ const template = {
             },
           },
           spinach: { 
-            name: 'brocolli',
             chanceWeight: 500,
             energy: {
               red: 5,
@@ -405,7 +485,6 @@ const template = {
             },
           },
           cherry: { 
-            name: 'cherry',
             chanceWeight: 500,
             energy: {
               red: 10, 
@@ -414,7 +493,6 @@ const template = {
             },
           },
           watermelon: { 
-            name: 'watermelon',
             chanceWeight: 500,
             energy: {
               red: 10, 
@@ -423,7 +501,6 @@ const template = {
             },
           },
           carrot: { 
-            name: 'carrot',
             chanceWeight: 500,
             energy: {
               orange: 15,
@@ -431,7 +508,6 @@ const template = {
             },
           },
           orange: { 
-            name: 'orange',
             chanceWeight: 500,
             energy: {
               orange: 15,
@@ -439,14 +515,12 @@ const template = {
             },
           },
           mango: { 
-            name: 'mango',
             chanceWeight: 500,
             energy: {
               yellow: 20,
             },
           },
           grapes: { 
-            name: 'grapes',
             chanceWeight: 500,
             energy: {
               yellow: 5,
@@ -455,7 +529,6 @@ const template = {
             },
           },
           strawberries: { 
-            name: 'strawberries',
             chanceWeight: 500,
             energy: {
               red: 15,
@@ -463,7 +536,6 @@ const template = {
             },
           },
           tomato: { 
-            name: 'tomato',
             chanceWeight: 500,
             energy: {
               red: 10,
@@ -472,7 +544,6 @@ const template = {
             },
           },
           eggplant: { 
-            name: 'eggplant',
             chanceWeight: 500,
             energy: {
               red: 5,
@@ -481,7 +552,6 @@ const template = {
             },
           },
           blueberries: { 
-            name: 'blueberries',
             chanceWeight: 500,
             energy: {
               yellow: 5,
@@ -489,7 +559,6 @@ const template = {
             },
           },
           pizza: { 
-            name: 'pizza',
             chanceWeight: 500,
             energy: {
               red: 3,
@@ -503,10 +572,10 @@ const template = {
             },
           },
           chocolate: { 
-            name: 'chocolate',
             chanceWeight: 500,
             energy: {
-              black: 20,
+              black: 10,
+              wp: 10,
             },
           },
         },
@@ -529,9 +598,10 @@ const template = {
       showAs: '🙂', 
       pos: Pair.empty(), 
       health: 20, 
-      money: 0,
+      gold: 0,
       attack: { min: 0, max: 2 },
       equip: {
+        hand: [],
         head: null, // helmet or hat
         body: null,
         gloves: null,
@@ -542,17 +612,11 @@ const template = {
         amulet: null,
         book: null, // book currently being studied
       },
-      chosen: {
-        melee: null,
-        ranged: null,
-        wand: null,
-      },
-      money: 0,
       inventory: {
         armor: [],
         book: [],
         food: [],
-        jewel: [],
+        jewelry: [],
         wand: [],
         potion: [],
         rock: [],
@@ -1409,8 +1473,8 @@ class BackController {
   addItemToInventory(item) {
     const type = getItemInventoryGroup(item)
     const group = this.getInventoryGroup(type)
-    if(item.type == 'money') {
-      this.getPlayer().money += item.count
+    if(item.type == 'gold') {
+      this.getPlayer().gold += item.count
     } else {
       let found = false
       for(let invItem of group) {
@@ -1491,10 +1555,10 @@ class BackController {
     bm.level[target.x][target.y-1].occupiedBy = null
     bm.level[target.x][target.y-1].onFloor = [rock]
 
-    const money = this.generateItem(20, ['money','money'])
+    const gold = this.generateItem(20, ['gold','gold'])
     
     bm.level[target.x][target.y+1].occupiedBy = null
-    bm.level[target.x][target.y+1].onFloor = [money]
+    bm.level[target.x][target.y+1].onFloor = [gold]
   }
 
   generateItem(count, path, currentItem = template.generated) {
@@ -1554,7 +1618,7 @@ class BackController {
   
   pickSomethingToGenerate(inheritedProperties, group, randomizer) {
     let totalWeight = 0
-    for(const subject of Object.values(group)) {
+    for(const [key, subject] of Object.values(group)) {
       let weight = subject.chanceWeight
       if(weight == null) {
         weight = inheritedProperties.chanceWeight
@@ -1563,6 +1627,8 @@ class BackController {
         err("Missing chanceWeight for " + getNameOf(null, subject))
       }
       totalWeight += weight
+
+      if(!subject.name) subject.name = key
     }
 
     let selected = null
@@ -2127,7 +2193,7 @@ class FrontController {
       )
       this.drawText(
         screen, window, 
-        new Pair(0, 2), '$: ' + player.money
+        new Pair(0, 2), '$: ' + player.gold
       )
     } else {
       const windowName = this.windowToWindowName(screen, window)
@@ -2435,7 +2501,7 @@ function getActionsFor(type, allowMultiple) {
     case 'food':
       return [ actions.drop ]
       break
-    case 'jewel':
+    case 'jewelry':
       return [ actions.drop ]
       break
     case 'wand':
@@ -2481,7 +2547,7 @@ const inventoryTypes = {
   a: 'armor',
   b: 'book',
   f: 'food',
-  j: 'jewel',
+  j: 'jewelry',
   m: 'wand',
   p: 'potion',
   r: 'rock',

@@ -1,12 +1,7 @@
-fix selecting wrong item bug
-money
 weapons
 equip
   armor, books, jewelry, stone are equipped into slots
-  weapons and wands are selected, which doesn't take time, and only determine which item is used on next action
-    1 melee may be selected at a time
-    1 ranged
-    1 wand
+  weapons, shields, and wands are equipped into hand slots, and may take more than one hand
 different times for actions
 game clock
 enemy actions don't execute until they have received enough time
@@ -132,6 +127,8 @@ magic
     they can be weakened or reversed
     must reduce the force resisting change before making a change
     then increase force resisting change after, to make change persistent
+  all item enchantments and potions and scrolls are woven from magic properties
+  even weapons and armor can be fabricated with magic if the user is powerful enough
 help about specific components of interface
 emotions
   happy, sad, afraid, pain
@@ -491,11 +488,12 @@ skills
       high damage, but weaker against armor
       can ripost
     staves
-      high skill requirement
-      high versatility
       can block or deflect
       have magic effect
         easily enchanted
+        bridges two energy pools while equipped (usually chosen randomly)
+          mostly between two spectra
+          rarely between a spectra and lumina, or etherea, or interna
     blowgun
       causes specific effects
       can select ammo types, requiring different mp:
@@ -583,6 +581,13 @@ macros
 traps
   may be created, but they take a lot of time to set up, so they typically can't be setup up during a battle
   can immobilize or damage
+damage types
+  chop
+  pierce
+  bash
+  heat
+  cold
+  shock
 species
   common:
     human

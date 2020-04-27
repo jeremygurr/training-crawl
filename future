@@ -1,7 +1,10 @@
-weapons
 equip
   armor, books, jewelry, stone are equipped into slots
   weapons, shields, and wands are equipped into hand slots, and may take more than one hand
+unequip
+weapon usage
+weapon priorization
+armor
 different times for actions
 game clock
 enemy actions don't execute until they have received enough time
@@ -473,6 +476,8 @@ item durability:
 books
   can provide study disciplines
   or can boost skill aptitudes
+ranged attacks
+  more distance reduces chance to hit
 skills
   offense
     unarmed combat
@@ -489,11 +494,10 @@ skills
       can ripost
     staves
       can block or deflect
-      have magic effect
-        easily enchanted
-        bridges two energy pools while equipped (usually chosen randomly)
-          mostly between two spectra
-          rarely between a spectra and lumina, or etherea, or interna
+      easily enchanted
+      bridges two energy pools while equipped (usually chosen randomly)
+        mostly between two spectra
+        rarely between a spectra and lumina, or etherea, or interna
     blowgun
       causes specific effects
       can select ammo types, requiring different mp:

@@ -2,6 +2,10 @@ equip
   armor, books, jewelry, stone are equipped into slots
   weapons, shields, and wands are equipped into hand slots, and may take more than one hand
 unequip
+wizard mode
+  can't undo
+  ^w
+export / import game
 weapon usage
 weapon priorization
 armor
@@ -361,7 +365,6 @@ experience / levels
     gives 10 growth points
     1 gp = +1 attribute
     1 gp = +apt skill (average being 4)
-
 challenge / defense calculation
   diff = challenge - defense 
   power = 2^(diff/4)

@@ -634,14 +634,14 @@ const template = {
       species: species.human,
       equip: {
         hand: [],
-        head: null, // helmet or hat
-        body: null,
-        gloves: null,
-        boots: null,
-        face: null, // glasses or mask
-        cloak: null,
         ring: [],
         amulet: null,
+        head: null, // helmet or hat
+        face: null, // glasses or mask
+        body: null,
+        cloak: null,
+        gloves: null,
+        boots: null,
         book: null, // book currently being studied
       },
       inventory: {
@@ -960,33 +960,35 @@ class TopController {
 
     let names = []
     let subjects = []
-    for(let [type, value] of equip) {
+    const tab = 8
+    for(let [type, value] of Object.entries(equip)) {
 
       if(type == 'hand' || type == 'ring') {
 
         for(let j = 0; j < hands; j++) {
 
-          let name = 'none'
+          let name = '(empty)'
 
           if(value[j]) {
             name = getNameOf(null, value[j]) 
           }
 
-          names.push(type + ' ' + j + ' ' + name)
-          values.push(value[j])
+          const out = type + ' ' + (j+1)
+          names.push(out.padEnd(tab) + ' ' + name)
+          subjects.push(value[j])
 
         }
 
       } else {
 
-        let name = 'none'
+        let name = '(empty)'
 
         if(value) {
           name = getNameOf(null, value) 
         }
 
-        names.push(type + '   ' + name)
-        values.push(value)
+        names.push(type.padEnd(tab) + ' ' + name)
+        subjects.push(value)
 
       }
 
@@ -2078,7 +2080,11 @@ class FrontController {
         index = fm.selectKeys.findIndex(x => x == key)
       }
 
-      if(index < 0 || index >= fm.selectNameList.length) {
+      if(
+        index < 0 
+        || index >= fm.selectNameList.length
+        || !fm.selectSubjectList[index]
+      ) {
         this.addMessage("Invalid item.")
         this.showSelectedItems()
         return
@@ -2288,7 +2294,11 @@ class FrontController {
 
     for(let i = 0; i < subjects.length; i++) {
       if(fm.selectIndexes[i]) {
-        items.push(subjects[i])
+        const subject = subjects[i]
+        if(subject == null) {
+          err('Found null subject')
+        }
+        items.push(subject)
       }
     }
 

@@ -630,7 +630,6 @@ const template = {
       pos: Pair.empty(), 
       health: 20, 
       gold: 0,
-      attack: { min: 0, max: 2 },
       species: species.human,
       creatorMode: false,
       equip: {
@@ -762,6 +761,7 @@ const keyMap = {
     moveLeftDown: [ 'b' ],
     moveRightUp: [ 'u' ],
     moveRightDown: [ 'n' ],
+    deleteTarget: [ 'd' ],
     exitTargetMode: [ 'Escape' ],
   },
   select: {
@@ -864,6 +864,9 @@ const commandExecution = {
   creatorMode: () => {
     topController.creatorMode()
   },
+  deleteTarget: () => {
+    topController.creatorModeDeleteTarget()
+  },
 }
 
 function random(possibilities) {
@@ -906,6 +909,25 @@ class TopController {
     this.frontController = new FrontController()
     this.backController = new BackController(this.frontController.addMessage)
     this.refresh()
+  }
+
+  creatorModeDeleteTarget() {
+    const bc = this.backController
+    const fc = this.frontController
+    const target = fc.getTarget().pos
+    const cell = bc.getCell(target)
+    if(cell.occupiedBy) {
+      fc.addMessage('Deleted ' + getNameOf(null, cell.occupiedBy))
+      cell.occupiedBy = null
+      fc.setLevelChanged(true)
+    } else if(cell.onFloor.length > 0) {
+      fc.addMessage('Deleted ' + getNameOf(null, cell.onFloor[0]))
+      cell.onFloor.splice(0, 1)
+      fc.setLevelChanged(true)
+    } else {
+      fc.addMessage('There\'s nothing here to delete.')
+    }
+    fc.outputTargetMessages(cell, true)
   }
 
   creatorMode() {
@@ -1567,19 +1589,12 @@ class TopController {
 
   setTarget(pos) {
     const fc = this.frontController
+    const bc = this.backController
+    const target = fc.getTarget().pos
     fc.setTarget(pos)
-    fc.clearMessages()
     if(pos) {
-      const cell = this.backController.getCell(pos)
-      if(cell.occupiedBy) {
-        fc.addMessage(describeItem(cell.occupiedBy))
-      }
-      for(let item of cell.onFloor) {
-        fc.addMessage(describeItem(item))
-      }
-      if(cell.floorType) {
-        fc.addMessage(describeItem(cell.floorType))
-      }
+      const cell = bc.getCell(pos)
+      fc.outputTargetMessages(cell, bc.getCreatorMode())
     }
   }
 
@@ -1595,6 +1610,10 @@ class BackController {
     this.backModel = _.cloneDeep(template.backModel)
     const randomizer = new SeededRandomizer(this.backModel.seed)
     this.buildLevel(randomizer)
+  }
+
+  getCreatorMode() {
+    return this.backModel.player.creatorMode
   }
 
   setCreatorMode() {
@@ -2053,6 +2072,21 @@ class FrontController {
 
     this.inController = new InController()
     this.outController = new OutController()
+  }
+
+  outputTargetMessages(cell, creatorMode) {
+    if(cell.occupiedBy) {
+      this.addMessage(describeItem(cell.occupiedBy))
+    }
+    for(let item of cell.onFloor) {
+      this.addMessage(describeItem(item))
+    }
+    if(cell.floorType) {
+      this.addMessage(describeItem(cell.floorType))
+    }
+    if(creatorMode) {
+      this.addMessage('d - delete target')
+    }
   }
 
   clearNumericSelection() {

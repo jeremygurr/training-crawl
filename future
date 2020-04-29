@@ -1,6 +1,6 @@
 creator mode
-  can't undo
-  ^w
+  support actions while in target mode
+    multi-line title?
   delete everything in space
   create creatures
   create item

@@ -1,17 +1,32 @@
-equip
-  armor, books, jewelry, stone are equipped into slots
-  weapons, shields, and wands are equipped into hand slots, and may take more than one hand
-unequip
-wizard mode
+creator mode
   can't undo
   ^w
-export / import game
+  delete everything in space
+  create creatures
+  create item
+  teleport player
+  regen level
 weapon usage
+target mode
+  ranged attacks
+export / import game
 weapon priorization
 armor
+generate stores
 different times for actions
 game clock
 enemy actions don't execute until they have received enough time
+basic senses
+  light
+    torch must be wielded to provide light
+      can chase some creatures away
+  sound
+  smell
+core attributes
+farming
+  seeds are placed on ground and grow if the required energy is available
+  base foods can be eaten or seeds extracted from
+  farming skills determine how many seeds you can extract
 energy management
   where does it come from?
     dungeon core generates energy for the dungeon
@@ -330,7 +345,7 @@ disciplines
     can move from one creature to another
     must store up enough energy before dying to be able to possess another 
     leaving before dying is better, since death causes a backlash greatly reducing the spirits power
-alters
+altars
   always require a certain kind of sacrifice in exchange for a temporary boost of some attribute or gifted item
 multiple species
   change species through polymorph potions
@@ -442,6 +457,7 @@ wands
 potions
   have a magic world effect definition
   can be applied to a weapon to add an effect (replaces other applied effects)
+  can be thrown for a splash effect (equipped as a weapon)
   can be crafted from ingredients
     alchemy skill boost effectiveness and success rate, and reduces side effects
     most ingredients have positive and negative effects
@@ -465,10 +481,11 @@ potions
       elf: 0.8 levels
       orc: 1.0 levels
       demigod: 0.4 levels
-    full restoration of all non-energy pools (hp, sp, mp, wp)
+    full restoration of all interna pools (hp, sp, mp, wp)
 item durability:
   when it's used, it reduces durability
   impossible to add durability
+  when item is destroyed, you get the stones back
   but you can slow down decay with runes or skill
   typical durability loss is 1 per usage
   wands, consumables, books don't have durability

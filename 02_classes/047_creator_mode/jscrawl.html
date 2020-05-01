@@ -21,7 +21,7 @@ const canvasProps = {
   height: 453,
 };
 
-document.write('<canvas id="mainCanvas" width="' + canvasProps.width + '" height="' + canvasProps.height + '"></canvas>');
+document.write('<canvas id="mainCanvas" width="' + canvasProps.width + '" height="' + canvasProps.height + '"></canvas>')
 
 </script>
 
@@ -137,11 +137,11 @@ class Pair {
   adjacent(size) {
     let result = []
     for(let c = this.x - 1; c <= this.x + 1; c++) {
-      if(c < 0 || c >= size.x) continue;
+      if(c < 0 || c >= size.x) continue
       for(let r = this.y - 1; r <= this.y + 1; r++) {
-        if(r < 0 || r >= size.y) continue;
-        if(c == this.x && r == this.y) continue;
-        result.push(new Pair(c, r));
+        if(r < 0 || r >= size.y) continue
+        if(c == this.x && r == this.y) continue
+        result.push(new Pair(c, r))
       }
     }
 
@@ -185,15 +185,15 @@ const template = {
         occupant: false,
         chanceWeight: 1000,
         sub: {
-          gold: { 
+          gold1: { 
             chanceWeight: 1000, 
             count: 1,
           },
-          gold: { 
+          gold10: { 
             chanceWeight: 200, 
             count: 10,
           },
-          gold: { 
+          gold100: { 
             chanceWeight: 50, 
             count: 100,
           },
@@ -761,7 +761,8 @@ const keyMap = {
     moveLeftDown: [ 'b' ],
     moveRightUp: [ 'u' ],
     moveRightDown: [ 'n' ],
-    deleteTarget: [ 'd' ],
+    creatorDeleteTarget: [ 'd' ],
+    creatorCreateTarget: [ 'c' ],
     exitTargetMode: [ 'Escape' ],
   },
   select: {
@@ -864,13 +865,16 @@ const commandExecution = {
   creatorMode: () => {
     topController.creatorMode()
   },
-  deleteTarget: () => {
+  creatorDeleteTarget: () => {
     topController.creatorModeDeleteTarget()
+  },
+  creatorCreateTarget: () => {
+    topController.creatorModeCreateTarget()
   },
 }
 
 function random(possibilities) {
-  return Math.floor(Math.random() * possibilities);
+  return Math.floor(Math.random() * possibilities)
 }
 
 class SeededRandomizer {
@@ -911,23 +915,120 @@ class TopController {
     this.refresh()
   }
 
+  creatorModeCreateTarget() {
+    const bc = this.backController
+    const fc = this.frontController
+    if(!bc.getCreatorMode()) {
+      fc.addMessage('Invalid command.')
+    } else {
+      const target = fc.getTarget().pos
+      if(bc.handleCreateTarget(target, {}, template.generated, 1)) {
+        fc.addMessage('Created ' + getNameOf(null, subject))
+      }
+    }
+    this.setKeyMode('target')
+    fc.outputTargetMessages(cell, true)
+  }
+
+  handleCreateTarget(target, inherited, template, count) {
+
+    const bc = this.backController
+    const fc = this.frontController
+
+    if(!target) {
+
+      let subjects = fc.getSelectSubjectList()
+      let indexes = fc.getSelectIndexes()
+      let found
+
+      for(let i = 0; i < subjects.length; i++) {
+        if(indexes[i]) {
+          const subject = subjects[i]
+          if(subject == null) {
+            err('Found null subject')
+          }
+          found = subject
+          break
+        }
+      }
+
+      if(found) {
+        target = found.target
+        inherited = found.inherited
+        template = found.template
+        count = found.count
+      } else {
+        err("No subjects were selected.")
+      }
+      
+    }
+
+    if(!template.sub) {
+
+      let subject = { ...inherited, ...template }
+      delete subject.sub
+      delete subject.chanceWeight
+      delete subject.fillRatio
+      subject = _.cloneDeep(subject)
+      bc.addSubjectToLevel(subject, target)
+
+    } else {
+
+      let subjects = []
+      let names = []
+
+      for(let [key, value] of Objects.entries(template.sub)) {
+        let newTemplate = template[key]
+        let newInherited = { ...inherited, ...template }
+        names.push(key)
+        subjects.push({
+          target: target,
+          inherited: newInherited,
+          template: newTemplate,
+          count: count,
+        })
+      }
+
+      fc.setSelectAllowMultiple(false)
+      fc.setSelectNameList(names)
+      fc.setSelectSubjectList(subjects)
+      fc.setSelectTitle('Choose something to create:')
+
+      fc.setSelectAction(
+        () => { topController.handleCreateTarget() }
+      )
+
+      fc.showSelectedItems()
+
+    }
+
+  }
+
   creatorModeDeleteTarget() {
     const bc = this.backController
     const fc = this.frontController
-    const target = fc.getTarget().pos
-    const cell = bc.getCell(target)
-    if(cell.occupiedBy) {
-      fc.addMessage('Deleted ' + getNameOf(null, cell.occupiedBy))
-      cell.occupiedBy = null
-      fc.setLevelChanged(true)
-    } else if(cell.onFloor.length > 0) {
-      fc.addMessage('Deleted ' + getNameOf(null, cell.onFloor[0]))
-      cell.onFloor.splice(0, 1)
-      fc.setLevelChanged(true)
+    if(!bc.getCreatorMode()) {
+      fc.addMessage('Invalid command.')
     } else {
-      fc.addMessage('There\'s nothing here to delete.')
-    }
-    fc.outputTargetMessages(cell, true)
+      const target = fc.getTarget().pos
+      const cell = bc.getCell(target)
+      let subject
+      if(cell.occupiedBy) {
+        fc.addMessage('Deleted ' + getNameOf(null, cell.occupiedBy))
+        subject = cell.occupiedBy
+        fc.setLevelChanged(true)
+      } else if(cell.onFloor.length > 0) {
+        fc.addMessage('Deleted ' + getNameOf(null, cell.onFloor[0]))
+        subject = cell.onFloor[0]
+        fc.setLevelChanged(true)
+      } else {
+        fc.addMessage('There\'s nothing here to delete.')
+      }
+      if(subject) {
+        bc.removeSubjectFromLevel(subject, target)
+      }
+      fc.outputTargetMessages(cell, true)
+    } 
   }
 
   creatorMode() {
@@ -1264,7 +1365,7 @@ class TopController {
 
   }
 
-  dropItem(item) {
+  dropItem(item, count) {
     const bc = this.backController
     const fc = this.frontController
     const group = bc.getInventoryGroup(item.type)
@@ -1276,7 +1377,6 @@ class TopController {
       }
     }
     if(index != null) {
-      const count = fc.getSelectCount(index)
       bc.dropItem(item.type, index, count)
       let name = getNameOf('a', item)
       if(count) {
@@ -1465,36 +1565,36 @@ class TopController {
     if(pos.x < levelWindow.panCellOffset.x + levelWindow.panScrollMargin 
       && levelWindow.panCellOffset.x > 0
       ) {
-      levelWindow.panCellOffset.x = Math.max(0, pos.x - levelWindow.panScrollMargin);
+      levelWindow.panCellOffset.x = Math.max(0, pos.x - levelWindow.panScrollMargin)
       fc.setLevelChanged(true)
     } 
 
     if(pos.y < levelWindow.panCellOffset.y + levelWindow.panScrollMargin 
       && levelWindow.panCellOffset.y > 0
       ) {
-      levelWindow.panCellOffset.y = Math.max(0, pos.y - levelWindow.panScrollMargin);
+      levelWindow.panCellOffset.y = Math.max(0, pos.y - levelWindow.panScrollMargin)
       fc.setLevelChanged(true)
     } 
 
     if(pos.x > levelWindow.panCellOffset.x + levelWindow.size.x - levelWindow.panScrollMargin 
       && levelWindow.panCellOffset.x + levelWindow.size.x < levelSize.x
       ) {
-      levelWindow.panCellOffset.x = Math.min(levelSize.x - levelWindow.size.x, pos.x + levelWindow.panScrollMargin - levelWindow.size.x);
+      levelWindow.panCellOffset.x = Math.min(levelSize.x - levelWindow.size.x, pos.x + levelWindow.panScrollMargin - levelWindow.size.x)
       fc.setLevelChanged(true)
     } 
 
     if(pos.y > levelWindow.panCellOffset.y + levelWindow.size.y - levelWindow.panScrollMargin 
       && levelWindow.panCellOffset.y + levelWindow.size.y < levelSize.y
       ) {
-      levelWindow.panCellOffset.y = Math.min(levelSize.y - levelWindow.size.y, pos.y + levelWindow.panScrollMargin - levelWindow.size.y);
+      levelWindow.panCellOffset.y = Math.min(levelSize.y - levelWindow.size.y, pos.y + levelWindow.panScrollMargin - levelWindow.size.y)
       fc.setLevelChanged(true)
     }
   }
 
   advanceTime() {
     this.backController.getActors().forEach(actor => {
-      this[actor.act](actor);
-    });
+      this[actor.act](actor)
+    })
   }
   
   simplePursuit(actor) {
@@ -1560,7 +1660,7 @@ class TopController {
       this.frontController.addMessage(message)
       this.adjustHealth(target, -damage)
     } else {
-      message = getNameOf('the', source) + " missed you.";
+      message = getNameOf('the', source) + " missed you."
       this.frontController.addMessage(message)
     }
   }
@@ -1924,16 +2024,14 @@ class BackController {
 
   }
 
-  addActor(actor, pos) {
+  addActor(actor) {
     const bm = this.backModel
     bm.actor.push(actor)
-    bm.level[pos.x][pos.y].occupiedBy = actor
-    actor.pos = pos
   }
 
   removeActor(actor) {
     const bm = this.backModel
-    bm.actor = bm.actor.filter(a => { return a != actor })
+    bm.actor = bm.actor.filter(a => a != actor)
   }
 
   getActors() {
@@ -1993,7 +2091,9 @@ class BackController {
     let merged
     if(selected.sub) {
       inheritedProperties = { ...inheritedProperties, ...selected }
-      inheritedProperties.sub = null
+      delete inheritedProperties.sub
+      delete inheritedProperties.chanceWeight
+      delete inheritedProperties.fillRatio
 
       merged = this.pickSomethingToGenerate(
         inheritedProperties, 
@@ -2017,18 +2117,35 @@ class BackController {
       let subject = this.pickSomethingToGenerate({}, template.generated.sub, randomizer)
       subject = _.cloneDeep(subject)
       let pos = findEmptyCellCentrally(level, randomizer)
-      if(subject.act) {
-        this.addActor(subject, pos)
-      } else {
-        if(subject.occupant) {
-          level[pos.x][pos.y].occupiedBy = subject
-        } else {
-          level[pos.x][pos.y].onFloor.push(subject)
-        }
-        subject.pos = pos
-      }
+      this.addSubjectToLevel(subject, pos)
       debug("Placed " + getNameOf(null, subject))
     }
+  }
+
+  addSubjectToLevel(subject, pos) {
+    if(subject.act) {
+      this.addActor(subject, pos)
+    }
+    if(subject.occupant) {
+      level[pos.x][pos.y].occupiedBy = subject
+    } else {
+      level[pos.x][pos.y].onFloor.push(subject)
+    }
+    subject.pos = pos
+  }
+
+  removeSubjectFromLevel(subject, pos) {
+    if(subject.act) {
+      this.removeActor(subject)
+    }
+    if(subject.occupant) {
+      level[pos.x][pos.y].occupiedBy = null
+    } else {
+      level[pos.x][pos.y].onFloor = 
+        level[pos.x][pos.y].onFloor
+        .filter(item => item != subject)
+    }
+    subject.pos = null
   }
 
   getLevel() {
@@ -2085,6 +2202,8 @@ class FrontController {
       this.addMessage(describeItem(cell.floorType))
     }
     if(creatorMode) {
+      this.addMessage('')
+      this.addMessage('c - create')
       this.addMessage('d - delete target')
     }
   }
@@ -2321,11 +2440,13 @@ class FrontController {
 
     const subject = fm.selectSubjectList[index]
     const items = subject.items
+    const counts = subject.counts
     const action = subject.action
 
     for(let i = 0; i < items.length; i++) {
       action.execute(
         items[i],
+        counts[i],
       )
     }
 
@@ -2337,7 +2458,7 @@ class FrontController {
 
     const fm = this.frontModel
     let subjects = fm.selectSubjectList
-    const counts = fm.selectCount
+    const counts = []
     const items = []
 
     for(let i = 0; i < subjects.length; i++) {
@@ -2347,6 +2468,7 @@ class FrontController {
           err('Found null subject')
         }
         items.push(subject)
+        counts.push(fm.selectCountList[i])
       }
     }
 
@@ -2360,7 +2482,7 @@ class FrontController {
     let keys = []
     for(let action of actions) {
       names.push(action.name)
-      subjects.push({ action: action, items: items })
+      subjects.push({ action: action, items: items, counts: counts })
       keys.push(action.key)
     }
 
@@ -2518,9 +2640,15 @@ class FrontController {
   }
 
   windowCellPosToScreenPixelPos(screen, window, windowPos) {
-    const screenCellPos = this.windowCellPosToScreenCellPos(screen, window, Pair.empty())
-    const screenPixelPos = screenCellPos.multiply(screen.cellPixelDimensions)
-    const windowPixelPos = windowPos.multiply(window.cellPixelDimensions)
+    const screenCellPos = this.windowCellPosToScreenCellPos(
+      screen, window, Pair.empty()
+    )
+    const screenPixelPos = screenCellPos.multiply(
+      screen.cellPixelDimensions
+    )
+    const windowPixelPos = windowPos.multiply(
+      window.cellPixelDimensions
+    )
     return screenPixelPos.add(windowPixelPos)
   }
 
@@ -2776,8 +2904,8 @@ class FrontController {
 class InController {
 
   constructor() {
-    document.removeEventListener("keyup", this.handleKey, false);
-    document.addEventListener("keyup", this.handleKey, false);
+    document.removeEventListener("keyup", this.handleKey, false)
+    document.addEventListener("keyup", this.handleKey, false)
   }
 
   handleKey(event) {
@@ -2943,8 +3071,8 @@ const actions = {
     key: 'd',
     name: 'drop',
     supportMulti: true,
-    execute: (item) => {
-      topController.dropItem(item)
+    execute: (item, count) => {
+      topController.dropItem(item, count)
     },
   },
   equip: {

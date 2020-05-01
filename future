@@ -1,16 +1,38 @@
 creator mode
-  support actions while in target mode
-    multi-line title?
-  delete everything in space
   create creatures
   create item
   teleport player
   regen level
 weapon usage
+  weapon prioritization
+  chance to hit
+    check against dodge, deflect, block
+    force
+      skill
+      weapon
+      dex
+      speed
+      enemy size
+    resist
+      distance
+      enemy dodge/deflect/block skill
+      enemy dex
+      enemy movement
+  damage
+    force
+      skill
+      weapon
+      str (depending on weapon)
+    resist
+      enemy armor
 target mode
   ranged attacks
+auto-help
+  based on input mode
+  should describe windows also
 export / import game
-weapon priorization
+auto-save after 10 turns
+ask if we should load game when starting
 armor
 generate stores
 different times for actions
@@ -23,14 +45,63 @@ basic senses
   sound
   smell
 core attributes
+cell attributes
+  5 levels of depth
+  smells (5 levels)
+  energy (each energy pool)
+  temperature
 farming
+  hoe
+    can be used to either plant something into the ground
+  shovel
+    can be used to dig something up to put into inventory
   seeds are placed on ground and grow if the required energy is available
   base foods can be eaten or seeds extracted from
   farming skills determine how many seeds you can extract
+  some monsters can breed
+    if sufficient food energy is available
+    most monsters feed off of one kind of energy and produce another
+mining / fishing / foraging
+  can find gem stones and gold
+  should be fairly difficult
+  but not tedious
+    mine / fish / forage large regions of the map at once
+      based on skill, from 2x2 -> whole level
+  need to use skills to find evidence of minerals
+  differences
+    mining can only be done once, but returns more valuable objects (gems and money)
+      requires pickaxe
+        can create shallow and deep pits, and can break rocks
+    fishing can be done repeatedly, depending on the energy that exists in pools of water
+      requires fishing pole
+      colored fish provide the color + blue
+      harvesting early gives you supplies more quickly, but less
+    harvesting/foraging is more complex, since it yields ingredients that can be combined to provide more powerful foods or potions
+      does not require an item, although an item is needed to plant things that weren't already there
+      can be done repeatedly
+      depends on what's growing in the area
+      harvesting early gives you supplies more quickly, but less
+dimensions
+  5 z positions for each cell?
+  w dimension to get to ketheric, etheric, astral, dungeon, abyss, void, pandemonium, oblivion
+  can set dimensions, 2 or 3 on main view
+quick travel
+  auto-explore
+  auto-attack
+  instant move 
+    to a place on an empty floor
+    from an empty floor
+  auto-travel
+    works even if monsters are around
+    attitudes:
+      avoid monsters
+      ignore all items
 energy management
+  hunger / display hunger
   where does it come from?
     dungeon core generates energy for the dungeon
       always one color
+      player auto-absorbs if pressure is in the right direction
   tiers 0-4
     1 tier 4 = 10 tier 3 = 100 tier 2 = 1000 tier 1 = 10000 tier 0
   energy types
@@ -57,21 +128,29 @@ energy management
       coPper (red, orange)
     spectra (tier 2)
       violet
-        element = electric
+        element = purity / poison
+        provided by mushrooms
       indigo
-        element = stone
+        element = metal
+        provided by dairy
       blue
         element = water
+        provided by seafood
       cyan
         element = ice
+        provided by roots 
       green
         element = earth
+        provided by veggies
       yellow
-        element = air
+        element = electric
+        provided by fruits
       orange
-        element = metal
+        element = stone
+        provided by grains
       red
         element = fire
+        provided by meat (land meat, not seafood)
     interna (tier 1) (N)
       critical_health (from violet)
       major_health (from green)
@@ -114,6 +193,11 @@ energy management
     some plants can convert one type of energy to another
     some creatures convert energy
     energy capacity of plants is lower than animals
+  meditation allows player to reduce pressure in a pool
+    meditation takes a turn, and increases effectiveness steadily
+    max depth and speed of meditation determined by meditation skill
+    state is maintained as long as player doesn't move or attack
+    can meditate on any pool, including interna
 eat
   starvation constantly attempts to deplete HP, MP, SP (not WP)
     red, orange, yellow energy is consumed to counter this, unless there is no energy available, in which case hp is lost
@@ -129,31 +213,6 @@ eat
   or 2/3 minor 1/3 of remaining major + critical, 1/3 of remaining critical
   all health must be 0 before death occurs
   critical strikes can bypass the normal damage order
-magic
-  transformation tree
-    levels
-      subatomic
-      proton
-      electron
-      spirit
-      mind
-      body
-    sapling to small tree to large tree
-    dry tree to normal tree to wet tree
-    turning a wall into water
-  delayed execution
-  triggered execution
-  manipulating an existing spell or curse
-    easier to alter later words
-  forces hold forms in place
-    they can be weakened or reversed
-    must reduce the force resisting change before making a change
-    then increase force resisting change after, to make change persistent
-  all item enchantments and potions and scrolls are woven from magic properties
-  even weapons and armor can be fabricated with magic if the user is powerful enough
-help about specific components of interface
-emotions
-  happy, sad, afraid, pain
 monster enemy identification
   sight
     changes quickly
@@ -165,17 +224,35 @@ monster enemy identification
     changes slowly
   persuasion
 everything destructable
+monster corpses and spirits
+  their intent and skills are part of the spirit
+  spirit dissipates slowly
+  body decays slowly
+if player dies, spirit is still alive for a time
+  player has mp and wp, but not hp or sp
+  can cast spells, but not hold items
+  once wp is gone, spirit falls apart
+  can't eat or drink potions or read scrolls
+  can possess another body if powerful enough
+  or resurrect original body
+  invisible to most monsters, although other spirits can see 
+  can still be attacked with magic
+  physical attacks don't work
+  does changing species change spirit?
+    yes, changes are retained
+  all energy pools leak slowly as a spirit
+  can pass through walls as spirit
 auto generated levels
-  branching
+  stairs
 variable size browser windows
 smarter monsters
+monsters have equip
+  they drop their equip and money on death
 attributes
 more sophisticated attack
 client / server
 multiple simultaneous clients
-save / load
 spawning monsters
-light mechanics
 curses
   wear off over time, or can be immediately cancelled with a remove curse scroll
 spawned items
@@ -280,38 +357,44 @@ dimenions
     no experience or items, only monsters that keep spawning
     must find exit
     gets more difficult the lower it is
-starting scenarios
-  choose at beginning
-  (rich man)
-    mediocre skills, but vast wealth to be able to buy the finest equipment
-    starts with decent equip
-  prodigy (super talent)
-    meager starting equipment, but amazing talent from the beginning
-  adventurer
-    evenly balanced
-  wanderer
-    minimal equipment and skills, but highly adaptable
-  adept
-    low equip and skills, but high rate of experience gain
-game objectives
-  met by achievements. Must complete at least one achievement and exit dungeon safely to win
-  raider
-    obtain the main treasure
-  conquerer
-    take out the main boss
-  annhilator
-    destory all bad creatures in the dungeon
-  explorer
-    to explore every part of the dungeon
-  entrepreneur
-    obtain 1 million gold
-  survivor
-    survive for a certain amount of time
-  peacemaker
-    to get to the bottom and return without killing any creature
-  seasoned
-    gain all experience potions in dungeon
-disciplines
+always starts with
+  scroll of permanence
+  experience potion
+  dagger
+starting equipment, selected at beginning
+  millionaire: pile of gold
+  scholar: start with book of identification
+  warrior: weapon and armor
+  sniper: ranged weapon and light armor
+  evoker: start with some wands
+  artificer: start with gems
+  alchemist: start with potions
+  scribe: start with scrolls
+guardians
+  can invoke help from guardians
+  but can only choose one guardian at a time
+  guardians give gifts, and can protect the player in various ways, but don't give abilities like disciplines
+  guardians can be found at shrines
+  guardians
+    emery: gives a random energy boost periodically
+      level 1: half every 100 turns
+    sensei: randomly double growth point gain
+      gifts of books
+    al: randomly gifts with one of the potions the player has
+    slip: randomly gifts with one of the scrolls the player has
+    ares: gifts of weapons
+    pete: gifts of armor
+    wanda: gifts of wands
+    midas: gifts of gold
+disciplines (from books)
+  abilities are paid with one particular interna
+    hp
+    sp
+    mp
+    wp
+    gp
+  identifier
+    while studying this book, if you come across any unidentified items, they become identified
   abilities are gained with experience, and don't come immediately
     based on levels gained after starting the discipline study
     can only study one discipline at a time, but can change without loss
@@ -345,8 +428,41 @@ disciplines
     can move from one creature to another
     must store up enough energy before dying to be able to possess another 
     leaving before dying is better, since death causes a backlash greatly reducing the spirits power
+game achievements (increase score)
+  raider: obtain the orb of power (doubles all pools while in inventory, but attracts monsters)
+  each rune: 1000 points
+  destroyer: destroy all bad creatures in the main dungeon
+  anhilator: destroy all bad creatures in all branches
+  explorer: to explore every part of the dungeon
+  entrepreneur: obtain 1 million gold
+  peacemaker: to get to the bottom and return without killing any creature
+  seasoned: gain all experience potions in dungeon
+  survivor: escape dungeon alive, 4x score
+score
+  each achievement adds to the score
+  escaping the dungeon alive multiplies score by 4
+  final score divided by amount of time used (multiplied by par for each achievement)
 altars
   always require a certain kind of sacrifice in exchange for a temporary boost of some attribute or gifted item
+  sacrifices
+    experience potions
+    hand
+    gold
+    gem
+    rune
+  reward
+    known wish, 3 of:
+    common
+      small growth points
+    rare
+      random energy awakening
+      medium growth points
+    legendary
+      chosen energy awakening
+      large growth points
+fountains
+  random effect, but it's consistent, and lasts 3-10 times
+  may be any potion effect except for experience potions
 multiple species
   change species through polymorph potions
     normally they are temporary, but there are special scrolls that can make them permanent
@@ -365,6 +481,9 @@ multiplayer in same dungeon
     maybe disabled when monsters are around?
 experience / levels
   every 10 levels gives a chance of a energy core awakening
+    can happen before level 10, but less likely
+      force = current level
+      resistance = 15*(energy cores)
     one core becomes a producer, randomly chosen
       you can alter the chances to some degree
       influenced by amount of energy in each energy pool
@@ -378,8 +497,9 @@ experience / levels
     [*] experience potions (one per floor)
   one level up per experience potion
     gives 10 growth points
-    1 gp = +1 attribute
-    1 gp = +apt skill (average being 4)
+    1 growp = +1 attribute
+    1 growp = +apt skill (average being 4)
+  status shows direction of experience potion in floor
 challenge / defense calculation
   diff = challenge - defense 
   power = 2^(diff/4)
@@ -409,17 +529,20 @@ item classes / sub
     weapons
     armor
     accessories
-      gem
       ring
       amulet
+  stones
+    gem
+    runes
   consumable
     scroll
     potion
     wand
     food
   misc
-    rune
     book
+    wards (scare certain types of monsters away)
+    lures (attract some monsters)
 scrolls
   inspection
   duplication
@@ -461,7 +584,7 @@ potions
   can be crafted from ingredients
     alchemy skill boost effectiveness and success rate, and reduces side effects
     most ingredients have positive and negative effects
-  non-energy pools are much more likely
+  non-energy pools are much less likely
     healing (full)
       minor 
       major
@@ -473,14 +596,20 @@ potions
   mutations: temporary effect
   species altering: temporary effect
   experience
+    no levels, only xp which can be spent
+      1 xp can be used to increase one:
+        core attribute +1
+        pool capacity by 10%
+        pool regen by 10% (if awakened)
+        skill +1
     one per floor
     all experience comes from this
     all give the same amount of experience, based on experience growth rate of current species: 
-      humans: 1.5 levels
-      other: 1 level
-      elf: 0.8 levels
-      orc: 1.0 levels
-      demigod: 0.4 levels
+      humans: 12 xp
+      orc: 10 xp
+      elf: 8 xp
+      demigod: 4 xp
+      other: 10 xp
     full restoration of all interna pools (hp, sp, mp, wp)
 item durability:
   when it's used, it reduces durability
@@ -499,6 +628,9 @@ books
 ranged attacks
   more distance reduces chance to hit
 skills
+  aptitudes
+    normal is 1.0, but can be 0.5, 1.5, 2.0, 2.5, etc
+    0 means can't be trained
   offense
     unarmed combat
     polearm
@@ -561,7 +693,32 @@ skills
     crafting
     scholarship
     medical
+    meditation (depth and speed)
+    farming (seed extraction)
+    mining
+    wands
 spells
+  transformation tree
+    levels
+      subatomic
+      proton
+      electron
+      spirit
+      mind
+      body
+    sapling to small tree to large tree
+    dry tree to normal tree to wet tree
+    turning a wall into water
+  delayed execution
+  triggered execution
+  manipulating an existing spell or curse
+    easier to alter later words
+  forces hold forms in place
+    they can be weakened or reversed
+    must reduce the force resisting change before making a change
+    then increase force resisting change after, to make change persistent
+  all item enchantments and potions and scrolls are woven from magic properties
+  even weapons and armor can be fabricated with magic if the user is powerful enough
   spell start / end keys
   principles
     teleportation
@@ -610,7 +767,7 @@ damage types
   pierce
   bash
   heat
-  cold
+  freeze
   shock
 species
   common:
@@ -710,7 +867,7 @@ species
       weak:
         damaged by Sun energy
     demigod
-      strong:
+      strong: (all +1 each level up)
         str
         dex
         int
@@ -719,8 +876,8 @@ species
         sp
         wp
       weak:
-        can't study disciplines
-        don't gain additional cores
+        can't have a guardian
+        xp gain
     demon
       strong:
         demonic mutations

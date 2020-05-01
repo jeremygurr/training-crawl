@@ -617,6 +617,7 @@ const template = {
   backModel: {
     actor: [],
     seed: 'test',
+    randomizer: null,
     levelCaveGenerator: {
       openness: 0.2,
       wallThreshold: 0.5,
@@ -746,7 +747,8 @@ const keyMap = {
     pickUpItem: [ ',' ],
     showInventory: [ 'i' ],
     showEquipment: [ 'e' ],
-    creatorMode: [ 'C' ],
+    enterCreatorMode: [ 'C' ],
+    creatorModeCommand: [ 'c' ],
   },
   target: {
     moveLeft: [ 'h', 'ArrowLeft' ],
@@ -761,9 +763,14 @@ const keyMap = {
     moveLeftDown: [ 'b' ],
     moveRightUp: [ 'u' ],
     moveRightDown: [ 'n' ],
-    creatorDeleteTarget: [ 'd' ],
     creatorCreateTarget: [ 'c' ],
+    creatorDeleteTarget: [ 'd' ],
+    creatorTeleportToTarget: [ 't' ],
     exitTargetMode: [ 'Escape' ],
+  },
+  creator: {
+    exitSimple: [ 'Escape' ],
+    creatorRegenLevel: [ 'r' ],
   },
   select: {
     exitSimple: [ 'Escape' ],
@@ -862,14 +869,23 @@ const commandExecution = {
   clearNumericSelection: () => {
     topController.clearNumericSelection()
   },
-  creatorMode: () => {
-    topController.creatorMode()
+  enterCreatorMode: () => {
+    topController.enterCreatorMode()
   },
   creatorDeleteTarget: () => {
     topController.creatorModeDeleteTarget()
   },
   creatorCreateTarget: () => {
     topController.creatorModeCreateTarget()
+  },
+  creatorTeleportToTarget: () => {
+    topController.creatorModeTeleportToTarget()
+  },
+  creatorRegenLevel: () => {
+    topController.creatorModeRegenLevel()
+  },
+  creatorModeCommand: () => {
+    topController.creatorModeCommand()
   },
 }
 
@@ -913,6 +929,17 @@ class TopController {
     this.frontController = new FrontController()
     this.backController = new BackController(this.frontController.addMessage)
     this.refresh()
+  }
+
+  creatorModeCommand() {
+    const bc = this.backController
+    const fc = this.frontController
+    if(!bc.getCreatorMode()) {
+      fc.addMessage('Invalid command.')
+    } else {
+      fc.setKeyMode('creator')
+      fc.outputCreatorModeMessages()
+    }
   }
 
   creatorModeCreateTarget() {
@@ -1033,7 +1060,31 @@ class TopController {
     } 
   }
 
-  creatorMode() {
+  creatorModeRegenLevel() {
+    const bc = this.backController
+    const fc = this.frontController
+    if(!bc.getCreatorMode()) {
+      fc.addMessage('Invalid command.')
+    } else {
+      bc.buildLevel(bc.backModel.randomizer)
+      fc.setLevelChanged(true)
+    } 
+    fc.exitSimple()
+  }
+
+  creatorModeTeleportToTarget() {
+    const bc = this.backController
+    const fc = this.frontController
+    if(!bc.getCreatorMode()) {
+      fc.addMessage('Invalid command.')
+    } else {
+      const target = fc.getTarget().pos
+      const player = bc.getPlayer()
+      this.occupantMove(player, target)
+    } 
+  }
+
+  enterCreatorMode() {
     this.backController.setCreatorMode()
     this.frontController.setStatusChanged(true)
   }
@@ -1423,7 +1474,7 @@ class TopController {
         fc.addMessage(getNameOf('a', item, 'is') + ' here.')
       }
 
-      this.occupantSet(bc.getPlayer(), playerNewPos)
+      this.occupantMove(bc.getPlayer(), playerNewPos)
       this.advanceTime();
     } else {
       // target mode is on
@@ -1633,7 +1684,7 @@ class TopController {
   }
 
   executeMove(actor, pos) {
-    this.occupantSet(actor, pos)
+    this.occupantMove(actor, pos)
   }
 
   adjustHealth(target, change) {
@@ -1667,7 +1718,7 @@ class TopController {
     }
   }
 
-  occupantSet(occupant, toPos) {
+  occupantMove(occupant, toPos) {
     const bc = this.backController
     const fc = this.frontController
 
@@ -1966,9 +2017,10 @@ class BackController {
   buildLevel(randomizer) {
 
     const bm = this.backModel
+    bm.randomizer = randomizer
 
     bm.level = generateLevelSimpleCaves(
-      bm.level, 
+      [], 
       bm.levelSize.subtract(new Pair(2, 2)), 
       randomizer, 
       bm.levelCaveGenerator,
@@ -2195,6 +2247,10 @@ class FrontController {
     this.outController = new OutController()
   }
 
+  outputCreatorModeMessages() {
+    this.addMessage('r - regenerate level')
+  }
+
   outputTargetMessages(cell, creatorMode) {
     if(cell.occupiedBy) {
       this.addMessage(describeItem(cell.occupiedBy))
@@ -2209,6 +2265,7 @@ class FrontController {
       this.addMessage('')
       this.addMessage('c - create')
       this.addMessage('d - delete target')
+      this.addMessage('t - teleport to target')
     }
   }
 

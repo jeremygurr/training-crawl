@@ -922,12 +922,9 @@ class TopController {
       fc.addMessage('Invalid command.')
     } else {
       const target = fc.getTarget().pos
-      if(bc.handleCreateTarget(target, {}, template.generated, 1)) {
-        fc.addMessage('Created ' + getNameOf(null, subject))
-      }
+      this.handleCreateTarget(target, {}, template.generated, 1)
+      this.setKeyMode('select')
     }
-    this.setKeyMode('target')
-    fc.outputTargetMessages(cell, true)
   }
 
   handleCreateTarget(target, inherited, template, count) {
@@ -971,14 +968,19 @@ class TopController {
       delete subject.fillRatio
       subject = _.cloneDeep(subject)
       bc.addSubjectToLevel(subject, target)
+      fc.setLevelChanged(true)
+      fc.addMessage('Created ' + getNameOf(null, subject))
+      this.setKeyMode('target')
+      const cell = bc.getCell(target)
+      fc.outputTargetMessages(cell, true)
 
     } else {
 
       let subjects = []
       let names = []
 
-      for(let [key, value] of Objects.entries(template.sub)) {
-        let newTemplate = template[key]
+      for(let [key, value] of Object.entries(template.sub)) {
+        let newTemplate = template.sub[key]
         let newInherited = { ...inherited, ...template }
         names.push(key)
         subjects.push({
@@ -1993,7 +1995,7 @@ class BackController {
     bm.level[target.x][target.y-1].occupiedBy = null
     bm.level[target.x][target.y-1].onFloor = [rock]
 
-    const gold = this.generateItem(20, ['gold','gold'])
+    const gold = this.generateItem(20, ['gold','gold1'])
     
     bm.level[target.x][target.y+1].occupiedBy = null
     bm.level[target.x][target.y+1].onFloor = [gold]
@@ -2091,10 +2093,6 @@ class BackController {
     let merged
     if(selected.sub) {
       inheritedProperties = { ...inheritedProperties, ...selected }
-      delete inheritedProperties.sub
-      delete inheritedProperties.chanceWeight
-      delete inheritedProperties.fillRatio
-
       merged = this.pickSomethingToGenerate(
         inheritedProperties, 
         selected.sub, 
@@ -2103,6 +2101,10 @@ class BackController {
     } else {
       merged = { ...inheritedProperties, ...selected }
     }
+
+    delete merged.sub
+    delete merged.chanceWeight
+    delete merged.fillRatio
 
     return merged
   }
@@ -2123,6 +2125,7 @@ class BackController {
   }
 
   addSubjectToLevel(subject, pos) {
+    const level = this.backModel.level
     if(subject.act) {
       this.addActor(subject, pos)
     }
@@ -2135,6 +2138,7 @@ class BackController {
   }
 
   removeSubjectFromLevel(subject, pos) {
+    const level = this.backModel.level
     if(subject.act) {
       this.removeActor(subject)
     }

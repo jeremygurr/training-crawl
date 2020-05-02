@@ -1,6 +1,6 @@
 creator mode
-  regen level
   handle longer lists (create food)
+    fix unclean mode changes (need to clear target sometimes)
 weapon usage
   weapon prioritization
   chance to hit

@@ -1560,7 +1560,7 @@ class TopController {
 
   setKeyMode(keyModeName) {
     this.frontController.setKeyMode(keyModeName)
-    this.frontController.setTarget(false)
+    this.frontController.setTarget(null)
   }
 
   refresh() {
@@ -1765,7 +1765,6 @@ class TopController {
   setTarget(pos) {
     const fc = this.frontController
     const bc = this.backController
-    const target = fc.getTarget().pos
     fc.setTarget(pos)
     if(pos) {
       const cell = bc.getCell(pos)

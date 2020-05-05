@@ -1,5 +1,4 @@
 energy
-  update energy each turn
   viewing connections
     Connections
     9: SR=I3 SO>IS SY>IM SG=I2 SB<I1
@@ -280,6 +279,7 @@ energy management
       3 skill = 4 depth max and 1.25 per aut
     state is maintained as long as player doesn't move or attack
     can meditate on any pool, including interna
+    willpower application works similarly, but constantly drains willpower to pay for it
 eat
   starvation constantly attempts to deplete HP, MP, SP (not WP)
     red, orange, yellow energy is consumed to counter this, unless there is no energy available, in which case hp is lost

@@ -13,7 +13,10 @@ energy
       0-9
   colorize status
   examine pools
+  willpower pressure reduction
+    can only pick one at a time
   meditation
+    can only pick one at a time
   experience potion drinking
   core awakening
 weapon usage
@@ -271,6 +274,10 @@ energy management
   meditation allows player to reduce pressure in a pool
     meditation takes a turn, and increases effectiveness steadily
     max depth and speed of meditation determined by meditation skill
+      0 skill = 1 depth max and 0.5 per aut
+      1 skill = 2 depth max and 0.75 per aut
+      2 skill = 3 depth max and 1.0 per aut
+      3 skill = 4 depth max and 1.25 per aut
     state is maintained as long as player doesn't move or attack
     can meditate on any pool, including interna
 eat

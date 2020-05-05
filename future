@@ -1,34 +1,24 @@
 energy
-  viewing status
-    Time: 12340  
-    $50123 XP:000
-    Interna
-    I1-3 000 / 000 / 000 of 325
-    IS:000 IM:000 IW:000
-    Lumina
-    B:100 G:045 T:010 M:015 S:000
-    Etherea
-    C:000 S:000 G:000 D:000
-    Spectra
-    R:000 O:000 Y:000 G:000 
-    C:000 B:000 I:000 V:000
-    Exotica
-    R:000 B:000 P:000
   eating food
+    eat command
+    add energy
   energy decay
     MP,SP,HP -0.1 per aut
   update energy each turn
+  viewing connections
+    Connections
+    9: SR=I3 SO>IS SY>IM SG=I2 SB<I1
+    6: EM>SR EM>SO EM>SY EM>SG EM<SC 
+       EM>SB EM=SI EM>SV
   channel command
     ci1 will show options:
       a - SB=I1
       b - I1>LB
     and then will ask for the level
       0-9
-  viewing connections
-    Connections
-    9: SR=I3 SO>IS SY>IM SG=I2 SB<I1
-    6: EM>SR EM>SO EM>SY EM>SG EM<SC 
-       EM>SB EM=SI EM>SV
+  colorize status
+  examine pools
+  meditation
   experience potion drinking
   core awakening
 weapon usage

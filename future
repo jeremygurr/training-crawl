@@ -1,3 +1,36 @@
+energy
+  viewing status
+    Time: 12340  
+    $50123 XP:000
+    Interna
+    I1-3 000 / 000 / 000 of 325
+    IS:000 IM:000 IW:000
+    Lumina
+    B:100 G:045 T:010 M:015 S:000
+    Etherea
+    C:000 S:000 G:000 D:000
+    Spectra
+    R:000 O:000 Y:000 G:000 
+    C:000 B:000 I:000 V:000
+    Exotica
+    R:000 B:000 P:000
+  eating food
+  energy decay
+    MP,SP,HP -0.1 per aut
+  update energy each turn
+  channel command
+    ci1 will show options:
+      a - SB=I1
+      b - I1>LB
+    and then will ask for the level
+      0-9
+  viewing connections
+    Connections
+    9: SR=I3 SO>IS SY>IM SG=I2 SB<I1
+    6: EM>SR EM>SO EM>SY EM>SG EM<SC 
+       EM>SB EM=SI EM>SV
+  experience potion drinking
+  core awakening
 weapon usage
   weapon prioritization
   chance to hit
@@ -20,8 +53,7 @@ weapon usage
       str (depending on weapon)
     resist
       enemy armor
-target mode
-  ranged attacks
+ranged attacks
 auto-help
   based on input mode
   should describe windows also
@@ -33,6 +65,12 @@ generate stores
 different times for actions
 game clock
   enemy actions don't execute until they have received enough time
+how to vary item generation?
+  item energy, gets used by each item generated
+  if not enough energy, then item isn't generated
+  each item has a generation cost
+  top floor starts with 100 points of each generation color
+  each floor has a core, which adds points to that generation color * the level of the floor
 multi-floor
   stairs
   10 floors for now
@@ -81,10 +119,6 @@ mining / fishing / foraging
       can be done repeatedly
       depends on what's growing in the area
       harvesting early gives you supplies more quickly, but less
-dimensions
-  5 z positions for each cell?
-  w dimension to get to ketheric, etheric, astral, dungeon, abyss, void, pandemonium, oblivion
-  can set dimensions, 2 or 3 on main view
 quick travel
   auto-explore
   auto-attack
@@ -102,62 +136,118 @@ energy management
     dungeon core generates energy for the dungeon
       always one color
       player auto-absorbs if pressure is in the right direction
+  connection flow
+    max amount of lower energy to move in an aut
+    levels:
+      9 = 100%
+      8 = 50%
+      7 = 25%
+      6 = 12%
+      5 = 6%
+      4 = 3%
+      3 = 1.5%
+      2 = 0.75%
+      1 = 0.37%
+      0 = 0%
+  overdriving energy capacity
+    causes damage to the energy pool
+      pain and reduction of max capacity of pools involved
+      energy leaks from the pool if there is damage, proportional to the damage level
+      how to repair damaged pools
+        higher tier pools that are connected will first repair the damage before filling the pool
+        repair cost is one higher tier point per damage point
+      damage per aut = ([overloaded amount] / [max]) ^ 4 / 10
   tiers 0-4
     1 tier 4 = 10 tier 3 = 100 tier 2 = 1000 tier 1 = 10000 tier 0
   energy types
-    lumina
-      white: Sun (tier 4)
+    lumina (5)
+      white: sUn (tier 4)
         connects to *all* etherea
         element = high life
       white: Moon (tier 3)
         connects to *all* spectra
+        connects to sun
         element = low life
       white: sTar (tier 2)
         connects to any etherea
+        connects to moon
         element = light
-      gray (tier 1)
+      grAy (tier 1)
         connects to any spectra
+        connects to star
         element = shadow
       blacK (tier 0)
-        connects to any interna
-        element = void
-    etherea (tier 3)
+        connects to any interna or gray
+        element = darkness
+    etherea (tier 3) (4)
       Diamond (cyan, blue, indigo, violet, red)
       goLd (yellow, green, cyan, blue)
       Silver (orange, yellow, green)
-      coPper (red, orange)
-    spectra (tier 2)
+      coppEr (red, orange)
+    spectra (tier 2) (8)
       violet
         element = purity / poison
         provided by mushrooms
+        used by: 
+          time spells
       indigo
         element = metal
         provided by dairy
+        used by: 
+          planes spells
+          deep creation
       blue
         element = water
         provided by seafood
+        used by: 
+          deep aleration spells
+          critical healing
       cyan
         element = ice
         provided by roots 
+        used by: 
+          translocation spells
+          freeze magic
+          perception magic
       green
         element = earth
         provided by veggies
+        used by: 
+          simple creation spells
+          major healing
       yellow
         element = electric
         provided by fruits
+        used by:
+          mana gen
+          control magic
+          lightning magic
       orange
         element = stone
         provided by grains
+        used by: 
+          simple aleration spells
+          stamina gen
       red
         element = fire
         provided by meat (land meat, not seafood)
-    interna (tier 1) (N)
-      critical_health (from violet)
-      major_health (from green)
-      minor_health (from red)
-      stamina (from orange)
-      mana (from yellow)
-      willpower
+        used by:
+          minor healing
+          fire magic
+    interna (tier 1) (N) (6) (form pools)
+      1 hp1 critical_health (from blue)
+      2 hp2 major_health (from green)
+      3 hp3 minor_health (from red)
+      4 sp  stamina (from orange)
+      5 mp  mana (from yellow)
+      6 wp  willpower (from violet)
+    eXotica (3) (tier 1) (extremely rare to find these energies)
+      raiNbow 
+        connects to *all* spectra
+      broWn 
+        connects to *all* lumina
+      Purple
+        connects to red AND blue
   energy can flow both directions, but favors down (2x pressure on top)
   willpower can be used to concentrate energy against the normal forces
     effectively reduces the pressure of the targeted energy pool
@@ -203,8 +293,8 @@ eat
     red, orange, yellow energy is consumed to counter this, unless there is no energy available, in which case hp is lost
     there is an idle rate that these deplete, although it is slow
     HP = 0 : dead
-    MP = 0 : occasional confusion
     SP = 0 : occasional fainting
+    MP = 0 : occasional confusion
   critical health must be at max before major healing can happen
   major health must be at max before minor healing can happen
   normally major damage isn't done until minor health is 0
@@ -346,22 +436,49 @@ shops
   items are sorted by rarity
   shops half full
   generated item count is fixed when level is generated, and is multiplied by store stability factor (10?)
+trees
+  wet
+  normal
+  dry
+    can catch on fire, and dry out or light other trees nearby
 consume item
-dungeon is a stack of 100 floors, but there are some branches and parallel dimensions
+dungeon is a stack of 100 floors, but there are some branches and planes
 branches
-  some number of floors which lead to a boss floor and a rune
-  20 runes total
-  branches have specialties, with some items spawning much more than others
-dimenions
-  potentially one per dungeon floor
-  abyss
-    no experience or items, only monsters that keep spawning
-    must find exit
-    gets more difficult the lower it is
+  5 floors which lead to a boss floor and a rune
+  20 runes total (one for each energy pool)
+  each branch is of a single energy pool color
+    branches will tend to be found on a floor of the same color, but if there are no floors of that color, a random one will be chosen
+  difficulty level of the branch is the difficulty level of the floor on which the branch entrance is found + level of branch
+dimensions
+  5 z positions for each cell?
+  w dimension to get to ketheric, etheric, astral, dungeon, abyss, void, pandemonium, oblivion
+  can set dimensions, 2 or 3 on main view
+planes
+  lower planes have less energy
+  bringing creatures to higher planes makes them have a better attitute towards the player (easier to command)
+  easier to travel down planes than up
+  each plane has a different background color
+  attributes of each
+    ketheric (violet)
+    etheric (blue)
+    astral (green)
+    dungeon (gray)
+      one energy core per level
+    abyss (yellow)
+    sheol (orange)
+    pandemonium (red)
+    void (black)
+    oblivion (nothing)
+      can't travel here without dying (no spirit either)
+      anything sent here is lost forever
 always starts with
   scroll of permanence
+  scroll of time (10 turns of stopped time)
+  scroll of blinking
+  scroll of remove curse
+  scroll of identify
   experience potion
-  red, green, violet potions
+  red, orange, yellow, green food
 starting equipment, selected at beginning
   maybe not: nothing to start with
   philanthropist: pile of gold
@@ -547,17 +664,17 @@ item classes / sub
     lures (attract some monsters)
 scrolls
   inspection
-  identify
+  identify (identifies all carried items)
   remove curse
   duplication
   amplification
+  duration: double the length of time of the next scroll
   permanence: makes a potion effect permanent
   inversion: makes a potion or scroll do the opposite
-  duration
-  blink
+  blink: instant teleport to some space that can be seen
   floor teleportation
   branch teleportation
-  world teleportation
+  dimension teleportation
   level map
   mineral report
   treasure map: shows where all of the gold or high rarity items on the floor is 
@@ -566,6 +683,7 @@ scrolls
   instant skill upgrades
   contain info about spell recipes
   contains a fundamental spell principle
+  time (stops time for 10 auts)
 wands
   some wands auto-recharge, which boosts their value considerably
   some wands auto-discharge
@@ -880,7 +998,7 @@ species
       strong:
         can transform to a bat
         can drain red energy from others on contact
-        starts with violet core
+        starts with blue core
       weak:
         damaged by Sun energy
     demigod

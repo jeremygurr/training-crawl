@@ -1,9 +1,4 @@
 energy
-  eating food
-    eat command
-    add energy
-  energy decay
-    MP,SP,HP -0.1 per aut
   update energy each turn
   viewing connections
     Connections

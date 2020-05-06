@@ -1,15 +1,9 @@
 energy
-  viewing connections
-    Connections
-    9: SR=I3 SO>IS SY>IM SG=I2 SB<I1
-    6: EM>SR EM>SO EM>SY EM>SG EM<SC 
-       EM>SB EM=SI EM>SV
   channel command
-    ci1 will show options:
-      a - SB=I1
-      b - I1>LB
-    and then will ask for the level
-      0-9
+    select multiple pool types
+    select multiple pools of one type
+  implement wrapping in messages for showSelectedItems
+  refactor for each channel
   colorize status
   examine pools
   willpower pressure reduction

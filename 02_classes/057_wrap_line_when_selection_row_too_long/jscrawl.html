@@ -1228,6 +1228,7 @@ const template = {
     selectNameList: [],
     selectSubjectList: [],
     selectTitle: [],
+    selectMaxWidth: null,
     selectMeta: {},
 
     target: {
@@ -1252,7 +1253,7 @@ const screens = {
         pos: Pair.empty(),
         size: new Pair(12, 18),
         offset: new Pair(7, 2),
-        cellPixelDimensions: new Pair(16, 18),
+        cellPixelDimensions: new Pair(10, 18),
         fontStyle: fontStyle.compact,
       },
 
@@ -1547,6 +1548,7 @@ class TopController {
     fc.setSelectNameList(names)
     fc.setSelectSubjectList(subjects)
     fc.setSelectAllowMultiple(true)
+    fc.setSelectMaxWidth(screens.main.window.message.smallCellSize.x / 2)
     this.setKeyMode('select')
 
     fc.setSelectAction(
@@ -3629,7 +3631,7 @@ class FrontController {
     const fm = this.frontModel
     const messages = fm.messages
     const header = fm.messagesHeader
-    const maxMessageRow = window.smallCellSize.y
+    const maxMessageRow = window.smallCellSize.y - 1
     let xOffset = 0
     let yOffset = 0
     let maxWidth = 0
@@ -3640,7 +3642,7 @@ class FrontController {
       let effectiveRow = row + yOffset
 
       if(effectiveRow > maxMessageRow) {
-        xOffset += maxWidth + 2
+        xOffset += maxWidth + 1
         yOffset -= maxMessageRow - header + 1
         effectiveRow = row + yOffset
         maxWidth = 0
@@ -3832,8 +3834,13 @@ class FrontController {
     fm.selectNameList = []
     fm.selectSubjectList = []
     fm.selectTitle = []
+    fm.selectMaxWidth = null
     // not resetting meta. That's supposed to persist between calls.
     // fm.selectMeta = {}
+  }
+
+  setSelectMaxWidth(maxWidth) {
+    this.frontModel.selectMaxWidth = maxWidth
   }
 
   getSelectSubjectList() {
@@ -3887,10 +3894,10 @@ class FrontController {
       let prefix = key + selected + count
       let remaining = name
       let fits
-      const maxWidth = screens.main.window.message.smallCellSize.x
+      const maxWidth = fm.selectMaxWidth || screens.main.window.message.smallCellSize.x
 
       while(prefix.length + remaining.length > maxWidth) {
-        let [ fits, remaining ] = splitAtBlankBefore(remaining, maxWidth - prefix.length)
+        [ fits, remaining ] = splitAtBlankBefore(remaining, maxWidth - prefix.length)
         if(fits.length == 0 || remaining.length == 0) break
         this.addMessage(prefix + fits, true)
         prefix = '    '

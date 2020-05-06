@@ -1,17 +1,18 @@
 energy
-  channel command
-    select multiple pool types
-    select multiple pools of one type
   implement wrapping in messages for showSelectedItems
+  long form
+  examine pools
+  flow isn't stabilizing
   refactor for each channel
   colorize status
-  examine pools
   willpower pressure reduction
     can only pick one at a time
   meditation
     can only pick one at a time
   experience potion drinking
   core awakening
+  minor health can't go up until major
+    make room function which calculates how much room a pool has to increase
 weapon usage
   weapon prioritization
   chance to hit

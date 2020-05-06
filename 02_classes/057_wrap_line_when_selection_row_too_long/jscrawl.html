@@ -157,6 +157,25 @@ class Pair {
   }
 }
 
+function splitAtBlankBefore(string, pos) {
+  let breakPoint = -1
+  for(let i = pos; i > 0; i--) {
+    if(string[i] == ' ') {
+      breakPoint = i
+      break
+    }
+  }
+
+  let result
+  if(breakPoint > -1) {
+    result = [ string.substring(0, breakPoint), string.substring(breakPoint+1) ]
+  } else {
+    result = [ string, '' ]
+  }
+
+  return result
+}
+
 const fontStyle = {
   fixed: { name: "Courier", size: 26 },
   compact: { name: "Courier", size: 16 },
@@ -3865,7 +3884,19 @@ class FrontController {
         count = '[' + selectedCount + '/' + maxCount + '] '
       }
 
-      this.addMessage(key + selected + count + name, true)
+      let prefix = key + selected + count
+      let remaining = name
+      let fits
+      const maxWidth = screens.main.window.message.smallCellSize.x
+
+      while(prefix.length + remaining.length > maxWidth) {
+        let [ fits, remaining ] = splitAtBlankBefore(remaining, maxWidth - prefix.length)
+        if(fits.length == 0 || remaining.length == 0) break
+        this.addMessage(prefix + fits, true)
+        prefix = '    '
+      }
+
+      this.addMessage(prefix + remaining, true)
 
     }
     

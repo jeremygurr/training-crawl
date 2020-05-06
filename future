@@ -1,7 +1,7 @@
 energy
-  implement wrapping in messages for showSelectedItems
-  don't allow empty selection selectItem
   long form
+    fix status width
+    fix channel missing pool in messages window bug
   examine pools
   flow isn't stabilizing
   refactor for each channel

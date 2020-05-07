@@ -646,9 +646,17 @@ function getChannelString(player, from, to) {
   let channelString = [ 
     {
       style: from.color.style,
-      from.shortName 
-    + direction 
-    + to.shortName
+      bgStyle: from.color.bgStyle,
+      text: from.shortName,
+    },
+    {
+      text: direction,
+    },
+    {
+      style: to.color.style,
+      bgStyle: to.color.bgStyle,
+      text: to.shortName,
+    },
   ]
 
   return channelString
@@ -2821,15 +2829,15 @@ class TopController {
     for(let i = 9; i > 0; i--) {
       const c = channelsToOutput[i]
       if(c) {
-        let line = i + ':'
+        let line = [{ text: i + ':' }]
         let col = 0
         const channelList = channelsToOutput[i]
         for(let ci = 0; ci < channelList.length; ci++) {
-          line += ' ' + channelList[ci]
+          line = [ ...line, { text: ' ' }, ...channelList[ci] ]
           col++
           if(col == maxColumns) {
             list.push(line)
-            line = '  '
+            line = [{ text: '  ' }]
             col = 0
           }
         }
@@ -4793,10 +4801,14 @@ class OutController {
   //  maxColumns = null,
   drawText(p) {
 
+    let multipleColumnBlocks = false
     if(typeof p.textToDraw == 'string') {
       p.textToDrawList = [{ text: p.textToDraw }]
     } else {
       p.textToDrawList = p.textToDraw
+      if(p.textToDrawList.length > 1) {
+        multipleColumnBlocks = true
+      }
     }
 
     for(let i = 0; i < p.textToDrawList.length; i++) {
@@ -4805,7 +4817,13 @@ class OutController {
       const textToDraw = textToDrawObject.text
       const style = textToDrawObject.style || '#000000'
       const bgStyle = textToDrawObject.bgStyle
-      const maxSize = p.maxColumns * p.cellSizePixels.x
+
+      let maxSize
+      if(multipleColumnBlocks) {
+        maxSize = textToDraw.length * p.cellSizePixels.x
+      } else {
+        maxSize = p.maxColumns * p.cellSizePixels.x
+      }
 
       let xOffset = canvasProps.xOffset 
       let yOffset = canvasProps.yOffset
@@ -4821,7 +4839,10 @@ class OutController {
         const y1 = p.screenPixelPos.y + yOffset
         const x2 = x1 + maxSize
         const y2 = y1 + p.cellSizePixels.y
-        this.drawFilledRect(new Rect(x1 - 2, y1 + 1, x2 - 2, y2 + 1), bgStyle)
+        this.drawFilledRect(
+          new Rect(x1 - 2, y1 + 1, x2 + 1, y2 + 1), 
+          bgStyle,
+        )
       }
 
       if(style != this.previousFillStyle) {
@@ -4866,6 +4887,8 @@ class OutController {
         p.screenPixelPos.x + xOffset, 
         p.screenPixelPos.y + yOffset,
       )
+
+      p.screenPixelPos.x = p.screenPixelPos.x + maxSize
 
     }
   }

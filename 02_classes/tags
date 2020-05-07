@@ -1,0 +1,1071 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+BackController	062_allow_multiple_item_eat/jscrawl.html	/^class BackController {$/;"	C
+FrontController	062_allow_multiple_item_eat/jscrawl.html	/^class FrontController {$/;"	C
+InController	062_allow_multiple_item_eat/jscrawl.html	/^class InController {$/;"	C
+OutController	062_allow_multiple_item_eat/jscrawl.html	/^class OutController {$/;"	C
+Pair	062_allow_multiple_item_eat/jscrawl.html	/^class Pair {$/;"	C
+Rect	062_allow_multiple_item_eat/jscrawl.html	/^class Rect {$/;"	C
+SeededRandomizer	062_allow_multiple_item_eat/jscrawl.html	/^class SeededRandomizer {$/;"	C
+TopController	062_allow_multiple_item_eat/jscrawl.html	/^class TopController {$/;"	C
+actionMessage	062_allow_multiple_item_eat/jscrawl.html	/^    let actionMessage = 'Unknown'$/;"	V
+actions	062_allow_multiple_item_eat/jscrawl.html	/^const actions = {$/;"	O
+actor	062_allow_multiple_item_eat/jscrawl.html	/^    actor: [],$/;"	P
+add	062_allow_multiple_item_eat/jscrawl.html	/^  add(pair) {$/;"	M
+addActor	062_allow_multiple_item_eat/jscrawl.html	/^  addActor(actor) {$/;"	M
+addEnergy	062_allow_multiple_item_eat/jscrawl.html	/^  addEnergy(actor, energyType, amount) {$/;"	M
+addItemToFloor	062_allow_multiple_item_eat/jscrawl.html	/^  addItemToFloor(pos, item) {$/;"	M
+addItemToInventory	062_allow_multiple_item_eat/jscrawl.html	/^  addItemToInventory(item) {$/;"	M
+addLevelCellsChanged	062_allow_multiple_item_eat/jscrawl.html	/^  addLevelCellsChanged(pos) {$/;"	M
+addMessage	062_allow_multiple_item_eat/jscrawl.html	/^  addMessage(message, multiColumn = false) {$/;"	M
+addStatusPoolLineCompact	062_allow_multiple_item_eat/jscrawl.html	/^  addStatusPoolLineCompact(list, player, poolList) {$/;"	M
+addStatusPoolLineExpanded	062_allow_multiple_item_eat/jscrawl.html	/^  addStatusPoolLineExpanded(list, player, poolList) {$/;"	M
+addSubjectToLevel	062_allow_multiple_item_eat/jscrawl.html	/^  addSubjectToLevel(subject, pos) {$/;"	M
+adjacent	062_allow_multiple_item_eat/jscrawl.html	/^        let adjacent = new Pair(fromX, fromY).adjacent(size)$/;"	V
+adjacent	062_allow_multiple_item_eat/jscrawl.html	/^  adjacent(size) {$/;"	M
+adjacentCells	062_allow_multiple_item_eat/jscrawl.html	/^  adjacentCells(subjectPos) {$/;"	M
+adjustHealth	062_allow_multiple_item_eat/jscrawl.html	/^  adjustHealth(target, change) {$/;"	M
+adjustLevelPan	062_allow_multiple_item_eat/jscrawl.html	/^  adjustLevelPan(levelWindow, pos, levelSize) {$/;"	M
+advanceEnergyFlow	062_allow_multiple_item_eat/jscrawl.html	/^  advanceEnergyFlow(actor) {$/;"	M
+advanceEnergyFlowChannel	062_allow_multiple_item_eat/jscrawl.html	/^  advanceEnergyFlowChannel(actor, channel, currentMaxFlow) {$/;"	M
+advanceEnergyFlowPools	062_allow_multiple_item_eat/jscrawl.html	/^  advanceEnergyFlowPools(actor, from, to, currentMaxFlow) {$/;"	M
+advanceTime	062_allow_multiple_item_eat/jscrawl.html	/^  advanceTime() {$/;"	M
+allResults	062_allow_multiple_item_eat/jscrawl.html	/^  let allResults = [] $/;"	A
+alt	062_allow_multiple_item_eat/jscrawl.html	/^  alt: false,$/;"	P
+amulet	062_allow_multiple_item_eat/jscrawl.html	/^        amulet: null,$/;"	P
+apple	062_allow_multiple_item_eat/jscrawl.html	/^          apple: { $/;"	P
+applyEnergyDelta	062_allow_multiple_item_eat/jscrawl.html	/^  applyEnergyDelta(actor) {$/;"	M
+armor	062_allow_multiple_item_eat/jscrawl.html	/^        armor: [],$/;"	P
+attack	062_allow_multiple_item_eat/jscrawl.html	/^            attack: { min: 0, max: 1 }, $/;"	P
+attack	062_allow_multiple_item_eat/jscrawl.html	/^            attack: { min: 0, max: 4 },$/;"	P
+attackSpeed	062_allow_multiple_item_eat/jscrawl.html	/^                attackSpeed: 0,$/;"	P
+attackSpeed	062_allow_multiple_item_eat/jscrawl.html	/^                attackSpeed: 1,$/;"	P
+attributes	062_allow_multiple_item_eat/jscrawl.html	/^    attributes: {$/;"	P
+average	062_allow_multiple_item_eat/jscrawl.html	/^                  average: 1$/;"	P
+average	062_allow_multiple_item_eat/jscrawl.html	/^                  average: 2$/;"	P
+averageValue	062_allow_multiple_item_eat/jscrawl.html	/^        let averageValue = values.reduce((a,b) => a + b, 0) \/ values.length$/;"	F
+axe	062_allow_multiple_item_eat/jscrawl.html	/^          axe: {$/;"	P
+b	062_allow_multiple_item_eat/jscrawl.html	/^  const b = 1 - levelCaveGenerator.openness$/;"	V
+backModel	062_allow_multiple_item_eat/jscrawl.html	/^  backModel: {$/;"	P
+bacon	062_allow_multiple_item_eat/jscrawl.html	/^          bacon: { $/;"	P
+banana	062_allow_multiple_item_eat/jscrawl.html	/^          banana: { $/;"	P
+base	062_allow_multiple_item_eat/jscrawl.html	/^                  base: 20, $/;"	P
+base	062_allow_multiple_item_eat/jscrawl.html	/^                  base: 3, $/;"	P
+base	062_allow_multiple_item_eat/jscrawl.html	/^                  base: 5, $/;"	P
+base	062_allow_multiple_item_eat/jscrawl.html	/^                  base: 8, $/;"	P
+base	062_allow_multiple_item_eat/jscrawl.html	/^  base: {$/;"	P
+beef	062_allow_multiple_item_eat/jscrawl.html	/^          beef: { $/;"	P
+beforeEachTurn	062_allow_multiple_item_eat/jscrawl.html	/^  beforeEachTurn() {$/;"	M
+black	062_allow_multiple_item_eat/jscrawl.html	/^              black: 10,$/;"	P
+black	062_allow_multiple_item_eat/jscrawl.html	/^  black: { $/;"	P
+blue	062_allow_multiple_item_eat/jscrawl.html	/^              blue: 15,$/;"	P
+blue	062_allow_multiple_item_eat/jscrawl.html	/^              blue: 2,$/;"	P
+blue	062_allow_multiple_item_eat/jscrawl.html	/^              blue: 5, $/;"	P
+blue	062_allow_multiple_item_eat/jscrawl.html	/^              blue: 5,$/;"	P
+blue	062_allow_multiple_item_eat/jscrawl.html	/^  blue: { $/;"	P
+blueberries	062_allow_multiple_item_eat/jscrawl.html	/^          blueberries: { $/;"	P
+body	062_allow_multiple_item_eat/jscrawl.html	/^        body: null,$/;"	P
+book	062_allow_multiple_item_eat/jscrawl.html	/^        book: [],$/;"	P
+boomerang	062_allow_multiple_item_eat/jscrawl.html	/^              boomerang: { $/;"	P
+boots	062_allow_multiple_item_eat/jscrawl.html	/^        boots: null,$/;"	P
+boulder	062_allow_multiple_item_eat/jscrawl.html	/^              boulder: { $/;"	P
+bread	062_allow_multiple_item_eat/jscrawl.html	/^          bread: { $/;"	P
+break	062_allow_multiple_item_eat/jscrawl.html	/^          break$/;"	V
+break	062_allow_multiple_item_eat/jscrawl.html	/^        break$/;"	V
+break	062_allow_multiple_item_eat/jscrawl.html	/^      break$/;"	V
+break	062_allow_multiple_item_eat/jscrawl.html	/^    break$/;"	V
+brocolli	062_allow_multiple_item_eat/jscrawl.html	/^          brocolli: { $/;"	P
+brown	062_allow_multiple_item_eat/jscrawl.html	/^  brown: { $/;"	P
+buildLevel	062_allow_multiple_item_eat/jscrawl.html	/^  buildLevel(randomizer) {$/;"	M
+calculateDamageFrom	062_allow_multiple_item_eat/jscrawl.html	/^  calculateDamageFrom(attacker) {$/;"	M
+canvasProps	062_allow_multiple_item_eat/jscrawl.html	/^const canvasProps = {$/;"	O
+carrot	062_allow_multiple_item_eat/jscrawl.html	/^          carrot: { $/;"	P
+cellPos	062_allow_multiple_item_eat/jscrawl.html	/^          cellPos,$/;"	V
+cellsChanged	062_allow_multiple_item_eat/jscrawl.html	/^        cellsChanged$/;"	V
+cellsChanged	062_allow_multiple_item_eat/jscrawl.html	/^    let cellsChanged = []$/;"	A
+chanceWeight	062_allow_multiple_item_eat/jscrawl.html	/^                chanceWeight: 100, $/;"	P
+chanceWeight	062_allow_multiple_item_eat/jscrawl.html	/^                chanceWeight: 1000, $/;"	P
+chanceWeight	062_allow_multiple_item_eat/jscrawl.html	/^            chanceWeight: 1,$/;"	P
+chanceWeight	062_allow_multiple_item_eat/jscrawl.html	/^            chanceWeight: 1000, $/;"	P
+chanceWeight	062_allow_multiple_item_eat/jscrawl.html	/^            chanceWeight: 1000,$/;"	P
+chanceWeight	062_allow_multiple_item_eat/jscrawl.html	/^            chanceWeight: 20,$/;"	P
+chanceWeight	062_allow_multiple_item_eat/jscrawl.html	/^            chanceWeight: 200, $/;"	P
+chanceWeight	062_allow_multiple_item_eat/jscrawl.html	/^            chanceWeight: 200,$/;"	P
+chanceWeight	062_allow_multiple_item_eat/jscrawl.html	/^            chanceWeight: 2000,$/;"	P
+chanceWeight	062_allow_multiple_item_eat/jscrawl.html	/^            chanceWeight: 300,$/;"	P
+chanceWeight	062_allow_multiple_item_eat/jscrawl.html	/^            chanceWeight: 50, $/;"	P
+chanceWeight	062_allow_multiple_item_eat/jscrawl.html	/^            chanceWeight: 500,$/;"	P
+chanceWeight	062_allow_multiple_item_eat/jscrawl.html	/^        chanceWeight: 1000,$/;"	P
+changeStatusMode	062_allow_multiple_item_eat/jscrawl.html	/^    changeStatusMode: [ 's' ],$/;"	P
+changeStatusMode	062_allow_multiple_item_eat/jscrawl.html	/^  changeStatusMode() {$/;"	M
+changeStatusMode	062_allow_multiple_item_eat/jscrawl.html	/^  changeStatusMode: () => {$/;"	M
+changeString	062_allow_multiple_item_eat/jscrawl.html	/^    let changeString = ''$/;"	V
+channelCommand	062_allow_multiple_item_eat/jscrawl.html	/^    channelCommand: [ 'c' ],$/;"	P
+channelCommand	062_allow_multiple_item_eat/jscrawl.html	/^  channelCommand: () => {$/;"	M
+channelCommandExecuteChange	062_allow_multiple_item_eat/jscrawl.html	/^  channelCommandExecuteChange() {$/;"	M
+channelCommandSelectChannel	062_allow_multiple_item_eat/jscrawl.html	/^  channelCommandSelectChannel() {$/;"	M
+channelCommandSelectFlow	062_allow_multiple_item_eat/jscrawl.html	/^  channelCommandSelectFlow() {$/;"	M
+channelCommandSelectPool	062_allow_multiple_item_eat/jscrawl.html	/^  channelCommandSelectPool() {$/;"	M
+channelCommandSelectPoolType	062_allow_multiple_item_eat/jscrawl.html	/^  channelCommandSelectPoolType() {$/;"	M
+channelCurrent	062_allow_multiple_item_eat/jscrawl.html	/^      channelCurrent: [],  \/\/ integers of openness of each channel$/;"	P
+channelMax	062_allow_multiple_item_eat/jscrawl.html	/^      channelMax: [],      \/\/ integers of max value of each channel$/;"	P
+channelsToOutput	062_allow_multiple_item_eat/jscrawl.html	/^    let channelsToOutput = []$/;"	A
+checkPan	062_allow_multiple_item_eat/jscrawl.html	/^  checkPan(window, pos, size) {$/;"	M
+cheese	062_allow_multiple_item_eat/jscrawl.html	/^          cheese: { $/;"	P
+cherry	062_allow_multiple_item_eat/jscrawl.html	/^          cherry: { $/;"	P
+chicken	062_allow_multiple_item_eat/jscrawl.html	/^          chicken: { $/;"	P
+chocolate	062_allow_multiple_item_eat/jscrawl.html	/^          chocolate: { $/;"	P
+classifyLevelSpaces	062_allow_multiple_item_eat/jscrawl.html	/^function classifyLevelSpaces(level, pos, classifiedSpaces = null) {$/;"	F
+clearArray	062_allow_multiple_item_eat/jscrawl.html	/^function clearArray(array) {$/;"	F
+clearLevelCellsChanged	062_allow_multiple_item_eat/jscrawl.html	/^  clearLevelCellsChanged() {$/;"	M
+clearMessages	062_allow_multiple_item_eat/jscrawl.html	/^  clearMessages() {$/;"	M
+clearNumericSelection	062_allow_multiple_item_eat/jscrawl.html	/^    clearNumericSelection: [ 'Backspace' ],$/;"	P
+clearNumericSelection	062_allow_multiple_item_eat/jscrawl.html	/^  clearNumericSelection() {$/;"	M
+clearNumericSelection	062_allow_multiple_item_eat/jscrawl.html	/^  clearNumericSelection: () => {$/;"	M
+clearRect	062_allow_multiple_item_eat/jscrawl.html	/^  clearRect(rect) {$/;"	M
+clearWindow	062_allow_multiple_item_eat/jscrawl.html	/^  clearWindow(screen, window) {$/;"	M
+clearWindowCells	062_allow_multiple_item_eat/jscrawl.html	/^  clearWindowCells(screen, window, cells) {$/;"	M
+cloak	062_allow_multiple_item_eat/jscrawl.html	/^        cloak: null,$/;"	P
+coconut	062_allow_multiple_item_eat/jscrawl.html	/^          coconut: { $/;"	P
+col	062_allow_multiple_item_eat/jscrawl.html	/^        let col = 0$/;"	V
+color	062_allow_multiple_item_eat/jscrawl.html	/^const color = {$/;"	O
+combined	062_allow_multiple_item_eat/jscrawl.html	/^  const combined = { ...item1, ...item2 }$/;"	O
+command	062_allow_multiple_item_eat/jscrawl.html	/^  command: false,$/;"	P
+commandExecution	062_allow_multiple_item_eat/jscrawl.html	/^const commandExecution = {$/;"	O
+compact	062_allow_multiple_item_eat/jscrawl.html	/^  compact: { name: "Courier", size: 14 },$/;"	P
+connectRooms	062_allow_multiple_item_eat/jscrawl.html	/^function connectRooms(level, map, wallThreshold, randomizer) {$/;"	F
+connectedRooms	062_allow_multiple_item_eat/jscrawl.html	/^  let connectedRooms = 0$/;"	V
+constructor	062_allow_multiple_item_eat/jscrawl.html	/^  constructor() {$/;"	M
+constructor	062_allow_multiple_item_eat/jscrawl.html	/^  constructor(seed) {$/;"	M
+constructor	062_allow_multiple_item_eat/jscrawl.html	/^  constructor(x, y) {$/;"	M
+constructor	062_allow_multiple_item_eat/jscrawl.html	/^  constructor(x1, y1, x2, y2) {$/;"	M
+continue	062_allow_multiple_item_eat/jscrawl.html	/^            continue$/;"	V
+continue	062_allow_multiple_item_eat/jscrawl.html	/^        continue$/;"	V
+continue	062_allow_multiple_item_eat/jscrawl.html	/^      continue$/;"	V
+control	062_allow_multiple_item_eat/jscrawl.html	/^  control: false,$/;"	P
+copper	062_allow_multiple_item_eat/jscrawl.html	/^              copper: 20,$/;"	P
+copper	062_allow_multiple_item_eat/jscrawl.html	/^  copper: { $/;"	P
+copperEgg	062_allow_multiple_item_eat/jscrawl.html	/^          copperEgg: { $/;"	P
+coreExperienceCost	062_allow_multiple_item_eat/jscrawl.html	/^    coreExperienceCost: 50,$/;"	P
+count	062_allow_multiple_item_eat/jscrawl.html	/^                count: 10,$/;"	P
+count	062_allow_multiple_item_eat/jscrawl.html	/^            count: 1,$/;"	P
+count	062_allow_multiple_item_eat/jscrawl.html	/^            count: 10,$/;"	P
+count	062_allow_multiple_item_eat/jscrawl.html	/^            count: 100,$/;"	P
+count	062_allow_multiple_item_eat/jscrawl.html	/^          count: count,$/;"	P
+count	062_allow_multiple_item_eat/jscrawl.html	/^        count: 1,$/;"	P
+count	062_allow_multiple_item_eat/jscrawl.html	/^      let count = ''$/;"	V
+count	062_allow_multiple_item_eat/jscrawl.html	/^    let count = 0$/;"	V
+countEmptyCells	062_allow_multiple_item_eat/jscrawl.html	/^  countEmptyCells() {$/;"	M
+counts	062_allow_multiple_item_eat/jscrawl.html	/^    const counts = []$/;"	A
+creator	062_allow_multiple_item_eat/jscrawl.html	/^  creator: {$/;"	P
+creatorCreateTarget	062_allow_multiple_item_eat/jscrawl.html	/^    creatorCreateTarget: [ 'c' ],$/;"	P
+creatorCreateTarget	062_allow_multiple_item_eat/jscrawl.html	/^  creatorCreateTarget: () => {$/;"	M
+creatorDeleteTarget	062_allow_multiple_item_eat/jscrawl.html	/^    creatorDeleteTarget: [ 'd' ],$/;"	P
+creatorDeleteTarget	062_allow_multiple_item_eat/jscrawl.html	/^  creatorDeleteTarget: () => {$/;"	M
+creatorMode	062_allow_multiple_item_eat/jscrawl.html	/^    creatorMode: false,$/;"	P
+creatorModeCommand	062_allow_multiple_item_eat/jscrawl.html	/^    creatorModeCommand: [ '`' ],$/;"	P
+creatorModeCommand	062_allow_multiple_item_eat/jscrawl.html	/^  creatorModeCommand() {$/;"	M
+creatorModeCommand	062_allow_multiple_item_eat/jscrawl.html	/^  creatorModeCommand: () => {$/;"	M
+creatorModeCreateTarget	062_allow_multiple_item_eat/jscrawl.html	/^  creatorModeCreateTarget() {$/;"	M
+creatorModeDeleteTarget	062_allow_multiple_item_eat/jscrawl.html	/^  creatorModeDeleteTarget() {$/;"	M
+creatorModeRegenLevel	062_allow_multiple_item_eat/jscrawl.html	/^  creatorModeRegenLevel() {$/;"	M
+creatorModeTeleportToTarget	062_allow_multiple_item_eat/jscrawl.html	/^  creatorModeTeleportToTarget() {$/;"	M
+creatorRegenLevel	062_allow_multiple_item_eat/jscrawl.html	/^    creatorRegenLevel: [ 'r' ],$/;"	P
+creatorRegenLevel	062_allow_multiple_item_eat/jscrawl.html	/^  creatorRegenLevel: () => {$/;"	M
+creatorTeleportToTarget	062_allow_multiple_item_eat/jscrawl.html	/^    creatorTeleportToTarget: [ 't' ],$/;"	P
+creatorTeleportToTarget	062_allow_multiple_item_eat/jscrawl.html	/^  creatorTeleportToTarget: () => {$/;"	M
+creature	062_allow_multiple_item_eat/jscrawl.html	/^      creature: {$/;"	P
+criticalHealth	062_allow_multiple_item_eat/jscrawl.html	/^      criticalHealth: 5,$/;"	P
+criticalHealth	062_allow_multiple_item_eat/jscrawl.html	/^  criticalHealth: { $/;"	P
+current	062_allow_multiple_item_eat/jscrawl.html	/^      const current = '' + Math.floor(bc.getPoolCurrent(player, index))$/;"	V
+currentMaxFlow	062_allow_multiple_item_eat/jscrawl.html	/^        const currentMaxFlow = 2**(currentFlowMagnitude-9) * max$/;"	V
+currentMaxFlow	062_allow_multiple_item_eat/jscrawl.html	/^        currentMaxFlow,$/;"	V
+cyan	062_allow_multiple_item_eat/jscrawl.html	/^              cyan: 2, $/;"	P
+cyan	062_allow_multiple_item_eat/jscrawl.html	/^              cyan: 5,$/;"	P
+cyan	062_allow_multiple_item_eat/jscrawl.html	/^  cyan: { $/;"	P
+damage	062_allow_multiple_item_eat/jscrawl.html	/^                damage: [{$/;"	P
+debug	062_allow_multiple_item_eat/jscrawl.html	/^function debug(message) {$/;"	F
+default	062_allow_multiple_item_eat/jscrawl.html	/^      default: 100,$/;"	P
+default	062_allow_multiple_item_eat/jscrawl.html	/^  default: {$/;"	P
+describeItem	062_allow_multiple_item_eat/jscrawl.html	/^function describeItem(item) {$/;"	F
+dexterity	062_allow_multiple_item_eat/jscrawl.html	/^      dexterity: 10,$/;"	P
+diamond	062_allow_multiple_item_eat/jscrawl.html	/^              diamond: 20,$/;"	P
+diamond	062_allow_multiple_item_eat/jscrawl.html	/^  diamond: { $/;"	P
+diamondEgg	062_allow_multiple_item_eat/jscrawl.html	/^          diamondEgg: { $/;"	P
+dirtFloor	062_allow_multiple_item_eat/jscrawl.html	/^    dirtFloor: { $/;"	P
+divide	062_allow_multiple_item_eat/jscrawl.html	/^  divide(pair) {$/;"	M
+drawEmptyRect	062_allow_multiple_item_eat/jscrawl.html	/^  drawEmptyRect(rect, style = "#000000") {$/;"	M
+drawFilledRect	062_allow_multiple_item_eat/jscrawl.html	/^  drawFilledRect(rect) {$/;"	M
+drawLevelWindowCell	062_allow_multiple_item_eat/jscrawl.html	/^  drawLevelWindowCell(screen, window, windowPos) {$/;"	M
+drawLevelWindowCells	062_allow_multiple_item_eat/jscrawl.html	/^  drawLevelWindowCells(screen, window, cells) {$/;"	M
+drawMessagesWindow	062_allow_multiple_item_eat/jscrawl.html	/^  drawMessagesWindow(screen, window) {$/;"	M
+drawStatusWindow	062_allow_multiple_item_eat/jscrawl.html	/^  drawStatusWindow(screen, window, statusList) {$/;"	M
+drawTarget	062_allow_multiple_item_eat/jscrawl.html	/^  drawTarget(screen, window, targetPos) {$/;"	M
+drawText	062_allow_multiple_item_eat/jscrawl.html	/^  drawText(fontStyle, screenPixelPos, textToDrawList, offset = null, centerWithin = null) {$/;"	M
+drawText	062_allow_multiple_item_eat/jscrawl.html	/^  drawText(screen, window, windowPos, textToDraw, offset = null, centerWithin = null) {$/;"	M
+drawWindow	062_allow_multiple_item_eat/jscrawl.html	/^  drawWindow(screen, window) {$/;"	M
+drop	062_allow_multiple_item_eat/jscrawl.html	/^  drop: {$/;"	P
+dropItem	062_allow_multiple_item_eat/jscrawl.html	/^  dropItem(item, count) {$/;"	M
+dropItem	062_allow_multiple_item_eat/jscrawl.html	/^  dropItem(type, index, count) {$/;"	M
+durability	062_allow_multiple_item_eat/jscrawl.html	/^        durability: 100,$/;"	P
+eat	062_allow_multiple_item_eat/jscrawl.html	/^  eat: {$/;"	P
+eatItem	062_allow_multiple_item_eat/jscrawl.html	/^  eatItem(item) {$/;"	M
+egg	062_allow_multiple_item_eat/jscrawl.html	/^          egg: { $/;"	P
+eggplant	062_allow_multiple_item_eat/jscrawl.html	/^          eggplant: { $/;"	P
+empty	062_allow_multiple_item_eat/jscrawl.html	/^  static empty() {$/;"	M
+emptyCellCount	062_allow_multiple_item_eat/jscrawl.html	/^    let emptyCellCount = 0$/;"	V
+energy	062_allow_multiple_item_eat/jscrawl.html	/^            energy: {$/;"	P
+energyDelta	062_allow_multiple_item_eat/jscrawl.html	/^    energyDelta: {$/;"	P
+enterCreatorMode	062_allow_multiple_item_eat/jscrawl.html	/^    enterCreatorMode: [ 'C' ],$/;"	P
+enterCreatorMode	062_allow_multiple_item_eat/jscrawl.html	/^  enterCreatorMode() {$/;"	M
+enterCreatorMode	062_allow_multiple_item_eat/jscrawl.html	/^  enterCreatorMode: () => {$/;"	M
+enterTargetMode	062_allow_multiple_item_eat/jscrawl.html	/^    enterTargetMode: [ 'x' ],$/;"	P
+enterTargetMode	062_allow_multiple_item_eat/jscrawl.html	/^    enterTargetMode: [],$/;"	P
+enterTargetMode	062_allow_multiple_item_eat/jscrawl.html	/^  enterTargetMode() {$/;"	M
+enterTargetMode	062_allow_multiple_item_eat/jscrawl.html	/^  enterTargetMode: () => {$/;"	M
+equip	062_allow_multiple_item_eat/jscrawl.html	/^      equip: {$/;"	P
+equip	062_allow_multiple_item_eat/jscrawl.html	/^  equip: {$/;"	P
+equipItem	062_allow_multiple_item_eat/jscrawl.html	/^  equipItem(item) {$/;"	M
+err	062_allow_multiple_item_eat/jscrawl.html	/^function err(message) {$/;"	F
+etherea	062_allow_multiple_item_eat/jscrawl.html	/^  etherea: { name: 'etherea', key: 'e', },$/;"	P
+execute	062_allow_multiple_item_eat/jscrawl.html	/^    execute: (item) => {$/;"	M
+execute	062_allow_multiple_item_eat/jscrawl.html	/^    execute: (item, count) => {$/;"	M
+executeAction	062_allow_multiple_item_eat/jscrawl.html	/^  executeAction() {$/;"	M
+executeAction	062_allow_multiple_item_eat/jscrawl.html	/^  executeAction(key) {$/;"	M
+executeAction	062_allow_multiple_item_eat/jscrawl.html	/^  executeAction: (key) => {$/;"	M
+executeAttack	062_allow_multiple_item_eat/jscrawl.html	/^  executeAttack(source, target) {$/;"	M
+executeMove	062_allow_multiple_item_eat/jscrawl.html	/^  executeMove(actor, pos) {$/;"	M
+executeSelectAction	062_allow_multiple_item_eat/jscrawl.html	/^    executeSelectAction: [ 'Enter' ],$/;"	P
+executeSelectAction	062_allow_multiple_item_eat/jscrawl.html	/^  executeSelectAction() {$/;"	M
+executeSelectAction	062_allow_multiple_item_eat/jscrawl.html	/^  executeSelectAction: () => {$/;"	M
+exitSimple	062_allow_multiple_item_eat/jscrawl.html	/^    exitSimple: [ 'Escape' ],$/;"	P
+exitSimple	062_allow_multiple_item_eat/jscrawl.html	/^  exitSimple() {$/;"	M
+exitSimple	062_allow_multiple_item_eat/jscrawl.html	/^  exitSimple: () => {$/;"	M
+exitTargetMode	062_allow_multiple_item_eat/jscrawl.html	/^    exitTargetMode: [ 'Escape' ],$/;"	P
+exitTargetMode	062_allow_multiple_item_eat/jscrawl.html	/^  exitTargetMode: () => {$/;"	M
+exotica	062_allow_multiple_item_eat/jscrawl.html	/^  exotica: { name: 'exotica', key: 'x', },$/;"	P
+expand	062_allow_multiple_item_eat/jscrawl.html	/^  expand(pixels) {$/;"	M
+expandCrack	062_allow_multiple_item_eat/jscrawl.html	/^function expandCrack(level, map, classifiedSpaces, wallThreshold, startPos) {$/;"	F
+experiencePerLevel	062_allow_multiple_item_eat/jscrawl.html	/^    experiencePerLevel: 12,$/;"	P
+experiencePerLevel	062_allow_multiple_item_eat/jscrawl.html	/^    experiencePerLevel: 15,$/;"	P
+fPress	062_allow_multiple_item_eat/jscrawl.html	/^  const [fPress, tPress] = getEffectivePressures($/;"	V
+fRoom	062_allow_multiple_item_eat/jscrawl.html	/^        fRoom,$/;"	V
+findBestCrack	062_allow_multiple_item_eat/jscrawl.html	/^function findBestCrack(level, map, classifiedSpaces, wallThreshold) {$/;"	F
+findEmptyCellCentrally	062_allow_multiple_item_eat/jscrawl.html	/^function findEmptyCellCentrally(level, randomizer, bounds = null) {$/;"	F
+findEmptyCellSimple	062_allow_multiple_item_eat/jscrawl.html	/^function findEmptyCellSimple(level) {$/;"	F
+fish	062_allow_multiple_item_eat/jscrawl.html	/^          fish: { $/;"	P
+fixed	062_allow_multiple_item_eat/jscrawl.html	/^  fixed: { name: "Courier", size: 26 },$/;"	P
+floor	062_allow_multiple_item_eat/jscrawl.html	/^  floor() {$/;"	M
+flow	062_allow_multiple_item_eat/jscrawl.html	/^    const flow = 9 - selectedIndex$/;"	V
+fontStyle	062_allow_multiple_item_eat/jscrawl.html	/^const fontStyle = {$/;"	O
+food	062_allow_multiple_item_eat/jscrawl.html	/^        food: [],$/;"	P
+food	062_allow_multiple_item_eat/jscrawl.html	/^      food: {$/;"	P
+for	062_allow_multiple_item_eat/jscrawl.html	/^            for(let t = 0; t < channel.to.length; t++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^          for(let c = 0; c < pool.channelIndexes.length; c++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^          for(let f = 0; f < channel.from.length; f++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^          for(let t = 0; t < channel.to.length; t++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^        for(let adjacentPos of newPos.adjacent(levelSize)) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^        for(let ci = 0; ci < channelList.length; ci++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^        for(let f = 0; f < channel.from.length; f++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^        for(let j = 0; j < hands; j++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^        for(let p = 0; p < poolTypePools.length; p++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^        for(let r = 0; r < window.size.y; r++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^      for(const [windowName, window] of Object.entries(screen.window)) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^      for(let [energyType, amount] of Object.entries(deltas)) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^      for(let [energyType, amount] of Object.entries(item.energy)) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^      for(let [key, value] of Object.entries(template.sub)) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^      for(let c = 0; c < pool.channelIndexes.length; c++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^      for(let c = 0; c < poolChannels.length; c++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^      for(let c = 0; c < window.size.x; c++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^      for(let fromY = 0; fromY < fromHeight; fromY++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^      for(let fromY = 0; fromY < size.y; fromY++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^      for(let i = 0; i < subjects.length; i++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^      for(let invItem of group) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^      for(let item of cell.onFloor) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^      for(let pt = 0; pt < poolTypes.length; pt++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^      for(let r = this.y - 1; r <= this.y + 1; r++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^      for(let t = 0; t < channel.to.length; t++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^      for(let y = 0; y < column.length; y++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^      for(let y = 0; y < level[0].length; y++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(const [key, subject] of Object.entries(group)) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(const [screenName, screen] of Object.entries(screens)) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(const [testName, testWindow] of Object.entries(screen.window)) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(const cellPos of cells) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(const poolName of poolList) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(const subject of Object.values(group)) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(const window of Object.values(screen.window)) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(const windowPos of cells) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(i = 0; i < poolChannels.length; i++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(index = 0; index < group.length; index++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let [poolName, pool] of Object.entries(pools)) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let [type, value] of Object.entries(equip)) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let action of actions) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let c = this.x - 1; c <= this.x + 1; c++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let channelIndex of fc.getSelectMeta('channelIndexes')) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let command of Object.keys(keyMap[km])) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let f = 0; f < channel.from.length; f++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let floorItem of cell.onFloor) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let fromX = 0; fromX < size.x; fromX++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let fromY = 0; fromY < fromHeight - 1; fromY += 2) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let fromY = 0; fromY < fromHeight; fromY++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let i = 0; i < adjacent.length; i++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let i = 0; i < floorItems.length; i++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let i = 0; i < fm.selectIndexes.length; i++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let i = 0; i < fm.selectSubjectList.length; i++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let i = 0; i < group.length; i++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let i = 0; i < hand.length; i++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let i = 0; i < items.length; i++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let i = 0; i < list.length; i++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let i = 0; i < poolChannels.length; i++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let i = 0; i < subjects.length; i++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let i = 0; i < textToDrawList.length; i++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let i = 9; i > 0; i--) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let i = 9; i >= 0; i--) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let item of cell.onFloor) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let key in inventoryTypes) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let n = 0; n < stuffCount; n++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let p = 0; p < pools.length; p++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let pool of Object.values(subjectPools)) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let poolType of Object.values(poolTypes)) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let r = 0; r < column.length; r++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let r = 0; r < size.y + 2; r++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let r = 0; r < size.y; r++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let row = 0; row < messages.length; row++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let row = 0; row < statusList.length; row++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let x = 0; x < level.length; x++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let y = 0; y < level[x].length; y++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^    for(let y = 0; y < toHeight; y++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^  for(let adjacentPos of adjacentList) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^  for(let adjacentPos of startPos.adjacent(levelSize)) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^  for(let c = 0; c < level.length; c++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^  for(let c = 0; c < size.x + 2; c++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^  for(let c = 0; c < size.x; c++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^  for(let fromX = 0; fromX < fromWidth - 1; fromX += 2) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^  for(let fromX = 0; fromX < fromWidth; fromX++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^  for(let i = pos; i > 0; i--) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^  for(let key of Object.keys(combined)) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^  for(let key of Object.keys(pools)) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^  for(let x = 0; x < level.length; x++) {$/;"	M
+for	062_allow_multiple_item_eat/jscrawl.html	/^  for(let x = 0; x < toWidth; x++) {$/;"	M
+fork	062_allow_multiple_item_eat/jscrawl.html	/^  fork() {$/;"	M
+found	062_allow_multiple_item_eat/jscrawl.html	/^    let found = [];$/;"	A
+from	062_allow_multiple_item_eat/jscrawl.html	/^    from: [$/;"	P
+from	062_allow_multiple_item_eat/jscrawl.html	/^    from: [pools.blue],$/;"	P
+from	062_allow_multiple_item_eat/jscrawl.html	/^    from: [pools.copper],$/;"	P
+from	062_allow_multiple_item_eat/jscrawl.html	/^    from: [pools.criticalHealth],$/;"	P
+from	062_allow_multiple_item_eat/jscrawl.html	/^    from: [pools.cyan],$/;"	P
+from	062_allow_multiple_item_eat/jscrawl.html	/^    from: [pools.diamond],$/;"	P
+from	062_allow_multiple_item_eat/jscrawl.html	/^    from: [pools.gold],$/;"	P
+from	062_allow_multiple_item_eat/jscrawl.html	/^    from: [pools.gray],$/;"	P
+from	062_allow_multiple_item_eat/jscrawl.html	/^    from: [pools.green],$/;"	P
+from	062_allow_multiple_item_eat/jscrawl.html	/^    from: [pools.indigo],$/;"	P
+from	062_allow_multiple_item_eat/jscrawl.html	/^    from: [pools.majorHealth],$/;"	P
+from	062_allow_multiple_item_eat/jscrawl.html	/^    from: [pools.mana],$/;"	P
+from	062_allow_multiple_item_eat/jscrawl.html	/^    from: [pools.minorHealth],$/;"	P
+from	062_allow_multiple_item_eat/jscrawl.html	/^    from: [pools.moon],$/;"	P
+from	062_allow_multiple_item_eat/jscrawl.html	/^    from: [pools.orange],$/;"	P
+from	062_allow_multiple_item_eat/jscrawl.html	/^    from: [pools.red],$/;"	P
+from	062_allow_multiple_item_eat/jscrawl.html	/^    from: [pools.silver],$/;"	P
+from	062_allow_multiple_item_eat/jscrawl.html	/^    from: [pools.stamina],$/;"	P
+from	062_allow_multiple_item_eat/jscrawl.html	/^    from: [pools.star],$/;"	P
+from	062_allow_multiple_item_eat/jscrawl.html	/^    from: [pools.sun],$/;"	P
+from	062_allow_multiple_item_eat/jscrawl.html	/^    from: [pools.violet],$/;"	P
+from	062_allow_multiple_item_eat/jscrawl.html	/^    from: [pools.willpower],$/;"	P
+from	062_allow_multiple_item_eat/jscrawl.html	/^    from: [pools.yellow],$/;"	P
+frontModel	062_allow_multiple_item_eat/jscrawl.html	/^  frontModel: {$/;"	P
+gameClock	062_allow_multiple_item_eat/jscrawl.html	/^    gameClock: 0,$/;"	P
+generateDiamondSquareMap	062_allow_multiple_item_eat/jscrawl.html	/^function generateDiamondSquareMap(fromMap, randomizer) {$/;"	F
+generateItem	062_allow_multiple_item_eat/jscrawl.html	/^  generateItem(count, path, currentItem = template.generated) {$/;"	M
+generateLevelEmptyRoom	062_allow_multiple_item_eat/jscrawl.html	/^function generateLevelEmptyRoom(level, size, randomizer) {$/;"	F
+generateLevelSimpleCaves	062_allow_multiple_item_eat/jscrawl.html	/^function generateLevelSimpleCaves(level, size, randomizer, levelCaveGenerator) {$/;"	F
+generated	062_allow_multiple_item_eat/jscrawl.html	/^  generated: {$/;"	P
+getActionModeMessage	062_allow_multiple_item_eat/jscrawl.html	/^  getActionModeMessage() {$/;"	M
+getActionsFor	062_allow_multiple_item_eat/jscrawl.html	/^function getActionsFor(type, allowMultiple) {$/;"	F
+getActors	062_allow_multiple_item_eat/jscrawl.html	/^  getActors() {$/;"	M
+getCell	062_allow_multiple_item_eat/jscrawl.html	/^  getCell(pos) {$/;"	M
+getCellPixelRect	062_allow_multiple_item_eat/jscrawl.html	/^  getCellPixelRect(screen, window, windowPos) {$/;"	M
+getChangeString	062_allow_multiple_item_eat/jscrawl.html	/^  getChangeString(prefix, change) {$/;"	M
+getChannelString	062_allow_multiple_item_eat/jscrawl.html	/^function getChannelString(player, from, to) {$/;"	F
+getCreatorMode	062_allow_multiple_item_eat/jscrawl.html	/^  getCreatorMode() {$/;"	M
+getCurrentScreen	062_allow_multiple_item_eat/jscrawl.html	/^  getCurrentScreen() {$/;"	M
+getEffectivePressures	062_allow_multiple_item_eat/jscrawl.html	/^function getEffectivePressures(actor, fromPool, toPool) {$/;"	F
+getEquipment	062_allow_multiple_item_eat/jscrawl.html	/^  getEquipment() {$/;"	M
+getFloorItemsAt	062_allow_multiple_item_eat/jscrawl.html	/^  getFloorItemsAt(pos) {$/;"	M
+getFloorItemsAtPlayerPos	062_allow_multiple_item_eat/jscrawl.html	/^  getFloorItemsAtPlayerPos() {$/;"	M
+getFontStyle	062_allow_multiple_item_eat/jscrawl.html	/^  getFontStyle(screen, window) {$/;"	M
+getGameClock	062_allow_multiple_item_eat/jscrawl.html	/^  getGameClock() {$/;"	M
+getInventoryGroup	062_allow_multiple_item_eat/jscrawl.html	/^  getInventoryGroup(type) {$/;"	M
+getItemInventoryGroup	062_allow_multiple_item_eat/jscrawl.html	/^function getItemInventoryGroup(item) {$/;"	F
+getKeyMode	062_allow_multiple_item_eat/jscrawl.html	/^  getKeyMode() {$/;"	M
+getLevel	062_allow_multiple_item_eat/jscrawl.html	/^  getLevel() {$/;"	M
+getLevelCellsChanged	062_allow_multiple_item_eat/jscrawl.html	/^  getLevelCellsChanged() {$/;"	M
+getLevelChanged	062_allow_multiple_item_eat/jscrawl.html	/^  getLevelChanged() {$/;"	M
+getMessagesChanged	062_allow_multiple_item_eat/jscrawl.html	/^  getMessagesChanged() {$/;"	M
+getNameOf	062_allow_multiple_item_eat/jscrawl.html	/^function getNameOf(article, item, verb) {$/;"	F
+getPlayer	062_allow_multiple_item_eat/jscrawl.html	/^  getPlayer() {$/;"	M
+getPlayerPos	062_allow_multiple_item_eat/jscrawl.html	/^  getPlayerPos() {$/;"	M
+getPlayerSpecies	062_allow_multiple_item_eat/jscrawl.html	/^  getPlayerSpecies() {$/;"	M
+getPoolCurrent	062_allow_multiple_item_eat/jscrawl.html	/^  getPoolCurrent(actor, poolIndex) {$/;"	M
+getPoolCurrentChange	062_allow_multiple_item_eat/jscrawl.html	/^  getPoolCurrentChange(actor, poolIndex) {$/;"	M
+getPoolDigits	062_allow_multiple_item_eat/jscrawl.html	/^  getPoolDigits(actor) {$/;"	M
+getPoolMax	062_allow_multiple_item_eat/jscrawl.html	/^  getPoolMax(actor, poolIndex) {$/;"	M
+getPoolMaxChange	062_allow_multiple_item_eat/jscrawl.html	/^  getPoolMaxChange(actor, poolIndex) {$/;"	M
+getPoolPercent	062_allow_multiple_item_eat/jscrawl.html	/^  getPoolPercent(actor, poolIndex) {$/;"	M
+getSelectAllowMultiple	062_allow_multiple_item_eat/jscrawl.html	/^  getSelectAllowMultiple(allow) {$/;"	M
+getSelectCount	062_allow_multiple_item_eat/jscrawl.html	/^  getSelectCount(index) {$/;"	M
+getSelectIndexes	062_allow_multiple_item_eat/jscrawl.html	/^  getSelectIndexes() {$/;"	M
+getSelectMeta	062_allow_multiple_item_eat/jscrawl.html	/^  getSelectMeta(key) {$/;"	M
+getSelectSubjectList	062_allow_multiple_item_eat/jscrawl.html	/^  getSelectSubjectList() {$/;"	M
+getSelectedIndex	062_allow_multiple_item_eat/jscrawl.html	/^  getSelectedIndex() {$/;"	M
+getSelectedIndexes	062_allow_multiple_item_eat/jscrawl.html	/^  getSelectedIndexes() {$/;"	M
+getSelectedSubjects	062_allow_multiple_item_eat/jscrawl.html	/^  getSelectedSubjects() {$/;"	M
+getStatusChanged	062_allow_multiple_item_eat/jscrawl.html	/^  getStatusChanged() {$/;"	M
+getStatusList	062_allow_multiple_item_eat/jscrawl.html	/^  getStatusList() {$/;"	M
+getStatusListChannels	062_allow_multiple_item_eat/jscrawl.html	/^  getStatusListChannels(list, player) {$/;"	M
+getStatusListPoolsCompact	062_allow_multiple_item_eat/jscrawl.html	/^  getStatusListPoolsCompact(list, player) {$/;"	M
+getStatusListPoolsExpanded	062_allow_multiple_item_eat/jscrawl.html	/^  getStatusListPoolsExpanded(list, player) {$/;"	M
+getStatusMode	062_allow_multiple_item_eat/jscrawl.html	/^  getStatusMode() {$/;"	M
+getTarget	062_allow_multiple_item_eat/jscrawl.html	/^  getTarget() {$/;"	M
+getWindowPixelRect	062_allow_multiple_item_eat/jscrawl.html	/^  getWindowPixelRect(screen, window) {$/;"	M
+gloves	062_allow_multiple_item_eat/jscrawl.html	/^        gloves: null,$/;"	P
+gold	062_allow_multiple_item_eat/jscrawl.html	/^              gold: 20,$/;"	P
+gold	062_allow_multiple_item_eat/jscrawl.html	/^      gold: 0,$/;"	P
+gold	062_allow_multiple_item_eat/jscrawl.html	/^      gold: {$/;"	P
+gold	062_allow_multiple_item_eat/jscrawl.html	/^  gold: { $/;"	P
+gold1	062_allow_multiple_item_eat/jscrawl.html	/^          gold1: { $/;"	P
+gold10	062_allow_multiple_item_eat/jscrawl.html	/^          gold10: { $/;"	P
+gold100	062_allow_multiple_item_eat/jscrawl.html	/^          gold100: { $/;"	P
+goldEgg	062_allow_multiple_item_eat/jscrawl.html	/^          goldEgg: { $/;"	P
+gradient	062_allow_multiple_item_eat/jscrawl.html	/^let gradient = {}$/;"	O
+grapes	062_allow_multiple_item_eat/jscrawl.html	/^          grapes: { $/;"	P
+gray	062_allow_multiple_item_eat/jscrawl.html	/^  gray: { $/;"	P
+green	062_allow_multiple_item_eat/jscrawl.html	/^              green: 10,$/;"	P
+green	062_allow_multiple_item_eat/jscrawl.html	/^              green: 15,$/;"	P
+green	062_allow_multiple_item_eat/jscrawl.html	/^              green: 3,$/;"	P
+green	062_allow_multiple_item_eat/jscrawl.html	/^              green: 5,$/;"	P
+green	062_allow_multiple_item_eat/jscrawl.html	/^  green: { $/;"	P
+ham	062_allow_multiple_item_eat/jscrawl.html	/^          ham: { $/;"	P
+hand	062_allow_multiple_item_eat/jscrawl.html	/^        hand: [],$/;"	P
+handAxe	062_allow_multiple_item_eat/jscrawl.html	/^              handAxe: {$/;"	P
+handleCreateTarget	062_allow_multiple_item_eat/jscrawl.html	/^  handleCreateTarget(target, inherited, template, count) {$/;"	M
+handleKeyDown	062_allow_multiple_item_eat/jscrawl.html	/^  handleKeyDown(event) {$/;"	M
+handleKeyUp	062_allow_multiple_item_eat/jscrawl.html	/^  handleKeyUp(event) {$/;"	M
+hands	062_allow_multiple_item_eat/jscrawl.html	/^                hands: 2,$/;"	P
+hands	062_allow_multiple_item_eat/jscrawl.html	/^        hands: 1,$/;"	P
+hands	062_allow_multiple_item_eat/jscrawl.html	/^    hands: 2,$/;"	P
+handsUsed	062_allow_multiple_item_eat/jscrawl.html	/^  handsUsed() {$/;"	M
+health	062_allow_multiple_item_eat/jscrawl.html	/^            health: 10,$/;"	P
+health	062_allow_multiple_item_eat/jscrawl.html	/^            health: 2,  $/;"	P
+heavyStyle	062_allow_multiple_item_eat/jscrawl.html	/^    const heavyStyle = "#0000C0"$/;"	V
+height	062_allow_multiple_item_eat/jscrawl.html	/^  height: 540,$/;"	P
+helpMode	062_allow_multiple_item_eat/jscrawl.html	/^    helpMode: [ '?' ],$/;"	P
+hitChance	062_allow_multiple_item_eat/jscrawl.html	/^                hitChance: 0,$/;"	P
+human	062_allow_multiple_item_eat/jscrawl.html	/^  human: {$/;"	P
+i	062_allow_multiple_item_eat/jscrawl.html	/^    let i = 0$/;"	V
+if	062_allow_multiple_item_eat/jscrawl.html	/^            if(!innerList) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^            if(!subjects.includes(channelIndex)) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^            if(fromMap[b.x][b.y] > wallThreshold) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^          if(col == maxColumns) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^          if(subject == null) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^          if(value[j]) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^          if(wallStrength <= wallThreshold) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^          if(weakestWall == null || wallStrength < weakestWall) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^        if(!subjects.includes(channelIndex)) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^        if(!this.unequipUntilHandsFree(item.hands)) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^        if(cell.occupiedBy == null) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^        if(fc.motionModeAttack()) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^        if(found > -1) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^        if(fromY < fromHeight - 1) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^        if(indexes[i]) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^        if(itemsEqual(invItem, item)) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^        if(itemsEqual(subject, item)) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^        if(line.length > 2) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^        if(noItemsFound) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^        if(player.equip[slot].length - player.species.hands < 1) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^        if(result) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^        if(subject == null) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^        if(value > wallThreshold && surroundingWalls < requireSurroundingWalls) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^        if(value) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^        if(x+1 < toWidth && toMap[x+1][y] != null) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^        if(x-1 > 0 && toMap[x-1][y] != null) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^        if(y+1 < toHeight && toMap[x][y+1] != null) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^        if(y-1 > 0 && toMap[x][y-1] != null) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(!bc.isEquipped(item)) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(!bc.isFieldPosValid(playerNewPos)) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(!bc.isFieldPosValid(targetNewPos)) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(!fc.motionModeMove()) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(!found) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(!key) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(!maxChannelSize) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(!maxPoolSize) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(!poolsInPoolType) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(!unequipItem(hand[hand.length-1])) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(bc.isEquipped(item)) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(bc.isFieldPosOccupied(playerNewPos)) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(c == 0 || r == 0 || c == size.x + 1 || r == size.y + 1) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(c == 0 || r == 0 || c == size.x - 1 || r == size.y - 1) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(c) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(cell.occupiedBy == null && cell.onFloor.length == 0) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(cell.occupiedBy == null) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(cell.occupiedBy == player) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(cell.occupiedBy) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(centerWithin && centerWithin.x > 0 && textSize.width < centerWithin.x) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(centerWithin && centerWithin.y > 0 && textHeight < centerWithin.y) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(centerWithin && centerWithin.y > 0) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(classifiedSpaces[x][y] == false && !level[x][y].occupiedBy) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(count == null) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(count) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(currentFlowMagnitude) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(damage > 0) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(effectiveRow > maxMessageRow) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(effectiveRow > maxRow) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(fc.isIndexSelected(i)) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(flow) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(fm.selectCount) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(fm.selectIndexes[i]) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(fm.selectKeys.length > 0) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(fm.selectMultiple) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(found) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(group.length > 0) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(group[i] == item) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(group[index] == item) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(hand.length < 1) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(i == 0) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(items.length == 0) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(itemsEqual(floorItem, item)) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(iterationsLeft > 0) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(keyMap[km][command].some(x => event.key == x)) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(map[c][r] > wallThreshold) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(maxCount > 1) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(message == null) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(newValue < 0) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(offset) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(pool.type == poolTypes.interna) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(poolChannels[i].to[0].type == poolTypes.interna) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(poolIndex == -1) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(remainingWeight < 0) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(row > header - 1) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(selected == null) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(selected[i]) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(style != this.previousFillStyle) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(subject) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(target == player) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(targetPos) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(testWindow == window) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(this.previousFontStyle != fontStyle) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(this.windowPosIsValid(window, cellPos)) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(toMap[x][y] == null) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(type == 'hand' || type == 'ring') {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^      if(weight == null) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(!_.isEqual(item1[key], item2[key])) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(!bc.getCreatorMode()) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(!classified && !occupied) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(!count) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(!found) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(!multiColumn) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(!multiple) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(!newItem) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(!pos) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(!slot) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(!target) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(!template.sub) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(!this.frontController.getTarget().pos) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(Number.isInteger(keyInt) && fm.selectCountMaxList.length) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(actionMode == 'attackOrMove') {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(attacker.attack != null) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(bc.getCell(toPos).occupiedBy != null) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(bc.getCreatorMode()) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(cell.floorType) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(cell.occupiedBy) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(change != 0 && target == player) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(change >= 1) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(changed || forceRefresh) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(classifiedSpaces[adjacentPos.x][adjacentPos.y]) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(count == inventoryCount) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(count > 0) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(count) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(damage > 0) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(deltas) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(energyType == 'health') {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(fc.getSelectAllowMultiple()) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(fc.getSelectedIndexes().length > 0) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(fc.getStatusMode() == 'compact') {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(fc.windowPosIsValid(window, windowPos, level)) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(floorItems.length == 0) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(floorItems.length == 1) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(fm.messages.length) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(fm.statusMode == 'compact') {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(fromPos != null) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(fromX < fromWidth - 1) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(index != null) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(index == -1) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(item.energy) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(item.type != 'food') { $/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(item.type == 'gold') {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(itemOnFloor.count == count) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(keyModeName != 'target') {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(maxIterations-- == 0) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(message) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(newItem.sub) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(noItemsFound) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(path.length) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(poolIndexFrom == -1 || poolIndexTo == -1) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(poolTypes.length == 0) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(poolTypes.length > 1) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(pools.length == 0) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(pos) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(possibilities == 0) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(random(3) == 0) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(removed > 0) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(screen.fontStyle) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(selected == null) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(selected) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(selected.sub) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(selectedInventoryType) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(sign > 0) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(slot == 'hand' || slot == 'ring') {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(string[i] == ' ') {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(style != ctx.stokeStyle) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(subject.act) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(subject.occupant) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(subjects.length == 0) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(success) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(target == null) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(target.health <= 0) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(target.pos == null) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(target.pos) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(targetActor.health <= 0) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(targetActor.health == null) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(this.frontModel.fontStyle) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(typeof textToDrawList == 'string') {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(wallStrength <= wallThreshold) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(weakestWall == null || wallStrength < weakestWall) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(window == mainWindows.level) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(window == screens.main.window.level) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(window.fontStyle) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(window.name == 'status') {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^    if(window.offset) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^  if(Number.isInteger(article)) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^  if(allResults.length > 0) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^  if(article) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^  if(bounds == null) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^  if(bounds.width < 2 || bounds.height < 2) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^  if(breakPoint > -1) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^  if(cellToTest.occupiedBy == null && cellToTest.onFloor.length == 0) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^  if(classifiedSpaces == null) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^  if(connectedRooms) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^  if(count != 1 && article) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^  if(fPress > tPress + 0.01) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^  if(item.health) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^  if(item.name) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^  if(item.type) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^  if(pos) {$/;"	M
+if	062_allow_multiple_item_eat/jscrawl.html	/^  if(verb) {$/;"	M
+index	062_allow_multiple_item_eat/jscrawl.html	/^    const index = fc.getSelectIndexes().findIndex(x => x == true)$/;"	F
+index	062_allow_multiple_item_eat/jscrawl.html	/^    const index = fm.selectIndexes.findIndex(x => x)$/;"	F
+index	062_allow_multiple_item_eat/jscrawl.html	/^  let index = 0$/;"	V
+indexToKey	062_allow_multiple_item_eat/jscrawl.html	/^  indexToKey(index) {$/;"	M
+indexes	062_allow_multiple_item_eat/jscrawl.html	/^      let indexes = []$/;"	A
+indigo	062_allow_multiple_item_eat/jscrawl.html	/^              indigo: 10,$/;"	P
+indigo	062_allow_multiple_item_eat/jscrawl.html	/^              indigo: 15,$/;"	P
+indigo	062_allow_multiple_item_eat/jscrawl.html	/^              indigo: 2,$/;"	P
+indigo	062_allow_multiple_item_eat/jscrawl.html	/^  indigo: { $/;"	P
+inherited	062_allow_multiple_item_eat/jscrawl.html	/^          inherited: newInherited,$/;"	P
+initializePlayer	062_allow_multiple_item_eat/jscrawl.html	/^  initializePlayer() {$/;"	M
+integrity	062_allow_multiple_item_eat/jscrawl.html	/^        integrity: 1,$/;"	P
+intelligence	062_allow_multiple_item_eat/jscrawl.html	/^      intelligence: 10,$/;"	P
+interna	062_allow_multiple_item_eat/jscrawl.html	/^  interna: { name: 'interna', key: 'i', },$/;"	P
+inventory	062_allow_multiple_item_eat/jscrawl.html	/^      inventory: {$/;"	P
+inventoryTypes	062_allow_multiple_item_eat/jscrawl.html	/^const inventoryTypes = {$/;"	O
+invertMultiSelect	062_allow_multiple_item_eat/jscrawl.html	/^    invertMultiSelect: [ ',' ],$/;"	P
+invertMultiSelect	062_allow_multiple_item_eat/jscrawl.html	/^  invertMultiSelect() {$/;"	M
+invertMultiSelect	062_allow_multiple_item_eat/jscrawl.html	/^  invertMultiSelect: () => {$/;"	M
+invertSelectedItems	062_allow_multiple_item_eat/jscrawl.html	/^    invertSelectedItems: [ '\/' ],$/;"	P
+invertSelectedItems	062_allow_multiple_item_eat/jscrawl.html	/^  invertSelectedItems() {$/;"	M
+invertSelectedItems	062_allow_multiple_item_eat/jscrawl.html	/^  invertSelectedItems: () => {$/;"	M
+isEquipped	062_allow_multiple_item_eat/jscrawl.html	/^  isEquipped(item) {$/;"	M
+isFieldPosOccupied	062_allow_multiple_item_eat/jscrawl.html	/^  isFieldPosOccupied(cellPos) {$/;"	M
+isFieldPosValid	062_allow_multiple_item_eat/jscrawl.html	/^  isFieldPosValid(cellPos) {$/;"	M
+isIndexSelected	062_allow_multiple_item_eat/jscrawl.html	/^  isIndexSelected(index) {$/;"	M
+item	062_allow_multiple_item_eat/jscrawl.html	/^          item,$/;"	V
+items	062_allow_multiple_item_eat/jscrawl.html	/^    const items = []$/;"	A
+itemsEqual	062_allow_multiple_item_eat/jscrawl.html	/^function itemsEqual(item1, item2) {$/;"	F
+iterationsLeft	062_allow_multiple_item_eat/jscrawl.html	/^  let iterationsLeft = 5$/;"	V
+jewelry	062_allow_multiple_item_eat/jscrawl.html	/^        jewelry: [],$/;"	P
+keyMap	062_allow_multiple_item_eat/jscrawl.html	/^const keyMap = {$/;"	O
+keyModifiers	062_allow_multiple_item_eat/jscrawl.html	/^let keyModifiers = {$/;"	O
+keyToIndex	062_allow_multiple_item_eat/jscrawl.html	/^  keyToIndex(key) {$/;"	M
+keys	062_allow_multiple_item_eat/jscrawl.html	/^    let keys = []$/;"	A
+lessThan	062_allow_multiple_item_eat/jscrawl.html	/^  lessThan(pair) {$/;"	M
+lessThanOrEqualTo	062_allow_multiple_item_eat/jscrawl.html	/^  lessThanOrEqualTo(pair) {$/;"	M
+level	062_allow_multiple_item_eat/jscrawl.html	/^      level: {$/;"	P
+level	062_allow_multiple_item_eat/jscrawl.html	/^    level: [],$/;"	P
+level	062_allow_multiple_item_eat/jscrawl.html	/^  let level = []$/;"	A
+levelCaveGenerator	062_allow_multiple_item_eat/jscrawl.html	/^    levelCaveGenerator: {$/;"	P
+levelCellsChanged	062_allow_multiple_item_eat/jscrawl.html	/^    levelCellsChanged: [],$/;"	P
+levelChanged	062_allow_multiple_item_eat/jscrawl.html	/^    levelChanged: false,$/;"	P
+levelPosToWindowPos	062_allow_multiple_item_eat/jscrawl.html	/^  levelPosToWindowPos(levelPos) {$/;"	M
+levelSize	062_allow_multiple_item_eat/jscrawl.html	/^  const levelSize = new Pair(level.length, level[0].length)$/;"	V
+levelSize	062_allow_multiple_item_eat/jscrawl.html	/^  let levelSize = new Pair(level.length, level[0].length)$/;"	V
+line	062_allow_multiple_item_eat/jscrawl.html	/^    let line = ''$/;"	V
+lion	062_allow_multiple_item_eat/jscrawl.html	/^          lion: { $/;"	P
+list	062_allow_multiple_item_eat/jscrawl.html	/^    const list = []$/;"	A
+longBlade	062_allow_multiple_item_eat/jscrawl.html	/^          longBlade: { $/;"	P
+lowerLeftQuarter	062_allow_multiple_item_eat/jscrawl.html	/^  lowerLeftQuarter() {$/;"	M
+lowerRightQuarter	062_allow_multiple_item_eat/jscrawl.html	/^  lowerRightQuarter() {$/;"	M
+lumina	062_allow_multiple_item_eat/jscrawl.html	/^  lumina:  { name: 'lumina',  key: 'l', },$/;"	P
+mace	062_allow_multiple_item_eat/jscrawl.html	/^              mace: {$/;"	P
+mace	062_allow_multiple_item_eat/jscrawl.html	/^          mace: {$/;"	P
+main	062_allow_multiple_item_eat/jscrawl.html	/^  main: {$/;"	P
+majorHealth	062_allow_multiple_item_eat/jscrawl.html	/^      majorHealth: 10,$/;"	P
+majorHealth	062_allow_multiple_item_eat/jscrawl.html	/^  majorHealth: { $/;"	P
+mana	062_allow_multiple_item_eat/jscrawl.html	/^  mana: { $/;"	P
+mango	062_allow_multiple_item_eat/jscrawl.html	/^          mango: { $/;"	P
+map	062_allow_multiple_item_eat/jscrawl.html	/^  let map = [[b, b], [b, b]]$/;"	A
+mapToLevel	062_allow_multiple_item_eat/jscrawl.html	/^function mapToLevel(map, level, wallThreshold, size) {$/;"	F
+max	062_allow_multiple_item_eat/jscrawl.html	/^      const max = '' + Math.floor(bc.getPoolMax(player, index))$/;"	V
+maxChannelSizeDefault	062_allow_multiple_item_eat/jscrawl.html	/^    maxChannelSizeDefault: 10,$/;"	P
+maxChannelSizes	062_allow_multiple_item_eat/jscrawl.html	/^    maxChannelSizes: [],$/;"	P
+maxColumns	062_allow_multiple_item_eat/jscrawl.html	/^    const maxColumns = 3$/;"	V
+maxDamage	062_allow_multiple_item_eat/jscrawl.html	/^    let maxDamage = 0$/;"	V
+maxIterations	062_allow_multiple_item_eat/jscrawl.html	/^  let maxIterations = 10$/;"	V
+maxPoolSizes	062_allow_multiple_item_eat/jscrawl.html	/^    maxPoolSizes: {$/;"	P
+maxWidth	062_allow_multiple_item_eat/jscrawl.html	/^    let maxWidth = 0$/;"	V
+message	062_allow_multiple_item_eat/jscrawl.html	/^        message$/;"	V
+message	062_allow_multiple_item_eat/jscrawl.html	/^      message: {$/;"	P
+message	062_allow_multiple_item_eat/jscrawl.html	/^    let message;$/;"	V
+messages	062_allow_multiple_item_eat/jscrawl.html	/^    messages: [],$/;"	P
+messagesChanged	062_allow_multiple_item_eat/jscrawl.html	/^    messagesChanged: false,$/;"	P
+messagesHeader	062_allow_multiple_item_eat/jscrawl.html	/^    messagesHeader: 1,$/;"	P
+milk	062_allow_multiple_item_eat/jscrawl.html	/^          milk: { $/;"	P
+minDamage	062_allow_multiple_item_eat/jscrawl.html	/^    let minDamage = 0$/;"	V
+minValue	062_allow_multiple_item_eat/jscrawl.html	/^      let minValue = values.reduce((a,b) => Math.min(a, b), 1)$/;"	F
+minorHealth	062_allow_multiple_item_eat/jscrawl.html	/^      minorHealth: 30,$/;"	P
+minorHealth	062_allow_multiple_item_eat/jscrawl.html	/^  minorHealth: { $/;"	P
+moon	062_allow_multiple_item_eat/jscrawl.html	/^  moon: { $/;"	P
+motionModeAttack	062_allow_multiple_item_eat/jscrawl.html	/^  motionModeAttack() {$/;"	M
+motionModeMove	062_allow_multiple_item_eat/jscrawl.html	/^  motionModeMove() {$/;"	M
+moveDown	062_allow_multiple_item_eat/jscrawl.html	/^    moveDown: [ 'j', 'ArrowDown' ],$/;"	P
+moveDown	062_allow_multiple_item_eat/jscrawl.html	/^  moveDown: () => {$/;"	M
+moveDownFast	062_allow_multiple_item_eat/jscrawl.html	/^    moveDownFast: [ 'J' ],$/;"	P
+moveDownFast	062_allow_multiple_item_eat/jscrawl.html	/^  moveDownFast: () => {$/;"	M
+moveLeft	062_allow_multiple_item_eat/jscrawl.html	/^    moveLeft: [ 'h', 'ArrowLeft' ],$/;"	P
+moveLeft	062_allow_multiple_item_eat/jscrawl.html	/^  moveLeft: () => {$/;"	M
+moveLeftDown	062_allow_multiple_item_eat/jscrawl.html	/^    moveLeftDown: [ 'b' ],$/;"	P
+moveLeftDown	062_allow_multiple_item_eat/jscrawl.html	/^  moveLeftDown: () => {$/;"	M
+moveLeftFast	062_allow_multiple_item_eat/jscrawl.html	/^    moveLeftFast: [ 'H' ],$/;"	P
+moveLeftFast	062_allow_multiple_item_eat/jscrawl.html	/^  moveLeftFast: () => {$/;"	M
+moveLeftUp	062_allow_multiple_item_eat/jscrawl.html	/^    moveLeftUp: [ 'y' ],$/;"	P
+moveLeftUp	062_allow_multiple_item_eat/jscrawl.html	/^  moveLeftUp: () => {$/;"	M
+moveRight	062_allow_multiple_item_eat/jscrawl.html	/^    moveRight: [ 'l', 'ArrowRight' ],$/;"	P
+moveRight	062_allow_multiple_item_eat/jscrawl.html	/^  moveRight: () => {$/;"	M
+moveRightDown	062_allow_multiple_item_eat/jscrawl.html	/^    moveRightDown: [ 'n' ],$/;"	P
+moveRightDown	062_allow_multiple_item_eat/jscrawl.html	/^  moveRightDown: () => {$/;"	M
+moveRightFast	062_allow_multiple_item_eat/jscrawl.html	/^    moveRightFast: [ 'L' ],$/;"	P
+moveRightFast	062_allow_multiple_item_eat/jscrawl.html	/^  moveRightFast: () => {$/;"	M
+moveRightUp	062_allow_multiple_item_eat/jscrawl.html	/^    moveRightUp: [ 'u' ],$/;"	P
+moveRightUp	062_allow_multiple_item_eat/jscrawl.html	/^  moveRightUp: () => {$/;"	M
+moveUp	062_allow_multiple_item_eat/jscrawl.html	/^    moveUp: [ 'k', 'ArrowUp' ],$/;"	P
+moveUp	062_allow_multiple_item_eat/jscrawl.html	/^  moveUp: () => {$/;"	M
+moveUpFast	062_allow_multiple_item_eat/jscrawl.html	/^    moveUpFast: [ 'K' ],$/;"	P
+moveUpFast	062_allow_multiple_item_eat/jscrawl.html	/^  moveUpFast: () => {$/;"	M
+mulchChance	062_allow_multiple_item_eat/jscrawl.html	/^                mulchChance: 1,$/;"	P
+multiply	062_allow_multiple_item_eat/jscrawl.html	/^  multiply(pair) {$/;"	M
+name	062_allow_multiple_item_eat/jscrawl.html	/^          let name = '(empty)'$/;"	V
+name	062_allow_multiple_item_eat/jscrawl.html	/^          let name = []$/;"	A
+name	062_allow_multiple_item_eat/jscrawl.html	/^        let name = '(empty)'$/;"	V
+names	062_allow_multiple_item_eat/jscrawl.html	/^      let names = []$/;"	A
+names	062_allow_multiple_item_eat/jscrawl.html	/^    let names = []$/;"	A
+newInherited	062_allow_multiple_item_eat/jscrawl.html	/^        let newInherited = { ...inherited, ...template }$/;"	O
+newPos	062_allow_multiple_item_eat/jscrawl.html	/^        let newPos = new Pair(x, y)$/;"	V
+next	062_allow_multiple_item_eat/jscrawl.html	/^  next(possibilities = 0) {$/;"	M
+oats	062_allow_multiple_item_eat/jscrawl.html	/^          oats: { $/;"	P
+object	062_allow_multiple_item_eat/jscrawl.html	/^  object: {$/;"	P
+occupant	062_allow_multiple_item_eat/jscrawl.html	/^        occupant: false,$/;"	P
+occupant	062_allow_multiple_item_eat/jscrawl.html	/^        occupant: true,$/;"	P
+occupant	062_allow_multiple_item_eat/jscrawl.html	/^      occupant: false, $/;"	P
+occupant	062_allow_multiple_item_eat/jscrawl.html	/^      occupant: true, $/;"	P
+occupantMove	062_allow_multiple_item_eat/jscrawl.html	/^  occupantMove(occupant, toPos) {$/;"	M
+occupiedBy	062_allow_multiple_item_eat/jscrawl.html	/^          occupiedBy: null, $/;"	P
+offset	062_allow_multiple_item_eat/jscrawl.html	/^        offset,$/;"	V
+onFloor	062_allow_multiple_item_eat/jscrawl.html	/^          onFloor: [], $/;"	P
+orange	062_allow_multiple_item_eat/jscrawl.html	/^              orange: 10,$/;"	P
+orange	062_allow_multiple_item_eat/jscrawl.html	/^              orange: 15,$/;"	P
+orange	062_allow_multiple_item_eat/jscrawl.html	/^              orange: 3,$/;"	P
+orange	062_allow_multiple_item_eat/jscrawl.html	/^              orange: 5,$/;"	P
+orange	062_allow_multiple_item_eat/jscrawl.html	/^          orange: { $/;"	P
+orange	062_allow_multiple_item_eat/jscrawl.html	/^  orange: { $/;"	P
+outputCreatorModeMessages	062_allow_multiple_item_eat/jscrawl.html	/^  outputCreatorModeMessages() {$/;"	M
+outputTargetMessages	062_allow_multiple_item_eat/jscrawl.html	/^  outputTargetMessages() {$/;"	M
+panScrollMargin	062_allow_multiple_item_eat/jscrawl.html	/^        panScrollMargin: 4,$/;"	P
+pickSomethingToGenerate	062_allow_multiple_item_eat/jscrawl.html	/^  pickSomethingToGenerate(inheritedProperties, group, randomizer) {$/;"	M
+pickUpItem	062_allow_multiple_item_eat/jscrawl.html	/^    pickUpItem: [ ',' ],$/;"	P
+pickUpItem	062_allow_multiple_item_eat/jscrawl.html	/^  pickUpItem() {$/;"	M
+pickUpItem	062_allow_multiple_item_eat/jscrawl.html	/^  pickUpItem: () => {$/;"	M
+pickUpSelectedItems	062_allow_multiple_item_eat/jscrawl.html	/^  pickUpSelectedItems() {$/;"	M
+pizza	062_allow_multiple_item_eat/jscrawl.html	/^          pizza: { $/;"	P
+placeStuffInLevel	062_allow_multiple_item_eat/jscrawl.html	/^  placeStuffInLevel(randomizer) {$/;"	M
+player	062_allow_multiple_item_eat/jscrawl.html	/^    player: { $/;"	P
+playerAttack	062_allow_multiple_item_eat/jscrawl.html	/^  playerAttack(target) {$/;"	M
+playerMotionRelative	062_allow_multiple_item_eat/jscrawl.html	/^  playerMotionRelative(relPos) {$/;"	M
+playerPos	062_allow_multiple_item_eat/jscrawl.html	/^          playerPos,$/;"	V
+polearm	062_allow_multiple_item_eat/jscrawl.html	/^          polearm: {$/;"	P
+poolChannels	062_allow_multiple_item_eat/jscrawl.html	/^const poolChannels = [$/;"	A
+poolCurrent	062_allow_multiple_item_eat/jscrawl.html	/^      poolCurrent: [],     \/\/ integers of how much is in each pool$/;"	P
+poolCurrentPast	062_allow_multiple_item_eat/jscrawl.html	/^      poolCurrentPast: [], \/\/ previous value of poolCurrent$/;"	P
+poolMax	062_allow_multiple_item_eat/jscrawl.html	/^      poolMax: [],         \/\/ integers of how big each pool is$/;"	P
+poolMaxPast	062_allow_multiple_item_eat/jscrawl.html	/^      poolMaxPast: [],     \/\/ previous value of poolMax$/;"	P
+poolOverloadFactorMax	062_allow_multiple_item_eat/jscrawl.html	/^const poolOverloadFactorMax = 1$/;"	V
+poolToIndex	062_allow_multiple_item_eat/jscrawl.html	/^function poolToIndex(poolName) {$/;"	F
+poolTypes	062_allow_multiple_item_eat/jscrawl.html	/^const poolTypes = {$/;"	O
+pools	062_allow_multiple_item_eat/jscrawl.html	/^const pools = {$/;"	O
+poolsToTry	062_allow_multiple_item_eat/jscrawl.html	/^    let poolsToTry = []$/;"	A
+pos	062_allow_multiple_item_eat/jscrawl.html	/^      pos: null,$/;"	P
+potion	062_allow_multiple_item_eat/jscrawl.html	/^        potion: [],$/;"	P
+purple	062_allow_multiple_item_eat/jscrawl.html	/^  purple: { $/;"	P
+rainbow	062_allow_multiple_item_eat/jscrawl.html	/^  rainbow: { $/;"	P
+random	062_allow_multiple_item_eat/jscrawl.html	/^function random(possibilities) {$/;"	F
+randomizer	062_allow_multiple_item_eat/jscrawl.html	/^        randomizer,$/;"	V
+randomizer	062_allow_multiple_item_eat/jscrawl.html	/^    const randomizer = new SeededRandomizer(this.backModel.seed)$/;"	V
+randomizer	062_allow_multiple_item_eat/jscrawl.html	/^    randomizer: null,$/;"	P
+range	062_allow_multiple_item_eat/jscrawl.html	/^                  range: 10, $/;"	P
+range	062_allow_multiple_item_eat/jscrawl.html	/^                  range: 2, $/;"	P
+range	062_allow_multiple_item_eat/jscrawl.html	/^                  range: 3, $/;"	P
+range	062_allow_multiple_item_eat/jscrawl.html	/^                  range: 4, $/;"	P
+range	062_allow_multiple_item_eat/jscrawl.html	/^                  range: 8, $/;"	P
+range	062_allow_multiple_item_eat/jscrawl.html	/^            range: 1,$/;"	P
+range	062_allow_multiple_item_eat/jscrawl.html	/^            range: 12,$/;"	P
+range	062_allow_multiple_item_eat/jscrawl.html	/^            range: 2,$/;"	P
+rat	062_allow_multiple_item_eat/jscrawl.html	/^          rat:  { $/;"	P
+red	062_allow_multiple_item_eat/jscrawl.html	/^              red: 10, $/;"	P
+red	062_allow_multiple_item_eat/jscrawl.html	/^              red: 10,$/;"	P
+red	062_allow_multiple_item_eat/jscrawl.html	/^              red: 15,$/;"	P
+red	062_allow_multiple_item_eat/jscrawl.html	/^              red: 20,$/;"	P
+red	062_allow_multiple_item_eat/jscrawl.html	/^              red: 3,$/;"	P
+red	062_allow_multiple_item_eat/jscrawl.html	/^              red: 5,$/;"	P
+red	062_allow_multiple_item_eat/jscrawl.html	/^  red: { $/;"	P
+reduceMap	062_allow_multiple_item_eat/jscrawl.html	/^function reduceMap(fromMap) {$/;"	F
+refresh	062_allow_multiple_item_eat/jscrawl.html	/^  refresh() {$/;"	M
+removeActor	062_allow_multiple_item_eat/jscrawl.html	/^  removeActor(actor) {$/;"	M
+removeIsolatedWalls	062_allow_multiple_item_eat/jscrawl.html	/^function removeIsolatedWalls(fromMap, wallThreshold, requireSurroundingWalls) {$/;"	F
+removeItemFromFloor	062_allow_multiple_item_eat/jscrawl.html	/^  removeItemFromFloor(pos, itemToMatch, count) {$/;"	M
+removeItemFromInventory	062_allow_multiple_item_eat/jscrawl.html	/^  removeItemFromInventory(item, count) {$/;"	M
+removeItemFromInventoryByIndex	062_allow_multiple_item_eat/jscrawl.html	/^  removeItemFromInventoryByIndex(type, index, count) {$/;"	M
+removeSubjectFromLevel	062_allow_multiple_item_eat/jscrawl.html	/^  removeSubjectFromLevel(subject, pos) {$/;"	M
+removed	062_allow_multiple_item_eat/jscrawl.html	/^  let removed = 0$/;"	V
+requireSurroundingWalls	062_allow_multiple_item_eat/jscrawl.html	/^      requireSurroundingWalls: 2,$/;"	P
+resetSelect	062_allow_multiple_item_eat/jscrawl.html	/^  resetSelect() {$/;"	M
+result	062_allow_multiple_item_eat/jscrawl.html	/^    let result = []$/;"	A
+return	062_allow_multiple_item_eat/jscrawl.html	/^          return$/;"	V
+return	062_allow_multiple_item_eat/jscrawl.html	/^        return$/;"	V
+return	062_allow_multiple_item_eat/jscrawl.html	/^      return$/;"	V
+rice	062_allow_multiple_item_eat/jscrawl.html	/^          rice: { $/;"	P
+ring	062_allow_multiple_item_eat/jscrawl.html	/^        ring: [],$/;"	P
+rock	062_allow_multiple_item_eat/jscrawl.html	/^              rock: { $/;"	P
+rock	062_allow_multiple_item_eat/jscrawl.html	/^        rock: [],$/;"	P
+rockWall	062_allow_multiple_item_eat/jscrawl.html	/^    rockWall: { $/;"	P
+screen	062_allow_multiple_item_eat/jscrawl.html	/^          screen,$/;"	V
+screen	062_allow_multiple_item_eat/jscrawl.html	/^        screen,$/;"	V
+screen	062_allow_multiple_item_eat/jscrawl.html	/^      screen,$/;"	V
+screen	062_allow_multiple_item_eat/jscrawl.html	/^      screen: null,$/;"	P
+screens	062_allow_multiple_item_eat/jscrawl.html	/^const screens = {$/;"	O
+scroll	062_allow_multiple_item_eat/jscrawl.html	/^        scroll: [],$/;"	P
+select	062_allow_multiple_item_eat/jscrawl.html	/^  select: {$/;"	P
+selectAction	062_allow_multiple_item_eat/jscrawl.html	/^    selectAction: null,$/;"	P
+selectAllowMultiple	062_allow_multiple_item_eat/jscrawl.html	/^    selectAllowMultiple: true,$/;"	P
+selectCount	062_allow_multiple_item_eat/jscrawl.html	/^          selectCount,$/;"	V
+selectCount	062_allow_multiple_item_eat/jscrawl.html	/^    selectCount: null,$/;"	P
+selectCountList	062_allow_multiple_item_eat/jscrawl.html	/^    selectCountList: [],$/;"	P
+selectCountMaxList	062_allow_multiple_item_eat/jscrawl.html	/^    selectCountMaxList: [],$/;"	P
+selectIndexes	062_allow_multiple_item_eat/jscrawl.html	/^    selectIndexes: [], \/\/ true or false, whether each index is selected$/;"	P
+selectItem	062_allow_multiple_item_eat/jscrawl.html	/^    selectItem: [],$/;"	P
+selectItem	062_allow_multiple_item_eat/jscrawl.html	/^  selectItem(key) {$/;"	M
+selectItem	062_allow_multiple_item_eat/jscrawl.html	/^  selectItem: (key) => {$/;"	M
+selectKeys	062_allow_multiple_item_eat/jscrawl.html	/^    selectKeys: [], $/;"	P
+selectMaxWidth	062_allow_multiple_item_eat/jscrawl.html	/^    selectMaxWidth: null,$/;"	P
+selectMeta	062_allow_multiple_item_eat/jscrawl.html	/^    selectMeta: {},$/;"	P
+selectMultiple	062_allow_multiple_item_eat/jscrawl.html	/^    selectMultiple: false,$/;"	P
+selectNameList	062_allow_multiple_item_eat/jscrawl.html	/^    selectNameList: [],$/;"	P
+selectSubjectList	062_allow_multiple_item_eat/jscrawl.html	/^    selectSubjectList: [],$/;"	P
+selectTitle	062_allow_multiple_item_eat/jscrawl.html	/^    selectTitle: [],$/;"	P
+selectedInventoryType	062_allow_multiple_item_eat/jscrawl.html	/^        selectedInventoryType$/;"	V
+selectedSubjects	062_allow_multiple_item_eat/jscrawl.html	/^    let selectedSubjects = []$/;"	A
+setChannelFlow	062_allow_multiple_item_eat/jscrawl.html	/^  setChannelFlow(actor, channelIndex, flow) {$/;"	M
+setCreatorMode	062_allow_multiple_item_eat/jscrawl.html	/^  setCreatorMode() {$/;"	M
+setFloorItemsAt	062_allow_multiple_item_eat/jscrawl.html	/^  setFloorItemsAt(pos, floorItems) {$/;"	M
+setKeyMode	062_allow_multiple_item_eat/jscrawl.html	/^  setKeyMode(keyModeName) {$/;"	M
+setLevelChanged	062_allow_multiple_item_eat/jscrawl.html	/^  setLevelChanged(changed) {$/;"	M
+setMessagesChanged	062_allow_multiple_item_eat/jscrawl.html	/^  setMessagesChanged(changed) {$/;"	M
+setMotionMode	062_allow_multiple_item_eat/jscrawl.html	/^  setMotionMode(mode) {$/;"	M
+setMotionModeAttack	062_allow_multiple_item_eat/jscrawl.html	/^    setMotionModeAttack: [ 'a' ],$/;"	P
+setMotionModeAttack	062_allow_multiple_item_eat/jscrawl.html	/^  setMotionModeAttack: () => {$/;"	M
+setMotionModeAttackOrMove	062_allow_multiple_item_eat/jscrawl.html	/^    setMotionModeAttackOrMove: [ 'A' ],$/;"	P
+setMotionModeAttackOrMove	062_allow_multiple_item_eat/jscrawl.html	/^  setMotionModeAttackOrMove: () => {$/;"	M
+setMotionModeMove	062_allow_multiple_item_eat/jscrawl.html	/^    setMotionModeMove: [ 'm' ],$/;"	P
+setMotionModeMove	062_allow_multiple_item_eat/jscrawl.html	/^  setMotionModeMove: () => {$/;"	M
+setScreen	062_allow_multiple_item_eat/jscrawl.html	/^  setScreen(screenName) {$/;"	M
+setSelectAction	062_allow_multiple_item_eat/jscrawl.html	/^  setSelectAction(action) {$/;"	M
+setSelectAllowMultiple	062_allow_multiple_item_eat/jscrawl.html	/^  setSelectAllowMultiple(allow) {$/;"	M
+setSelectCountMaxList	062_allow_multiple_item_eat/jscrawl.html	/^  setSelectCountMaxList(list) {$/;"	M
+setSelectIndexes	062_allow_multiple_item_eat/jscrawl.html	/^  setSelectIndexes(indexes) {$/;"	M
+setSelectKeys	062_allow_multiple_item_eat/jscrawl.html	/^  setSelectKeys(list) {$/;"	M
+setSelectMaxWidth	062_allow_multiple_item_eat/jscrawl.html	/^  setSelectMaxWidth(maxWidth) {$/;"	M
+setSelectMeta	062_allow_multiple_item_eat/jscrawl.html	/^  setSelectMeta(key, value) {$/;"	M
+setSelectMultiple	062_allow_multiple_item_eat/jscrawl.html	/^  setSelectMultiple(multiple) {$/;"	M
+setSelectNameList	062_allow_multiple_item_eat/jscrawl.html	/^  setSelectNameList(list) {$/;"	M
+setSelectSubjectList	062_allow_multiple_item_eat/jscrawl.html	/^  setSelectSubjectList(list) {$/;"	M
+setSelectTitle	062_allow_multiple_item_eat/jscrawl.html	/^  setSelectTitle(single, multiple) {$/;"	M
+setStatusChanged	062_allow_multiple_item_eat/jscrawl.html	/^  setStatusChanged(changed) {$/;"	M
+setTarget	062_allow_multiple_item_eat/jscrawl.html	/^  setTarget(pos) {$/;"	M
+shift	062_allow_multiple_item_eat/jscrawl.html	/^  shift: false,$/;"	P
+showEquipment	062_allow_multiple_item_eat/jscrawl.html	/^    showEquipment: [ 'e' ],$/;"	P
+showEquipment	062_allow_multiple_item_eat/jscrawl.html	/^  showEquipment() {$/;"	M
+showEquipment	062_allow_multiple_item_eat/jscrawl.html	/^  showEquipment: () => {$/;"	M
+showInventory	062_allow_multiple_item_eat/jscrawl.html	/^    showInventory: [ 'i' ],$/;"	P
+showInventory	062_allow_multiple_item_eat/jscrawl.html	/^  showInventory() {$/;"	M
+showInventory	062_allow_multiple_item_eat/jscrawl.html	/^  showInventory: () => {$/;"	M
+showInventoryActions	062_allow_multiple_item_eat/jscrawl.html	/^  showInventoryActions() {$/;"	M
+showInventoryGroup	062_allow_multiple_item_eat/jscrawl.html	/^  showInventoryGroup() {$/;"	M
+showInventoryGroup	062_allow_multiple_item_eat/jscrawl.html	/^  showInventoryGroup(inventoryGroup) {$/;"	M
+showSelectedItems	062_allow_multiple_item_eat/jscrawl.html	/^  showSelectedItems() {$/;"	M
+silver	062_allow_multiple_item_eat/jscrawl.html	/^              silver: 20,$/;"	P
+silver	062_allow_multiple_item_eat/jscrawl.html	/^  silver: { $/;"	P
+silverEgg	062_allow_multiple_item_eat/jscrawl.html	/^          silverEgg: { $/;"	P
+simplePursuit	062_allow_multiple_item_eat/jscrawl.html	/^  simplePursuit(actor) {$/;"	M
+size	062_allow_multiple_item_eat/jscrawl.html	/^  let size = new Pair(fromMap.length, fromMap[0].length)$/;"	V
+spear	062_allow_multiple_item_eat/jscrawl.html	/^              spear: {$/;"	P
+species	062_allow_multiple_item_eat/jscrawl.html	/^      species: null,$/;"	P
+species	062_allow_multiple_item_eat/jscrawl.html	/^    player.species = { ...species.default, ...species.human }$/;"	P
+species	062_allow_multiple_item_eat/jscrawl.html	/^const species = {$/;"	O
+spectra	062_allow_multiple_item_eat/jscrawl.html	/^  spectra: { name: 'spectra', key: 's', },$/;"	P
+spinach	062_allow_multiple_item_eat/jscrawl.html	/^          spinach: { $/;"	P
+splitAtBlankBefore	062_allow_multiple_item_eat/jscrawl.html	/^function splitAtBlankBefore(string, pos) {$/;"	F
+stamina	062_allow_multiple_item_eat/jscrawl.html	/^  stamina: { $/;"	P
+star	062_allow_multiple_item_eat/jscrawl.html	/^  star: { $/;"	P
+status	062_allow_multiple_item_eat/jscrawl.html	/^      status: {$/;"	P
+statusChanged	062_allow_multiple_item_eat/jscrawl.html	/^    statusChanged: false,$/;"	P
+statusRow	062_allow_multiple_item_eat/jscrawl.html	/^        statusRow$/;"	V
+strawberries	062_allow_multiple_item_eat/jscrawl.html	/^          strawberries: { $/;"	P
+strength	062_allow_multiple_item_eat/jscrawl.html	/^      strength: 10,$/;"	P
+style	062_allow_multiple_item_eat/jscrawl.html	/^    const style = "#0000C080"$/;"	V
+sub	062_allow_multiple_item_eat/jscrawl.html	/^            sub: {$/;"	P
+sub	062_allow_multiple_item_eat/jscrawl.html	/^        sub: {$/;"	P
+sub	062_allow_multiple_item_eat/jscrawl.html	/^    sub: {$/;"	P
+subject	062_allow_multiple_item_eat/jscrawl.html	/^      let subject = { ...inherited, ...template }$/;"	O
+subjects	062_allow_multiple_item_eat/jscrawl.html	/^      let subjects = []$/;"	A
+subjects	062_allow_multiple_item_eat/jscrawl.html	/^    let subjects = []$/;"	A
+subtract	062_allow_multiple_item_eat/jscrawl.html	/^  subtract(pair) {$/;"	M
+sun	062_allow_multiple_item_eat/jscrawl.html	/^  sun: { $/;"	P
+supportMulti	062_allow_multiple_item_eat/jscrawl.html	/^    supportMulti: true,$/;"	P
+surroundLevelWithWalls	062_allow_multiple_item_eat/jscrawl.html	/^function surroundLevelWithWalls(oldLevel, size) {$/;"	F
+sushiRoll	062_allow_multiple_item_eat/jscrawl.html	/^          sushiRoll: { $/;"	P
+switch	062_allow_multiple_item_eat/jscrawl.html	/^    switch(event.key) {$/;"	M
+switch	062_allow_multiple_item_eat/jscrawl.html	/^    switch(slot) {$/;"	M
+switch	062_allow_multiple_item_eat/jscrawl.html	/^  switch(type) {$/;"	M
+sword	062_allow_multiple_item_eat/jscrawl.html	/^              sword: {$/;"	P
+tPress	062_allow_multiple_item_eat/jscrawl.html	/^  const [fPress, tPress] = getEffectivePressures($/;"	V
+tRoom	062_allow_multiple_item_eat/jscrawl.html	/^        tRoom,$/;"	V
+tab	062_allow_multiple_item_eat/jscrawl.html	/^    const tab = 8$/;"	V
+target	062_allow_multiple_item_eat/jscrawl.html	/^          target: target,$/;"	P
+target	062_allow_multiple_item_eat/jscrawl.html	/^    target: {$/;"	P
+target	062_allow_multiple_item_eat/jscrawl.html	/^  target: {$/;"	P
+template	062_allow_multiple_item_eat/jscrawl.html	/^          template: newTemplate,$/;"	P
+template	062_allow_multiple_item_eat/jscrawl.html	/^const template = {$/;"	O
+thickness	062_allow_multiple_item_eat/jscrawl.html	/^    const thickness = 3$/;"	V
+throwable	062_allow_multiple_item_eat/jscrawl.html	/^          throwable: {$/;"	P
+tier	062_allow_multiple_item_eat/jscrawl.html	/^    tier: 0,$/;"	P
+tier	062_allow_multiple_item_eat/jscrawl.html	/^    tier: 1,$/;"	P
+tier	062_allow_multiple_item_eat/jscrawl.html	/^    tier: 2,$/;"	P
+tier	062_allow_multiple_item_eat/jscrawl.html	/^    tier: 3,$/;"	P
+tier	062_allow_multiple_item_eat/jscrawl.html	/^    tier: 4,$/;"	P
+tierMultiplier	062_allow_multiple_item_eat/jscrawl.html	/^    const tierMultiplier = 10 ** (from.tier - to.tier)$/;"	V
+to	062_allow_multiple_item_eat/jscrawl.html	/^                to,$/;"	V
+to	062_allow_multiple_item_eat/jscrawl.html	/^              to,$/;"	V
+to	062_allow_multiple_item_eat/jscrawl.html	/^    to,$/;"	V
+to	062_allow_multiple_item_eat/jscrawl.html	/^    to: [$/;"	P
+to	062_allow_multiple_item_eat/jscrawl.html	/^    to: [pools.black],$/;"	P
+to	062_allow_multiple_item_eat/jscrawl.html	/^    to: [pools.blue],$/;"	P
+to	062_allow_multiple_item_eat/jscrawl.html	/^    to: [pools.brown],$/;"	P
+to	062_allow_multiple_item_eat/jscrawl.html	/^    to: [pools.criticalHealth],$/;"	P
+to	062_allow_multiple_item_eat/jscrawl.html	/^    to: [pools.cyan],$/;"	P
+to	062_allow_multiple_item_eat/jscrawl.html	/^    to: [pools.gray],$/;"	P
+to	062_allow_multiple_item_eat/jscrawl.html	/^    to: [pools.green],$/;"	P
+to	062_allow_multiple_item_eat/jscrawl.html	/^    to: [pools.indigo],$/;"	P
+to	062_allow_multiple_item_eat/jscrawl.html	/^    to: [pools.majorHealth],$/;"	P
+to	062_allow_multiple_item_eat/jscrawl.html	/^    to: [pools.mana],$/;"	P
+to	062_allow_multiple_item_eat/jscrawl.html	/^    to: [pools.minorHealth],$/;"	P
+to	062_allow_multiple_item_eat/jscrawl.html	/^    to: [pools.moon],$/;"	P
+to	062_allow_multiple_item_eat/jscrawl.html	/^    to: [pools.orange],$/;"	P
+to	062_allow_multiple_item_eat/jscrawl.html	/^    to: [pools.purple],$/;"	P
+to	062_allow_multiple_item_eat/jscrawl.html	/^    to: [pools.rainbow],$/;"	P
+to	062_allow_multiple_item_eat/jscrawl.html	/^    to: [pools.red],$/;"	P
+to	062_allow_multiple_item_eat/jscrawl.html	/^    to: [pools.stamina],$/;"	P
+to	062_allow_multiple_item_eat/jscrawl.html	/^    to: [pools.star],$/;"	P
+to	062_allow_multiple_item_eat/jscrawl.html	/^    to: [pools.violet],$/;"	P
+to	062_allow_multiple_item_eat/jscrawl.html	/^    to: [pools.willpower],$/;"	P
+to	062_allow_multiple_item_eat/jscrawl.html	/^    to: [pools.yellow],$/;"	P
+toMap	062_allow_multiple_item_eat/jscrawl.html	/^  let toMap = []$/;"	A
+toMapColumn	062_allow_multiple_item_eat/jscrawl.html	/^      let toMapColumn = []$/;"	A
+toMapColumn	062_allow_multiple_item_eat/jscrawl.html	/^    let toMapColumn = []$/;"	A
+toggleSelectedItem	062_allow_multiple_item_eat/jscrawl.html	/^  toggleSelectedItem(index) {$/;"	M
+tomato	062_allow_multiple_item_eat/jscrawl.html	/^          tomato: { $/;"	P
+topController	062_allow_multiple_item_eat/jscrawl.html	/^const topController = new TopController()$/;"	V
+total	062_allow_multiple_item_eat/jscrawl.html	/^    let total = 0$/;"	V
+totalWeight	062_allow_multiple_item_eat/jscrawl.html	/^    let totalWeight = 0$/;"	V
+unequip	062_allow_multiple_item_eat/jscrawl.html	/^  unequip: {$/;"	P
+unequipItem	062_allow_multiple_item_eat/jscrawl.html	/^  unequipItem(item) {$/;"	M
+unequipUntilHandsFree	062_allow_multiple_item_eat/jscrawl.html	/^  unequipUntilHandsFree(handsNeeded) {$/;"	M
+upBias	062_allow_multiple_item_eat/jscrawl.html	/^    const upBias = 0$/;"	V
+update	062_allow_multiple_item_eat/jscrawl.html	/^  update(forceRefresh = false) {$/;"	M
+updateScreen	062_allow_multiple_item_eat/jscrawl.html	/^  updateScreen(screen, forceRefresh = false) {$/;"	M
+updateWindow	062_allow_multiple_item_eat/jscrawl.html	/^  updateWindow(screen, window, forceRefresh = false) {$/;"	M
+upperLeftQuarter	062_allow_multiple_item_eat/jscrawl.html	/^  upperLeftQuarter() {$/;"	M
+upperRightQuarter	062_allow_multiple_item_eat/jscrawl.html	/^  upperRightQuarter() {$/;"	M
+values	062_allow_multiple_item_eat/jscrawl.html	/^        let values = []$/;"	A
+values	062_allow_multiple_item_eat/jscrawl.html	/^      let values = []$/;"	A
+violet	062_allow_multiple_item_eat/jscrawl.html	/^              violet: 10,$/;"	P
+violet	062_allow_multiple_item_eat/jscrawl.html	/^              violet: 2,$/;"	P
+violet	062_allow_multiple_item_eat/jscrawl.html	/^              violet: 5,$/;"	P
+violet	062_allow_multiple_item_eat/jscrawl.html	/^  violet: { $/;"	P
+wait	062_allow_multiple_item_eat/jscrawl.html	/^    wait: [ '.' ],$/;"	P
+wait	062_allow_multiple_item_eat/jscrawl.html	/^  wait: () => {$/;"	M
+wand	062_allow_multiple_item_eat/jscrawl.html	/^        wand: [],$/;"	P
+warn	062_allow_multiple_item_eat/jscrawl.html	/^function warn(message) {$/;"	F
+watermelon	062_allow_multiple_item_eat/jscrawl.html	/^          watermelon: { $/;"	P
+weapon	062_allow_multiple_item_eat/jscrawl.html	/^        weapon: [],$/;"	P
+weapon	062_allow_multiple_item_eat/jscrawl.html	/^      weapon: {$/;"	P
+while	062_allow_multiple_item_eat/jscrawl.html	/^      while(prefix.length + remaining.length >= maxWidth) {$/;"	M
+while	062_allow_multiple_item_eat/jscrawl.html	/^    while(handsAvailable < handsNeeded) {$/;"	M
+while	062_allow_multiple_item_eat/jscrawl.html	/^    while(remaining != 0 && poolsToTry.length) {$/;"	M
+while	062_allow_multiple_item_eat/jscrawl.html	/^  while(map.length < size.x) {$/;"	M
+while	062_allow_multiple_item_eat/jscrawl.html	/^  while(true) {$/;"	M
+width	062_allow_multiple_item_eat/jscrawl.html	/^  width: 1600,$/;"	P
+willpower	062_allow_multiple_item_eat/jscrawl.html	/^              willpower: 10,$/;"	P
+willpower	062_allow_multiple_item_eat/jscrawl.html	/^  willpower: { $/;"	P
+window	062_allow_multiple_item_eat/jscrawl.html	/^          window,$/;"	V
+window	062_allow_multiple_item_eat/jscrawl.html	/^        window,$/;"	V
+window	062_allow_multiple_item_eat/jscrawl.html	/^      window,$/;"	V
+window	062_allow_multiple_item_eat/jscrawl.html	/^      window: null,$/;"	P
+window	062_allow_multiple_item_eat/jscrawl.html	/^    window: {$/;"	P
+windowCellPosToLevel	062_allow_multiple_item_eat/jscrawl.html	/^  windowCellPosToLevel(window, windowCellPos) {$/;"	M
+windowCellPosToScreenPixelPos	062_allow_multiple_item_eat/jscrawl.html	/^  windowCellPosToScreenPixelPos(screen, window, windowPos) {$/;"	M
+windowPos	062_allow_multiple_item_eat/jscrawl.html	/^      windowPos$/;"	V
+windowPosIsValid	062_allow_multiple_item_eat/jscrawl.html	/^  windowPosIsValid(window, windowPos) {$/;"	M
+windowToWindowName	062_allow_multiple_item_eat/jscrawl.html	/^  windowToWindowName(screen, window) {$/;"	M
+within	062_allow_multiple_item_eat/jscrawl.html	/^  within(minPair, maxPairExclusive) {$/;"	M
+xOffset	062_allow_multiple_item_eat/jscrawl.html	/^    let xOffset = 0$/;"	V
+xOffset	062_allow_multiple_item_eat/jscrawl.html	/^  xOffset: 0,$/;"	P
+xp	062_allow_multiple_item_eat/jscrawl.html	/^      xp: 0,$/;"	P
+yOffset	062_allow_multiple_item_eat/jscrawl.html	/^    let yOffset = 0$/;"	V
+yOffset	062_allow_multiple_item_eat/jscrawl.html	/^  yOffset: 0,$/;"	P
+yellow	062_allow_multiple_item_eat/jscrawl.html	/^              yellow: 10,$/;"	P
+yellow	062_allow_multiple_item_eat/jscrawl.html	/^              yellow: 15,$/;"	P
+yellow	062_allow_multiple_item_eat/jscrawl.html	/^              yellow: 20,$/;"	P
+yellow	062_allow_multiple_item_eat/jscrawl.html	/^              yellow: 3,$/;"	P
+yellow	062_allow_multiple_item_eat/jscrawl.html	/^              yellow: 5, $/;"	P
+yellow	062_allow_multiple_item_eat/jscrawl.html	/^              yellow: 5,$/;"	P
+yellow	062_allow_multiple_item_eat/jscrawl.html	/^  yellow: { $/;"	P

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [ ! -f "$1" ]; then
+  echo "Usage: $0 {path to file to edit}" >&2
+  exit 1
+fi
+
+./generateTags "$1"
+vi +vsp +vsp "$1"

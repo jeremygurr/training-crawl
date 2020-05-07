@@ -1,19 +1,43 @@
 energy
-  long form
-    fix status width
-    fix channel missing pool in messages window bug
-  examine pools
-  flow isn't stabilizing
+  should be able to eat all of stack at once
+  need to be able to create a count of items
+  sort pools high to low in each type
   refactor for each channel
   colorize status
   willpower pressure reduction
     can only pick one at a time
+    can only reduce 1 level max, skill doesn't apply
   meditation
     can only pick one at a time
+    can reduce many levels based on skill
   experience potion drinking
+    adds 20 to each etherea
+  creator mode: 
+    set energy pool
+    allow multiple item creation, or disable multiselect
+    move CREATOR MODE to right of action
   core awakening
   minor health can't go up until major
     make room function which calculates how much room a pool has to increase
+  energy in environment
+    cells store energy
+    energy moves between cells
+      conductance different for different materials
+      capacity different for different materials
+  external channels
+    all pools can vent except interna
+    OG=SG OD=ED
+? general help
+  another section at the bottom for 3 lines of menus / messages
+  scratch space
+examine pools
+  use scratch space
+  data model 
+  out and in commands
+  draw target based on what's being focussed
+  define visual blocks
+  add details to visual blocks
+  show details associated with selected object
 weapon usage
   weapon prioritization
   chance to hit
@@ -289,7 +313,7 @@ eat
   all 100/100/100 of 250
   or 1/2 minor 1/4 major 1/4 critical
   or 2/3 minor 1/3 of remaining major + critical, 1/3 of remaining critical
-  all health must be 0 before death occurs
+  the player must receive damage after all health < 1 at beginning of turn before death occurs
   critical strikes can bypass the normal damage order
 monster enemy identification
   sight
@@ -1095,4 +1119,3 @@ species
         can't use scrolls
       other:
         size = large
-

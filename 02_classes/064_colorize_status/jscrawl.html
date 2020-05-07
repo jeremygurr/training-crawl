@@ -6,7 +6,7 @@
     <title>Training: Crawl Game</title>
     <style>
       * { padding: 0; margin: 0; }
-      canvas { background: #eee; display: block; margin: 0 auto; }
+      canvas { background: #fff; display: block; margin: 0 auto; }
     </style>
 </head>
 <body>
@@ -231,9 +231,158 @@ const poolTypes = {
   exotica: { name: 'exotica', key: 'x', },
 }
 
+function generateGradient(width, list) {
+  const g = ctx.createLinearGradient(0, 0, width, 0);
+  const increment = 1 / (list.length + 1)
+  let stop = 0
+  for(let i = 0; i < list.length; i++) {
+    g.addColorStop(stop, list[i]);
+    stop += increment
+  }
+  return g
+}
+
+let gradient = {}
+
+{
+
+  gradient.vrainbow = generateGradient(250, [
+    "#C00000",
+    "#C06000",
+    "#C0C000",
+    "#00C000",
+    "#00C0C0",
+    "#0000C0",
+  ])
+
+  gradient.rainbow = generateGradient(200, [
+    '#FF2F2F',
+    '#FF6F1F',
+    '#FFAB12',
+    '#FFCB0C',
+    '#FFFF00',
+    '#CFFF00',
+    '#7FFF00',
+    '#00FFFF',
+    '#1F74FF',
+    '#583FFF',
+    '#824FFF',
+  ])
+
+  gradient.diamond = generateGradient(230, [
+    '#FFFFFF',
+    '#E0FFFF',
+    '#FFFFFF',
+    '#E0FFFF',
+    '#FFFFFF',
+    '#E0FFFF',
+    '#FFFFFF',
+    '#E0FFFF',
+    '#FFFFFF',
+    '#E0FFFF',
+    '#FFFFFF',
+    '#E0FFFF',
+    '#FFFFFF',
+  ])
+
+  gradient.gold = generateGradient(230, [
+    '#FFFFFF',
+    '#FFFFD0',
+    '#FFFFFF',
+    '#FFFFD0',
+    '#FFFFFF',
+    '#FFFFD0',
+    '#FFFFFF',
+    '#FFFFD0',
+    '#FFFFFF',
+    '#FFFFD0',
+    '#FFFFFF',
+    '#FFFFD0',
+    '#FFFFFF',
+  ])
+
+  gradient.silver = generateGradient(230, [
+    '#FFFFFF',
+    '#E0E0E0',
+    '#FFFFFF',
+    '#E0E0E0',
+    '#FFFFFF',
+    '#E0E0E0',
+    '#FFFFFF',
+    '#E0E0E0',
+    '#FFFFFF',
+    '#E0E0E0',
+    '#FFFFFF',
+    '#E0E0E0',
+    '#FFFFFF',
+  ])
+
+  gradient.copper = generateGradient(230, [
+    '#FFFFFF',
+    '#FFE0C0',
+    '#FFFFFF',
+    '#FFE0C0',
+    '#FFFFFF',
+    '#FFE0C0',
+    '#FFFFFF',
+    '#FFE0C0',
+    '#FFFFFF',
+    '#FFE0C0',
+    '#FFFFFF',
+    '#FFE0C0',
+    '#FFFFFF',
+  ])
+
+}
+
+const colorize = {
+  magenta: message => [{ style: '#C000C0', text: message }],
+  rainbow: message => [{ style: gradient.vrainbow, text: message }],
+}
+
 // each has a dark and light version
 const colors = {
-  blue: ['#000080', '#4040FF'],
+  black:   { bgStyle: '#000000', style: '#FFF' },
+  gray:    { bgStyle: '#808080', style: '#FFF' },
+  white1:  { bgStyle: '#D0D0D0', style: '#000' },
+  white2:  { bgStyle: '#E8E8E8', style: '#000' },
+  white3:  { bgStyle: '#FFFFFF', style: '#000' },
+  copper:  { 
+    bgStyle: gradient.copper,
+    style: '#000' 
+  },
+  silver:  { 
+    bgStyle: gradient.silver,
+    style: '#000' 
+  },
+  gold:  { 
+    bgStyle: gradient.gold,
+    style: '#000' 
+  },
+  diamond:  { 
+    bgStyle: gradient.diamond,
+    style: '#000' 
+  },
+  lightred:   { bgStyle: '#FF9F9F', style: '#000' },
+  lightorange:{ bgStyle: '#FFDD88', style: '#000' },
+  lightyellow:{ bgStyle: '#FFFF80', style: '#000' },
+  lightgreen: { bgStyle: '#BFFF80', style: '#000' },
+  lightblue:  { bgStyle: '#8FB9FF', style: '#000' },
+  lightviolet:{ bgStyle: '#C89FFF', style: '#000' },
+  red:        { bgStyle: '#FF2F2F', style: '#FFF' },
+  orange:     { bgStyle: '#FFAB12', style: '#000' },
+  yellow:     { bgStyle: '#FFFF00', style: '#000' },
+  green:      { bgStyle: '#7FFF00', style: '#000' },
+  cyan:       { bgStyle: '#00FFFF', style: '#000' },
+  blue:       { bgStyle: '#1F74FF', style: '#FFF' },
+  indigo:     { bgStyle: '#583FFF', style: '#FFF' },
+  violet:     { bgStyle: '#824FFF', style: '#FFF' },
+  rainbow: { 
+    bgStyle: gradient.rainbow, 
+    style: '#000',
+  },
+  brown:   { bgStyle: '#CF9509', style: '#FFF'  },
+  purple:  { bgStyle: '#D56FFF', style: '#FFF'  },
 }
 
 const pools = {
@@ -247,7 +396,7 @@ const pools = {
     shortName: 'I1', 
     longName: 'critical health',
     tier: 1,
-    color: colors.blue,
+    color: colors.lightblue,
   },
   majorHealth: { 
     type: poolTypes.interna, 
@@ -255,6 +404,7 @@ const pools = {
     shortName: 'I2', 
     longName: 'major health',
     tier: 1,
+    color: colors.lightgreen,
   },
   minorHealth: { 
     type: poolTypes.interna, 
@@ -262,6 +412,7 @@ const pools = {
     shortName: 'I3', 
     longName: 'minor health',
     tier: 1,
+    color: colors.lightred,
   },
   stamina: { 
     type: poolTypes.interna, 
@@ -269,6 +420,7 @@ const pools = {
     shortName: 'IS', 
     longName: 'stamina',
     tier: 1,
+    color: colors.lightorange,
   },
   mana: { 
     type: poolTypes.interna, 
@@ -276,6 +428,7 @@ const pools = {
     shortName: 'IM', 
     longName: 'mana',
     tier: 1,
+    color: colors.lightyellow,
   },
   willpower: { 
     type: poolTypes.interna, 
@@ -283,6 +436,7 @@ const pools = {
     shortName: 'IW', 
     longName: 'willpower',
     tier: 1,
+    color: colors.lightviolet,
   },
   black: { 
     type: poolTypes.lumina, 
@@ -290,6 +444,7 @@ const pools = {
     shortName: 'LB', 
     longName: 'black',
     tier: 0,
+    color: colors.black,
   },
   gray: { 
     type: poolTypes.lumina, 
@@ -297,6 +452,7 @@ const pools = {
     shortName: 'LG', 
     longName: 'gray',
     tier: 1,
+    color: colors.gray,
   },
   star: { 
     type: poolTypes.lumina, 
@@ -304,6 +460,7 @@ const pools = {
     shortName: 'LT', 
     longName: 'star',
     tier: 2,
+    color: colors.white1,
   },
   moon: { 
     type: poolTypes.lumina, 
@@ -311,6 +468,7 @@ const pools = {
     shortName: 'LM', 
     longName: 'moon',
     tier: 3,
+    color: colors.white2,
   },
   sun: { 
     type: poolTypes.lumina, 
@@ -318,6 +476,7 @@ const pools = {
     shortName: 'LS', 
     longName: 'sun',
     tier: 4,
+    color: colors.white3,
   },
   copper: { 
     type: poolTypes.etherea, 
@@ -325,6 +484,7 @@ const pools = {
     shortName: 'EC', 
     longName: 'copper',
     tier: 3,
+    color: colors.copper,
   },
   silver: { 
     type: poolTypes.etherea, 
@@ -332,6 +492,7 @@ const pools = {
     shortName: 'ES', 
     longName: 'silver',
     tier: 3,
+    color: colors.silver,
   },
   gold: { 
     type: poolTypes.etherea, 
@@ -339,6 +500,7 @@ const pools = {
     shortName: 'EG', 
     longName: 'gold',
     tier: 3,
+    color: colors.gold,
   },
   diamond: { 
     type: poolTypes.etherea, 
@@ -346,6 +508,7 @@ const pools = {
     shortName: 'ED', 
     longName: 'diamond',
     tier: 3,
+    color: colors.diamond,
   },
   red: { 
     type: poolTypes.spectra, 
@@ -353,6 +516,7 @@ const pools = {
     shortName: 'SR', 
     longName: 'red',
     tier: 2,
+    color: colors.red,
   },
   orange: { 
     type: poolTypes.spectra, 
@@ -360,6 +524,7 @@ const pools = {
     shortName: 'SO', 
     longName: 'orange',
     tier: 2,
+    color: colors.orange,
   },
   yellow: { 
     type: poolTypes.spectra, 
@@ -367,6 +532,7 @@ const pools = {
     shortName: 'SY', 
     longName: 'yellow',
     tier: 2,
+    color: colors.yellow,
   },
   green: { 
     type: poolTypes.spectra, 
@@ -374,6 +540,7 @@ const pools = {
     shortName: 'SG', 
     longName: 'green',
     tier: 2,
+    color: colors.green,
   },
   cyan: { 
     type: poolTypes.spectra, 
@@ -381,6 +548,7 @@ const pools = {
     shortName: 'SC', 
     longName: 'cyan',
     tier: 2,
+    color: colors.cyan,
   },
   blue: { 
     type: poolTypes.spectra, 
@@ -388,6 +556,7 @@ const pools = {
     shortName: 'SB', 
     longName: 'blue',
     tier: 2,
+    color: colors.blue,
   },
   indigo: { 
     type: poolTypes.spectra, 
@@ -395,6 +564,7 @@ const pools = {
     shortName: 'SI', 
     longName: 'indigo',
     tier: 2,
+    color: colors.indigo,
   },
   violet: { 
     type: poolTypes.spectra, 
@@ -402,6 +572,7 @@ const pools = {
     shortName: 'SV', 
     longName: 'violet',
     tier: 2,
+    color: colors.violet,
   },
   rainbow: { 
     type: poolTypes.exotica, 
@@ -409,6 +580,7 @@ const pools = {
     shortName: 'XR', 
     longName: 'rainbow',
     tier: 1,
+    color: colors.rainbow,
   },
   brown: { 
     type: poolTypes.exotica, 
@@ -416,6 +588,7 @@ const pools = {
     shortName: 'XB', 
     longName: 'brown',
     tier: 1,
+    color: colors.brown,
   },
   purple: { 
     type: poolTypes.exotica, 
@@ -423,6 +596,7 @@ const pools = {
     shortName: 'XP', 
     longName: 'purple',
     tier: 1,
+    color: colors.purple,
   },
 }
 
@@ -469,9 +643,13 @@ function getChannelString(player, from, to) {
     direction = '='
   }
 
-  let channelString = from.shortName 
+  let channelString = [ 
+    {
+      style: from.color.style,
+      from.shortName 
     + direction 
     + to.shortName
+  ]
 
   return channelString
 
@@ -2383,6 +2561,7 @@ class TopController {
     const level = bc.getLevel()
 
     if(fc.windowPosIsValid(window, windowPos, level)) {
+
       const levelPos = fc.windowCellPosToLevel(window, windowPos)
       const cell = level[levelPos.x][levelPos.y]
       let characterToDraw
@@ -2399,16 +2578,19 @@ class TopController {
         offset = cell.floorType.offset;
       }
 
-      fc.drawText(
-        screen,
-        window,
-        windowPos, 
-        characterToDraw, 
-        offset,
-        true,
-        window.cellPixelDimensions,
-      )
+      fc.drawText({
+        screen: screen,
+        window: window,
+        windowPos: windowPos, 
+        textToDraw: characterToDraw, 
+        offset: offset,
+        center: true,
+        cellSizePixels: window.cellPixelDimensions,
+        maxColumns: 1,
+      })
+
     }
+
   }
 
   getStatusList() {
@@ -2419,7 +2601,7 @@ class TopController {
     const player = bc.getPlayer()
 
     if(bc.getCreatorMode()) {
-      list.push(color.rainbow('***** CREATOR MODE *****'))
+      list.push(colorize.rainbow('***** CREATOR MODE *****'))
     }
 
     list.push('Action: ' + fc.getActionModeMessage())
@@ -2475,16 +2657,18 @@ class TopController {
       let maxChangeString = this.getChangeString(' max',maxChange)
       const digits = bc.getPoolDigits(player)
 
-      line += ' ' + pool.shortName[1] + ': ' 
+      line += pool.shortName[1] + ': ' 
         + current.padStart(digits)
         + '/' 
         + max.padStart(digits) + maxChangeString
         + currentChangeString 
-        + maxChangeString 
+        + maxChangeString
 
-      if(pool.color) {
-        list = [{ bgStyle: pool.color[1], text: line }]
-      }
+      line = [{ 
+        style: pool.color.style, 
+        bgStyle: pool.color.bgStyle, 
+        text: line 
+      }]
 
     }
 
@@ -2494,7 +2678,7 @@ class TopController {
 
   getStatusListPoolsExpanded(list, player) {
 
-    list.push('Interna')
+    list.push(' Interna')
     this.addStatusPoolLineExpanded(list, player, ['criticalHealth'])
     this.addStatusPoolLineExpanded(list, player, ['majorHealth'])
     this.addStatusPoolLineExpanded(list, player, ['minorHealth' ])
@@ -2502,20 +2686,20 @@ class TopController {
     this.addStatusPoolLineExpanded(list, player, ['mana'])
     this.addStatusPoolLineExpanded(list, player, ['willpower'])
 
-    list.push('Lumina')
+    list.push(' Lumina')
     this.addStatusPoolLineExpanded(list, player, ['sun'])
     this.addStatusPoolLineExpanded(list, player, ['moon'])
     this.addStatusPoolLineExpanded(list, player, ['star'])
     this.addStatusPoolLineExpanded(list, player, ['gray'])
     this.addStatusPoolLineExpanded(list, player, ['black'])
 
-    list.push('Etherea')
+    list.push(' Etherea')
     this.addStatusPoolLineExpanded(list, player, ['diamond'])
     this.addStatusPoolLineExpanded(list, player, ['gold'])
     this.addStatusPoolLineExpanded(list, player, ['silver'])
     this.addStatusPoolLineExpanded(list, player, ['copper'])
 
-    list.push('Spectra')
+    list.push(' Spectra')
     this.addStatusPoolLineExpanded(list, player, ['red'])
     this.addStatusPoolLineExpanded(list, player, ['orange'])
     this.addStatusPoolLineExpanded(list, player, ['yellow'])
@@ -2525,7 +2709,7 @@ class TopController {
     this.addStatusPoolLineExpanded(list, player, ['indigo'])
     this.addStatusPoolLineExpanded(list, player, ['violet'])
 
-    list.push('Exotica')
+    list.push(' Exotica')
     this.addStatusPoolLineExpanded(list, player, ['rainbow'])
     this.addStatusPoolLineExpanded(list, player, ['brown'])
     this.addStatusPoolLineExpanded(list, player, ['purple'])
@@ -2546,7 +2730,7 @@ class TopController {
 
   getStatusListPoolsCompact(list, player) {
 
-    list.push('Interna')
+    list.push(' Interna')
     this.addStatusPoolLineCompact(list, player, [
       'criticalHealth', 
       'majorHealth', 
@@ -2558,7 +2742,7 @@ class TopController {
       'willpower',
     ])
 
-    list.push('Lumina')
+    list.push(' Lumina')
     this.addStatusPoolLineCompact(list, player, [
       'black', 
       'gray', 
@@ -2567,7 +2751,7 @@ class TopController {
       'sun',
     ])
 
-    list.push('Etherea')
+    list.push(' Etherea')
     this.addStatusPoolLineCompact(list, player, [
       'copper',
       'silver',
@@ -2575,7 +2759,7 @@ class TopController {
       'diamond',
     ])
 
-    list.push('Spectra')
+    list.push(' Spectra')
     this.addStatusPoolLineCompact(list, player, [
       'red',
       'orange',
@@ -2589,7 +2773,7 @@ class TopController {
       'violet',
     ])
 
-    list.push('Exotica')
+    list.push(' Exotica')
     this.addStatusPoolLineCompact(list, player, [
       'rainbow',
       'brown',
@@ -3785,12 +3969,12 @@ class FrontController {
         maxWidth = 0
       }
 
-      this.drawText(
-        screen, 
-        window, 
-        new Pair(xOffset, effectiveRow), 
-        message
-      )
+      this.drawText({
+        screen: screen, 
+        window: window, 
+        windowPos: new Pair(xOffset, effectiveRow), 
+        textToDraw: message
+      })
 
       if(row > header - 1) {
         maxWidth = Math.max(maxWidth, message.length)
@@ -3814,11 +3998,13 @@ class FrontController {
         xOffset += halfWidth
         effectiveRow = row + yOffset
       }
-      this.drawText(
-        screen, window, 
-        new Pair(xOffset, effectiveRow), 
-        statusRow
-      )
+      this.drawText({
+        screen: screen, 
+        window: window, 
+        windowPos: new Pair(xOffset, effectiveRow), 
+        textToDraw: statusRow,
+        maxColumns: window.smallCellSize.x / 2,
+      })
     }
   }
 
@@ -4480,35 +4666,37 @@ class FrontController {
     return fontStyle.fixed
   }
 
-  drawText(
-    screen, 
-    window, 
-    windowPos, 
-    textToDraw, 
-    offset = null, 
-    center = false,
-    maxSize = null,
-  ) {
+  // accepts an object with the following props:
+  //  screen, 
+  //  window, 
+  //  windowPos, 
+  //  textToDraw = null, 
+  //  offset = null, 
+  //  center = false,
+  //  maxColumns = null,
+  drawText(p) {
 
-    const fontStyle = this.getFontStyle(screen, window)
+    const cellSizePixels = p.window.cellPixelDimensions
+    const fontStyle = this.getFontStyle(p.screen, p.window)
     const screenPixelPos = this.windowCellPosToScreenPixelPos(
-      screen,
-      window,
-      windowPos
+      p.screen,
+      p.window,
+      p.windowPos
     )
 
-    if(window.offset) {
-      offset = window.offset.add(offset)
+    if(p.window.offset) {
+      p.offset = p.window.offset.add(p.offset)
     }
 
-    this.outController.drawText(
-      fontStyle, 
-      screenPixelPos, 
-      textToDraw, 
-      offset, 
-      center, 
-      maxSize,
-    )
+    this.outController.drawText({
+      fontStyle: fontStyle, 
+      screenPixelPos: screenPixelPos, 
+      textToDraw: p.textToDraw, 
+      offset: p.offset, 
+      center: p.center, 
+      cellSizePixels: cellSizePixels,
+      maxColumns: p.maxColumns,
+    })
 
   }
 
@@ -4598,37 +4786,42 @@ class OutController {
   // accepts an object with the following props:
   //  fontStyle, 
   //  screenPixelPos, 
-  //  textToDraw, 
-  //  textToDrawList = null, 
+  //  textToDraw = null, 
   //  offset = null, 
   //  center = false,
   //  cellSizePixels = null,
   //  maxColumns = null,
-  drawText(
-    p
-  ) {
+  drawText(p) {
 
-    if(!p.textToDrawList) {
-      p.textToDrawList = [{ style: '#000000', text: p.textToDraw }]
+    if(typeof p.textToDraw == 'string') {
+      p.textToDrawList = [{ text: p.textToDraw }]
+    } else {
+      p.textToDrawList = p.textToDraw
     }
 
     for(let i = 0; i < p.textToDrawList.length; i++) {
 
       const textToDrawObject = p.textToDrawList[i]
       const textToDraw = textToDrawObject.text
-      const style = textToDrawObject.style
+      const style = textToDrawObject.style || '#000000'
       const bgStyle = textToDrawObject.bgStyle
+      const maxSize = p.maxColumns * p.cellSizePixels.x
+
+      let xOffset = canvasProps.xOffset 
+      let yOffset = canvasProps.yOffset
+
+      if(p.offset) {
+        xOffset += p.offset.x
+        yOffset += p.offset.y
+      }
 
       if(bgStyle) {
-        this.drawFilledRect(
-          new Rect(
-            screenPixelPos.x, 
-            screenPixelPos.y,
-            screenPixelPos.x + cellSizePixels.x,
-            screenPixelPos.y + cellSizePixels.y,
-          ),
-          bgStyle,
-        )
+        this.previousFillStyle = bgStyle
+        const x1 = p.screenPixelPos.x + xOffset
+        const y1 = p.screenPixelPos.y + yOffset
+        const x2 = x1 + maxSize
+        const y2 = y1 + p.cellSizePixels.y
+        this.drawFilledRect(new Rect(x1 - 2, y1 + 1, x2 - 2, y2 + 1), bgStyle)
       }
 
       if(style != this.previousFillStyle) {
@@ -4636,41 +4829,33 @@ class OutController {
         ctx.fillStyle = style
       }
 
-      let xOffset = canvasProps.xOffset 
-      let yOffset = canvasProps.yOffset
-
-      if(offset) {
-        xOffset += offset.x
-        yOffset += offset.y
+      if(this.previousFontStyle != p.fontStyle) {
+        ctx.font = p.fontStyle.size + "px " + p.fontStyle.name;
       }
-
-      if(this.previousFontStyle != fontStyle) {
-        ctx.font = fontStyle.size + "px " + fontStyle.name;
-      }
-      this.previousFontStyle = fontStyle
+      this.previousFontStyle = p.fontStyle
 
       const textSize = ctx.measureText(textToDraw);
       const textWidth = textSize.width
       if(
-        center
-        && maxColumns > 0 
-        && textWidth < maxSize.x
+        p.center
+        && p.maxColumns > 0 
+        && textWidth < maxSize
       ) {
-        xOffset += Math.floor((maxColumns - textWidth) / 2)
+        xOffset += Math.floor((maxSize - textWidth) / 2)
       }
-      const textHeight = fontStyle.size
+      const textHeight = p.fontStyle.size
       //const textHeight = textSize.actualBoundingBoxAscent + textSize.actualBoundingBoxDescent
       if(
-        center 
-        && cellSizePixels 
-        && cellSizePixels.y > 0 && textHeight < cellSizePixels.y
+        p.center 
+        && p.cellSizePixels 
+        && p.cellSizePixels.y > 0 && textHeight < p.cellSizePixels.y
       ) {
-        yOffset += Math.floor((cellSizePixels.y - textHeight) / 2)
+        yOffset += Math.floor((p.cellSizePixels.y - textHeight) / 2)
       }
 
-      yOffset += fontStyle.size 
+      yOffset += p.fontStyle.size 
 
-      if(center && cellSizePixels && cellSizePixels.y > 0) {
+      if(p.center && p.cellSizePixels && p.cellSizePixels.y > 0) {
         yOffset -= 
           textSize.actualBoundingBoxDescent 
           + (textHeight - textSize.actualBoundingBoxAscent) / 2
@@ -4678,8 +4863,8 @@ class OutController {
 
       ctx.fillText(
         textToDraw, 
-        screenPixelPos.x + xOffset, 
-        screenPixelPos.y + yOffset,
+        p.screenPixelPos.x + xOffset, 
+        p.screenPixelPos.y + yOffset,
       )
 
     }
@@ -5280,24 +5465,6 @@ function findEmptyCellCentrally(level, randomizer, bounds = null) {
 
 function clearArray(array) {
   array.splice(0, array.length)
-}
-
-let gradient = {}
-
-{
-  const rainbow = ctx.createLinearGradient(0, 0, 250, 0);
-  rainbow.addColorStop("0", "#C00000");
-  rainbow.addColorStop("0.2", "#C06000");
-  rainbow.addColorStop("0.4", "#C0C000");
-  rainbow.addColorStop("0.6", "#00C000");
-  rainbow.addColorStop("0.8", "#00C0C0");
-  rainbow.addColorStop("1.0", "#0000C0");
-  gradient.rainbow = rainbow
-}
-
-const color = {
-  magenta: message => [{ style: '#C000C0', text: message }],
-  rainbow: message => [{ style: gradient.rainbow, text: message }],
 }
 
 const topController = new TopController()

@@ -1,0 +1,5580 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Training: Crawl Game</title>
+    <style>
+      * { padding: 0; margin: 0; }
+      canvas { background: #fff; display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+<script>
+"use strict";
+
+const canvasProps = {
+  xOffset: 0,
+  yOffset: 0,
+  width: 1600,
+  height: 540,
+};
+
+document.write('<canvas id="mainCanvas" width="' + canvasProps.width + '" height="' + canvasProps.height + '"></canvas>')
+
+</script>
+
+<!-- provides _.cloneDeep() -->
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+<!-- provides Math.seedrandom -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
+
+<script>
+
+const canvas = document.getElementById("mainCanvas")
+const ctx = canvas.getContext("2d")
+
+// immutable
+class Rect {
+  // x1, y1 are inclusive
+  // x2, y2 are exclusive (are not part of this rectangle)
+  constructor(x1, y1, x2, y2) {
+    this.x1 = x1
+    this.y1 = y1
+    this.x2 = x2
+    this.y2 = y2
+
+    const xa = Math.floor((this.x1 + this.x2)/2)
+    const ya = Math.floor((this.y1 + this.y2)/2)
+    this.center = new Pair(xa, ya)
+    this.width = x2 - x1
+    this.height = y2 - y1
+  }
+
+  upperLeftQuarter() {
+    const newX1 = this.x1
+    const newY1 = this.y1
+    const newX2 = this.center.x
+    const newY2 = this.center.y
+    return new Rect(newX1, newY1, newX2, newY2)
+  }
+
+  upperRightQuarter() {
+    const newX1 = this.center.x
+    const newY1 = this.y1
+    const newX2 = this.x2
+    const newY2 = this.center.y
+    return new Rect(newX1, newY1, newX2, newY2)
+  }
+
+  lowerLeftQuarter() {
+    const newX1 = this.x1
+    const newY1 = this.center.y
+    const newX2 = this.center.x
+    const newY2 = this.y2
+    return new Rect(newX1, newY1, newX2, newY2)
+  }
+
+  lowerRightQuarter() {
+    const newX1 = this.center.x
+    const newY1 = this.center.y
+    const newX2 = this.x2
+    const newY2 = this.y2
+    return new Rect(newX1, newY1, newX2, newY2)
+  }
+
+  expand(pixels) {
+    const newX1 = this.x1 - pixels
+    const newY1 = this.y1 - pixels
+    const newX2 = this.x2 + pixels
+    const newY2 = this.y2 + pixels
+    return new Rect(newX1, newY1, newX2, newY2)
+  }
+
+  add(pair) {
+    if(!pair) return this
+    return new Rect(this.x1 + pair.x, this.y1 + pair.y, this.x2 + pair.x, this.y2 + pair.y)
+  }
+}
+
+class Pair {
+  static empty() {
+    return new Pair(0, 0)
+  }
+
+  constructor(x, y) {
+    this.x = x
+    this.y = y
+  }
+
+  add(pair) {
+    if(!pair) return this
+    return new Pair(this.x + pair.x, this.y + pair.y)
+  }
+
+  subtract(pair) {
+    return new Pair(this.x - pair.x, this.y - pair.y)
+  }
+
+  multiply(pair) {
+    return new Pair(this.x * pair.x, this.y * pair.y)
+  }
+
+  divide(pair) {
+    return new Pair(this.x / pair.x, this.y / pair.y)
+  }
+
+  floor() {
+    return new Pair(Math.floor(this.x), Math.floor(this.y))
+  }
+
+  lessThan(pair) {
+    return this.x < pair.x && this.y < pair.y
+  }
+
+  lessThanOrEqualTo(pair) {
+    return this.x <= pair.x && this.y <= pair.y
+  }
+
+  within(minPair, maxPairExclusive) {
+    return minPair.lessThanOrEqualTo(this) && this.lessThan(maxPairExclusive)
+  }
+
+  // returns a list of adjacent positions that fit within the given size
+  adjacent(size) {
+    let result = []
+    for(let c = this.x - 1; c <= this.x + 1; c++) {
+      if(c < 0 || c >= size.x) continue
+      for(let r = this.y - 1; r <= this.y + 1; r++) {
+        if(r < 0 || r >= size.y) continue
+        if(c == this.x && r == this.y) continue
+        result.push(new Pair(c, r))
+      }
+    }
+
+    return result
+  }
+}
+
+const fontStyle = {
+  fixed: { name: "Courier", size: 26 },
+  compact: { name: "Courier", size: 14 },
+}
+
+// These should never be altered.
+const species = {
+
+  default: {
+
+    hands: 2,
+
+    attributes: {
+      strength: 10,
+      dexterity: 10,
+      intelligence: 10,
+    },
+
+    experiencePerLevel: 12,
+    coreExperienceCost: 50,
+
+    maxPoolSizes: {
+      criticalHealth: 5,
+      majorHealth: 10,
+      minorHealth: 30,
+      default: 100,
+    },
+
+    maxChannelSizes: [],
+    maxChannelSizeDefault: 10,
+
+    energyDelta: {
+      health: -0.1,
+      stamina: -0.1,
+      mana: -0.1,
+      willpower: -0.1,
+    },
+
+  },
+
+  human: {
+    experiencePerLevel: 15,
+  },
+
+}
+
+const poolTypes = {
+  // pools is added to each of these automatically
+  interna: { name: 'interna', key: 'i', },
+  lumina:  { name: 'lumina',  key: 'l', },
+  etherea: { name: 'etherea', key: 'e', },
+  spectra: { name: 'spectra', key: 's', },
+  exotica: { name: 'exotica', key: 'x', },
+}
+
+function generateGradient(width, height, list) {
+  const g = ctx.createLinearGradient(0, 0, width, height);
+  const increment = 1 / (list.length + 1)
+  let stop = 0
+  for(let i = 0; i < list.length; i++) {
+    g.addColorStop(stop, list[i]);
+    stop += increment
+  }
+  return g
+}
+
+let gradient = {}
+
+{
+
+  gradient.vrainbow = generateGradient(250, 0, [
+    "#C00000",
+    "#C06000",
+    "#C0C000",
+    "#00C000",
+    "#00C0C0",
+    "#0000C0",
+  ])
+
+  gradient.rainbow = generateGradient(0, 10, [
+    '#FF2F2F',
+    '#FF6F1F',
+    '#FFAB12',
+    '#FFCB0C',
+    '#FFFF00',
+    '#CFFF00',
+    '#7FFF00',
+    '#00FFFF',
+    '#1F74FF',
+    '#583FFF',
+    '#824FFF',
+  ])
+
+  gradient.diamond = generateGradient(230, 0, [
+    '#FFFFFF',
+    '#E0FFFF',
+    '#FFFFFF',
+    '#E0FFFF',
+    '#FFFFFF',
+    '#E0FFFF',
+    '#FFFFFF',
+    '#E0FFFF',
+    '#FFFFFF',
+    '#E0FFFF',
+    '#FFFFFF',
+    '#E0FFFF',
+    '#FFFFFF',
+  ])
+
+  gradient.gold = generateGradient(230, 0, [
+    '#FFFFFF',
+    '#FFFFD0',
+    '#FFFFFF',
+    '#FFFFD0',
+    '#FFFFFF',
+    '#FFFFD0',
+    '#FFFFFF',
+    '#FFFFD0',
+    '#FFFFFF',
+    '#FFFFD0',
+    '#FFFFFF',
+    '#FFFFD0',
+    '#FFFFFF',
+  ])
+
+  gradient.silver = generateGradient(230, 0, [
+    '#FFFFFF',
+    '#E0E0E0',
+    '#FFFFFF',
+    '#E0E0E0',
+    '#FFFFFF',
+    '#E0E0E0',
+    '#FFFFFF',
+    '#E0E0E0',
+    '#FFFFFF',
+    '#E0E0E0',
+    '#FFFFFF',
+    '#E0E0E0',
+    '#FFFFFF',
+  ])
+
+  gradient.copper = generateGradient(230, 0, [
+    '#FFFFFF',
+    '#FFE0C0',
+    '#FFFFFF',
+    '#FFE0C0',
+    '#FFFFFF',
+    '#FFE0C0',
+    '#FFFFFF',
+    '#FFE0C0',
+    '#FFFFFF',
+    '#FFE0C0',
+    '#FFFFFF',
+    '#FFE0C0',
+    '#FFFFFF',
+  ])
+
+}
+
+const colorize = {
+  magenta: message => [{ style: '#C000C0', text: message }],
+  rainbow: message => [{ style: gradient.vrainbow, text: message }],
+}
+
+// each has a dark and light version
+const colors = {
+  black:   { bgStyle: '#000000', style: '#FFF' },
+  gray:    { bgStyle: '#808080', style: '#FFF' },
+  white1:  { bgStyle: '#D0D0D0', style: '#000' },
+  white2:  { bgStyle: '#E8E8E8', style: '#000' },
+  white3:  { bgStyle: '#FFFFFF', style: '#000' },
+  copper:  { 
+    bgStyle: gradient.copper,
+    style: '#000' 
+  },
+  silver:  { 
+    bgStyle: gradient.silver,
+    style: '#000' 
+  },
+  gold:  { 
+    bgStyle: gradient.gold,
+    style: '#000' 
+  },
+  diamond:  { 
+    bgStyle: gradient.diamond,
+    style: '#000' 
+  },
+  lightred:   { bgStyle: '#FF9F9F', style: '#000' },
+  lightorange:{ bgStyle: '#FFDD88', style: '#000' },
+  lightyellow:{ bgStyle: '#FFFF80', style: '#000' },
+  lightgreen: { bgStyle: '#BFFF80', style: '#000' },
+  lightblue:  { bgStyle: '#8FB9FF', style: '#000' },
+  lightviolet:{ bgStyle: '#C89FFF', style: '#000' },
+  red:        { bgStyle: '#FF2F2F', style: '#FFF' },
+  orange:     { bgStyle: '#FFAB12', style: '#000' },
+  yellow:     { bgStyle: '#FFFF00', style: '#000' },
+  green:      { bgStyle: '#7FFF00', style: '#000' },
+  cyan:       { bgStyle: '#00FFFF', style: '#000' },
+  blue:       { bgStyle: '#1F74FF', style: '#FFF' },
+  indigo:     { bgStyle: '#583FFF', style: '#FFF' },
+  violet:     { bgStyle: '#824FFF', style: '#FFF' },
+  rainbow: { 
+    bgStyle: gradient.rainbow, 
+    style: '#000',
+  },
+  brown:   { bgStyle: '#CF9509', style: '#FFF'  },
+  purple:  { bgStyle: '#D56FFF', style: '#FFF'  },
+}
+
+const pools = {
+  // name is added to these automatically
+  // channels is added to these automatically
+  //   which contains an array of channel indexes
+  // index is added to these automatically
+  criticalHealth: { 
+    type: poolTypes.interna, 
+    key: '1', 
+    shortName: 'I1', 
+    longName: 'critical health',
+    tier: 1,
+    color: colors.lightblue,
+  },
+  majorHealth: { 
+    type: poolTypes.interna, 
+    key: '2', 
+    shortName: 'I2', 
+    longName: 'major health',
+    tier: 1,
+    color: colors.lightgreen,
+  },
+  minorHealth: { 
+    type: poolTypes.interna, 
+    key: '3', 
+    shortName: 'I3', 
+    longName: 'minor health',
+    tier: 1,
+    color: colors.lightred,
+  },
+  stamina: { 
+    type: poolTypes.interna, 
+    key: 's', 
+    shortName: 'IS', 
+    longName: 'stamina',
+    tier: 1,
+    color: colors.lightorange,
+  },
+  mana: { 
+    type: poolTypes.interna, 
+    key: 'm', 
+    shortName: 'IM', 
+    longName: 'mana',
+    tier: 1,
+    color: colors.lightyellow,
+  },
+  willpower: { 
+    type: poolTypes.interna, 
+    key: 'w', 
+    shortName: 'IW', 
+    longName: 'willpower',
+    tier: 1,
+    color: colors.lightviolet,
+  },
+  black: { 
+    type: poolTypes.lumina, 
+    key: 'b', 
+    shortName: 'LB', 
+    longName: 'black',
+    tier: 0,
+    color: colors.black,
+  },
+  gray: { 
+    type: poolTypes.lumina, 
+    key: 'g', 
+    shortName: 'LG', 
+    longName: 'gray',
+    tier: 1,
+    color: colors.gray,
+  },
+  star: { 
+    type: poolTypes.lumina, 
+    key: 't', 
+    shortName: 'LT', 
+    longName: 'star',
+    tier: 2,
+    color: colors.white1,
+  },
+  moon: { 
+    type: poolTypes.lumina, 
+    key: 'm', 
+    shortName: 'LM', 
+    longName: 'moon',
+    tier: 3,
+    color: colors.white2,
+  },
+  sun: { 
+    type: poolTypes.lumina, 
+    key: 's', 
+    shortName: 'LS', 
+    longName: 'sun',
+    tier: 4,
+    color: colors.white3,
+  },
+  copper: { 
+    type: poolTypes.etherea, 
+    key: 'c', 
+    shortName: 'EC', 
+    longName: 'copper',
+    tier: 3,
+    color: colors.copper,
+  },
+  silver: { 
+    type: poolTypes.etherea, 
+    key: 's', 
+    shortName: 'ES', 
+    longName: 'silver',
+    tier: 3,
+    color: colors.silver,
+  },
+  gold: { 
+    type: poolTypes.etherea, 
+    key: 'g', 
+    shortName: 'EG', 
+    longName: 'gold',
+    tier: 3,
+    color: colors.gold,
+  },
+  diamond: { 
+    type: poolTypes.etherea, 
+    key: 'd', 
+    shortName: 'ED', 
+    longName: 'diamond',
+    tier: 3,
+    color: colors.diamond,
+  },
+  red: { 
+    type: poolTypes.spectra, 
+    key: 'r', 
+    shortName: 'SR', 
+    longName: 'red',
+    tier: 2,
+    color: colors.red,
+  },
+  orange: { 
+    type: poolTypes.spectra, 
+    key: 'o', 
+    shortName: 'SO', 
+    longName: 'orange',
+    tier: 2,
+    color: colors.orange,
+  },
+  yellow: { 
+    type: poolTypes.spectra, 
+    key: 'y', 
+    shortName: 'SY', 
+    longName: 'yellow',
+    tier: 2,
+    color: colors.yellow,
+  },
+  green: { 
+    type: poolTypes.spectra, 
+    key: 'g', 
+    shortName: 'SG', 
+    longName: 'green',
+    tier: 2,
+    color: colors.green,
+  },
+  cyan: { 
+    type: poolTypes.spectra, 
+    key: 'c', 
+    shortName: 'SC', 
+    longName: 'cyan',
+    tier: 2,
+    color: colors.cyan,
+  },
+  blue: { 
+    type: poolTypes.spectra, 
+    key: 'b', 
+    shortName: 'SB', 
+    longName: 'blue',
+    tier: 2,
+    color: colors.blue,
+  },
+  indigo: { 
+    type: poolTypes.spectra, 
+    key: 'i', 
+    shortName: 'SI', 
+    longName: 'indigo',
+    tier: 2,
+    color: colors.indigo,
+  },
+  violet: { 
+    type: poolTypes.spectra, 
+    key: 'v', 
+    shortName: 'SV', 
+    longName: 'violet',
+    tier: 2,
+    color: colors.violet,
+  },
+  rainbow: { 
+    type: poolTypes.exotica, 
+    key: 'r', 
+    shortName: 'XR', 
+    longName: 'rainbow',
+    tier: 1,
+    color: colors.rainbow,
+  },
+  brown: { 
+    type: poolTypes.exotica, 
+    key: 'b', 
+    shortName: 'XB', 
+    longName: 'brown',
+    tier: 1,
+    color: colors.brown,
+  },
+  purple: { 
+    type: poolTypes.exotica, 
+    key: 'p', 
+    shortName: 'XP', 
+    longName: 'purple',
+    tier: 1,
+    color: colors.purple,
+  },
+}
+
+// only allow a pool to contain this many times it's capacity
+const poolOverloadFactorMax = 1
+
+function poolToIndex(poolName) {
+  let index = 0
+  for(let key of Object.keys(pools)) {
+    if(key == poolName) return index
+    index++
+  }
+  return -1
+}
+
+// returns [fromPressure, toPressure]
+function getEffectivePressures(actor, fromPool, toPool) {
+  const poolIndexFrom = poolToIndex(fromPool.name)
+  const poolIndexTo = poolToIndex(toPool.name)
+  const fCur = actor.poolCurrent[poolIndexFrom]
+  const tCur = actor.poolCurrent[poolIndexTo]
+  const fMax = actor.poolMax[poolIndexFrom]
+  const tMax = actor.poolMax[poolIndexTo]
+  const downBias = fromPool.tier > toPool.tier ? 1 : 0
+  const fPress = fCur / fMax
+  const tPress = tCur / (tMax * (1 + downBias))
+  return [fPress, tPress]
+}
+
+function getChannelString(player, from, to) {
+
+  const [fPress, tPress] = getEffectivePressures(
+    player, 
+    from, 
+    to,
+  )
+
+  let direction
+  if(fPress > tPress + 0.01) {
+    direction = '>'
+  } else if(tPress > fPress + 0.01) {
+    direction = '<'
+  } else {
+    direction = '='
+  }
+
+  let channelString = [ 
+    {
+      style: from.color.style,
+      bgStyle: from.color.bgStyle,
+      text: from.shortName,
+    },
+    {
+      text: direction,
+    },
+    {
+      style: to.color.style,
+      bgStyle: to.color.bgStyle,
+      text: to.shortName,
+    },
+  ]
+
+  return channelString
+
+}
+
+// index is added to each of these automatically
+const poolChannels = [
+  {
+    from: [pools.sun],
+    to: [
+      pools.diamond,
+      pools.gold,
+      pools.silver,
+      pools.copper,
+    ],
+  },
+  {
+    from: [pools.sun],
+    to: [pools.moon],
+  },
+  {
+    from: [
+      pools.sun,
+      pools.moon,
+      pools.star,
+      pools.gray,
+      pools.black,
+    ],
+    to: [pools.brown],
+  },
+  {
+    from: [pools.moon],
+    to: [
+      pools.red,
+      pools.orange,
+      pools.yellow,
+      pools.green,
+      pools.cyan,
+      pools.blue,
+      pools.indigo,
+      pools.violet,
+    ],
+  },
+  {
+    from: [pools.moon],
+    to: [pools.star],
+  },
+  {
+    from: [pools.diamond],
+    to: [pools.red],
+  },
+  {
+    from: [pools.diamond],
+    to: [pools.cyan],
+  },
+  {
+    from: [pools.diamond],
+    to: [pools.blue],
+  },
+  {
+    from: [pools.diamond],
+    to: [pools.indigo],
+  },
+  {
+    from: [pools.diamond],
+    to: [pools.violet],
+  },
+  {
+    from: [pools.diamond],
+    to: [pools.star],
+  },
+  {
+    from: [pools.gold],
+    to: [pools.yellow],
+  },
+  {
+    from: [pools.gold],
+    to: [pools.green],
+  },
+  {
+    from: [pools.gold],
+    to: [pools.cyan],
+  },
+  {
+    from: [pools.gold],
+    to: [pools.blue],
+  },
+  {
+    from: [pools.gold],
+    to: [pools.star],
+  },
+  {
+    from: [pools.silver],
+    to: [pools.orange],
+  },
+  {
+    from: [pools.silver],
+    to: [pools.yellow],
+  },
+  {
+    from: [pools.silver],
+    to: [pools.green],
+  },
+  {
+    from: [pools.silver],
+    to: [pools.star],
+  },
+  {
+    from: [pools.copper],
+    to: [pools.red],
+  },
+  {
+    from: [pools.copper],
+    to: [pools.orange],
+  },
+  {
+    from: [pools.copper],
+    to: [pools.star],
+  },
+  {
+    from: [pools.star],
+    to: [pools.gray],
+  },
+  {
+    from: [pools.red],
+    to: [pools.gray],
+  },
+  {
+    from: [pools.orange],
+    to: [pools.gray],
+  },
+  {
+    from: [pools.yellow],
+    to: [pools.gray],
+  },
+  {
+    from: [pools.green],
+    to: [pools.gray],
+  },
+  {
+    from: [pools.cyan],
+    to: [pools.gray],
+  },
+  {
+    from: [pools.blue],
+    to: [pools.gray],
+  },
+  {
+    from: [pools.indigo],
+    to: [pools.gray],
+  },
+  {
+    from: [pools.violet],
+    to: [pools.gray],
+  },
+  {
+    from: [pools.red],
+    to: [pools.minorHealth],
+  },
+  {
+    from: [pools.orange],
+    to: [pools.stamina],
+  },
+  {
+    from: [pools.yellow],
+    to: [pools.mana],
+  },
+  {
+    from: [pools.green],
+    to: [pools.majorHealth],
+  },
+  {
+    from: [pools.blue],
+    to: [pools.criticalHealth],
+  },
+  {
+    from: [pools.violet],
+    to: [pools.willpower],
+  },
+  {
+    from: [
+      pools.red,
+      pools.orange,
+      pools.yellow,
+      pools.green,
+      pools.cyan,
+      pools.blue,
+      pools.indigo,
+      pools.violet,
+    ],
+    to: [pools.rainbow],
+  },
+  {
+    from: [
+      pools.red,
+      pools.blue,
+    ],
+    to: [pools.purple],
+  },
+  {
+    from: [pools.criticalHealth],
+    to: [pools.black],
+  },
+  {
+    from: [pools.majorHealth],
+    to: [pools.black],
+  },
+  {
+    from: [pools.minorHealth],
+    to: [pools.black],
+  },
+  {
+    from: [pools.stamina],
+    to: [pools.black],
+  },
+  {
+    from: [pools.mana],
+    to: [pools.black],
+  },
+  {
+    from: [pools.willpower],
+    to: [pools.black],
+  },
+  {
+    from: [pools.gray],
+    to: [pools.black],
+  },
+]
+
+// These should never be altered. They are used to create other objects which may be altered.
+const template = {
+
+  object: {
+    dirtFloor: { 
+      type: 'floor', 
+      occupant: false, 
+      name: 'dirt', 
+      showAs: '.' 
+    },
+    rockWall: { 
+      type: 'wall', 
+      occupant: true, 
+      name: 'rock', 
+      showAs: '🀆', 
+      offset: new Pair(0, 1) 
+    },
+  },
+
+  generated: {
+    fillRatio: 0.020,
+
+    sub: {
+
+      gold: {
+        type: 'gold',
+        showAs: '$', 
+        occupant: false,
+        chanceWeight: 1000,
+        sub: {
+          gold1: { 
+            chanceWeight: 1000, 
+            count: 1,
+          },
+          gold10: { 
+            chanceWeight: 200, 
+            count: 10,
+          },
+          gold100: { 
+            chanceWeight: 50, 
+            count: 100,
+          },
+        },
+      },
+
+      creature: {
+        type: 'creature',
+        occupant: true,
+        chanceWeight: 1000,
+        sub: {
+          rat:  { 
+            chanceWeight: 1000, 
+            showAs: '🐭', 
+            health: 2,  
+            attack: { min: 0, max: 1 }, 
+            act: 'simplePursuit',
+          },
+          lion: { 
+            chanceWeight: 300,
+            showAs: '🦁',
+            health: 10,
+            attack: { min: 0, max: 4 },
+            act: 'simplePursuit',
+          },
+        },
+      },
+
+      weapon: {
+        type: 'weapon',
+        occupant: false,
+        chanceWeight: 1000,
+        count: 1,
+        equipSlot: 'hand',
+        hands: 1,
+        durability: 100,
+        integrity: 1,
+        sub: {
+          throwable: {
+            skill: 'throwing',
+            range: 12,
+            sub: {
+              rock: { 
+                chanceWeight: 1000, 
+                showAs: 'o', 
+                count: 10,
+                hitChance: -2,
+                attackSpeed: 0,
+                damage: [{
+                  type: 'bash',
+                  base: 3, 
+                  range: 2, 
+                  average: 2
+                }],
+                mulchChance: 1,
+              },
+              boulder: { 
+                chanceWeight: 100, 
+                showAs: 'O',
+                hands: 2,
+                hitChance: -1,
+                attackSpeed: -1,
+                damage: [{
+                  type: 'bash',
+                  base: 20, 
+                  range: 10, 
+                  average: 2
+                }],
+                returnChance: 0.1,
+                mulchChance: 1,
+              },
+              boomerang: { 
+                chanceWeight: 100, 
+                showAs: ')',
+                hitChance: -2,
+                attackSpeed: 0,
+                damage: [{
+                  type: 'chop',
+                  base: 5, 
+                  range: 3, 
+                  average: 1
+                }],
+                returnChance: 0.3,
+              },
+            },
+          },
+          
+          longBlade: { 
+            skill: 'longBlade',
+            range: 1,
+            sub: {
+              sword: {
+                chanceWeight: 100, 
+                showAs: '⚔️',
+                hitChance: 0,
+                attackSpeed: 1,
+                damage: [{
+                  type: 'chop',
+                  base: 8, 
+                  range: 4, 
+                  average: 1
+                }],
+              },
+            },
+          },
+
+          axe: {
+            skill: 'axe',
+            range: 1,
+            sub: {
+              handAxe: {
+                chanceWeight: 100, 
+                showAs: '🪓',
+                hitChance: 0,
+                attackSpeed: 0,
+                damage: [{
+                  type: 'chop',
+                  base: 8, 
+                  range: 4, 
+                  average: 2
+                }],
+              },
+            },
+          },
+
+          polearm: {
+            skill: 'polearm',
+            range: 2,
+            sub: {
+              spear: {
+                chanceWeight: 100, 
+                showAs: '𐃆',
+                hitChance: 0,
+                attackSpeed: -1,
+                damage: [{
+                  type: 'pierce',
+                  base: 8, 
+                  range: 8, 
+                  average: 2
+                }],
+              },
+            },
+          },
+
+          mace: {
+            skill: 'mace',
+            sub: {
+              mace: {
+                chanceWeight: 100, 
+                showAs: '⚒',
+                hitChance: 0,
+                attackSpeed: -1,
+                damage: [{
+                  type: 'bash',
+                  base: 8, 
+                  range: 4, 
+                  average: 2
+                }],
+              },
+            },
+          },
+        },
+      },
+
+      food: {
+        type: 'food',
+        occupant: false,
+        chanceWeight: 1000,
+        showAs: '🍖',
+        count: 1,
+        sub: {
+          beef: { 
+            chanceWeight: 1000,
+            energy: {
+              red: 20,
+            },
+          },
+          bacon: { 
+            chanceWeight: 300,
+            energy: {
+              red: 10,
+              orange: 5,
+              yellow: 5, 
+            },
+          },
+          ham: { 
+            chanceWeight: 1000,
+            energy: {
+              red: 15,
+              orange: 5,
+            },
+          },
+          fish: { 
+            chanceWeight: 1000,
+            energy: {
+              red: 15,
+              blue: 5,
+            },
+          },
+          chicken: { 
+            chanceWeight: 1000,
+            energy: {
+              red: 15,
+              yellow: 5,
+            },
+          },
+          egg: { 
+            chanceWeight: 300,
+            energy: {
+              red: 5,
+              yellow: 5,
+              blue: 5, 
+              violet: 5,
+            },
+          },
+          copperEgg: { 
+            chanceWeight: 20,
+            energy: {
+              copper: 20,
+            },
+          },
+          silverEgg: { 
+            chanceWeight: 20,
+            energy: {
+              silver: 20,
+            },
+          },
+          goldEgg: { 
+            chanceWeight: 20,
+            energy: {
+              gold: 20,
+            },
+          },
+          diamondEgg: { 
+            chanceWeight: 1,
+            energy: {
+              diamond: 20,
+            },
+          },
+          bread: { 
+            chanceWeight: 2000,
+            energy: {
+              red: 5,
+              orange: 15,
+            },
+          },
+          rice: { 
+            chanceWeight: 2000,
+            energy: {
+              orange: 10,
+              green: 10,
+            },
+          },
+          sushiRoll: { 
+            chanceWeight: 200,
+            energy: {
+              red: 5,
+              orange: 5,
+              green: 5,
+              blue: 5,
+            },
+          },
+          oats: { 
+            chanceWeight: 2000,
+            energy: {
+              red: 5,
+              orange: 10,
+              yellow: 5,
+            },
+          },
+          cheese: { 
+            chanceWeight: 500,
+            energy: {
+              yellow: 10,
+              indigo: 10,
+            },
+          },
+          milk: { 
+            chanceWeight: 500,
+            energy: {
+              red: 5,
+              indigo: 15,
+            },
+          },
+          apple: { 
+            chanceWeight: 500,
+            energy: {
+              red: 10,
+              yellow: 10,
+            },
+          },
+          banana: { 
+            chanceWeight: 500,
+            energy: {
+              orange: 5,
+              yellow: 15,
+            },
+          },
+          brocolli: { 
+            chanceWeight: 500,
+            energy: {
+              yellow: 5,
+              green: 15,
+            },
+          },
+          coconut: { 
+            chanceWeight: 500,
+            energy: {
+              yellow: 5,
+              orange: 5,
+              green: 5,
+              cyan: 5,
+            },
+          },
+          spinach: { 
+            chanceWeight: 500,
+            energy: {
+              red: 5,
+              green: 15,
+            },
+          },
+          cherry: { 
+            chanceWeight: 500,
+            energy: {
+              red: 10, 
+              orange: 5,
+              yellow: 5,
+            },
+          },
+          watermelon: { 
+            chanceWeight: 500,
+            energy: {
+              red: 10, 
+              yellow: 5,
+              green: 5,
+            },
+          },
+          carrot: { 
+            chanceWeight: 500,
+            energy: {
+              orange: 15,
+              green: 5,
+            },
+          },
+          orange: { 
+            chanceWeight: 500,
+            energy: {
+              orange: 15,
+              yellow: 5,
+            },
+          },
+          mango: { 
+            chanceWeight: 500,
+            energy: {
+              yellow: 20,
+            },
+          },
+          grapes: { 
+            chanceWeight: 500,
+            energy: {
+              yellow: 5,
+              green: 10,
+              violet: 5,
+            },
+          },
+          strawberries: { 
+            chanceWeight: 500,
+            energy: {
+              red: 15,
+              yellow: 5,
+            },
+          },
+          tomato: { 
+            chanceWeight: 500,
+            energy: {
+              red: 10,
+              orange: 5,
+              yellow: 5,
+            },
+          },
+          eggplant: { 
+            chanceWeight: 500,
+            energy: {
+              red: 5,
+              green: 5,
+              violet: 10,
+            },
+          },
+          blueberries: { 
+            chanceWeight: 500,
+            energy: {
+              yellow: 5,
+              blue: 15,
+            },
+          },
+          pizza: { 
+            chanceWeight: 500,
+            energy: {
+              red: 3,
+              orange: 3,
+              yellow: 3,
+              green: 3,
+              cyan: 2, 
+              blue: 2,
+              indigo: 2,
+              violet: 2,
+            },
+          },
+          chocolate: { 
+            chanceWeight: 500,
+            energy: {
+              black: 10,
+              willpower: 10,
+            },
+          },
+        },
+      },
+    },
+  },
+
+  backModel: {
+    actor: [],
+    seed: 'test',
+    randomizer: null,
+    levelCaveGenerator: {
+      openness: 0.2,
+      wallThreshold: 0.5,
+      requireSurroundingWalls: 2,
+    },
+    levelSize: new Pair(30, 30),
+    level: [],
+    gameClock: 0,
+    creatorMode: false,
+    player: { 
+      name: 'player', 
+      showAs: '🙂', 
+      pos: Pair.empty(), 
+      gold: 0,
+      xp: 0,
+      species: null,
+      equip: {
+        hand: [],
+        ring: [],
+        amulet: null,
+        head: null, // helmet or hat
+        face: null, // glasses or mask
+        body: null,
+        cloak: null,
+        gloves: null,
+        boots: null,
+        book: null, // book currently being studied
+      },
+      inventory: {
+        armor: [],
+        book: [],
+        food: [],
+        jewelry: [],
+        wand: [],
+        potion: [],
+        rock: [],
+        scroll: [],
+        weapon: [],
+      },
+      poolCurrentPast: [], // previous value of poolCurrent
+      poolCurrent: [],     // integers of how much is in each pool
+      poolMaxPast: [],     // previous value of poolMax
+      poolMax: [],         // integers of how big each pool is
+      poolDigits: 3,       // number of digits needed to represent all pools
+      channelCurrent: [],  // integers of openness of each channel
+      channelMax: [],      // integers of max value of each channel
+    },
+  },
+
+  frontModel: {
+
+    currentScreen: 'main',
+    currentKeyMode: 'base',
+    motionMode: 'attackOrMove',
+
+    levelCellsChanged: [],
+    levelChanged: false,
+    messages: [],
+    messagesHeader: 1,
+    messagesChanged: false,
+    statusChanged: false,
+    statusMode: 'expanded',
+
+    selectAction: null,
+    selectAllowMultiple: true,
+    selectCount: null,
+    selectCountList: [],
+    selectCountMaxList: [],
+    selectCountMax: null,
+    selectIndexes: [], // true or false, whether each index is selected
+    selectKeys: [], 
+    selectMultiple: false,
+    selectNameList: [],
+    selectSubjectList: [],
+    selectTitle: [],
+    selectMaxWidth: null,
+    selectMeta: {},
+
+    target: {
+      screen: null,
+      window: null,
+      pos: null,
+    },
+
+  },
+}
+
+const screens = {
+  main: {
+
+    cellPixelDimensions: new Pair(26, 30),
+    size: new Pair(55, 18),
+
+    window: {
+
+      // smallCellSize is added to each of these
+      status: {
+        pos: Pair.empty(),
+        size: new Pair(15, 18),
+        offset: new Pair(7, 2),
+        cellPixelDimensions: new Pair(8.4, 16),
+        fontStyle: fontStyle.compact,
+      },
+
+      level: {
+        pos: new Pair(15, 0),
+        size: new Pair(30, 18),
+        cellPixelDimensions: new Pair(26, 30),
+        fontStyle: fontStyle.fixed,
+        panCellOffset: Pair.empty(),
+        panScrollMargin: 4,
+      },
+
+      message: {
+        pos: new Pair(45, 0),
+        size: new Pair(17, 18),
+        offset: new Pair(5, 2),
+        cellPixelDimensions: new Pair(8.4, 16),
+        fontStyle: fontStyle.compact,
+      },
+    },
+
+  },
+}
+  
+const keyMap = {
+  base: {
+    moveLeft: [ 'h', 'ArrowLeft' ],
+    moveRight: [ 'l', 'ArrowRight' ],
+    moveUp: [ 'k', 'ArrowUp' ],
+    moveDown: [ 'j', 'ArrowDown' ],
+    moveLeftUp: [ 'y' ],
+    moveLeftDown: [ 'b' ],
+    moveRightUp: [ 'u' ],
+    moveRightDown: [ 'n' ],
+    wait: [ '.' ],
+    setMotionModeAttackOrMove: [ 'A' ],
+    setMotionModeAttack: [ 'a' ],
+    setMotionModeMove: [ 'm' ],
+    enterTargetMode: [ 'x' ],
+    pickUpItem: [ ',' ],
+    showInventory: [ 'i' ],
+    showEquipment: [ 'e' ],
+    enterCreatorMode: [ 'C' ],
+    creatorModeCommand: [ '`' ],
+    channelCommand: [ 'c' ],
+    changeStatusMode: [ 's' ],
+    helpMode: [ '?' ],
+  },
+  target: {
+    moveLeft: [ 'h', 'ArrowLeft' ],
+    moveRight: [ 'l', 'ArrowRight' ],
+    moveUp: [ 'k', 'ArrowUp' ],
+    moveDown: [ 'j', 'ArrowDown' ],
+    moveLeftFast: [ 'H' ],
+    moveRightFast: [ 'L' ],
+    moveUpFast: [ 'K' ],
+    moveDownFast: [ 'J' ],
+    moveLeftUp: [ 'y' ],
+    moveLeftDown: [ 'b' ],
+    moveRightUp: [ 'u' ],
+    moveRightDown: [ 'n' ],
+    creatorCreateTarget: [ 'c' ],
+    creatorDeleteTarget: [ 'd' ],
+    creatorTeleportToTarget: [ 't' ],
+    exitTargetMode: [ 'Escape' ],
+    enterTargetMode: [],
+  },
+  creator: {
+    exitSimple: [ 'Escape' ],
+    creatorRegenLevel: [ 'r' ],
+  },
+  select: {
+    exitSimple: [ 'Escape' ],
+    executeSelectAction: [ 'Enter' ],
+    invertSelectedItems: [ '/' ],
+    invertMultiSelect: [ ',' ],
+    clearNumericSelection: [ 'Backspace' ],
+    selectItem: [],
+  },
+}
+
+const commandExecution = {
+  moveLeft: () => {
+    topController.playerMotionRelative(new Pair(-1, 0))
+  },
+  moveRight: () => {
+    topController.playerMotionRelative(new Pair(1, 0))
+  },
+  moveUp: () => {
+    topController.playerMotionRelative(new Pair(0, -1))
+  },
+  moveDown: () => {
+    topController.playerMotionRelative(new Pair(0, 1))
+  },
+  moveLeftFast: () => {
+    topController.playerMotionRelative(new Pair(-10, 0))
+  },
+  moveRightFast: () => {
+    topController.playerMotionRelative(new Pair(10, 0))
+  },
+  moveUpFast: () => {
+    topController.playerMotionRelative(new Pair(0, -10))
+  },
+  moveDownFast: () => {
+    topController.playerMotionRelative(new Pair(0, 10))
+  },
+  moveLeftUp: () => {
+    topController.playerMotionRelative(new Pair(-1, -1))
+  },
+  moveRightUp: () => {
+    topController.playerMotionRelative(new Pair(1, -1))
+  },
+  moveLeftDown: () => {
+    topController.playerMotionRelative(new Pair(-1, 1))
+  },
+  moveRightDown: () => {
+    topController.playerMotionRelative(new Pair(1, 1))
+  },
+  wait: () => {
+    topController.advanceTime()
+  },
+  setMotionModeMove: () => {
+    topController.setMotionMode('move')
+  },
+  setMotionModeAttack: () => {
+    topController.setMotionMode('attack')
+  },
+  setMotionModeAttackOrMove: () => {
+    topController.setMotionMode('attackOrMove')
+  },
+  enterTargetMode: () => {
+    topController.enterTargetMode()
+  },
+  exitTargetMode: () => {
+    topController.setKeyMode('base')
+  },
+  pickUpItem: () => {
+    topController.pickUpItem()
+  },
+  showInventory: () => {
+    topController.showInventory()
+  },
+  showEquipment: () => {
+    topController.showEquipment()
+  },
+  executeAction: (key) => {
+    topController.executeAction(key)
+  },
+  exitSimple: () => {
+    topController.exitSimple()
+  },
+  selectItem: (key) => {
+    topController.selectItem(key)
+  },
+  executeSelectAction: () => {
+    topController.executeSelectAction()
+  },
+  invertSelectedItems: () => {
+    topController.invertSelectedItems()
+  },
+  invertMultiSelect: () => {
+    topController.invertMultiSelect()
+  },
+  clearNumericSelection: () => {
+    topController.clearNumericSelection()
+  },
+  enterCreatorMode: () => {
+    topController.enterCreatorMode()
+  },
+  creatorDeleteTarget: () => {
+    topController.creatorModeDeleteTarget()
+  },
+  creatorCreateTarget: () => {
+    topController.creatorModeCreateTarget()
+  },
+  creatorTeleportToTarget: () => {
+    topController.creatorModeTeleportToTarget()
+  },
+  creatorRegenLevel: () => {
+    topController.creatorModeRegenLevel()
+  },
+  creatorModeCommand: () => {
+    topController.creatorModeCommand()
+  },
+  channelCommand: () => {
+    topController.channelCommandSelectPoolType()
+  },
+  changeStatusMode: () => {
+    topController.changeStatusMode()
+  },
+}
+
+function random(possibilities) {
+  return Math.floor(Math.random() * possibilities)
+}
+
+class SeededRandomizer {
+  constructor(seed) {
+    this.generator = new Math.seedrandom(seed)
+  }
+
+  next(possibilities = 0) {
+    if(possibilities == 0) {
+      return this.generator()
+    } else {
+      return Math.floor(this.generator() * possibilities)
+    }
+  }
+
+  fork() {
+    return new SeededRandomizer(next())
+  }
+}
+
+function debug(message) {
+  console.log(message)
+}
+
+function warn(message) {
+  console.log(message)
+}
+
+function err(message) {
+  throw new Error(message)
+}
+
+class TopController {
+
+  constructor() {
+    this.frontController = new FrontController()
+    this.backController = new BackController(this.frontController.addMessage)
+    this.refresh()
+  }
+
+  enterTargetMode() {
+    this.setKeyMode('target')
+    if(!this.frontController.getTarget().pos) {
+      this.setTarget(this.getPlayerPos())
+    } else {
+      this.outputTargetMessages()
+    }
+  }
+
+  beforeEachTurn() {
+    this.clearMessages()
+    const player = this.backController.getPlayer()
+    player.poolCurrentPast = [ ...player.poolCurrent ]
+    player.poolMaxPast = [ ...player.poolMax ]
+  }
+
+  changeStatusMode() {
+    this.frontController.changeStatusMode()
+  }
+  
+  channelCommandSelectPoolType() {
+    this.frontController.channelCommandSelectPoolType()
+  }
+  
+  channelCommandSelectPool() {
+    this.frontController.channelCommandSelectPool()
+  }
+
+  channelCommandSelectChannel() {
+
+    const bc = this.backController
+    const fc = this.frontController
+    let names = []
+    let subjects = []
+
+    let pools = fc.getSelectedSubjects()
+
+    if(pools.length == 0) {
+      err("No pools selected. This shouldn't happen")
+    }
+
+    for(let p = 0; p < pools.length; p++) {
+
+      const pool = pools[p]
+
+      for(let c = 0; c < pool.channelIndexes.length; c++) {
+
+        const channelIndex = pool.channelIndexes[c]
+        if(!subjects.includes(channelIndex)) {
+
+          const channel = poolChannels[channelIndex]
+          let name = []
+
+          for(let f = 0; f < channel.from.length; f++) {
+            const from = channel.from[f]
+            for(let t = 0; t < channel.to.length; t++) {
+              const to = channel.to[t]
+              const channelString = getChannelString(
+                bc.getPlayer(), 
+                from, 
+                to,
+              )
+              name.push(channelString)
+            }
+          }
+
+          names.push(name)
+          subjects.push(channelIndex)
+
+        }
+
+      }
+
+    }
+
+    fc.resetSelect()
+
+    fc.setSelectTitle(
+      'Choose channel:',
+      'Choose channels:',
+    )
+
+    fc.setSelectNameList(names)
+    fc.setSelectSubjectList(subjects)
+    fc.setSelectAllowMultiple(true)
+    fc.setSelectMaxWidth(screens.main.window.message.smallCellSize.x / 2)
+    this.setKeyMode('select')
+
+    fc.setSelectAction(
+      () => { topController.channelCommandSelectFlow() }
+    )
+
+    fc.showSelectedItems()
+
+  }
+
+  channelCommandSelectFlow() {
+    this.frontController.channelCommandSelectFlow()
+  }
+
+  channelCommandExecuteChange() {
+    const bc = this.backController
+    const fc = this.frontController
+    const player = bc.getPlayer()
+    const selectedIndex = fc.getSelectedIndex()
+    if(selectedIndex == -1) err("No flow selected")
+    const flow = 9 - selectedIndex
+    for(let channelIndex of fc.getSelectMeta('channelIndexes')) {
+      bc.setChannelFlow(player, channelIndex, flow)
+    }
+    fc.setStatusChanged(true)
+    this.exitSimple()
+  }
+
+  creatorModeCommand() {
+    const bc = this.backController
+    const fc = this.frontController
+    if(!bc.getCreatorMode()) {
+      fc.addMessage('Invalid command.')
+    } else {
+      this.setKeyMode('creator')
+      fc.outputCreatorModeMessages()
+    }
+  }
+
+  creatorModeCreateTarget() {
+    const bc = this.backController
+    const fc = this.frontController
+    if(!bc.getCreatorMode()) {
+      fc.addMessage('Invalid command.')
+    } else {
+      const target = fc.getTarget().pos
+      this.handleCreateTarget(target, {}, template.generated, 1)
+      this.setKeyMode('select')
+    }
+  }
+
+  handleCreateTarget(target, inherited, template, count) {
+
+    const bc = this.backController
+    const fc = this.frontController
+
+    if(!target) {
+
+      let subjects = fc.getSelectSubjectList()
+      let indexes = fc.getSelectIndexes()
+      let countList = fc.getSelectCountList()
+      let found
+
+      for(let i = 0; i < subjects.length; i++) {
+        if(indexes[i]) {
+          const subject = subjects[i]
+          if(subject == null) {
+            err('Found null subject')
+          }
+          found = subject
+          count = countList[i] || 1
+          break
+        }
+      }
+
+      if(found) {
+        target = found.target
+        inherited = found.inherited
+        template = found.template
+      } else {
+        err("No subjects were selected.")
+      }
+      
+    }
+
+    if(!template.sub) {
+
+      let subject = { ...inherited, ...template }
+      delete subject.sub
+      delete subject.chanceWeight
+      delete subject.fillRatio
+      subject = _.cloneDeep(subject)
+      subject.count = count
+      bc.addSubjectToLevel(subject, target)
+      fc.setLevelChanged(true)
+      fc.addMessage('Created ' + getNameOf(count, subject))
+      this.setKeyMode('target')
+      fc.setTarget(target)
+      this.outputTargetMessages()
+
+    } else {
+
+      let subjects = []
+      let names = []
+
+      for(let [key, value] of Object.entries(template.sub)) {
+        let newTemplate = template.sub[key]
+        let newInherited = { ...inherited, ...template }
+        names.push(key)
+        subjects.push({
+          target: target,
+          inherited: newInherited,
+          template: newTemplate,
+          count: count,
+        })
+      }
+
+      fc.resetSelect()
+      fc.setSelectNameList(names)
+      fc.setSelectSubjectList(subjects)
+      fc.setSelectTitle('Choose something to create:')
+      fc.setSelectCountMax(999)
+
+      fc.setSelectAction(
+        () => { topController.handleCreateTarget() }
+      )
+
+      fc.showSelectedItems()
+
+    }
+
+  }
+
+  creatorModeDeleteTarget() {
+    const bc = this.backController
+    const fc = this.frontController
+    if(!bc.getCreatorMode()) {
+      fc.addMessage('Invalid command.')
+    } else {
+      const target = fc.getTarget().pos
+      const cell = bc.getCell(target)
+      let subject
+      if(cell.occupiedBy) {
+        fc.addMessage('Deleted ' + getNameOf(null, cell.occupiedBy))
+        subject = cell.occupiedBy
+      } else if(cell.onFloor.length > 0) {
+        fc.addMessage('Deleted ' + getNameOf(null, cell.onFloor[0]))
+        subject = cell.onFloor[0]
+      } else {
+        fc.addMessage('There\'s nothing here to delete.')
+      }
+      if(subject) {
+        bc.removeSubjectFromLevel(subject, target)
+        fc.setLevelChanged(true)
+      }
+      this.outputTargetMessages()
+    } 
+  }
+
+  creatorModeRegenLevel() {
+    const bc = this.backController
+    const fc = this.frontController
+    if(!bc.getCreatorMode()) {
+      fc.addMessage('Invalid command.')
+    } else {
+      bc.buildLevel(bc.backModel.randomizer)
+      fc.setLevelChanged(true)
+    } 
+    this.exitSimple()
+  }
+
+  creatorModeTeleportToTarget() {
+    const bc = this.backController
+    const fc = this.frontController
+    if(!bc.getCreatorMode()) {
+      fc.addMessage('Invalid command.')
+    } else {
+      const target = fc.getTarget().pos
+      const player = bc.getPlayer()
+      this.occupantMove(player, target)
+    } 
+  }
+
+  enterCreatorMode() {
+    this.backController.setCreatorMode()
+    this.frontController.setStatusChanged(true)
+  }
+
+  getFloorItemsAtPlayerPos() {
+    const bc = this.backController
+    const playerPos = bc.getPlayerPos()
+    const floorItems = bc.getFloorItemsAt(playerPos)
+    return floorItems 
+  }
+
+  selectItem(key) {
+    this.frontController.selectItem(key)
+  }
+
+  exitSimple() {
+    this.setKeyMode('base')
+    this.frontController.resetSelect()
+  }
+
+  executeAction(key) {
+    this.frontController.executeAction(key)
+    this.exitSimple()
+  }
+
+  showInventoryActions() {
+    this.frontController.showInventoryActions()
+  }
+
+  showInventoryGroup() {
+
+    const bc = this.backController
+    const fc = this.frontController
+    const index = fc.getSelectIndexes().findIndex(x => x == true)
+
+    if(index == -1) {
+      err("Couldn't find index of selected item.")
+    }
+
+    const selectedInventoryType = fc.getSelectSubjectList()[index]
+
+    if(selectedInventoryType) {
+      const inventoryGroup = bc.getInventoryGroup(
+        selectedInventoryType
+      )
+      fc.showInventoryGroup(inventoryGroup)
+    } else {
+      fc.addMessage("Invalid inventory type.")
+      this.showInventory()
+    }
+
+  }
+
+  showEquipment() {
+
+    const bc = this.backController
+    const fc = this.frontController
+
+    const equip = bc.getEquipment()
+    const hands = bc.getPlayerSpecies().hands
+
+    let names = []
+    let subjects = []
+    const tab = 8
+    for(let [type, value] of Object.entries(equip)) {
+
+      if(type == 'hand' || type == 'ring') {
+
+        for(let j = 0; j < hands; j++) {
+
+          let name = '(empty)'
+
+          if(value[j]) {
+            name = getNameOf(null, value[j]) 
+          }
+
+          const out = type + ' ' + (j+1)
+          names.push(out.padEnd(tab) + ' ' + name)
+          subjects.push(value[j])
+
+        }
+
+      } else {
+
+        let name = '(empty)'
+
+        if(value) {
+          name = getNameOf(null, value) 
+        }
+
+        names.push(type.padEnd(tab) + ' ' + name)
+        subjects.push(value)
+
+      }
+
+    }
+
+    this.setKeyMode('select')
+    fc.resetSelect()
+    fc.setSelectNameList(names)
+
+    fc.setSelectTitle(
+      'Choose an equipped item:',
+      'Choose some equipped items:',
+    )
+
+    fc.setSelectAction(
+      () => { topController.showInventoryActions() }
+    )
+
+    fc.setSelectSubjectList(subjects)
+    fc.showSelectedItems()
+
+  }
+
+  showInventory() {
+
+    const bc = this.backController
+    const fc = this.frontController
+    let noItemsFound = true
+    let names = []
+    let subjects = []
+
+    for(let key in inventoryTypes) {
+      const type = inventoryTypes[key]
+      const group = bc.getInventoryGroup(type)
+      if(group.length > 0) {
+        if(noItemsFound) {
+          noItemsFound = false
+        }
+        names.push(type + ' (' + group.length + ' items)')
+        subjects.push(type)
+      }
+    }
+
+    if(noItemsFound) {
+
+      fc.addMessage("You aren't carrying anything.")
+      this.exitSimple()
+
+    } else {
+
+      fc.resetSelect()
+      fc.setSelectNameList(names)
+      this.setKeyMode('select')
+      fc.setSelectAllowMultiple(false)
+      fc.setSelectTitle(
+        'Choose an inventory type:',
+      )
+
+      fc.setSelectAction(
+        () => { topController.showInventoryGroup() }
+      )
+
+      fc.setSelectSubjectList(subjects)
+      fc.showSelectedItems()
+
+    }
+
+  }
+
+  executeSelectAction() {
+    const fc = this.frontController
+    if(fc.getSelectedIndexes().length > 0) {
+      fc.frontModel.selectAction()
+    } else {
+      fc.showSelectedItems()
+    }
+  }
+
+  clearNumericSelection() {
+    this.frontController.clearNumericSelection()
+  }
+
+  invertMultiSelect() {
+    const fc = this.frontController
+    if(fc.getSelectAllowMultiple()) {
+      fc.invertMultiSelect()
+      fc.showSelectedItems()
+    } else {
+      fc.addMessage("Multi-select not allowed here")
+      fc.showSelectedItems()
+    }
+  }
+
+  invertSelectedItems() {
+    const fc = this.frontController
+    fc.invertSelectedItems()
+    fc.showSelectedItems()
+  }
+
+  pickUpSelectedItems() {
+
+    const bc = this.backController
+    const fc = this.frontController
+    const playerPos = bc.getPlayerPos()
+    const floorItems = _.cloneDeep(bc.getFloorItemsAt(playerPos))
+
+    let count = 0
+
+    for(let i = 0; i < floorItems.length; i++) {
+
+      if(fc.isIndexSelected(i)) {
+
+        let selectCount = fc.getSelectCountByIndex(i) || 1
+        count += selectCount
+        let item = floorItems[i]
+        item = bc.removeItemFromFloor(
+          playerPos,
+          item,
+          selectCount,
+        )
+        bc.addItemToInventory(item)
+
+      }
+
+    }
+
+    if(count > 0) {
+      fc.setStatusChanged(true)
+      fc.addMessage('Picked up ' + count + ' items.')
+    }
+
+    this.exitSimple()
+    
+  }
+
+  pickUpItem() {
+
+    const bc = this.backController
+    const fc = this.frontController
+    const playerPos = bc.getPlayerPos()
+    const floorItems = bc.getFloorItemsAt(playerPos)
+
+    if(floorItems.length == 0) {
+      fc.addMessage("There's nothing here to pick up.")
+      return
+    }
+
+    if(floorItems.length == 1) {
+      const item = bc.removeItemFromFloor(playerPos, floorItems[0])
+      bc.addItemToInventory(item)
+      fc.setStatusChanged(true)
+      fc.addMessage('Picked up ' + getNameOf('a', item) + '.')
+    } else {
+      const floorItems = this.getFloorItemsAtPlayerPos()
+
+      fc.resetSelect()
+      fc.setSelectNameList(
+        floorItems.map(
+          item => getNameOf(null, item)
+        )
+      )
+
+      this.setKeyMode('select')
+      fc.setSelectMultiple(true)
+
+      fc.setSelectTitle(
+        'Choose item to pick up:',
+        'Choose items to pick up:',
+      )
+
+      fc.setSelectAction(
+        () => { topController.pickUpSelectedItems() }
+      )
+
+      fc.setSelectCountMaxList(
+        floorItems.map(
+          item => item.count
+        )
+      )
+      
+      fc.showSelectedItems()
+    }
+
+  }
+
+  eatItem(item, count) {
+
+    const bc = this.backController
+    const fc = this.frontController
+    const player = bc.getPlayer()
+
+    if(item.type != 'food') { 
+      err('Not food: ' + getNameOf(null, item))
+    }
+
+    if(item.energy) {
+      for(let [energyType, amount] of Object.entries(item.energy)) {
+        bc.addEnergy(player, energyType, amount * count)
+      }
+      fc.setStatusChanged(true)
+    }
+
+    fc.addMessage("Ate " + getNameOf(count, item))
+
+    bc.removeItemFromInventory(item, count)
+
+  }
+
+  equipItem(item) {
+
+    const bc = this.backController
+    const fc = this.frontController
+    const group = bc.getInventoryGroup(item.type)
+    let index = null
+
+    for(let i = 0; i < group.length; i++) {
+      if(group[i] == item) {
+        index = i
+        break
+      }
+    }
+
+    const name = getNameOf(null, item)
+    if(index != null) {
+      if(bc.isEquipped(item)) {
+        fc.addMessage(
+          name + ' is already equipped.'
+        )
+      } else if(
+        item.hands 
+        && bc.getPlayerSpecies().hands < item.hands
+      ) {
+        fc.addMessage('You don\'t have enough hands to equip that')
+      } else {
+        let result = bc.equipItem(item)
+        if(result) {
+          fc.addMessage('Equipped ' + name + '.')
+        } else {
+          fc.addMessage('Failed to equip ' + name + '.')
+        }
+      }
+    }
+
+  }
+
+  unequipItem(item) {
+
+    const bc = this.backController
+    const fc = this.frontController
+    const group = bc.getInventoryGroup(item.type)
+    let index = null
+
+    for(let i = 0; i < group.length; i++) {
+      if(group[i] == item) {
+        index = i
+        break
+      }
+    }
+
+    const name = getNameOf(null, item)
+
+    if(index != null) {
+      if(!bc.isEquipped(item)) {
+        fc.addMessage(
+          name + ' is not equipped.'
+        )
+      } else {
+        let result = bc.unequipItem(type, item)
+        if(result) {
+          fc.addMessage('Unequipped ' + name + '.')
+        } else {
+          fc.addMessage('Failed to unequip ' + name + '.')
+        }
+      }
+    }
+
+  }
+
+  dropItem(item, count) {
+    const bc = this.backController
+    const fc = this.frontController
+    const group = bc.getInventoryGroup(item.type)
+    let index = null
+    for(let i = 0; i < group.length; i++) {
+      if(group[i] == item) {
+        index = i
+        break
+      }
+    }
+    if(index != null) {
+      bc.dropItem(item.type, index, count)
+      let name = getNameOf('a', item)
+      if(count) {
+        name = getNameOf(count, item)
+      }
+      fc.addMessage('Dropped ' + name + '.')
+    }
+  }
+
+  playerMotionRelative(relPos) {
+    const bc = this.backController
+    const fc = this.frontController
+
+    const target = fc.getTarget()
+
+    if(target.pos == null) {
+      const playerOldPos = bc.getPlayerPos()
+      const playerNewPos = playerOldPos.add(relPos)
+
+      if(!bc.isFieldPosValid(playerNewPos)) {
+        fc.addMessage("You can't move there.")
+        return
+      }
+
+      if(bc.isFieldPosOccupied(playerNewPos)) {
+        if(fc.motionModeAttack()) {
+          this.playerAttack(playerNewPos)
+          return
+        } else {
+          fc.addMessage("That space is already occupied.")
+          return
+        }
+      }
+
+      if(!fc.motionModeMove()) {
+        fc.addMessage("There is nothing to attack there.")
+        return
+      }
+
+      const cell = bc.getCell(playerNewPos)
+      for(let item of cell.onFloor) {
+        fc.addMessage(getNameOf('a', item, 'is') + ' here.')
+      }
+
+      this.occupantMove(bc.getPlayer(), playerNewPos)
+      this.advanceTime();
+    } else {
+      // target mode is on
+      const targetNewPos = target.pos.add(relPos)
+
+      if(!bc.isFieldPosValid(targetNewPos)) {
+        return
+      }
+
+      this.setTarget(targetNewPos)
+    }
+  }
+
+  playerAttack(target) {
+    const bc = this.backController
+    const fc = this.frontController
+
+    const targetCell = bc.getCell(target)
+    const targetActor = targetCell.occupiedBy
+    if(targetActor.health == null) {
+      fc.addMessage("You can't attack that.")
+      return
+    }
+
+    const player = bc.getPlayer()
+    const damage = this.calculateDamageFrom(player)
+    targetActor.health -= damage
+    const targetName = getNameOf('the', targetActor)
+    let message
+    if(damage > 0) {
+      message = 'You hit ' + targetName + ' for ' + damage + ' damage.'
+    } else {
+      message = 'You miss ' + targetName + '.'
+    }
+    fc.addMessage(message)
+
+    message = ''
+    if(targetActor.health <= 0) {
+      message = 'The ' + targetName + ' is dead.'; 
+      targetCell.occupiedBy = null
+      bc.removeActor(targetActor)
+      fc.setLevelChanged(true)
+    } else {
+      if(damage > 0) {
+        message = 'hp=' + targetActor.health
+      }
+    }
+    if(message) {
+      fc.addMessage(message)
+    }
+
+    this.advanceTime()
+  }
+
+  clearMessages() {
+    this.frontController.clearMessages()
+  }
+
+  getKeyMode() {
+    return this.frontController.getKeyMode()
+  }
+
+  setKeyMode(keyModeName) {
+    this.frontController.setKeyMode(keyModeName)
+    if(keyModeName != 'target') {
+      this.frontController.setTarget(null)
+    }
+  }
+
+  refresh() {
+    this.update(true)
+  }
+
+  update(forceRefresh = false) {
+    const screen = this.frontController.getCurrentScreen()
+    this.updateScreen(screen, forceRefresh)
+  }
+
+  updateScreen(screen, forceRefresh = false) {
+    for(const window of Object.values(screen.window)) {
+      this.updateWindow(screen, window, forceRefresh)
+    }
+  }
+
+  updateWindow(screen, window, forceRefresh = false) {
+
+    const fc = this.frontController
+    const bc = this.backController
+
+    let pos
+    let target = fc.getTarget()
+    if(target.pos) {
+      pos = target.pos
+    } else {
+      pos = bc.getPlayerPos()
+    }
+
+    this.checkPan(window, pos, bc.backModel.levelSize)
+
+    let changed = false
+    let cellsChanged = []
+    if(window.name == 'status') {
+      changed = fc.getStatusChanged() 
+    } else if(window.name == 'level') {
+      changed = fc.getLevelChanged() 
+      cellsChanged = fc.getLevelCellsChanged()
+    } else if(window.name == 'message') {
+      changed = fc.getMessagesChanged() 
+    }
+
+    if(changed || forceRefresh) {
+      fc.clearWindow(screen, window)
+      this.drawWindow(screen, window)
+    } else if(cellsChanged.length) {
+      fc.clearWindowCells(screen, window, cellsChanged)
+      this.drawLevelWindowCells(
+        screen, 
+        window, 
+        cellsChanged
+      )
+    }
+
+    if(window.name == 'status') {
+      fc.setStatusChanged(false) 
+    } else if(window.name == 'level') {
+      fc.setLevelChanged(false) 
+      fc.clearLevelCellsChanged()
+    } else if(window.name == 'message') {
+      fc.setMessagesChanged(false) 
+    }
+
+  }
+
+  drawWindow(screen, window) {
+
+    const fc = this.frontController
+    const bc = this.backController
+    const mainWindows = screens.main.window
+
+    if(window == mainWindows.level) {
+
+      for(let c = 0; c < window.size.x; c++) {
+        for(let r = 0; r < window.size.y; r++) {
+          this.drawLevelWindowCell(
+            screen, 
+            window, 
+            new Pair(c, r),
+          )
+        }
+      }
+
+      const targetPos = fc.getTarget().pos
+      if(targetPos) {
+        fc.drawTarget(screen, window, targetPos)
+      }
+
+    } else if(window == mainWindows.message) {
+
+      fc.drawMessagesWindow(screen, window)
+
+    } else if(window == mainWindows.status) {
+
+      const statusList = this.getStatusList()
+      fc.drawStatusWindow(screen, window, statusList)
+
+    } else {
+
+      const windowName = fc.windowToWindowName(screen, window)
+      warn("Don't know how to draw this window yet: " + windowName)
+
+    }
+
+  }
+
+  drawLevelWindowCells(screen, window, cells) {
+    for(const windowPos of cells) {
+      this.drawLevelWindowCell(screen, window, windowPos)
+    }
+  }
+
+  drawLevelWindowCell(screen, window, windowPos) {
+
+    const bc = this.backController
+    const fc = this.frontController
+    const level = bc.getLevel()
+
+    if(fc.windowPosIsValid(window, windowPos, level)) {
+
+      const levelPos = fc.windowCellPosToLevel(window, windowPos)
+      const cell = level[levelPos.x][levelPos.y]
+      let characterToDraw
+      let offset
+
+      if(cell.occupiedBy) {
+        characterToDraw = cell.occupiedBy.showAs;
+        offset = cell.occupiedBy.offset;
+      } else if(cell.onFloor.length > 0) {
+        characterToDraw = cell.onFloor[0].showAs;
+        offset = cell.onFloor[0].offset;
+      } else {
+        characterToDraw = cell.floorType.showAs;
+        offset = cell.floorType.offset;
+      }
+
+      fc.drawText({
+        screen: screen,
+        window: window,
+        windowPos: windowPos, 
+        textToDraw: characterToDraw, 
+        offset: offset,
+        center: true,
+        cellSizePixels: window.cellPixelDimensions,
+        maxColumns: 1,
+      })
+
+    }
+
+  }
+
+  getStatusList() {
+
+    const bc = this.backController
+    const fc = this.frontController
+    const list = []
+    const player = bc.getPlayer()
+
+    if(bc.getCreatorMode()) {
+      list.push(colorize.rainbow('***** CREATOR MODE *****'))
+    }
+
+    list.push('Action: ' + fc.getActionModeMessage())
+    list.push(
+      'Time:' + bc.getGameClock()
+    + ' $:' + player.gold
+    + ' xp:' + player.xp
+    )
+
+    if(fc.getStatusMode() == 'compact') {
+      this.getStatusListPoolsCompact(list, player)
+    } else {
+      this.getStatusListPoolsExpanded(list, player)
+    }
+    this.getStatusListChannels(list, player)
+
+    return list
+
+  }
+
+  getChangeString(prefix, change) {
+    let changeString = ''
+    if(change >= 1) {
+      changeString = prefix + '+' + Math.floor(change)
+    } else if(change <= -1) {
+      changeString = prefix + '-' + Math.floor(-change)
+    } else if(change >= 0.001) {
+      changeString = prefix + '+' + Math.floor(change * 1000) / 1000
+    } else if(change <= -0.001) {
+      changeString = prefix + '-' + Math.floor(-change * 1000) / 1000
+    }
+    return changeString
+  }
+
+  addStatusPoolLineExpanded(list, player, poolList) {
+
+    const bc = this.backController
+    let line = ''
+
+    for(const poolName of poolList) {
+
+      const index = poolToIndex(poolName)
+      const pool = pools[poolName]
+      const current = '' + Math.floor(
+        bc.getPoolCurrent(player, index)
+      )
+      const max = '' + Math.floor(bc.getPoolMax(player, index))
+      const currentChange = bc.getPoolCurrentChange(player, index)
+      const maxChange = bc.getPoolMaxChange(player, index)
+      let currentChangeString = this.getChangeString(
+        ' ',currentChange
+      )
+      let maxChangeString = this.getChangeString(' max',maxChange)
+      const digits = bc.getPoolDigits(player)
+
+      line += pool.shortName[1] + ': ' 
+        + current.padStart(digits)
+        + '/' 
+        + max.padStart(digits) + maxChangeString
+        + currentChangeString 
+        + maxChangeString
+
+      line = [{ 
+        style: pool.color.style, 
+        bgStyle: pool.color.bgStyle, 
+        text: line 
+      }]
+
+    }
+
+    list.push(line)
+
+  }
+
+  getStatusListPoolsExpanded(list, player) {
+
+    list.push(' Interna')
+    this.addStatusPoolLineExpanded(list, player, ['criticalHealth'])
+    this.addStatusPoolLineExpanded(list, player, ['majorHealth'])
+    this.addStatusPoolLineExpanded(list, player, ['minorHealth' ])
+    this.addStatusPoolLineExpanded(list, player, ['stamina'])
+    this.addStatusPoolLineExpanded(list, player, ['mana'])
+    this.addStatusPoolLineExpanded(list, player, ['willpower'])
+
+    list.push(' Lumina')
+    this.addStatusPoolLineExpanded(list, player, ['sun'])
+    this.addStatusPoolLineExpanded(list, player, ['moon'])
+    this.addStatusPoolLineExpanded(list, player, ['star'])
+    this.addStatusPoolLineExpanded(list, player, ['gray'])
+    this.addStatusPoolLineExpanded(list, player, ['black'])
+
+    list.push(' Etherea')
+    this.addStatusPoolLineExpanded(list, player, ['diamond'])
+    this.addStatusPoolLineExpanded(list, player, ['gold'])
+    this.addStatusPoolLineExpanded(list, player, ['silver'])
+    this.addStatusPoolLineExpanded(list, player, ['copper'])
+
+    list.push(' Spectra')
+    this.addStatusPoolLineExpanded(list, player, ['red'])
+    this.addStatusPoolLineExpanded(list, player, ['orange'])
+    this.addStatusPoolLineExpanded(list, player, ['yellow'])
+    this.addStatusPoolLineExpanded(list, player, ['green'])
+    this.addStatusPoolLineExpanded(list, player, ['cyan'])
+    this.addStatusPoolLineExpanded(list, player, ['blue'])
+    this.addStatusPoolLineExpanded(list, player, ['indigo'])
+    this.addStatusPoolLineExpanded(list, player, ['violet'])
+
+    list.push(' Exotica')
+    this.addStatusPoolLineExpanded(list, player, ['rainbow'])
+    this.addStatusPoolLineExpanded(list, player, ['brown'])
+    this.addStatusPoolLineExpanded(list, player, ['purple'])
+
+  }
+
+  addStatusPoolLineCompact(list, player, poolList) {
+    const bc = this.backController
+    let line = ''
+    for(const poolName of poolList) {
+      const index = poolToIndex(poolName)
+      const pool = pools[poolName]
+      const percent = bc.getPoolPercent(player, index)
+      line += ' ' + pool.shortName[1] + ':' + percent
+    }
+    list.push(line)
+  }
+
+  getStatusListPoolsCompact(list, player) {
+
+    list.push(' Interna')
+    this.addStatusPoolLineCompact(list, player, [
+      'criticalHealth', 
+      'majorHealth', 
+      'minorHealth',
+    ])
+    this.addStatusPoolLineCompact(list, player, [
+      'stamina', 
+      'mana', 
+      'willpower',
+    ])
+
+    list.push(' Lumina')
+    this.addStatusPoolLineCompact(list, player, [
+      'black', 
+      'gray', 
+      'star',
+      'moon',
+      'sun',
+    ])
+
+    list.push(' Etherea')
+    this.addStatusPoolLineCompact(list, player, [
+      'copper',
+      'silver',
+      'gold',
+      'diamond',
+    ])
+
+    list.push(' Spectra')
+    this.addStatusPoolLineCompact(list, player, [
+      'red',
+      'orange',
+      'yellow',
+      'green',
+    ])
+    this.addStatusPoolLineCompact(list, player, [
+      'cyan',
+      'blue',
+      'indigo',
+      'violet',
+    ])
+
+    list.push(' Exotica')
+    this.addStatusPoolLineCompact(list, player, [
+      'rainbow',
+      'brown',
+      'purple',
+    ])
+
+  }
+
+  getStatusListChannels(list, player) {
+
+    const bc = this.backController
+    const maxColumns = 3
+    list.push('Channels')
+    let channelsToOutput = []
+
+    for(let i = 0; i < poolChannels.length; i++) {
+      const flow = player.channelCurrent[i]
+      if(flow) {
+        const channel = poolChannels[i]
+        for(let f = 0; f < channel.from.length; f++) {
+          const from = channel.from[f]
+          for(let t = 0; t < channel.to.length; t++) {
+
+            const to = channel.to[t]
+
+            let innerList = channelsToOutput[flow]
+            if(!innerList) {
+              innerList = []
+              channelsToOutput[flow] = innerList
+            }
+
+            const channelString = getChannelString(
+              player, 
+              from, 
+              to,
+            )
+
+            innerList.push(channelString)
+
+          }
+        }
+      }
+    }
+
+    for(let i = 9; i > 0; i--) {
+      const c = channelsToOutput[i]
+      if(c) {
+        let line = [{ text: i + ':' }]
+        let col = 0
+        const channelList = channelsToOutput[i]
+        for(let ci = 0; ci < channelList.length; ci++) {
+          line = [ ...line, { text: ' ' }, ...channelList[ci] ]
+          col++
+          if(col == maxColumns) {
+            list.push(line)
+            line = [{ text: '  ' }]
+            col = 0
+          }
+        }
+        if(line.length > 2) {
+          list.push(line)
+        }
+      }
+    }
+
+  }
+
+  outputCreatorModeMessages() {
+    this.addMessage('r - regenerate level')
+  }
+
+  outputTargetMessages() {
+    const bc = this.backController
+    const fc = this.frontController
+    const cell = bc.getCell(fc.getTarget().pos)
+    if(cell.occupiedBy) {
+      fc.addMessage(describeItem(cell.occupiedBy))
+    }
+    for(let item of cell.onFloor) {
+      fc.addMessage(describeItem(item))
+    }
+    if(cell.floorType) {
+      fc.addMessage(describeItem(cell.floorType))
+    }
+    if(bc.getCreatorMode()) {
+      fc.addMessage('')
+      fc.addMessage('c - create')
+      fc.addMessage('d - delete target')
+      fc.addMessage('t - teleport to target')
+    }
+  }
+
+  checkPan(window, pos, size) {
+    if(window == screens.main.window.level) {
+      this.adjustLevelPan(window, pos, size)
+    }
+  }
+
+  adjustLevelPan(levelWindow, pos, levelSize) {
+    const fc = this.frontController
+
+    if(pos.x < levelWindow.panCellOffset.x + levelWindow.panScrollMargin 
+      && levelWindow.panCellOffset.x > 0
+      ) {
+      levelWindow.panCellOffset.x = Math.max(0, pos.x - levelWindow.panScrollMargin)
+      fc.setLevelChanged(true)
+    } 
+
+    if(pos.y < levelWindow.panCellOffset.y + levelWindow.panScrollMargin 
+      && levelWindow.panCellOffset.y > 0
+      ) {
+      levelWindow.panCellOffset.y = Math.max(0, pos.y - levelWindow.panScrollMargin)
+      fc.setLevelChanged(true)
+    } 
+
+    if(pos.x > levelWindow.panCellOffset.x + levelWindow.size.x - levelWindow.panScrollMargin 
+      && levelWindow.panCellOffset.x + levelWindow.size.x < levelSize.x
+      ) {
+      levelWindow.panCellOffset.x = Math.min(levelSize.x - levelWindow.size.x, pos.x + levelWindow.panScrollMargin - levelWindow.size.x)
+      fc.setLevelChanged(true)
+    } 
+
+    if(pos.y > levelWindow.panCellOffset.y + levelWindow.size.y - levelWindow.panScrollMargin 
+      && levelWindow.panCellOffset.y + levelWindow.size.y < levelSize.y
+      ) {
+      levelWindow.panCellOffset.y = Math.min(levelSize.y - levelWindow.size.y, pos.y + levelWindow.panScrollMargin - levelWindow.size.y)
+      fc.setLevelChanged(true)
+    }
+  }
+
+  advanceTime() {
+    const bc = this.backController
+    const fc = this.frontController
+    const player = bc.getPlayer()
+    bc.getActors().forEach(actor => {
+      this[actor.act](actor)
+    })
+    bc.applyEnergyDelta(player)
+    bc.advanceEnergyFlow(player)
+    fc.setStatusChanged(true)
+  }
+  
+  simplePursuit(actor) {
+    const bc = this.backController
+    const adjacent = bc.adjacentCells(actor.pos)
+    const player = bc.getPlayer()
+    for(let i = 0; i < adjacent.length; i++) {
+      let pos = adjacent[i]
+      let cell = bc.getCell(pos)
+      if(cell.occupiedBy == player) {
+        this.executeAttack(actor, player)
+        return
+      }
+    }
+
+    if(random(3) == 0) {
+      let pos = adjacent[random(adjacent.length)]
+      let cell = bc.getCell(pos)
+      if(cell.occupiedBy == null) {
+        this.executeMove(actor, pos)
+      }
+    }
+  }
+
+  calculateDamageFrom(attacker) {
+    let minDamage = 0
+    let maxDamage = 0
+    if(attacker.attack != null) {
+      minDamage = attacker.attack.min
+      maxDamage = attacker.attack.max
+    }
+
+    return Math.floor(Math.random() * (1 + maxDamage - minDamage)) + minDamage
+  }
+
+  executeMove(actor, pos) {
+    this.occupantMove(actor, pos)
+  }
+
+  adjustHealth(target, change) {
+    target.health += change
+    const player = this.backController.getPlayer()
+
+    if(target.health <= 0) {
+      if(target == player) {
+        err("Not implemented yet")
+        // fc.addMessage("You died. Press 'R' to restart.")
+        // setKeyListener(rKeyHandler, restart)
+      }
+    }
+
+    if(change != 0 && target == player) {
+      this.frontController.setStatusChanged(true)
+    }
+  }
+
+  executeAttack(source, target) {
+    let damage = this.calculateDamageFrom(source)
+
+    let message;
+    if(damage > 0) {
+      message = getNameOf('the', source) + " hit you for " + damage + " damage."
+      this.frontController.addMessage(message)
+      this.adjustHealth(target, -damage)
+    } else {
+      message = getNameOf('the', source) + " missed you."
+      this.frontController.addMessage(message)
+    }
+  }
+
+  occupantMove(occupant, toPos) {
+    const bc = this.backController
+    const fc = this.frontController
+
+    const fromPos = occupant.pos
+    if(fromPos != null) {
+      bc.getCell(fromPos).occupiedBy = null
+      fc.addLevelCellsChanged(fc.levelPosToWindowPos(fromPos))
+    }
+    if(bc.getCell(toPos).occupiedBy != null) {
+      err('Cell at ' + toPos.x + ', ' + toPos.y + ' is already occupied')
+    }
+    bc.getCell(toPos).occupiedBy = occupant
+    fc.addLevelCellsChanged(fc.levelPosToWindowPos(toPos))
+
+    occupant.pos = toPos
+  }
+
+  setMotionMode(mode) {
+    this.frontController.setMotionMode(mode)
+  }
+
+  setTarget(pos) {
+    const fc = this.frontController
+    const bc = this.backController
+    fc.setTarget(pos)
+    if(pos) {
+      this.outputTargetMessages()
+    }
+  }
+
+  getPlayerPos() {
+    return this.backController.getPlayerPos()
+  }
+
+}
+
+class BackController {
+
+  constructor() {
+    this.backModel = _.cloneDeep(template.backModel)
+    const randomizer = new SeededRandomizer(this.backModel.seed)
+    this.buildLevel(randomizer)
+    this.initializePlayer()
+  }
+
+  getPoolDigits(actor) {
+    return actor.poolDigits
+  }
+
+  setChannelFlow(actor, channelIndex, flow) {
+    actor.channelCurrent[channelIndex] = flow
+  }
+
+  advanceEnergyFlow(actor) {
+    for(let i = 0; i < poolChannels.length; i++) {
+      const currentFlowMagnitude = actor.channelCurrent[i]
+      if(currentFlowMagnitude) {
+        const max = actor.channelMax[i]
+        const currentMaxFlow = 2**(currentFlowMagnitude-9) * max
+        const channel = poolChannels[i]
+        this.advanceEnergyFlowChannel(actor, channel, currentMaxFlow)
+      }
+    }
+  }
+
+  advanceEnergyFlowChannel(actor, channel, currentMaxFlow) {
+    for(let f = 0; f < channel.from.length; f++) {
+      const from = channel.from[f]
+      for(let t = 0; t < channel.to.length; t++) {
+        const to = channel.to[t]
+        this.advanceEnergyFlowPools(actor, from, to, currentMaxFlow)
+      }
+    }
+  }
+
+  advanceEnergyFlowPools(actor, from, to, currentMaxFlow) {
+
+    const poolIndexFrom = poolToIndex(from.name)
+    const poolIndexTo = poolToIndex(to.name)
+
+    if(poolIndexFrom == -1 || poolIndexTo == -1) {
+      err("Could not find pool")
+    }
+
+    const fCur = actor.poolCurrent[poolIndexFrom]
+    const tCur = actor.poolCurrent[poolIndexTo]
+    const fMax = actor.poolMax[poolIndexFrom]
+    const tMax = actor.poolMax[poolIndexTo]
+
+    const tierMultiplier = 10 ** (from.tier - to.tier)
+    const fCur2 = fCur * tierMultiplier
+    const fMax2 = fMax * tierMultiplier
+
+    // this will be expanded later
+    const upBias = 0
+    const downBias = tierMultiplier > 1 ? 1 : 0
+
+    const n = 
+      fCur2 * tMax * (1 + downBias)
+    - tCur * fMax2 * (1 + upBias)
+
+    const d = 
+      tMax * (1 + downBias)
+    + fMax2 * (1 + upBias)
+
+    const equalizer = n / d
+    const sign = Math.sign(equalizer)
+
+    let fRoom
+    let tRoom
+    if(sign > 0) {
+      // flowing down
+      fRoom = fCur2
+      tRoom = tMax * poolOverloadFactorMax - tCur
+    } else {
+      // flowing up
+      fRoom = fMax2 * poolOverloadFactorMax - fCur2
+      tRoom = tCur
+    }
+
+    const delta = 
+      Math.min(
+        Math.abs(equalizer), 
+        currentMaxFlow,
+        fRoom,
+        tRoom,
+      ) 
+    * sign
+
+    actor.poolCurrent[poolIndexFrom] -= delta / tierMultiplier
+    actor.poolCurrent[poolIndexTo]   += delta
+
+  }
+
+  applyEnergyDelta(actor) {
+    const deltas = actor.species.energyDelta
+    if(deltas) {
+      for(let [energyType, amount] of Object.entries(deltas)) {
+        this.addEnergy(actor, energyType, amount)
+      }
+    }
+  }
+
+  addEnergy(actor, energyType, amount) {
+
+    let poolIndex = -1
+    let poolsToTry = []
+
+    if(energyType == 'health') {
+      poolsToTry = ['minorHealth', 'majorHealth', 'criticalHealth']
+    } else {
+      poolsToTry = [energyType]
+    }
+
+    let remaining = amount
+
+    while(remaining != 0 && poolsToTry.length) {
+
+      energyType = poolsToTry.shift()
+      poolIndex = poolToIndex(energyType)
+      if(poolIndex == -1) {
+        err("Couldn't identify energy type: " + energyType)
+      }
+
+      let oldValue = actor.poolCurrent[poolIndex]
+      let newValue = oldValue + amount
+      let maxValue = actor.poolMax[poolIndex] * poolOverloadFactorMax
+
+      if(newValue < 0) {
+        remaining = newValue
+        newValue = 0
+      } else if(newValue > maxValue) {
+        remaining = newValue - maxValue
+        newValue = maxValue
+      } else {
+        remaining = 0
+      }
+
+      actor.poolCurrent[poolIndex] = newValue
+
+    }
+
+    return remaining
+  }
+
+  // returns the pool percentage as a padded string
+  getPoolPercent(actor, poolIndex) {
+    return ('' + Math.floor(
+      actor.poolCurrent[poolIndex] * 100
+      /
+      actor.poolMax[poolIndex]
+      )
+    ).padStart(3, '0')
+  }
+
+  getPoolCurrent(actor, poolIndex) {
+    return actor.poolCurrent[poolIndex]
+  }
+
+  getPoolCurrentChange(actor, poolIndex) {
+    return actor.poolCurrent[poolIndex] 
+      - actor.poolCurrentPast[poolIndex]
+  }
+
+  getPoolMaxChange(actor, poolIndex) {
+    return actor.poolMax[poolIndex] 
+      - actor.poolMaxPast[poolIndex]
+  }
+
+  getPoolMax(actor, poolIndex) {
+    return actor.poolMax[poolIndex]
+  }
+
+  initializePlayer() {
+
+    const player = this.getPlayer()
+
+    player.species = { ...species.default, ...species.human }
+    let i = 0
+
+    for(i = 0; i < poolChannels.length; i++) {
+
+      player.channelCurrent[i] = 0
+      poolChannels[i].index = i
+
+      if(poolChannels[i].to[0].type == poolTypes.interna) {
+        player.channelCurrent[i] = 9
+      }
+
+      let maxChannelSize = player.species.maxChannelSizes[i]
+
+      if(!maxChannelSize) {
+        maxChannelSize = player.species.maxChannelSizeDefault
+      }
+
+      player.channelMax[i] = maxChannelSize
+
+    }
+
+    i = 0
+    for(let [poolName, pool] of Object.entries(pools)) {
+
+      let maxPoolSize = player.species.maxPoolSizes[poolName]
+      pool.name = poolName
+      pool.index = i
+      pool.channelIndexes = []
+
+      for(let c = 0; c < poolChannels.length; c++) {
+        let channel = poolChannels[c]
+        if(
+           channel.from.some(x => x == pool)
+          || channel.to.some(x => x == pool)
+        ) {
+          pool.channelIndexes.push(channel.index)
+        }
+      }
+
+      if(!maxPoolSize) {
+        maxPoolSize = player.species.maxPoolSizes.default
+      }
+
+      player.poolMax[i] = maxPoolSize
+
+      if(pool.type == poolTypes.interna) {
+        player.poolCurrent[i] = maxPoolSize
+      } else if(pool.type == poolTypes.spectra) {
+        player.poolCurrent[i] = maxPoolSize / 2
+      } else {
+        player.poolCurrent[i] = 0
+      }
+
+      let poolsInPoolType = pool.type.pools
+      if(!poolsInPoolType) {
+        poolsInPoolType = []
+        pool.type.pools = poolsInPoolType
+      }
+
+      poolsInPoolType.push(pool)
+
+      i++
+
+    }
+
+  }
+
+  getGameClock() {
+    return this.backModel.gameClock
+  }
+
+  getCreatorMode() {
+    return this.backModel.creatorMode
+  }
+
+  setCreatorMode() {
+    this.backModel.creatorMode = true
+  }
+
+  setFloorItemsAt(pos, floorItems) {
+    const cell = this.getCell(pos)
+    cell.onFloor = floorItems
+  }
+
+  getFloorItemsAt(pos) {
+    const cell = this.getCell(pos)
+    const floorItems = cell.onFloor
+    return floorItems
+  }
+
+  addItemToFloor(pos, item) {
+    const cell = this.getCell(pos)
+    let found = false
+    for(let floorItem of cell.onFloor) {
+      if(itemsEqual(floorItem, item)) {
+        floorItem.count += item.count
+        found = true
+        break
+      }
+    }
+    if(!found) {
+      cell.onFloor.push(item)
+    }
+  }
+
+  removeItemFromFloor(pos, itemToMatch, count) {
+
+    const cell = this.getCell(pos)
+    let index = cell.onFloor.findIndex(
+      item => itemsEqual(item, itemToMatch)
+    )
+    let itemOnFloor = cell.onFloor[index]
+    let itemToReturn = itemOnFloor
+
+    if(count == null) count = itemOnFloor.count
+    if(count > itemOnFloor.count) count = itemOnFloor.count
+
+    if(itemOnFloor.count == count) {
+      cell.onFloor.splice(index, 1)
+    } else {
+      itemToReturn = { ...itemOnFloor, count: count }
+      itemOnFloor.count -= count
+    }
+
+    return itemToReturn
+
+  }
+
+  handsUsed() {
+    const hand = this.getPlayer().equip.hand
+    let total = 0
+    for(let i = 0; i < hand.length; i++) {
+      total += hand[i].hands
+    }
+    return total
+  }
+
+  unequipItem(item) {
+
+    const player = this.getPlayer()
+    const slot = item.equipSlot
+    let result = false
+
+    switch(slot) {
+      case 'hand':
+      case 'ring':
+        let list = player.equip[slot]
+        let found = list.indexOf(item)
+        if(found > -1) {
+          list.splice(found, 1)
+          result = true
+        }
+        break
+      default:
+        player.equip[slot] = null
+        result = true
+        break
+    }
+   
+    return result
+
+  }
+
+  unequipUntilHandsFree(handsNeeded) {
+
+    let result = true
+
+    const player = this.getPlayer()
+    const hand = player.equip.hand
+
+    let handsAvailable = 
+      player.species.hands 
+      - this.handsUsed()
+
+    while(handsAvailable < handsNeeded) {
+
+      if(hand.length < 1) {
+        result = false
+        break
+      }
+
+      if(!unequipItem(hand[hand.length-1])) {
+        result = false
+        break
+      }
+
+      handsAvailable = 
+        player.species.hands 
+        - this.handsUsed()
+
+    }
+
+    return result
+
+  }
+
+  isEquipped(item) {
+    const player = this.getPlayer()
+    const slot = item.equipSlot
+    let result = false
+    if(slot == 'hand' || slot == 'ring') {
+      let list = player.equip[slot]
+      let found = list.indexOf(item)
+      result = found > -1
+    } else {
+      result = player.equip[slot] == item
+    }
+    return result
+  }
+
+  equipItem(item) {
+
+    const player = this.getPlayer()
+    const slot = item.equipSlot
+
+    if(!slot) {
+      err("Missing .equipSlot, can't equip: " + getNameOf(null, item))
+    }
+
+    // make sure it's not already there
+    const alreadyThere = this.unequipItem(item)
+
+    let result = false
+
+    switch(slot) {
+      case 'hand':
+        if(!this.unequipUntilHandsFree(item.hands)) {
+          break
+        }
+        player.equip[slot].unshift(item)
+        result = true
+        break
+      case 'ring':
+        if(player.equip[slot].length - player.species.hands < 1) {
+          player.equip[slot].pop()
+        }
+        player.equip[slot].unshift(item)
+        result = true
+        break
+      default: 
+        player.equip[slot] = item
+        result = true
+        break
+    }
+
+    // don't charge time cost if the item was already equipped
+
+    return result
+
+  }
+
+  dropItem(type, index, count) {
+    const playerPos = this.getPlayerPos()
+    const cell = this.getCell(playerPos)
+    const item = this.removeItemFromInventoryByIndex(type, index, count)
+    this.unequipItem(item)
+    this.addItemToFloor(playerPos, item)
+  }
+
+  getEquipment() {
+    return this.backModel.player.equip
+  }
+
+  getInventoryGroup(type) {
+    return this.backModel.player.inventory[type]
+  }
+
+  addItemToInventory(item) {
+    const type = getItemInventoryGroup(item)
+    const group = this.getInventoryGroup(type)
+    if(item.type == 'gold') {
+      this.getPlayer().gold += item.count
+    } else {
+      let found = false
+      for(let invItem of group) {
+        if(itemsEqual(invItem, item)) {
+          invItem.count += item.count
+          found = true
+          break
+        }
+      }
+      if(!found) {
+        group.push(item)
+      }
+    }
+  }
+
+  removeItemFromInventory(item, count) {
+    const type = item.type
+    const group = this.getInventoryGroup(type)
+    let found = false
+    let index
+    for(index = 0; index < group.length; index++) {
+      if(group[index] == item) {
+        found = true
+        break
+      } 
+    }
+    if(!found) {
+      err("Could not find item in inventory")
+    }
+    return this.removeItemFromInventoryByIndex(type, index, count)
+  }
+
+  removeItemFromInventoryByIndex(type, index, count) {
+
+    const player = this.getPlayer()
+    let item = player.inventory[type][index]
+    const inventoryCount = item.count
+    if(!count) {
+      count = inventoryCount
+    }
+
+    if(count < 1) count = 1
+    if(count > inventoryCount) count = inventoryCount
+
+    if(count == inventoryCount) {
+      player.inventory[type].splice(index, 1)
+    } else {
+      item.count -= count
+      item = { ...item, count: count }
+    }
+
+    return item
+
+  }
+
+  getCell(pos) {
+    return this.backModel.level[pos.x][pos.y]
+  }
+
+  adjacentCells(subjectPos) {
+    let result = []
+    const bm = this.backModel
+    return subjectPos.adjacent(bm.levelSize)
+  }
+
+  buildLevel(randomizer) {
+
+    const bm = this.backModel
+    bm.randomizer = randomizer
+
+    bm.level = generateLevelSimpleCaves(
+      [], 
+      bm.levelSize.subtract(new Pair(2, 2)), 
+      randomizer, 
+      bm.levelCaveGenerator,
+    )
+    this.placeStuffInLevel(randomizer) 
+
+    const target = findEmptyCellCentrally(bm.level, randomizer)
+    if(target == null) {
+      err("Could not find an empty spot in the level to place the player.")
+    }
+
+    bm.level[target.x][target.y].occupiedBy = bm.player
+    bm.player.pos = target
+
+    const bacon = this.generateItem(1, ['food','bacon'])
+    const ham = this.generateItem(1, ['food','ham'])
+    const fish = this.generateItem(1, ['food','fish'])
+
+    bm.level[target.x+1][target.y].occupiedBy = null
+    bm.level[target.x+1][target.y].onFloor = [bacon, ham, fish]
+
+    const rock = this.generateItem(10, ['weapon','throwable','rock'])
+
+    bm.level[target.x][target.y-1].occupiedBy = null
+    bm.level[target.x][target.y-1].onFloor = [rock]
+
+    const gold = this.generateItem(20, ['gold','gold1'])
+    
+    bm.level[target.x][target.y+1].occupiedBy = null
+    bm.level[target.x][target.y+1].onFloor = [gold]
+  }
+
+  generateItem(count, path, currentItem = template.generated) {
+
+    const type = path.splice(0, 1)
+    let newItem = currentItem.sub[type]
+    if(!newItem) {
+      err('Could not find item to generate: ' + type + ' from ' + currentItem.name)
+    }
+    newItem = { ...currentItem, ...newItem, name: type }
+
+    if(path.length) {
+      newItem = this.generateItem(count, path, newItem)
+    }
+
+    if(newItem.sub) {
+      newItem.sub = null
+    }
+
+    if(count) {
+      newItem.count = count
+    }
+
+    return newItem
+
+  }
+
+  addActor(actor) {
+    const bm = this.backModel
+    bm.actor.push(actor)
+  }
+
+  removeActor(actor) {
+    const bm = this.backModel
+    bm.actor = bm.actor.filter(a => a != actor)
+  }
+
+  getActors() {
+    return this.backModel.actor
+  }
+
+  countEmptyCells() {
+    const bm = this.backModel
+    const level = bm.level
+    let emptyCellCount = 0
+    for(let x = 0; x < level.length; x++) {
+      for(let y = 0; y < level[0].length; y++) {
+        let cell = level[x][y]
+        if(cell.occupiedBy == null) {
+          emptyCellCount++
+        }
+      }
+    }
+
+    debug("Found " + emptyCellCount + "/" + (level.length * level[0].length) + " empty cells")
+    return emptyCellCount
+  }
+  
+  pickSomethingToGenerate(inheritedProperties, group, randomizer) {
+    let totalWeight = 0
+    for(const [key, subject] of Object.entries(group)) {
+      let weight = subject.chanceWeight
+      if(weight == null) {
+        weight = inheritedProperties.chanceWeight
+      }
+      if(weight == null) {
+        err("Missing chanceWeight for " + getNameOf(null, subject))
+      }
+      totalWeight += weight
+
+      subject.name = key
+    }
+
+    let selected = null
+    let remainingWeight = randomizer.next(totalWeight)
+    for(const subject of Object.values(group)) {
+      let weight = subject.chanceWeight
+      if(weight == null) {
+        weight = inheritedProperties.chanceWeight
+      }
+      remainingWeight -= weight
+      if(remainingWeight < 0) {
+        selected = subject
+        break
+      }
+    }
+
+    if(selected == null) {
+      err("Failed to select subject")
+    }
+
+    let merged
+    if(selected.sub) {
+      inheritedProperties = { ...inheritedProperties, ...selected }
+      merged = this.pickSomethingToGenerate(
+        inheritedProperties, 
+        selected.sub, 
+        randomizer,
+      )
+    } else {
+      merged = { ...inheritedProperties, ...selected }
+    }
+
+    delete merged.sub
+    delete merged.chanceWeight
+    delete merged.fillRatio
+
+    return merged
+  }
+
+  placeStuffInLevel(randomizer) {
+    const bm = this.backModel
+    const level = bm.level
+    const stuffCount = Math.floor(this.countEmptyCells() * template.generated.fillRatio)
+    debug("Placing " + stuffCount + " things in this level.")
+
+    for(let n = 0; n < stuffCount; n++) {
+      let subject = this.pickSomethingToGenerate({}, template.generated.sub, randomizer)
+      subject = _.cloneDeep(subject)
+      let pos = findEmptyCellCentrally(level, randomizer)
+      this.addSubjectToLevel(subject, pos)
+      debug("Placed " + getNameOf(null, subject))
+    }
+  }
+
+  addSubjectToLevel(subject, pos) {
+    const level = this.backModel.level
+    const cell = level[pos.x][pos.y]
+    if(subject.act) {
+      this.addActor(subject, pos)
+    }
+    if(subject.occupant) {
+      cell.occupiedBy = subject
+    } else {
+      let found = false
+      for(let item of cell.onFloor) {
+        if(itemsEqual(subject, item)) {
+          item.count += subject.count
+          found = true
+          break
+        }
+      }
+      if(!found) {
+        cell.onFloor.push(subject)
+      }
+    }
+    subject.pos = pos
+  }
+
+  removeSubjectFromLevel(subject, pos) {
+    const level = this.backModel.level
+    if(subject.act) {
+      this.removeActor(subject)
+    }
+    if(subject.occupant) {
+      level[pos.x][pos.y].occupiedBy = null
+    } else {
+      level[pos.x][pos.y].onFloor = 
+        level[pos.x][pos.y].onFloor
+        .filter(item => item != subject)
+    }
+    subject.pos = null
+  }
+
+  getLevel() {
+    return this.backModel.level
+  }
+
+  getPlayer() {
+    return this.backModel.player
+  }
+
+  getPlayerPos() {
+    return this.backModel.player.pos
+  }
+
+  getPlayerSpecies() {
+    return this.backModel.player.species
+  }
+
+  isFieldPosValid(cellPos) {
+    return cellPos.within(Pair.empty(), this.backModel.levelSize)
+  }
+
+  isFieldPosOccupied(cellPos) {
+    return this.backModel.level[cellPos.x][cellPos.y].occupiedBy != null
+  }
+
+}
+
+class FrontController {
+
+  constructor() {
+    let fm = _.cloneDeep(template.frontModel)
+    this.frontModel = fm
+
+    for(const [screenName, screen] of Object.entries(screens)) {
+      for(const [windowName, window] of Object.entries(screen.window)) {
+        window.name = windowName
+        let size = window.size.multiply(screen.cellPixelDimensions)
+        size = size.divide(window.cellPixelDimensions).floor()
+        window.smallCellSize = size
+      }
+      screen.name = screenName
+    }
+
+    this.inController = new InController()
+    this.outController = new OutController()
+  }
+
+  getStatusMode() {
+    return this.frontModel.statusMode
+  }
+
+  changeStatusMode() {
+    const fm = this.frontModel
+    if(fm.statusMode == 'compact') {
+      fm.statusMode = 'expanded'
+    } else {
+      fm.statusMode = 'compact'
+    }
+    this.setStatusChanged(true)
+  }
+
+  channelCommandSelectPoolType() {
+
+    let names = []
+    let subjects = []
+    let keys = []
+
+    for(let poolType of Object.values(poolTypes)) {
+      names.push(poolType.name)
+      keys.push(poolType.key)
+      subjects.push(poolType.pools)
+    }
+
+    this.resetSelect()
+    this.setSelectTitle(
+      'Choose pool type:',
+      'Choose pool types:',
+    )
+    this.setSelectNameList(names)
+    this.setSelectSubjectList(subjects)
+    this.setSelectKeys(keys)
+    this.setSelectAllowMultiple(true)
+    this.setKeyMode('select')
+
+    this.setSelectAction(
+      () => { topController.channelCommandSelectPool() }
+    )
+
+    this.showSelectedItems()
+
+  }
+  
+  channelCommandSelectPool() {
+
+    let names = []
+    let subjects = []
+    let keys = []
+
+    let poolTypes = this.getSelectedSubjects()
+
+    if(poolTypes.length == 0) {
+      err("No pool groups selected. This shouldn't happen")
+    }
+
+    if(poolTypes.length > 1) {
+      // if multiple pool types were chosen, we can't
+      // list the pools that are part of them, since they
+      // will have conflicting keys. So we will just assume
+      // the player wants all pools in each of the types
+      // chosen, and will skip this selection step
+      let indexes = []
+      for(let pt = 0; pt < poolTypes.length; pt++) {
+        const poolTypePools = poolTypes[pt]
+        for(let p = 0; p < poolTypePools.length; p++) {
+          const pool = poolTypePools[p]
+          for(let c = 0; c < pool.channelIndexes.length; c++) {
+            const channelIndex = pool.channelIndexes[c]
+            if(!subjects.includes(channelIndex)) {
+              subjects.push(channelIndex)
+              indexes.push(true)
+            }
+          }
+        }
+      }
+      this.setSelectSubjectList(subjects)
+      this.setSelectIndexes(indexes)
+      topController.channelCommandSelectFlow()
+      return
+    }
+
+    // only one pool type was selected, so we can list the
+    // pools of this type for the user to select from
+
+    let subjectPools = poolTypes[0]
+
+    for(let pool of Object.values(subjectPools)) {
+      names.push(pool.name)
+      keys.push(pool.key)
+      subjects.push(pool)
+    }
+
+    this.resetSelect()
+    this.setSelectTitle(
+      'Choose pool:',
+      'Choose pools:',
+    )
+
+    this.setSelectNameList(names)
+    this.setSelectSubjectList(subjects)
+    this.setSelectKeys(keys)
+    this.setSelectAllowMultiple(true)
+    this.setKeyMode('select')
+
+    this.setSelectAction(
+      () => { topController.channelCommandSelectChannel() }
+    )
+
+    this.showSelectedItems()
+
+  }
+
+  channelCommandSelectFlow() {
+
+    let names = []
+    let keys = []
+    let subjects = this.getSelectedSubjects()
+    this.setSelectMeta('channelIndexes', subjects)
+
+    if(subjects.length == 0) {
+      err("No channels selected. This shouldn't happen")
+    }
+
+    for(let i = 9; i >= 0; i--) {
+      keys.push('' + i)
+      let percentage
+      if(i == 0) {
+        percentage = 0
+      } else if(i > 3) {
+        percentage = Math.floor(2 ** (i - 9) * 100)
+      } else {
+        percentage = Math.floor(2 ** (i - 9) * 1000) / 10
+      }
+      names.push(percentage + '%')
+    }
+
+    this.resetSelect()
+
+    this.setSelectTitle(
+      'Choose how open the selected channels should be:',
+    )
+
+    this.setSelectNameList(names)
+    this.setSelectAllowMultiple(false)
+    this.setSelectKeys(keys)
+    this.setKeyMode('select')
+
+    this.setSelectAction(
+      () => { topController.channelCommandExecuteChange() }
+    )
+
+    this.showSelectedItems()
+
+  }
+
+  drawMessagesWindow(screen, window) {
+
+    const fm = this.frontModel
+    const messages = fm.messages
+    const header = fm.messagesHeader
+    const maxMessageRow = window.smallCellSize.y - 1
+    let xOffset = 0
+    let yOffset = 0
+    let maxWidth = 0
+
+    for(let row = 0; row < messages.length; row++) {
+
+      let message = messages[row]
+      if(message == null) {
+        err("Bad message")
+      }
+      let effectiveRow = row + yOffset
+
+      if(effectiveRow > maxMessageRow) {
+        xOffset += maxWidth + 3
+        yOffset -= maxMessageRow - header + 1
+        effectiveRow = row + yOffset
+        maxWidth = 0
+      }
+
+      this.drawText({
+        screen: screen, 
+        window: window, 
+        windowPos: new Pair(xOffset, effectiveRow), 
+        textToDraw: message
+      })
+
+      if(row > header - 1) {
+        maxWidth = Math.max(maxWidth, message.length)
+      }
+
+    }
+      
+  }
+
+  drawStatusWindow(screen, window, statusList) {
+    let xOffset = 0
+    let yOffset = 0
+    const maxRow = screens.main.window.status.smallCellSize.y - 1
+    const halfWidth = 
+      Math.floor(screens.main.window.status.smallCellSize.x / 2)
+    for(let row = 0; row < statusList.length; row++) {
+      let effectiveRow = row + yOffset
+      let statusRow = statusList[row]
+      if(effectiveRow > maxRow) {
+        yOffset -= maxRow
+        xOffset += halfWidth
+        effectiveRow = row + yOffset
+      }
+      this.drawText({
+        screen: screen, 
+        window: window, 
+        windowPos: new Pair(xOffset, effectiveRow), 
+        textToDraw: statusRow,
+        maxColumns: window.smallCellSize.x / 2,
+      })
+    }
+  }
+
+  clearNumericSelection() {
+    this.frontModel.selectCount = null
+    this.showSelectedItems()
+  }
+
+  selectItem(key) {
+    const fm = this.frontModel
+
+    const keyInt = parseInt(key)
+
+    if(
+      Number.isInteger(keyInt) 
+      && (
+        fm.selectCountMaxList.length
+        || fm.selectCountMax != null
+      )
+    ) {
+
+      if(fm.selectCount) {
+        fm.selectCount = fm.selectCount * 10 + keyInt
+      } else {
+        fm.selectCount = keyInt
+      }
+
+      this.showSelectedItems()
+
+    } else {
+
+      const items = fm.selectNameList
+      if(items.length == 0) {
+        return
+      }
+
+      let index = this.keyToIndex(key)
+      if(fm.selectKeys.length > 0) {
+        index = fm.selectKeys.findIndex(x => x == key)
+      }
+
+      if(
+        index < 0 
+        || index >= fm.selectNameList.length
+        // this seems to cause problems, not sure we even need it
+        // || fm.selectSubjectList[index] == null
+      ) {
+        this.addMessage("Invalid item.")
+        this.showSelectedItems()
+        return
+      }
+
+      this.toggleSelectedItem(index)
+      if(fm.selectMultiple) {
+        this.showSelectedItems()
+      } else {
+        fm.selectAction()
+      }
+
+    }
+
+  }
+
+  getSelectMeta(key) {
+    return this.frontModel.selectMeta[key]
+  }
+
+  setSelectMeta(key, value) {
+    this.frontModel.selectMeta[key] = value
+  }
+
+  setSelectTitle(single, multiple) {
+    this.frontModel.selectTitle = [single, multiple]
+    if(!multiple) {
+      this.frontModel.selectAllowMultiple = false
+    }
+  }
+
+  getSelectAllowMultiple(allow) {
+    return this.frontModel.selectAllowMultiple
+  }
+
+  setSelectAllowMultiple(allow) {
+    this.frontModel.selectAllowMultiple = allow
+  }
+
+  setSelectMultiple(multiple) {
+    this.frontModel.selectMultiple = multiple
+  }
+
+  setSelectAction(action) {
+    this.frontModel.selectAction = action
+  }
+
+  getSelectCountList() {
+    return this.frontModel.selectCountList
+  }
+
+  setSelectCountMaxList(list) {
+    this.frontModel.selectCountMaxList = list
+  }
+
+  // do this first
+  // will initialize other select variables
+  setSelectNameList(list) {
+    const fm = this.frontModel
+    fm.selectNameList = list
+  }
+
+  setSelectKeys(list) {
+    const fm = this.frontModel
+    fm.selectKeys = list
+  }
+
+  setSelectSubjectList(list) {
+    const fm = this.frontModel
+    fm.selectSubjectList = list
+  }
+
+  setSelectIndexes(indexes) {
+    const fm = this.frontModel
+    fm.selectIndexes = indexes
+  }
+
+  setMotionMode(mode) {
+    this.frontModel.motionMode = mode
+    this.setStatusChanged(true)
+  }
+
+  motionModeAttack() {
+    const mode = this.frontModel.motionMode
+    return mode == 'attack' || mode == 'attackOrMove'
+  }
+
+  motionModeMove() {
+    const mode = this.frontModel.motionMode
+    return mode == 'move' || mode == 'attackOrMove'
+  }
+
+  getTarget() {
+    return this.frontModel.target
+  }
+
+  setTarget(pos) {
+    this.frontModel.target.pos = pos
+    this.setLevelChanged(true)
+  }
+
+  isIndexSelected(index) {
+    return this.frontModel.selectIndexes[index] 
+  }
+
+  invertMultiSelect() {
+    const fm = this.frontModel
+    fm.selectMultiple = !fm.selectMultiple
+  }
+
+  invertSelectedItems() {
+    const fm = this.frontModel
+    const selected = fm.selectIndexes
+    const list = fm.selectNameList
+    fm.selectMultiple = true
+    for(let i = 0; i < list.length; i++) {
+      if(selected[i]) {
+        selected[i] = false
+      } else {
+        selected[i] = true
+      }
+    }
+  }
+
+  resetSelect() {
+    const fm = this.frontModel
+    fm.selectAction = null
+    fm.selectAllowMultiple = true
+    fm.selectCount = null
+    fm.selectCountList = []
+    fm.selectCountMaxList = []
+    fm.selectCountMax = null
+    fm.selectIndexes = []
+    fm.selectKeys = []
+    fm.selectMultiple = false
+    fm.selectNameList = []
+    fm.selectSubjectList = []
+    fm.selectTitle = []
+    fm.selectMaxWidth = null
+    // not resetting meta. That's supposed to persist between calls.
+    // fm.selectMeta = {}
+  }
+
+  setSelectMaxWidth(maxWidth) {
+    this.frontModel.selectMaxWidth = Math.floor(maxWidth)
+  }
+
+  getSelectSubjectList() {
+    return this.frontModel.selectSubjectList
+  }
+
+  showSelectedItems() {
+
+    const fm = this.frontModel
+
+    let message = 
+      fm.selectMultiple &&
+      fm.selectTitle &&
+      fm.selectTitle.length > 1 ?
+      fm.selectTitle[1] :
+      fm.selectTitle[0]
+
+    if(fm.selectCount) message += ' ' + fm.selectCount
+    this.addMessage(message)
+    const items = fm.selectNameList
+    const keys = fm.selectKeys
+
+    for(let i = 0; i < items.length; i++) {
+
+      let key = keys[i]
+      if(!key) {
+        key = this.indexToKey(i)
+      }
+
+      let selected = fm.selectIndexes[i] 
+
+      if(selected == null) {
+        fm.selectIndexes[i] = false
+      }
+
+      selected = selected ? ' + ' : ' - '
+      const name = items[i]
+      let count = ''
+      const maxCount = fm.selectCountMaxList[i]
+
+      if(maxCount > 1) {
+        let selectedCount = fm.selectCountList[i]
+        if(selectedCount == null) selectedCount = 0
+        count = '[' + selectedCount + '/' + maxCount + '] '
+      }
+
+      let prefix = key + selected + count
+      if(typeof name == 'string') {
+
+        let remaining = name
+        let fits
+        const maxWidth = fm.selectMaxWidth 
+          || screens.main.window.message.smallCellSize.x
+
+        while(prefix.length + remaining.length >= maxWidth) {
+          [ fits, remaining ] = 
+            splitAtBlankBefore(remaining, maxWidth - prefix.length)
+          if(fits.length == 0 || remaining.length == 0) break
+          this.addMessage(prefix + fits, true)
+          prefix = '    '
+        }
+
+        this.addMessage(prefix + remaining, true)
+
+      } else {
+
+        let remaining = name
+        let fits
+        const maxWidth = fm.selectMaxWidth 
+          || screens.main.window.message.smallCellSize.x
+
+        while(prefix.length + complexLength(remaining) 
+          >= maxWidth
+        ) {
+
+          [ fits, remaining ] = 
+            splitAtBlankBefore(remaining, maxWidth - prefix.length)
+
+          if(complexLength(fits) == 0 
+            || complexLength(remaining) == 0
+          ) break
+
+          this.addMessage([ 
+            {text: prefix}, 
+            ...complexJoin(fits),
+          ], true)
+          prefix = '    '
+
+        }
+
+        this.addMessage([ 
+          {text: prefix}, 
+          ...complexJoin(remaining),
+        ], true)
+
+      }
+
+    }
+    
+  }
+
+  executeAction() {
+
+    const fm = this.frontModel
+
+    const index = fm.selectIndexes.findIndex(x => x)
+
+    if(index == -1) {
+      this.addMessage('Unknown action.')
+      this.showInventoryActions()
+    }
+
+    const subject = fm.selectSubjectList[index]
+    const items = subject.items
+    const counts = subject.counts
+    const action = subject.action
+
+    for(let i = 0; i < items.length; i++) {
+      action.execute(
+        items[i],
+        counts[i] || 1,
+      )
+    }
+
+  }
+
+  showInventoryActions() {
+
+    const fm = this.frontModel
+    let subjects = fm.selectSubjectList
+    const counts = []
+    const items = []
+
+    for(let i = 0; i < subjects.length; i++) {
+      if(fm.selectIndexes[i]) {
+        const subject = subjects[i]
+        if(subject == null) {
+          err('Found null subject')
+        }
+        items.push(subject)
+        counts.push(fm.selectCountList[i])
+      }
+    }
+
+    subjects = []
+    const actions = getActionsFor(
+      items[0].type,
+      items.length > 1,
+    )
+
+    let names = []
+    let keys = []
+    for(let action of actions) {
+      names.push(action.name)
+      subjects.push({ action: action, items: items, counts: counts })
+      keys.push(action.key)
+    }
+
+    this.resetSelect()
+    this.setSelectNameList(names)
+    this.setSelectSubjectList(subjects)
+    this.setSelectKeys(keys)
+    this.setSelectTitle('Choose an action:')
+
+    this.setSelectAction(
+      () => { topController.executeAction() }
+    )
+
+    this.showSelectedItems()
+
+  }
+
+  showInventoryGroup(inventoryGroup) {
+    this.resetSelect()
+    this.setSelectNameList(
+      inventoryGroup.map(
+        item => getNameOf(null, item)
+      )
+    )
+    this.setSelectSubjectList(inventoryGroup)
+    this.setSelectTitle(
+      'Choose item:',
+      'Choose items:',
+    )
+    this.setSelectAction(
+      () => { topController.showInventoryActions() }
+    )
+    this.setSelectCountMaxList(
+      inventoryGroup.map(
+        item => item.count
+      )
+    )
+    this.showSelectedItems()
+  }
+
+  
+  getSelectedIndexes() {
+    const fm = this.frontModel
+    let selectedSubjects = []
+    let found = [];
+    for(let i = 0; i < fm.selectIndexes.length; i++) {
+      if(fm.selectIndexes[i]) {
+        found.push(i)
+      }
+    }
+    return found
+  }
+
+  getSelectedIndex() {
+    const fm = this.frontModel
+    let selectedSubjects = []
+    let found = -1;
+    for(let i = 0; i < fm.selectIndexes.length; i++) {
+      if(fm.selectIndexes[i]) {
+        found = i
+        break
+      }
+    }
+    return found
+  }
+
+  getSelectedSubjects() {
+    const fm = this.frontModel
+    let selectedSubjects = []
+    for(let i = 0; i < fm.selectSubjectList.length; i++) {
+      if(fm.selectIndexes[i]) {
+        selectedSubjects.push(fm.selectSubjectList[i])
+      }
+    }
+    return selectedSubjects
+  }
+
+  getSelectIndexes() {
+    return this.frontModel.selectIndexes
+  }
+
+  setSelectCountMax(value) {
+    this.frontModel.selectCountMax = value
+  }
+
+  getSelectCountByIndex(index) {
+    return this.frontModel.selectCountList[index]
+  }
+
+  toggleSelectedItem(index) {
+
+    const fm = this.frontModel
+
+    if(index < 0) return
+
+    const selected = fm.selectIndexes[index]
+    if(selected) {
+      fm.selectCountList[index] = 0
+      fm.selectIndexes[index] = false
+    } else {
+      let count = fm.selectCount
+      if(count == null) {
+        count = fm.selectCountMaxList[index] || 1
+      }
+      fm.selectCountList[index] = count
+      fm.selectIndexes[index] = true
+    }
+
+    fm.selectCount = null
+
+  }
+
+  keyToIndex(key) {
+    const code = key.charCodeAt(0)
+    let offset = -1
+    if(
+         code >= 'a'.charCodeAt(0) && code <= 'z'.charCodeAt(0)
+      || code >= 'A'.charCodeAt(0) && code <= 'Z'.charCodeAt(0)
+    ) {
+      offset = code - 97
+      if(offset < 0) offset = code - 65 + 26
+    }
+    return offset
+  }
+
+  indexToKey(index) {
+    let offset = index + 97
+    if(index >= 26) offset = index + 65 - 26
+    const c = String.fromCharCode(offset)
+    return c
+  }
+
+  addMessage(message, multiColumn = false) {
+    const fm = this.frontModel
+    fm.messages.push(message)
+    if(!multiColumn) {
+      fm.messagesHeader = fm.messages.length
+    }
+    fm.messagesChanged = true
+  }
+
+  setLevelChanged(changed) {
+    this.frontModel.levelChanged = changed
+  }
+
+  getLevelChanged() {
+    return this.frontModel.levelChanged 
+  }
+
+  getLevelCellsChanged() {
+    return this.frontModel.levelCellsChanged
+  }
+
+  addLevelCellsChanged(pos) {
+    return this.frontModel.levelCellsChanged.push(pos)
+  }
+
+  clearLevelCellsChanged() {
+    return this.frontModel.levelCellsChanged = []
+  }
+
+  setMessagesChanged(changed) {
+    this.frontModel.messagesChanged = changed
+  }
+
+  getMessagesChanged() {
+    return this.frontModel.messagesChanged 
+  }
+
+  setStatusChanged(changed) {
+    this.frontModel.statusChanged = changed
+  }
+
+  getStatusChanged() {
+    return this.frontModel.statusChanged 
+  }
+
+  clearMessages() {
+    const fm = this.frontModel
+    if(fm.messages.length) {
+      fm.messages = []
+      fm.messagesChanged = true
+    }
+  }
+
+  setScreen(screenName) {
+    this.frontModel.currentScreen = screenName
+  }
+
+  levelPosToWindowPos(levelPos) {
+    const panOffset = 
+      screens.main
+      .window.level.panCellOffset
+    return levelPos.subtract(panOffset)
+  }
+
+  getKeyMode() {
+    return this.frontModel.currentKeyMode
+  }
+
+  setKeyMode(keyModeName) {
+    this.frontModel.currentKeyMode = keyModeName
+  }
+
+  windowCellPosToScreenPixelPos(screen, window, windowPos) {
+    const screenPixelPos = window.pos.multiply(
+      screen.cellPixelDimensions
+    )
+    const windowPixelPos = windowPos.multiply(
+      window.cellPixelDimensions
+    )
+    return screenPixelPos.add(windowPixelPos)
+  }
+
+  windowCellPosToLevel(window, windowCellPos) {
+    return windowCellPos.add(window.panCellOffset)
+  }
+
+  clearWindow(screen, window) {
+    const screenPixelPos = this.windowCellPosToScreenPixelPos(
+      screen,
+      window,
+      Pair.empty(),
+      )
+
+    this.outController.clearRect(
+      new Rect(
+        screenPixelPos.x - 1, 
+        screenPixelPos.y - 1, 
+        screenPixelPos.x + window.size.x * screen.cellPixelDimensions.x + 1, 
+        screenPixelPos.y + window.size.y * screen.cellPixelDimensions.y + 1,
+      )
+    )
+  }
+
+  windowToWindowName(screen, window) {
+
+    let windowName
+
+    for(const [testName, testWindow] of Object.entries(screen.window)) {
+      if(testWindow == window) {
+        windowName = testName
+      }
+    }
+
+    return windowName
+
+  }
+
+  getActionModeMessage() {
+
+    const fm = this.frontModel
+    let actionMode = fm.motionMode
+    let actionMessage = 'Unknown'
+
+    if(actionMode == 'attackOrMove') {
+      actionMessage = 'Move / Attack'
+    } else if(actionMode == 'move') {
+      actionMessage = 'Move'
+    } else if(actionMode == 'attack') {
+      actionMessage = 'Attack'
+    } 
+
+    return actionMessage
+
+  }
+
+  getCellPixelRect(screen, window, windowPos) {
+    const posUpperLeft = this.windowCellPosToScreenPixelPos(screen, window, windowPos)
+    const posLowerRight = posUpperLeft.add(window.cellPixelDimensions)
+    return new Rect(posUpperLeft.x, posUpperLeft.y, posLowerRight.x, posLowerRight.y)
+  }
+
+  getWindowPixelRect(screen, window) {
+    const posUpperLeft = this.windowCellPosToScreenPixelPos(screen, window, Pair.empty())
+    const posLowerRight = posUpperLeft.add(window.size.multiply(window.cellPixelDimensions))
+    return new Rect(posUpperLeft.x, posUpperLeft.y, posLowerRight.x, posLowerRight.y)
+  }
+
+  drawTarget(screen, window, targetPos) {
+    const windowPos = this.levelPosToWindowPos(targetPos)
+    const cellBoundary = this.getCellPixelRect(screen, window, windowPos).add(new Pair(0,-1))
+    const windowBoundary = this.getWindowPixelRect(screen, window)
+    const yMid = (cellBoundary.y1 + cellBoundary.y2) / 2
+    const xMid = (cellBoundary.x1 + cellBoundary.x2) / 2
+    const thickness = 3
+    const style = "#0000C080"
+    const heavyStyle = "#0000C0"
+    this.outController.drawEmptyRect(
+      new Rect(windowBoundary.x1, yMid - thickness, cellBoundary.x1, yMid + thickness)
+      , style
+    )
+    this.outController.drawEmptyRect(
+      new Rect(cellBoundary.x2, yMid - thickness, windowBoundary.x2, yMid + thickness)
+      , style
+    )
+    this.outController.drawEmptyRect(
+      new Rect(xMid - thickness, windowBoundary.y1, xMid + thickness, cellBoundary.y1)
+      , style
+    )
+    this.outController.drawEmptyRect(
+      new Rect(xMid - thickness, cellBoundary.y2, xMid + thickness, windowBoundary.y2)
+      , style
+    )
+    this.outController.drawEmptyRect(cellBoundary, heavyStyle)
+  }
+
+  windowPosIsValid(window, windowPos) {
+    return windowPos.x >= 0 
+      && windowPos.y >= 0
+      && windowPos.x < window.size.x
+      && windowPos.y < window.size.y
+  }
+
+  clearWindowCells(screen, window, cells) {
+    for(const cellPos of cells) {
+      if(this.windowPosIsValid(window, cellPos)) {
+        const screenPixelPos = this.windowCellPosToScreenPixelPos(
+          screen,
+          window,
+          cellPos,
+          )
+
+        this.outController.clearRect(
+          new Rect(
+            screenPixelPos.x, 
+            screenPixelPos.y, 
+            screenPixelPos.x + screen.cellPixelDimensions.x, 
+            screenPixelPos.y + screen.cellPixelDimensions.y,
+          )
+        )
+      }
+    }
+  }
+
+  getFontStyle(screen, window) {
+    if(window.fontStyle) {
+      return window.fontStyle
+    }
+
+    if(screen.fontStyle) {
+      return screen.fontStyle
+    }
+
+    if(this.frontModel.fontStyle) {
+      return this.frontModel.fontStyle
+    }
+
+    return fontStyle.fixed
+  }
+
+  // accepts an object with the following props:
+  //  screen, 
+  //  window, 
+  //  windowPos, 
+  //  textToDraw = null, 
+  //  offset = null, 
+  //  center = false,
+  //  maxColumns = null,
+  drawText(p) {
+
+    const cellSizePixels = p.window.cellPixelDimensions
+    const fontStyle = this.getFontStyle(p.screen, p.window)
+    const screenPixelPos = this.windowCellPosToScreenPixelPos(
+      p.screen,
+      p.window,
+      p.windowPos
+    )
+
+    if(p.window.offset) {
+      p.offset = p.window.offset.add(p.offset)
+    }
+
+    this.outController.drawText({
+      fontStyle: fontStyle, 
+      screenPixelPos: screenPixelPos, 
+      textToDraw: p.textToDraw, 
+      offset: p.offset, 
+      center: p.center, 
+      cellSizePixels: cellSizePixels,
+      maxColumns: p.maxColumns,
+    })
+
+  }
+
+  getCurrentScreen() {
+    const cs = this.frontModel.currentScreen
+    const screen = screens[cs]
+    return screen
+  }
+
+}
+
+let keyModifiers = {
+  alt: false,
+  command: false,
+  control: false,
+  shift: false,
+}
+
+class InController {
+
+  constructor() {
+    document.removeEventListener("keyup", this.handleKeyUp, false)
+    document.addEventListener("keyup", this.handleKeyUp, false)
+    document.removeEventListener("keydown", this.handleKeyDown, false)
+    document.addEventListener("keydown", this.handleKeyDown, false)
+  }
+
+  handleKeyDown(event) {
+    switch(event.key) {
+      case 'Alt':
+        keyModifiers.alt = true
+        break
+      case 'Meta':
+        keyModifiers.command = true
+        break
+      case 'Control':
+        keyModifiers.control = true
+        break
+      case 'Shift':
+        keyModifiers.shift = true
+        break
+    }
+  }
+
+  handleKeyUp(event) {
+    switch(event.key) {
+      case 'Alt':
+        keyModifiers.alt = false
+        return
+      case 'Meta':
+        keyModifiers.command = false
+        return
+      case 'Control':
+        keyModifiers.control = false
+        return
+      case 'Shift':
+        keyModifiers.shift = false
+        return
+    }
+
+    topController.beforeEachTurn()
+
+    const km = topController.getKeyMode()
+
+    for(let command of Object.keys(keyMap[km])) {
+      if(keyMap[km][command].some(x => event.key == x)) {
+        commandExecution[command]()
+        break
+      } else if(keyMap[km][command].length == 0) {
+        commandExecution[command](event.key)
+        break
+      }
+    }
+
+    topController.update()
+  }
+
+}
+
+class OutController {
+
+  constructor() {
+    this.previousFontStyle = null
+    this.previousFillStyle = null
+  }
+
+  // accepts an object with the following props:
+  //  fontStyle, 
+  //  screenPixelPos, 
+  //  textToDraw = null, 
+  //  offset = null, 
+  //  center = false,
+  //  cellSizePixels = null,
+  //  maxColumns = null,
+  drawText(p) {
+
+    let multipleColumnBlocks = false
+    if(typeof p.textToDraw == 'string') {
+      p.textToDrawList = [{ text: p.textToDraw }]
+    } else {
+      p.textToDrawList = p.textToDraw
+      if(p.textToDrawList.length > 1) {
+        multipleColumnBlocks = true
+      }
+    }
+
+    for(let i = 0; i < p.textToDrawList.length; i++) {
+
+      const textToDrawObject = p.textToDrawList[i]
+      const textToDraw = textToDrawObject.text
+      const style = textToDrawObject.style || '#000000'
+      const bgStyle = textToDrawObject.bgStyle
+
+      let maxSize
+      if(multipleColumnBlocks) {
+        maxSize = textToDraw.length * p.cellSizePixels.x
+      } else {
+        maxSize = p.maxColumns * p.cellSizePixels.x
+      }
+
+      let xOffset = canvasProps.xOffset 
+      let yOffset = canvasProps.yOffset
+
+      if(p.offset) {
+        xOffset += p.offset.x
+        yOffset += p.offset.y
+      }
+
+      if(bgStyle) {
+        this.previousFillStyle = bgStyle
+        const x1 = p.screenPixelPos.x + xOffset
+        const y1 = p.screenPixelPos.y + yOffset
+        const x2 = x1 + maxSize
+        const y2 = y1 + p.cellSizePixels.y
+        this.drawFilledRect(
+          new Rect(x1 - 2, y1 + 1, x2 + 1, y2 + 1), 
+          bgStyle,
+        )
+      }
+
+      if(style != this.previousFillStyle) {
+        this.previousFillStyle = style
+        ctx.fillStyle = style
+      }
+
+      if(this.previousFontStyle != p.fontStyle) {
+        ctx.font = p.fontStyle.size + "px " + p.fontStyle.name;
+      }
+      this.previousFontStyle = p.fontStyle
+
+      const textSize = ctx.measureText(textToDraw);
+      const textWidth = textSize.width
+      if(
+        p.center
+        && p.maxColumns > 0 
+        && textWidth < maxSize
+      ) {
+        xOffset += Math.floor((maxSize - textWidth) / 2)
+      }
+      const textHeight = p.fontStyle.size
+      //const textHeight = textSize.actualBoundingBoxAscent + textSize.actualBoundingBoxDescent
+      if(
+        p.center 
+        && p.cellSizePixels 
+        && p.cellSizePixels.y > 0 && textHeight < p.cellSizePixels.y
+      ) {
+        yOffset += Math.floor((p.cellSizePixels.y - textHeight) / 2)
+      }
+
+      yOffset += p.fontStyle.size 
+
+      if(p.center && p.cellSizePixels && p.cellSizePixels.y > 0) {
+        yOffset -= 
+          textSize.actualBoundingBoxDescent 
+          + (textHeight - textSize.actualBoundingBoxAscent) / 2
+      }
+
+      ctx.fillText(
+        textToDraw, 
+        p.screenPixelPos.x + xOffset, 
+        p.screenPixelPos.y + yOffset,
+      )
+
+      p.screenPixelPos.x = p.screenPixelPos.x + maxSize
+
+    }
+  }
+
+  drawEmptyRect(rect, style = "#000000") {
+    if(style != ctx.stokeStyle) {
+      ctx.strokeStyle = style
+    }
+    ctx.strokeRect(
+      canvasProps.xOffset + rect.x1, 
+      canvasProps.yOffset + rect.y1, 
+      rect.width, 
+      rect.height
+      )
+  }
+
+  drawFilledRect(rect, style = "#000000") {
+    if(style != ctx.stokeStyle) {
+      ctx.strokeStyle = style
+    }
+    if(style != ctx.fillStyle) {
+      ctx.fillStyle = style
+    }
+    ctx.fillRect(
+      canvasProps.xOffset + rect.x1, 
+      canvasProps.yOffset + rect.y1, 
+      rect.width, 
+      rect.height
+      )
+  }
+
+  clearRect(rect) {
+    ctx.clearRect(
+      canvasProps.xOffset + rect.x1, 
+      canvasProps.yOffset + rect.y1, 
+      rect.width, 
+      rect.height
+      )
+  }
+
+}
+
+function itemsEqual(item1, item2) {
+  let result = true
+  const combined = { ...item1, ...item2 }
+  for(let key of Object.keys(combined)) {
+    if(key == 'count' || key == 'pos') continue
+    if(!_.isEqual(item1[key], item2[key])) {
+      result = false
+      break
+    }
+  }
+  return result
+}
+
+function getNameOf(article, item, verb) {
+  let name
+  if(item.name) {
+    name = item.name
+  } else {
+    name = 'Unknown Item'
+  }
+
+  let count = item.count
+
+  if(Number.isInteger(article)) {
+    count = article
+  }
+
+  if(count != 1 && article) {
+    article = count
+    name = name + 's'
+    if(verb == 'is') verb = 'are'
+  }
+
+  if(article) {
+    name = article + ' ' + name
+  }
+
+  if(verb) {
+    name += ' ' + verb
+  }
+
+  return name
+}
+
+const actions = {
+  drop: {
+    key: 'd',
+    name: 'drop',
+    supportMulti: true,
+    execute: (item, count) => {
+      topController.dropItem(item, count)
+    },
+  },
+  eat: {
+    key: 'e',
+    name: 'eat',
+    supportMulti: true,
+    execute: (item, count) => {
+      topController.eatItem(item, count)
+    },
+  },
+  equip: {
+    key: 'e',
+    name: 'equip',
+    supportMulti: true,
+    execute: (item) => {
+      topController.equipItem(item)
+    },
+  },
+  unequip: {
+    key: 'u',
+    name: 'unequip',
+    supportMulti: true,
+    execute: (item) => {
+      topController.unequipItem(item)
+    },
+  },
+}
+
+function getActionsFor(type, allowMultiple) {
+  switch(type) {
+    case 'armor':
+      return [ actions.drop, actions.equip, actions.unequip ]
+      break
+    case 'book':
+      return [ actions.drop, actions.equip, actions.unequip ]
+      break
+    case 'food':
+      return [ actions.drop, actions.eat ]
+      break
+    case 'jewelry':
+      return [ actions.drop, actions.equip, actions.unequip ]
+      break
+    case 'wand':
+      return [ actions.drop, actions.equip, actions.unequip ]
+      break
+    case 'potion':
+      return [ actions.drop ]
+      break
+    case 'rock':
+      return [ actions.drop, actions.equip, actions.unequip ]
+      break
+    case 'scroll':
+      return [ actions.drop ]
+      break
+    case 'weapon':
+      return [ actions.drop, actions.equip, actions.unequip ]
+      break
+    default:
+      err('Invalid inventory type: ' + type)
+      break
+  }
+}
+
+function describeItem(item) {
+  let message = item.showAs
+  if(item.type) {
+    message += ' ' + item.type + ' / '
+  }
+  message += item.name
+
+  if(item.health) {
+    message += ' hp=' + item.health
+  }
+
+  return message
+}
+  
+function getItemInventoryGroup(item) {
+  return item.type
+}
+
+const inventoryTypes = {
+  a: 'armor',
+  b: 'book',
+  f: 'food',
+  j: 'jewelry',
+  m: 'wand',
+  p: 'potion',
+  r: 'rock',
+  s: 'scroll',
+  w: 'weapon',
+}
+
+function generateLevelEmptyRoom(level, size, randomizer) {
+  const ot = template.object
+  for(let c = 0; c < size.x; c++) {
+    level[c] = []
+    for(let r = 0; r < size.y; r++) {
+      if(c == 0 || r == 0 || c == size.x - 1 || r == size.y - 1) {
+        level[c][r] = { 
+          occupiedBy: _.cloneDeep(ot.rockWall), 
+          onFloor: [], 
+          floorType: ot.dirtFloor 
+        }
+      } else {
+        level[c][r] = { 
+          occupiedBy: null, 
+          onFloor: [], 
+          floorType: ot.dirtFloor 
+        }
+      }
+    }
+  }
+}
+
+function generateDiamondSquareMap(fromMap, randomizer) {
+  let toMap = []
+  let fromWidth = fromMap.length
+  let fromHeight = fromMap[0].length
+
+  // calculate center of each square
+  for(let fromX = 0; fromX < fromWidth; fromX++) {
+
+    // even column
+    let toMapColumn = []
+    toMap.push(toMapColumn)
+    for(let fromY = 0; fromY < fromHeight; fromY++) {
+      let fromMapValue = fromMap[fromX][fromY]
+
+      // top left
+      toMapColumn[fromY * 2] = fromMapValue
+
+      // left: do nothing
+    }
+
+    if(fromX < fromWidth - 1) {
+      // odd column
+      toMapColumn = []
+      toMap.push(toMapColumn)
+      for(let fromY = 0; fromY < fromHeight; fromY++) {
+        let values = []
+        values.push(fromMap[fromX][fromY])
+        values.push(fromMap[fromX+1][fromY])
+        values.push(fromMap[fromX][fromY+1])
+        values.push(fromMap[fromX+1][fromY+1])
+
+        let randomValue = randomizer.next()
+        values.push(randomValue)
+
+        let averageValue = values.reduce((a,b) => a + b, 0) / values.length
+
+        // top: do nothing
+
+        if(fromY < fromHeight - 1) {
+          // center
+          toMapColumn[fromY * 2 + 1] = averageValue
+        }
+      }
+    }
+
+  }
+
+  // calculate sides of each square
+  const toWidth = toMap.length
+  const toHeight = toMap[0].length
+
+  for(let x = 0; x < toWidth; x++) {
+    for(let y = 0; y < toHeight; y++) {
+      if(toMap[x][y] == null) {
+        let values = []
+        if(x-1 > 0 && toMap[x-1][y] != null) {
+          values.push(toMap[x-1][y])
+        }
+        if(x+1 < toWidth && toMap[x+1][y] != null) {
+          values.push(toMap[x+1][y])
+        }
+        if(y-1 > 0 && toMap[x][y-1] != null) {
+          values.push(toMap[x][y-1])
+        }
+        if(y+1 < toHeight && toMap[x][y+1] != null) {
+          values.push(toMap[x][y+1])
+        }
+
+        let randomValue = randomizer.next()
+        values.push(randomValue)
+
+        let averageValue = values.reduce((a,b) => a + b, 0) / values.length
+
+        toMap[x][y] = averageValue
+      }
+    }
+  }
+
+  return toMap
+}
+
+function reduceMap(fromMap) {
+  let toMap = []
+  let fromWidth = fromMap.length
+  let fromHeight = fromMap[0].length
+
+  for(let fromX = 0; fromX < fromWidth - 1; fromX += 2) {
+    let toMapColumn = []
+    toMap.push(toMapColumn)
+    for(let fromY = 0; fromY < fromHeight - 1; fromY += 2) {
+      let values = []
+      values.push(fromMap[fromX][fromY])
+      values.push(fromMap[fromX + 1][fromY])
+      values.push(fromMap[fromX][fromY + 1])
+      values.push(fromMap[fromX + 1][fromY + 1])
+
+      let minValue = values.reduce((a,b) => Math.min(a, b), 1)
+      toMapColumn.push(minValue)
+    }
+  }
+ 
+  return toMap
+}
+
+function removeIsolatedWalls(fromMap, wallThreshold, requireSurroundingWalls) {
+  let size = new Pair(fromMap.length, fromMap[0].length)
+  let iterationsLeft = 5
+
+  let toMap
+  let removed = 0
+  while(true) {
+    toMap = []
+    for(let fromX = 0; fromX < size.x; fromX++) {
+      let toMapColumn = []
+      toMap.push(toMapColumn)
+      for(let fromY = 0; fromY < size.y; fromY++) {
+        let adjacent = new Pair(fromX, fromY).adjacent(size)
+        let surroundingWalls = adjacent.reduce(
+          (a,b) => {
+            if(fromMap[b.x][b.y] > wallThreshold) {
+              return a + 1
+            } else {
+              return a
+            }
+          }, 0
+        )
+
+        let value = fromMap[fromX][fromY]
+        if(value > wallThreshold && surroundingWalls < requireSurroundingWalls) {
+          value = 0
+          removed++
+        }
+
+        toMapColumn.push(value)
+      }
+    }
+
+    if(removed > 0) {
+      debug("Removed " + removed + " stray walls.")
+      fromMap = toMap
+      iterationsLeft--
+      if(iterationsLeft > 0) {
+        removed = 0
+        continue
+      }
+    }
+    break
+  } 
+   
+  return toMap
+}
+
+function classifyLevelSpaces(level, pos, classifiedSpaces = null) {
+  let levelSize = new Pair(level.length, level[0].length)
+
+  if(classifiedSpaces == null) {
+    classifiedSpaces = []
+    for(let x = 0; x < level.length; x++) {
+      let column = level[x]
+      classifiedSpaces[x] = []
+      for(let y = 0; y < column.length; y++) {
+        classifiedSpaces[x][y] = false
+      }
+    }
+  }
+
+  classifiedSpaces[pos.x][pos.y] = true
+  const adjacentList = pos.adjacent(levelSize)
+  for(let adjacentPos of adjacentList) {
+    const occupied = level[adjacentPos.x][adjacentPos.y].occupiedBy
+    const classified = classifiedSpaces[adjacentPos.x][adjacentPos.y]
+    if(!classified && !occupied) {
+      classifyLevelSpaces(level, adjacentPos, classifiedSpaces)
+    }
+  }
+
+  return classifiedSpaces
+}
+
+// returns null if no unclassified space exists
+function findBestCrack(level, map, classifiedSpaces, wallThreshold) {
+  let pos = null
+  let weakestWall = null
+  const levelSize = new Pair(level.length, level[0].length)
+
+  for(let x = 0; x < level.length; x++) {
+    for(let y = 0; y < level[x].length; y++) {
+      if(classifiedSpaces[x][y] == false && !level[x][y].occupiedBy) {
+        let newPos = new Pair(x, y)
+        for(let adjacentPos of newPos.adjacent(levelSize)) {
+          let wallStrength = map[adjacentPos.x][adjacentPos.y]
+          if(wallStrength <= wallThreshold) {
+            // not a wall, so we don't care
+            continue
+          }
+          if(weakestWall == null || wallStrength < weakestWall) {
+            pos = newPos
+            weakestWall = wallStrength
+          }
+        }
+      }
+    }
+  }
+
+  return pos
+}
+
+function expandCrack(level, map, classifiedSpaces, wallThreshold, startPos) {
+  let pos = null
+  let weakestWall = null
+  const levelSize = new Pair(level.length, level[0].length)
+
+  for(let adjacentPos of startPos.adjacent(levelSize)) {
+    if(classifiedSpaces[adjacentPos.x][adjacentPos.y]) {
+      // already connected, we are done here
+
+      // fill any adjacent unclassified spaces
+      classifyLevelSpaces(level, adjacentPos, classifiedSpaces)
+
+      return true
+    }
+
+    let wallStrength = map[adjacentPos.x][adjacentPos.y]
+    if(wallStrength <= wallThreshold) {
+      // not a wall, so we don't care
+      continue
+    }
+    if(weakestWall == null || wallStrength < weakestWall) {
+      pos = adjacentPos
+      weakestWall = wallStrength
+    }
+  }
+
+  if(pos) {
+    map[pos.x][pos.y] = 0
+    level[pos.x][pos.y].occupiedBy = null
+    return expandCrack(level, map, classifiedSpaces, wallThreshold, pos)
+  }
+
+  // we didn't find any cracks that we could expand successfully
+  return false
+}
+
+function connectRooms(level, map, wallThreshold, randomizer) {
+  let startingPoint = findEmptyCellCentrally(level, randomizer)
+  let classifiedSpaces = classifyLevelSpaces(level, startingPoint)
+  
+  let maxIterations = 10
+  let connectedRooms = 0
+  while(true) {
+    let pos = findBestCrack(level, map, classifiedSpaces, wallThreshold)
+    if(!pos) {
+      break
+    }
+
+    let success = expandCrack(level, map, classifiedSpaces, wallThreshold, pos)
+    if(success) {
+      connectedRooms++
+      continue
+    }
+
+    if(maxIterations-- == 0) {
+      warn('Ran out of iterations to connectRooms')
+      break
+    }
+  }
+
+  if(connectedRooms) {
+    debug('Connected ' + connectedRooms + ' rooms')
+  }
+}
+
+function mapToLevel(map, level, wallThreshold, size) {
+  const ot = template.object
+  for(let c = 0; c < size.x; c++) {
+    level[c] = []
+    for(let r = 0; r < size.y; r++) {
+      if(map[c][r] > wallThreshold) {
+        level[c][r] = { occupiedBy: _.cloneDeep(ot.rockWall), onFloor: [], floorType: ot.dirtFloor }
+      } else {
+        level[c][r] = { occupiedBy: null, onFloor: [], floorType: ot.dirtFloor }
+      }
+    }
+  }
+}
+
+function surroundLevelWithWalls(oldLevel, size) {
+  const ot = template.object
+  let level = []
+  for(let c = 0; c < size.x + 2; c++) {
+    level[c] = []
+    for(let r = 0; r < size.y + 2; r++) {
+      if(c == 0 || r == 0 || c == size.x + 1 || r == size.y + 1) {
+        level[c][r] = { occupiedBy: _.cloneDeep(ot.rockWall), onFloor: [], floorType: ot.dirtFloor }
+      } else {
+        level[c][r] = oldLevel[c-1][r-1]
+      }
+    }
+  }
+
+  return level
+}
+
+function generateLevelSimpleCaves(level, size, randomizer, levelCaveGenerator) {
+  const ot = template.object
+  const b = 1 - levelCaveGenerator.openness
+  const wallThreshold = levelCaveGenerator.wallThreshold
+  const requireSurroundingWalls = levelCaveGenerator.requireSurroundingWalls
+
+  let map = [[b, b], [b, b]]
+
+  while(map.length < size.x) {
+    map = generateDiamondSquareMap(map, randomizer)
+  }
+
+  // generate an extra level of data
+  map = generateDiamondSquareMap(map, randomizer)
+  // smooth out the results using the extra level of data
+  map = reduceMap(map)
+  map = removeIsolatedWalls(map, wallThreshold, requireSurroundingWalls)
+  mapToLevel(map, level, wallThreshold, size)
+  connectRooms(level, map, wallThreshold, randomizer)
+  level = surroundLevelWithWalls(level, size)
+  return level
+}
+
+// returns an empty position, or null if no position can be found
+function findEmptyCellSimple(level) {
+  for(let c = 0; c < level.length; c++) {
+    let column = level[c]
+    for(let r = 0; r < column.length; r++) {
+      let cell = column[r]
+      if(cell.occupiedBy == null && cell.onFloor.length == 0) {
+        return new Pair(c, r)
+      }
+    }
+  }
+
+  return null
+}
+
+// returns an empty position, or null if no position can be found
+function findEmptyCellCentrally(level, randomizer, bounds = null) {
+  if(bounds == null) {
+    const height = level.length
+    const width = level[0].length
+
+    bounds = new Rect(0, 0, width, height)
+  }
+
+  const middlePos = bounds.center
+  const cellToTest = level[middlePos.x][middlePos.y]
+
+  if(cellToTest.occupiedBy == null && cellToTest.onFloor.length == 0) {
+    return middlePos
+  }
+
+  if(bounds.width < 2 || bounds.height < 2) {
+    // too small to subdivide further
+    return null
+  }
+
+  let newBounds
+  let allResults = [] 
+  let result
+
+  newBounds = bounds.upperLeftQuarter()
+  result = findEmptyCellCentrally(level, randomizer, newBounds)
+  if(result) allResults.push(result)
+
+  newBounds = bounds.upperRightQuarter()
+  result = findEmptyCellCentrally(level, randomizer, newBounds)
+  if(result) allResults.push(result)
+
+  newBounds = bounds.lowerLeftQuarter()
+  result = findEmptyCellCentrally(level, randomizer, newBounds)
+  if(result) allResults.push(result)
+
+  newBounds = bounds.lowerRightQuarter()
+  result = findEmptyCellCentrally(level, randomizer, newBounds)
+  if(result) allResults.push(result)
+
+  if(allResults.length > 0) {
+    return allResults[randomizer.next(allResults.length)]
+  }
+
+  return null
+}
+
+function clearArray(array) {
+  array.splice(0, array.length)
+}
+
+function splitAtBlankBefore(string, pos) {
+
+  let breakPoint = -1
+  let result
+
+  if(typeof string == 'string') {
+
+    for(let i = pos; i > 0; i--) {
+      if(string[i] == ' ') {
+        breakPoint = i
+        break
+      }
+    }
+
+    if(breakPoint > -1) {
+      result = [ string.substring(0, breakPoint), string.substring(breakPoint+1) ]
+    } else {
+      result = [ string, '' ]
+    }
+
+  } else {
+
+    const list = string
+    for(let i = list.length - 1; i >= 0; i--) {
+      if(complexLength(list.slice(0, i)) <= pos) {
+        breakPoint = i
+        break
+      }
+    }
+
+    if(breakPoint > -1) {
+      result = [ list.slice(0, breakPoint), list.slice(breakPoint) ]
+    } else {
+      result = [ list, [] ]
+    }
+
+  }
+
+  return result
+}
+
+function complexLength(list) {
+  let total = 0
+  for(let item of list) {
+    if(item.text) {
+      total += item.text.length
+    } else {
+      total += complexLength(item)
+    }
+  }
+  return total
+}
+
+function complexJoin(list, pad={text:' '}) {
+  let result = []
+  for(let item of list) {
+    if(result.length > 0) {
+      result.push(pad)
+    }
+    result.push(...item)
+  }
+  return result
+}
+
+const topController = new TopController()
+
+</script>
+
+</body>
+</html>

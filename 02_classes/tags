@@ -140,6 +140,7 @@ cloak	067_willpower_pressure_reduction/jscrawl.html	/^        cloak: null,$/;"	P
 coconut	067_willpower_pressure_reduction/jscrawl.html	/^          coconut: { $/;"	P
 col	067_willpower_pressure_reduction/jscrawl.html	/^        let col = 0$/;"	V
 colorize	067_willpower_pressure_reduction/jscrawl.html	/^const colorize = {$/;"	O
+colorizePoolName	067_willpower_pressure_reduction/jscrawl.html	/^function colorizePoolName(pool) {$/;"	F
 colors	067_willpower_pressure_reduction/jscrawl.html	/^const colors = {$/;"	O
 combined	067_willpower_pressure_reduction/jscrawl.html	/^  const combined = { ...item1, ...item2 }$/;"	O
 command	067_willpower_pressure_reduction/jscrawl.html	/^  command: false,$/;"	P
@@ -193,7 +194,7 @@ creature	067_willpower_pressure_reduction/jscrawl.html	/^      creature: {$/;"	P
 criticalHealth	067_willpower_pressure_reduction/jscrawl.html	/^      criticalHealth: 5,$/;"	P
 criticalHealth	067_willpower_pressure_reduction/jscrawl.html	/^  criticalHealth: { $/;"	P
 current	067_willpower_pressure_reduction/jscrawl.html	/^      const current = '' + Math.floor($/;"	V
-currentMaxFlow	067_willpower_pressure_reduction/jscrawl.html	/^        const currentMaxFlow = 2**(currentFlowMagnitude-9) * max$/;"	V
+currentFlowMagnitude	067_willpower_pressure_reduction/jscrawl.html	/^        currentFlowMagnitude,$/;"	V
 currentMaxFlow	067_willpower_pressure_reduction/jscrawl.html	/^        currentMaxFlow,$/;"	V
 cyan	067_willpower_pressure_reduction/jscrawl.html	/^              cyan: 2, $/;"	P
 cyan	067_willpower_pressure_reduction/jscrawl.html	/^              cyan: 5,$/;"	P
@@ -266,6 +267,7 @@ experiencePerLevel	067_willpower_pressure_reduction/jscrawl.html	/^    experienc
 experiencePerLevel	067_willpower_pressure_reduction/jscrawl.html	/^    experiencePerLevel: 15,$/;"	P
 fPress	067_willpower_pressure_reduction/jscrawl.html	/^  const [fPress, tPress] = getEffectivePressures($/;"	V
 fRoom	067_willpower_pressure_reduction/jscrawl.html	/^        fRoom,$/;"	V
+false	067_willpower_pressure_reduction/jscrawl.html	/^      false,$/;"	V
 findBestCrack	067_willpower_pressure_reduction/jscrawl.html	/^function findBestCrack(level, map, classifiedSpaces, wallThreshold) {$/;"	F
 findEmptyCellCentrally	067_willpower_pressure_reduction/jscrawl.html	/^function findEmptyCellCentrally(level, randomizer, bounds = null) {$/;"	F
 findEmptyCellSimple	067_willpower_pressure_reduction/jscrawl.html	/^function findEmptyCellSimple(level) {$/;"	F
@@ -406,6 +408,7 @@ getActors	067_willpower_pressure_reduction/jscrawl.html	/^  getActors() {$/;"	M
 getCell	067_willpower_pressure_reduction/jscrawl.html	/^  getCell(pos) {$/;"	M
 getCellPixelRect	067_willpower_pressure_reduction/jscrawl.html	/^  getCellPixelRect(screen, window, windowPos) {$/;"	M
 getChangeString	067_willpower_pressure_reduction/jscrawl.html	/^  getChangeString(prefix, change) {$/;"	M
+getChannelFlowFromMagnitude	067_willpower_pressure_reduction/jscrawl.html	/^function getChannelFlowFromMagnitude(mag, max) {$/;"	F
 getChannelString	067_willpower_pressure_reduction/jscrawl.html	/^function getChannelString(player, from, to) {$/;"	F
 getCreatorMode	067_willpower_pressure_reduction/jscrawl.html	/^  getCreatorMode() {$/;"	M
 getCurrentScreen	067_willpower_pressure_reduction/jscrawl.html	/^  getCurrentScreen() {$/;"	M
@@ -539,7 +542,6 @@ if	067_willpower_pressure_reduction/jscrawl.html	/^      if(classifiedSpaces[x][
 if	067_willpower_pressure_reduction/jscrawl.html	/^      if(complexLength(list.slice(0, i)) <= pos) {$/;"	M
 if	067_willpower_pressure_reduction/jscrawl.html	/^      if(count == null) {$/;"	M
 if	067_willpower_pressure_reduction/jscrawl.html	/^      if(count) {$/;"	M
-if	067_willpower_pressure_reduction/jscrawl.html	/^      if(currentFlowMagnitude) {$/;"	M
 if	067_willpower_pressure_reduction/jscrawl.html	/^      if(damage > 0) {$/;"	M
 if	067_willpower_pressure_reduction/jscrawl.html	/^      if(effectiveRow > maxMessageRow) {$/;"	M
 if	067_willpower_pressure_reduction/jscrawl.html	/^      if(effectiveRow > maxRow) {$/;"	M
@@ -554,7 +556,7 @@ if	067_willpower_pressure_reduction/jscrawl.html	/^      if(group.length > 0) {$
 if	067_willpower_pressure_reduction/jscrawl.html	/^      if(group[i] == item) {$/;"	M
 if	067_willpower_pressure_reduction/jscrawl.html	/^      if(group[index] == item) {$/;"	M
 if	067_willpower_pressure_reduction/jscrawl.html	/^      if(hand.length < 1) {$/;"	M
-if	067_willpower_pressure_reduction/jscrawl.html	/^      if(i == 0) {$/;"	M
+if	067_willpower_pressure_reduction/jscrawl.html	/^      if(i > 6) {$/;"	M
 if	067_willpower_pressure_reduction/jscrawl.html	/^      if(items.length == 0) {$/;"	M
 if	067_willpower_pressure_reduction/jscrawl.html	/^      if(itemsEqual(floorItem, item)) {$/;"	M
 if	067_willpower_pressure_reduction/jscrawl.html	/^      if(iterationsLeft > 0) {$/;"	M
@@ -640,6 +642,7 @@ if	067_willpower_pressure_reduction/jscrawl.html	/^    if(newItem.sub) {$/;"	M
 if	067_willpower_pressure_reduction/jscrawl.html	/^    if(noItemsFound) {$/;"	M
 if	067_willpower_pressure_reduction/jscrawl.html	/^    if(p.window.offset) {$/;"	M
 if	067_willpower_pressure_reduction/jscrawl.html	/^    if(path.length) {$/;"	M
+if	067_willpower_pressure_reduction/jscrawl.html	/^    if(player.wpFocus) {$/;"	M
 if	067_willpower_pressure_reduction/jscrawl.html	/^    if(poolIndexFrom == -1 || poolIndexTo == -1) {$/;"	M
 if	067_willpower_pressure_reduction/jscrawl.html	/^    if(poolTypes.length == 0) {$/;"	M
 if	067_willpower_pressure_reduction/jscrawl.html	/^    if(poolTypes.length > 1) {$/;"	M
@@ -746,7 +749,7 @@ lightorange	067_willpower_pressure_reduction/jscrawl.html	/^  lightorange:{ bgSt
 lightred	067_willpower_pressure_reduction/jscrawl.html	/^  lightred:   { bgStyle: '#FF9F9F', style: '#000' },$/;"	P
 lightviolet	067_willpower_pressure_reduction/jscrawl.html	/^  lightviolet:{ bgStyle: '#C89FFF', style: '#000' },$/;"	P
 lightyellow	067_willpower_pressure_reduction/jscrawl.html	/^  lightyellow:{ bgStyle: '#FFFF80', style: '#000' },$/;"	P
-line	067_willpower_pressure_reduction/jscrawl.html	/^        let line = [{ text: i + ':' }]$/;"	A
+line	067_willpower_pressure_reduction/jscrawl.html	/^        let line = [text(i + ':')]$/;"	A
 line	067_willpower_pressure_reduction/jscrawl.html	/^    let line = ''$/;"	V
 lion	067_willpower_pressure_reduction/jscrawl.html	/^          lion: { $/;"	P
 list	067_willpower_pressure_reduction/jscrawl.html	/^    const list = []$/;"	A
@@ -763,6 +766,7 @@ mana	067_willpower_pressure_reduction/jscrawl.html	/^  mana: { $/;"	P
 mango	067_willpower_pressure_reduction/jscrawl.html	/^          mango: { $/;"	P
 map	067_willpower_pressure_reduction/jscrawl.html	/^  let map = [[b, b], [b, b]]$/;"	A
 mapToLevel	067_willpower_pressure_reduction/jscrawl.html	/^function mapToLevel(map, level, wallThreshold, size) {$/;"	F
+max	067_willpower_pressure_reduction/jscrawl.html	/^        max$/;"	V
 max	067_willpower_pressure_reduction/jscrawl.html	/^      const max = '' + Math.floor(bc.getPoolMax(player, index))$/;"	V
 maxChannelSizeDefault	067_willpower_pressure_reduction/jscrawl.html	/^    maxChannelSizeDefault: 10,$/;"	P
 maxChannelSizes	067_willpower_pressure_reduction/jscrawl.html	/^    maxChannelSizes: [],$/;"	P
@@ -933,6 +937,8 @@ selectMaxWidth	067_willpower_pressure_reduction/jscrawl.html	/^    selectMaxWidt
 selectMeta	067_willpower_pressure_reduction/jscrawl.html	/^    selectMeta: {},$/;"	P
 selectMultiple	067_willpower_pressure_reduction/jscrawl.html	/^    selectMultiple: false,$/;"	P
 selectNameList	067_willpower_pressure_reduction/jscrawl.html	/^    selectNameList: [],$/;"	P
+selectPool	067_willpower_pressure_reduction/jscrawl.html	/^  selectPool(afterSelect, allowMultiple) {$/;"	M
+selectPoolType	067_willpower_pressure_reduction/jscrawl.html	/^  selectPoolType(afterSelect, allowMultiple) {$/;"	M
 selectSubjectList	067_willpower_pressure_reduction/jscrawl.html	/^    selectSubjectList: [],$/;"	P
 selectTitle	067_willpower_pressure_reduction/jscrawl.html	/^    selectTitle: [],$/;"	P
 selectedInventoryType	067_willpower_pressure_reduction/jscrawl.html	/^        selectedInventoryType$/;"	V
@@ -1021,7 +1027,7 @@ target	067_willpower_pressure_reduction/jscrawl.html	/^  target: {$/;"	P
 template	067_willpower_pressure_reduction/jscrawl.html	/^          template: newTemplate,$/;"	P
 template	067_willpower_pressure_reduction/jscrawl.html	/^const template = {$/;"	O
 text	067_willpower_pressure_reduction/jscrawl.html	/^        text: line $/;"	P
-text	067_willpower_pressure_reduction/jscrawl.html	/^      text: direction,$/;"	P
+text	067_willpower_pressure_reduction/jscrawl.html	/^function text(t) {$/;"	F
 textToDraw	067_willpower_pressure_reduction/jscrawl.html	/^        textToDraw: characterToDraw, $/;"	P
 textToDraw	067_willpower_pressure_reduction/jscrawl.html	/^        textToDraw: message$/;"	P
 textToDraw	067_willpower_pressure_reduction/jscrawl.html	/^        textToDraw: statusRow,$/;"	P
@@ -1067,10 +1073,12 @@ topController	067_willpower_pressure_reduction/jscrawl.html	/^const topControlle
 total	067_willpower_pressure_reduction/jscrawl.html	/^    let total = 0$/;"	V
 total	067_willpower_pressure_reduction/jscrawl.html	/^  let total = 0$/;"	V
 totalWeight	067_willpower_pressure_reduction/jscrawl.html	/^    let totalWeight = 0$/;"	V
+true	067_willpower_pressure_reduction/jscrawl.html	/^      true,$/;"	V
 unequip	067_willpower_pressure_reduction/jscrawl.html	/^  unequip: {$/;"	P
 unequipItem	067_willpower_pressure_reduction/jscrawl.html	/^  unequipItem(item) {$/;"	M
 unequipUntilHandsFree	067_willpower_pressure_reduction/jscrawl.html	/^  unequipUntilHandsFree(handsNeeded) {$/;"	M
-upBias	067_willpower_pressure_reduction/jscrawl.html	/^    const upBias = 0$/;"	V
+upBias	067_willpower_pressure_reduction/jscrawl.html	/^    let upBias = 0$/;"	V
+upBias	067_willpower_pressure_reduction/jscrawl.html	/^  let upBias = 0$/;"	V
 update	067_willpower_pressure_reduction/jscrawl.html	/^  update(forceRefresh = false) {$/;"	M
 updateScreen	067_willpower_pressure_reduction/jscrawl.html	/^  updateScreen(screen, forceRefresh = false) {$/;"	M
 updateWindow	067_willpower_pressure_reduction/jscrawl.html	/^  updateWindow(screen, window, forceRefresh = false) {$/;"	M
@@ -1101,6 +1109,12 @@ white3	067_willpower_pressure_reduction/jscrawl.html	/^  white3:  { bgStyle: '#F
 width	067_willpower_pressure_reduction/jscrawl.html	/^  width: 1600,$/;"	P
 willpower	067_willpower_pressure_reduction/jscrawl.html	/^              willpower: 10,$/;"	P
 willpower	067_willpower_pressure_reduction/jscrawl.html	/^  willpower: { $/;"	P
+willpowerFocus	067_willpower_pressure_reduction/jscrawl.html	/^    willpowerFocus: [ 'w' ],$/;"	P
+willpowerFocus	067_willpower_pressure_reduction/jscrawl.html	/^  willpowerFocus() {$/;"	M
+willpowerFocus	067_willpower_pressure_reduction/jscrawl.html	/^  willpowerFocus: () => {$/;"	M
+willpowerFocusExecute	067_willpower_pressure_reduction/jscrawl.html	/^  willpowerFocusExecute() {$/;"	M
+willpowerFocusSelectPool	067_willpower_pressure_reduction/jscrawl.html	/^  willpowerFocusSelectPool() {$/;"	M
+willpowerFocusSelectPoolType	067_willpower_pressure_reduction/jscrawl.html	/^  willpowerFocusSelectPoolType() {$/;"	M
 window	067_willpower_pressure_reduction/jscrawl.html	/^          window,$/;"	V
 window	067_willpower_pressure_reduction/jscrawl.html	/^        window: window, $/;"	P
 window	067_willpower_pressure_reduction/jscrawl.html	/^        window: window,$/;"	P
@@ -1113,6 +1127,7 @@ windowPos	067_willpower_pressure_reduction/jscrawl.html	/^        windowPos: win
 windowPosIsValid	067_willpower_pressure_reduction/jscrawl.html	/^  windowPosIsValid(window, windowPos) {$/;"	M
 windowToWindowName	067_willpower_pressure_reduction/jscrawl.html	/^  windowToWindowName(screen, window) {$/;"	M
 within	067_willpower_pressure_reduction/jscrawl.html	/^  within(minPair, maxPairExclusive) {$/;"	M
+wpFocus	067_willpower_pressure_reduction/jscrawl.html	/^      wpFocus: null,$/;"	P
 xOffset	067_willpower_pressure_reduction/jscrawl.html	/^    let xOffset = 0$/;"	V
 xOffset	067_willpower_pressure_reduction/jscrawl.html	/^  xOffset: 0,$/;"	P
 xp	067_willpower_pressure_reduction/jscrawl.html	/^      xp: 0,$/;"	P

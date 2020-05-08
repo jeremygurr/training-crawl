@@ -3070,6 +3070,9 @@ class BackController {
   }
 
   advanceEnergyFlow(actor) {
+    if(actor.wpFocus) {
+      this.addEnergy(actor, 'willpower', -0.1)
+    }
     for(let i = 0; i < poolChannels.length; i++) {
       const currentFlowMagnitude = actor.channelCurrent[i]
       const max = actor.channelMax[i]

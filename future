@@ -1,9 +1,4 @@
 energy
-  should be able to eat all of stack at once
-  need to be able to create a count of items
-  sort pools high to low in each type
-  refactor for each channel
-  colorize status
   willpower pressure reduction
     can only pick one at a time
     can only reduce 1 level max, skill doesn't apply
@@ -155,7 +150,7 @@ energy management
       3 = 1.5%
       2 = 0.75%
       1 = 0.37%
-      0 = 0%
+      0 = 0.1%
   overdriving energy capacity
     causes damage to the energy pool
       pain and reduction of max capacity of pools involved

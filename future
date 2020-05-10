@@ -1,35 +1,81 @@
-energy
-  meditation
-    can only pick one at a time
-    can reduce many levels based on skill
-  experience potion drinking
-    adds 20 to each etherea
-  creator mode: 
-    set energy pool
-    allow multiple item creation, or disable multiselect
-    move CREATOR MODE to right of action
-  core awakening
-  minor health can't go up until major
-    make room function which calculates how much room a pool has to increase
-  energy in environment
-    cells store energy
-    energy moves between cells
-      conductance different for different materials
-      capacity different for different materials
-  external channels
-    all pools can vent except interna
-    OG=SG OD=ED
-? general help
-  another section at the bottom for 3 lines of menus / messages
-  scratch space
-examine pools
-  use scratch space
-  data model 
-  out and in commands
-  draw target based on what's being focussed
-  define visual blocks
-  add details to visual blocks
-  show details associated with selected object
+separate immutable
+  item
+    base: immutable stuff
+    count
+    modifications, etc
+  mutable stuff:
+    socketed parts
+    enhancements
+    count?
+    pos
+don't allow energy to flow less than 1 point
+sort file, put settings at top
+attributes
+  str
+  dex
+  int
+experience potion drinking
+  adds 20 to each etherea
+  spend xp on
+    attributes +1
+    energy pools x1.25
+    energy channels x1.25
+    skill +1
+  hard to choose when you can sink all points into a single attribute
+    [ ] limit to 1 attribute at a time, forcing player to spread it out across 12 skills / pools
+meditation enhances willpower focus, not a separate focus
+  also enhances senses
+  automatically happens when resting while focussed
+  med rate doubles each turn:
+    +0.2
+    +0.4
+    +0.8
+    +1.6
+    +3.2
+creator mode: 
+  set energy pool
+  allow multiple item creation, or disable multiselect
+  move CREATOR MODE to right of action
+core awakening
+  to put continuous energy into a pool will allow all pools to be filled. 
+  Too powerful
+  how to balance
+  [ ] capacity of pool x4 
+      - same as upgrading pool cap
+        [ ] maybe we don't allow pool cap upgrade
+        [ ] or core awakening is removed in place of pool cap upgrade
+  [ ] density upgrade of pool, 
+      instead of 1 point of tier 2 becoming 10 points of tier 1
+      1 point of tier 2 becomes 30 points of tier 2
+      - fairly complex to track density outside of tiers
+  [*] use of that pool is multiple times more efficient
+      + doesn't disrupt other energy
+      + provides real value for that specialty
+      doing this over many 10x levels would create too many power upgrades
+      [*] only allow awakening once
+      [ ] awakening is bought with xp
+          3 levels:
+          50 xp = random spectra
+          100 xp = a spectra randomly selected from a chosen etherea
+          500 xp = a single spectra chosen 
+minor health can't go up until major
+  make room function which calculates how much room a pool has to increase
+basic senses
+  light
+    torch must be wielded to provide light
+      can chase some creatures away
+  sound
+  smell
+  if one sense is lost, others should be magnified
+willpower focus can focus on senses as well (instead of pool)
+energy in environment
+  cells store energy
+  energy moves between cells
+    conductance different for different materials
+    capacity different for different materials
+external channels
+  all pools can vent except interna
+  OG=SG OD=ED
 weapon usage
   weapon prioritization
   chance to hit
@@ -53,34 +99,40 @@ weapon usage
     resist
       enemy armor
 ranged attacks
-auto-help
-  based on input mode
-  should describe windows also
 export / import game
-auto-save after 10 turns
-ask if we should load game when starting
 armor
-generate stores
 different times for actions
 game clock
   enemy actions don't execute until they have received enough time
+generate stores
+basic skills
+? general help
+  another section at the bottom for 3 lines of menus / messages
+  scratch space
+examine pools
+  use scratch space
+  data model 
+  out and in commands
+  draw target based on what's being focussed
+  define visual blocks
+  add details to visual blocks
+  show details associated with selected object
+auto-help
+  based on input mode
+  should describe windows also
+auto-save after 10 turns
+ask if we should load game when starting
+multi-floor
+  stairs
+  10 floors for now
+  floor difficulty level concept
+    somewhat random, with 1, 50, and 100 floors being fixed. 50 will be set to difficulty level
 how to vary item generation?
   item energy, gets used by each item generated
   if not enough energy, then item isn't generated
   each item has a generation cost
   top floor starts with 100 points of each generation color
   each floor has a core, which adds points to that generation color * the level of the floor
-multi-floor
-  stairs
-  10 floors for now
-  floor difficulty level concept
-    somewhat random, with 1, 50, and 100 floors being fixed. 50 will be set to difficulty level
-basic senses
-  light
-    torch must be wielded to provide light
-      can chase some creatures away
-  sound
-  smell
 core attributes
 cell attributes
   5 levels of depth

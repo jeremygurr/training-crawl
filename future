@@ -1,15 +1,4 @@
 separate immutable
-  item
-    base: immutable stuff
-    count
-    modifications, etc
-  mutable stuff:
-    socketed parts
-    enhancements
-    count?
-    pos
-don't allow energy to flow less than 1 point
-sort file, put settings at top
 attributes
   str
   dex

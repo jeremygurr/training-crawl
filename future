@@ -1,16 +1,10 @@
-separate immutable
 experience potion drinking
   drink action
-    abort execution if all points are not used
-    support custom back / escape command
     spend xp on
-      attributes +1
       energy pools x1.25
       energy channels x1.25
       energy usage efficiency x1.25
       skill +1
-    initialize growth and growthSelection
-    fills interna
   getAttribute
     factor in base species attribute plus growth
   getPoolCap
@@ -18,8 +12,7 @@ experience potion drinking
   getChannelCap
   getSkillLevel
     takes into account base skill, growth, and aptitude
-  hard to choose when you can sink all points into a single attribute
-    [*] limit to 1 attribute at a time, forcing player to spread it out across 12 skills / pools
+  display result in select attribute / etc panels
 meditation enhances willpower energy or sense focus, not a separate focus
   automatically happens when resting while focussed
   med rate doubles each turn:
@@ -30,30 +23,18 @@ meditation enhances willpower energy or sense focus, not a separate focus
     +3.2
 creator mode: 
   set energy pool
+  advanceLevel
   allow multiple item creation, or disable multiselect
   move CREATOR MODE to right of action
 core awakening
-  to put continuous energy into a pool will allow all pools to be filled. 
-  Too powerful
-  how to balance
-  [ ] capacity of pool x4 
-      - same as upgrading pool cap
-        [ ] maybe we don't allow pool cap upgrade
-        [ ] or core awakening is removed in place of pool cap upgrade
-  [ ] density upgrade of pool, 
-      instead of 1 point of tier 2 becoming 10 points of tier 1
-      1 point of tier 2 becomes 30 points of tier 2
-      - fairly complex to track density outside of tiers
-  [*] use of that pool is multiple times more efficient
-      + doesn't disrupt other energy
-      + provides real value for that specialty
-      doing this over many 10x levels would create too many power upgrades
-      [*] only allow awakening once
-      [ ] awakening is bought with xp
-          3 levels:
-          50 xp = random spectra
-          100 xp = a spectra randomly selected from a chosen etherea
-          500 xp = a single spectra chosen 
+  only happens once at level 10
+  pool capacity increases x3
+  pool energy efficiency increases x3
+  all channel flows to this pool increases x3
+  2/3 chance of spectra
+  2/3 chance of etherea
+  2/3 chance of lumina
+  remaining chance of exotica
 minor health can't go up until major
   make room function which calculates how much room a pool has to increase
 basic senses
@@ -62,16 +43,21 @@ basic senses
       can chase some creatures away
   sound
   smell
+  feel: 
+    heat
+    vibration / pressure
+    energy
   if one sense is lost, others should be magnified
-willpower focus can focus on senses as well (instead of pool)
 energy in environment
   cells store energy
   energy moves between cells
     conductance different for different materials
+      typically slow (1-3)
     capacity different for different materials
+      typically fairly large (1000)
 external channels
   all pools can vent except interna
-  OG=SG OD=ED
+  OO=SG OO=ED
 weapon usage
   weapon prioritization
   chance to hit
@@ -176,184 +162,32 @@ quick travel
     attitudes:
       avoid monsters
       ignore all items
-energy management
-  hunger / display hunger
-  where does it come from?
-    dungeon core generates energy for the dungeon
-      always one color
-      player auto-absorbs if pressure is in the right direction
-  connection flow
-    max amount of lower energy to move in an aut
-    levels:
-      9 = 100%
-      8 = 50%
-      7 = 25%
-      6 = 12%
-      5 = 6%
-      4 = 3%
-      3 = 1.5%
-      2 = 0.75%
-      1 = 0.37%
-      0 = 0.1%
-  overdriving energy capacity
-    causes damage to the energy pool
-      pain and reduction of max capacity of pools involved
-      energy leaks from the pool if there is damage, proportional to the damage level
-      how to repair damaged pools
-        higher tier pools that are connected will first repair the damage before filling the pool
-        repair cost is one higher tier point per damage point
-      damage per aut = ([overloaded amount] / [max]) ^ 4 / 10
-  tiers 0-4
-    1 tier 4 = 10 tier 3 = 100 tier 2 = 1000 tier 1 = 10000 tier 0
-  energy types
-    lumina (5)
-      white: sUn (tier 4)
-        connects to *all* etherea
-        element = high life
-      white: Moon (tier 3)
-        connects to *all* spectra
-        connects to sun
-        element = low life
-      white: sTar (tier 2)
-        connects to any etherea
-        connects to moon
-        element = light
-      grAy (tier 1)
-        connects to any spectra
-        connects to star
-        element = shadow
-      blacK (tier 0)
-        connects to any interna or gray
-        element = darkness
-    etherea (tier 3) (4)
-      Diamond (cyan, blue, indigo, violet, red)
-      goLd (yellow, green, cyan, blue)
-      Silver (orange, yellow, green)
-      coppEr (red, orange)
-    spectra (tier 2) (8)
-      violet
-        element = purity / poison
-        provided by mushrooms
-        used by: 
-          time spells
-      indigo
-        element = metal
-        provided by dairy
-        used by: 
-          planes spells
-          deep creation
-      blue
-        element = water
-        provided by seafood
-        used by: 
-          deep aleration spells
-          critical healing
-      cyan
-        element = ice
-        provided by roots 
-        used by: 
-          translocation spells
-          freeze magic
-          perception magic
-      green
-        element = earth
-        provided by veggies
-        used by: 
-          simple creation spells
-          major healing
-      yellow
-        element = electric
-        provided by fruits
-        used by:
-          mana gen
-          control magic
-          lightning magic
-      orange
-        element = stone
-        provided by grains
-        used by: 
-          simple aleration spells
-          stamina gen
-      red
-        element = fire
-        provided by meat (land meat, not seafood)
-        used by:
-          minor healing
-          fire magic
-    interna (tier 1) (N) (6) (form pools)
-      1 hp1 critical_health (from blue)
-      2 hp2 major_health (from green)
-      3 hp3 minor_health (from red)
-      4 sp  stamina (from orange)
-      5 mp  mana (from yellow)
-      6 wp  willpower (from violet)
-    eXotica (3) (tier 1) (extremely rare to find these energies)
-      raiNbow 
-        connects to *all* spectra
-      broWn 
-        connects to *all* lumina
-      Purple
-        connects to red AND blue
-  energy can flow both directions, but favors down (2x pressure on top)
-  willpower can be used to concentrate energy against the normal forces
-    effectively reduces the pressure of the targeted energy pool
-      1/2 = 1 willpower per aut
-      1/3 = 2 willpower per aut
-      1/4 = 3 willpower per aut
-      1/5 = 4 willpower per aut
-      can only be applied to energy pools, not interna
-    willpower is gained from successful activities
-      killing a monster
-      discovering valuable items
-      achievements
-      successful spell casting
-      successful weapon strike
-      successful dodge or deflect or block
-      scroll of motivation
-      most food gives a small amount of willpower
-        dessert food gives larger amount: chocolate, cake, etc
-      stealth success
-    willpower is drained by 
-      being hit
-      pain
-      spells failing
-      fear
-      stealth detection
-  energy should not pass from one pool to another unless the result would make the pressure difference lower
-  energy passes through cells of the dungeon
-    each cell may have containers for one or more energy types
-    adjacent cells are connected, and based on the cell flow rate, can share energy
-    levels have an energy core, unless it is dug up
-    plants derive energy from the floor
-    some kinds of energy can spawn monsters
-    some plants can convert one type of energy to another
-    some creatures convert energy
-    energy capacity of plants is lower than animals
-  meditation allows player to reduce pressure in a pool
-    meditation takes a turn, and increases effectiveness steadily
-    max depth and speed of meditation determined by meditation skill
-      0 skill = 1 depth max and 0.5 per aut
-      1 skill = 2 depth max and 0.75 per aut
-      2 skill = 3 depth max and 1.0 per aut
-      3 skill = 4 depth max and 1.25 per aut
-    state is maintained as long as player doesn't move or attack
-    can meditate on any pool, including interna
-    willpower application works similarly, but constantly drains willpower to pay for it
-eat
+willpower is gained from successful activities
+  killing a monster
+  discovering valuable items
+  achievements
+  successful spell casting
+  successful weapon strike
+  successful dodge or deflect or block
+  scroll of motivation
+  most food gives a small amount of willpower
+    dessert food gives larger amount: chocolate, cake, etc
+  stealth success
+willpower is drained by 
+  being hit
+  pain
+  spells failing
+  fear
+  stealth detection
+low interna
   starvation constantly attempts to deplete HP, MP, SP (not WP)
     red, orange, yellow energy is consumed to counter this, unless there is no energy available, in which case hp is lost
     there is an idle rate that these deplete, although it is slow
     HP = 0 : dead
     SP = 0 : occasional fainting
     MP = 0 : occasional confusion
-  critical health must be at max before major healing can happen
-  major health must be at max before minor healing can happen
-  normally major damage isn't done until minor health is 0
-  all 100/100/100 of 250
-  or 1/2 minor 1/4 major 1/4 critical
-  or 2/3 minor 1/3 of remaining major + critical, 1/3 of remaining critical
+instadeath avoidance
   the player must receive damage after all health < 1 at beginning of turn before death occurs
-  critical strikes can bypass the normal damage order
 monster enemy identification
   sight
     changes quickly
@@ -1166,3 +1000,124 @@ species
         can't use scrolls
       other:
         size = large
+
+
+info
+energy management
+  hunger / display hunger
+  where does it come from?
+    dungeon core generates energy for the dungeon
+      always one color
+      player auto-absorbs if pressure is in the right direction
+  connection flow
+    max amount of lower energy to move in an aut
+    levels:
+      9 = 100%
+      8 = 50%
+      7 = 25%
+      6 = 12%
+      5 = 6%
+      4 = 3%
+      3 = 1.5%
+      2 = 0.75%
+      1 = 0.37%
+      0 = 0.1%
+  overdriving energy capacity
+    causes damage to the energy pool
+      pain and reduction of max capacity of pools involved
+      energy leaks from the pool if there is damage, proportional to the damage level
+      how to repair damaged pools
+        higher tier pools that are connected will first repair the damage before filling the pool
+        repair cost is one higher tier point per damage point
+      damage per aut = ([overloaded amount] / [max]) ^ 4 / 10
+  tiers 0-4
+    1 tier 4 = 10 tier 3 = 100 tier 2 = 1000 tier 1 = 10000 tier 0
+  energy types
+    lumina (5)
+      white: sUn (tier 4)
+        connects to *all* etherea
+        element = high life
+      white: Moon (tier 3)
+        connects to *all* spectra
+        connects to sun
+        element = low life
+      white: sTar (tier 2)
+        connects to any etherea
+        connects to moon
+        element = light
+      grAy (tier 1)
+        connects to any spectra
+        connects to star
+        element = shadow
+      blacK (tier 0)
+        connects to any interna or gray
+        element = darkness
+    etherea (tier 3) (4)
+      Diamond (cyan, blue, indigo, violet, red)
+      goLd (yellow, green, cyan, blue)
+      Silver (orange, yellow, green)
+      coppEr (red, orange)
+    spectra (tier 2) (8)
+      violet
+        element = purity / poison
+        provided by mushrooms
+        used by: 
+          time spells
+      indigo
+        element = metal
+        provided by dairy
+        used by: 
+          planes spells
+          deep creation
+      blue
+        element = water
+        provided by seafood
+        used by: 
+          deep aleration spells
+          critical healing
+      cyan
+        element = ice
+        provided by roots 
+        used by: 
+          translocation spells
+          freeze magic
+          perception magic
+      green
+        element = earth
+        provided by veggies
+        used by: 
+          simple creation spells
+          major healing
+      yellow
+        element = electric
+        provided by fruits
+        used by:
+          mana gen
+          control magic
+          lightning magic
+      orange
+        element = stone
+        provided by grains
+        used by: 
+          simple aleration spells
+          stamina gen
+      red
+        element = fire
+        provided by meat (land meat, not seafood)
+        used by:
+          minor healing
+          fire magic
+    interna (tier 1) (N) (6) (form pools)
+      1 hp1 critical_health (from blue)
+      2 hp2 major_health (from green)
+      3 hp3 minor_health (from red)
+      4 sp  stamina (from orange)
+      5 mp  mana (from yellow)
+      6 wp  willpower (from violet)
+    eXotica (3) (tier 1) (extremely rare to find these energies)
+      raiNbow 
+        connects to *all* spectra
+      broWn 
+        connects to *all* lumina
+      Purple
+        connects to red AND blue

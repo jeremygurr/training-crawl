@@ -1,13 +1,7 @@
 separate immutable
 experience potion drinking
   drink action
-    changing selection doesn't actually change the select list
-      add afterChange callback
-      but what about updating the selection list from the saved config?
-        need to bind a selection list to it
-    titles can't be dynamic, since they are set at setup instead of after each selection
-      [ ] allow a title to be a function instead of a string
-      [*] replace all titles with a function, removing the plural cases
+    abort execution if all points are not used
     support custom back / escape command
     spend xp on
       attributes +1

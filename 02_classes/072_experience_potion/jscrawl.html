@@ -1641,10 +1641,14 @@ class TopController {
   drinkExperiencePotionExecute() {
     const fc = this.frontController
     const bc = this.backController
-    // TODO
-    // fill interna
-    bc.removeItemFromInventory(item, count)
-    fc.addMessage("Drank " + getNameOf(count, item))
+    const player = bc.getPlayer()
+    bc.addGrowthSelectionToGrowth()
+    bc.fillEnergy(player, poolTypes.interna)
+    const item = fc.getSelectMeta('item')
+    bc.removeItemFromInventory(item, 1)
+    fc.addMessage("Drank " + getNameOf('a', item))
+    fc.setStatusChanged(true)
+    fc.exitSimple()
   }
 
   wait() {
@@ -2138,15 +2142,18 @@ class TopController {
 
   executeSelectAction() {
     const fc = this.frontController
+    let executeAction = fc.getSelectExecute()
+    let selectAction = fc.getSelectAction()
     if(fc.getSelectedIndex() >= 0) {
-      let action = fc.getSelectExecute()
-      if(action == null) {
-        action = fc.getSelectAction()
+      if(selectAction) {
+        selectAction()
+      } else if(executeAction) {
+        executeAction()
+      } else {
+        err("No select action defined.")
       }
-      if(action == null) {
-        err("No action defined.")
-      }
-      action()
+    } else if(executeAction) {
+      executeAction()
     } else {
       fc.showSelectedItems()
     }
@@ -3110,6 +3117,40 @@ class BackController {
     this.initializePlayer()
   }
 
+  addGrowthSelectionToGrowth() {
+    const player = this.backModel.player
+    const growthSelection = player.growthSelection
+    const growth = player.growth
+    this.addGrowthSelectionToGrowth2(growthSelection, growth)
+  }
+
+  addGrowthSelectionToGrowth2(growthSelection, growth) {
+    for(const key in growthSelection) {
+      const value = growthSelection[key]
+      if(typeof value == 'boolean') {
+        growth[key]++
+      } else {
+        this.addGrowthSelectionToGrowth2(
+          growthSelection[key], 
+          growth[key],
+        )
+      }
+    }
+  }
+
+  // either set poolTypeToFill or poolToFill
+  fillEnergy(actor, poolTypeToFill = null, poolToFill = null) {
+    let i = 0
+    for(const pool of Object.values(pools)) {
+      if(poolTypeToFill && pool.type == poolTypeToFill) {
+        this.fillPool(actor, pool)
+      } else if(poolToFill && pool == poolToFill) {
+        this.fillPool(actor, pool)
+      }
+      i++
+    }
+  }
+
   getGrowthSelection() {
     return this.backModel.player.growthSelection
   }
@@ -3252,6 +3293,14 @@ class BackController {
       for(let [energyType, amount] of Object.entries(deltas)) {
         this.addEnergy(actor, energyType, amount)
       }
+    }
+  }
+
+  fillPool(actor, pool) {
+    const poolIndex = pool.index
+    const maxValue = actor.poolMax[poolIndex]
+    if(actor.poolCurrent[poolIndex] < maxValue) {
+      actor.poolCurrent[poolIndex] = maxValue
     }
   }
 
@@ -5280,16 +5329,16 @@ function getNameOf(article, item, verb) {
     if(verb == 'is') verb = 'are'
   }
 
+  if(item.base && item.base.type == 'potion') {
+    name = 'potion of ' + name
+  }
+
   if(article) {
     name = article + ' ' + name
   }
 
   if(verb) {
     name += ' ' + verb
-  }
-
-  if(item.base && item.base.type == 'potion') {
-    name = 'potion of ' + name
   }
 
   return name

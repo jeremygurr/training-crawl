@@ -4,1157 +4,1157 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
-BackController	071_add_attributes/jscrawl.html	/^class BackController {$/;"	C
-FrontController	071_add_attributes/jscrawl.html	/^class FrontController {$/;"	C
-InController	071_add_attributes/jscrawl.html	/^class InController {$/;"	C
-OutController	071_add_attributes/jscrawl.html	/^class OutController {$/;"	C
-Pair	071_add_attributes/jscrawl.html	/^class Pair {$/;"	C
-Rect	071_add_attributes/jscrawl.html	/^class Rect {$/;"	C
-SeededRandomizer	071_add_attributes/jscrawl.html	/^class SeededRandomizer {$/;"	C
-TopController	071_add_attributes/jscrawl.html	/^class TopController {$/;"	C
-actionMessage	071_add_attributes/jscrawl.html	/^    let actionMessage = 'Unknown'$/;"	V
-actions	071_add_attributes/jscrawl.html	/^const actions = {$/;"	O
-actor	071_add_attributes/jscrawl.html	/^    actor: [],$/;"	P
-add	071_add_attributes/jscrawl.html	/^  add(pair) {$/;"	M
-addActor	071_add_attributes/jscrawl.html	/^  addActor(actor) {$/;"	M
-addEnergy	071_add_attributes/jscrawl.html	/^  addEnergy(actor, energyType, amount) {$/;"	M
-addItemToFloor	071_add_attributes/jscrawl.html	/^  addItemToFloor(pos, item) {$/;"	M
-addItemToInventory	071_add_attributes/jscrawl.html	/^  addItemToInventory(item) {$/;"	M
-addLevelCellsChanged	071_add_attributes/jscrawl.html	/^  addLevelCellsChanged(pos) {$/;"	M
-addMessage	071_add_attributes/jscrawl.html	/^  addMessage(message, multiColumn = false) {$/;"	M
-addStatusPoolLineCompact	071_add_attributes/jscrawl.html	/^  addStatusPoolLineCompact(list, player, poolList) {$/;"	M
-addStatusPoolLineExpanded	071_add_attributes/jscrawl.html	/^  addStatusPoolLineExpanded(list, player, poolList) {$/;"	M
-addSubjectToLevel	071_add_attributes/jscrawl.html	/^  addSubjectToLevel(subject, pos) {$/;"	M
-adjacent	071_add_attributes/jscrawl.html	/^        let adjacent = new Pair(fromX, fromY).adjacent(size)$/;"	V
-adjacent	071_add_attributes/jscrawl.html	/^  adjacent(size) {$/;"	M
-adjacentCells	071_add_attributes/jscrawl.html	/^  adjacentCells(subjectPos) {$/;"	M
-adjustHealth	071_add_attributes/jscrawl.html	/^  adjustHealth(target, change) {$/;"	M
-adjustLevelPan	071_add_attributes/jscrawl.html	/^  adjustLevelPan(levelWindow, pos, levelSize) {$/;"	M
-advanceEnergyFlow	071_add_attributes/jscrawl.html	/^  advanceEnergyFlow(actor) {$/;"	M
-advanceEnergyFlowChannel	071_add_attributes/jscrawl.html	/^  advanceEnergyFlowChannel(actor, channel, currentMaxFlow) {$/;"	M
-advanceEnergyFlowPools	071_add_attributes/jscrawl.html	/^  advanceEnergyFlowPools(actor, from, to, currentMaxFlow) {$/;"	M
-advanceTime	071_add_attributes/jscrawl.html	/^  advanceTime(playerActive) {$/;"	M
-afterEachTurn	071_add_attributes/jscrawl.html	/^  afterEachTurn() {$/;"	M
-allResults	071_add_attributes/jscrawl.html	/^  let allResults = [] $/;"	A
-alt	071_add_attributes/jscrawl.html	/^  alt: false,$/;"	P
-amulet	071_add_attributes/jscrawl.html	/^        amulet: null,$/;"	P
-apple	071_add_attributes/jscrawl.html	/^          apple: { $/;"	P
-applyEnergyDelta	071_add_attributes/jscrawl.html	/^  applyEnergyDelta(actor) {$/;"	M
-armor	071_add_attributes/jscrawl.html	/^        armor: [],$/;"	P
-attack	071_add_attributes/jscrawl.html	/^            attack: { min: 0, max: 1 }, $/;"	P
-attack	071_add_attributes/jscrawl.html	/^            attack: { min: 0, max: 4 },$/;"	P
-attackSpeed	071_add_attributes/jscrawl.html	/^                attackSpeed: 0,$/;"	P
-attackSpeed	071_add_attributes/jscrawl.html	/^                attackSpeed: 1,$/;"	P
-attributes	071_add_attributes/jscrawl.html	/^    attributes: {$/;"	P
-average	071_add_attributes/jscrawl.html	/^                  average: 1$/;"	P
-average	071_add_attributes/jscrawl.html	/^                  average: 2$/;"	P
-averageValue	071_add_attributes/jscrawl.html	/^        let averageValue = values.reduce((a,b) => a + b, 0) \/ values.length$/;"	F
-axe	071_add_attributes/jscrawl.html	/^          axe: {$/;"	P
-b	071_add_attributes/jscrawl.html	/^  const b = 1 - levelCaveGenerator.openness$/;"	V
-backModel	071_add_attributes/jscrawl.html	/^  backModel: {$/;"	P
-bacon	071_add_attributes/jscrawl.html	/^          bacon: { $/;"	P
-banana	071_add_attributes/jscrawl.html	/^          banana: { $/;"	P
-base	071_add_attributes/jscrawl.html	/^                  base: 20, $/;"	P
-base	071_add_attributes/jscrawl.html	/^                  base: 3, $/;"	P
-base	071_add_attributes/jscrawl.html	/^                  base: 5, $/;"	P
-base	071_add_attributes/jscrawl.html	/^                  base: 8, $/;"	P
-base	071_add_attributes/jscrawl.html	/^      base: {$/;"	P
-base	071_add_attributes/jscrawl.html	/^  base: {$/;"	P
-beef	071_add_attributes/jscrawl.html	/^          beef: { $/;"	P
-beforeEachTurn	071_add_attributes/jscrawl.html	/^  beforeEachTurn() {$/;"	M
-bgStyle	071_add_attributes/jscrawl.html	/^          bgStyle,$/;"	V
-black	071_add_attributes/jscrawl.html	/^              black: 10,$/;"	P
-black	071_add_attributes/jscrawl.html	/^  black:   { bgStyle: '#000000', style: '#FFF' },$/;"	P
-black	071_add_attributes/jscrawl.html	/^  black: { $/;"	P
-blue	071_add_attributes/jscrawl.html	/^              blue: 15,$/;"	P
-blue	071_add_attributes/jscrawl.html	/^              blue: 2,$/;"	P
-blue	071_add_attributes/jscrawl.html	/^              blue: 5, $/;"	P
-blue	071_add_attributes/jscrawl.html	/^              blue: 5,$/;"	P
-blue	071_add_attributes/jscrawl.html	/^  blue:       { bgStyle: '#1F74FF', style: '#FFF' },$/;"	P
-blue	071_add_attributes/jscrawl.html	/^  blue: { $/;"	P
-blueberries	071_add_attributes/jscrawl.html	/^          blueberries: { $/;"	P
-body	071_add_attributes/jscrawl.html	/^        body: null,$/;"	P
-book	071_add_attributes/jscrawl.html	/^        book: [],$/;"	P
-boomerang	071_add_attributes/jscrawl.html	/^              boomerang: { $/;"	P
-boots	071_add_attributes/jscrawl.html	/^        boots: null,$/;"	P
-boulder	071_add_attributes/jscrawl.html	/^              boulder: { $/;"	P
-bread	071_add_attributes/jscrawl.html	/^          bread: { $/;"	P
-break	071_add_attributes/jscrawl.html	/^          break$/;"	V
-break	071_add_attributes/jscrawl.html	/^        break$/;"	V
-break	071_add_attributes/jscrawl.html	/^      break$/;"	V
-break	071_add_attributes/jscrawl.html	/^    break$/;"	V
-brocolli	071_add_attributes/jscrawl.html	/^          brocolli: { $/;"	P
-brown	071_add_attributes/jscrawl.html	/^  brown:   { bgStyle: '#CF9509', style: '#FFF'  },$/;"	P
-brown	071_add_attributes/jscrawl.html	/^  brown: { $/;"	P
-buildLevel	071_add_attributes/jscrawl.html	/^  buildLevel(randomizer) {$/;"	M
-calculateDamageFrom	071_add_attributes/jscrawl.html	/^  calculateDamageFrom(attacker) {$/;"	M
-canvasProps	071_add_attributes/jscrawl.html	/^const canvasProps = {$/;"	O
-carrot	071_add_attributes/jscrawl.html	/^          carrot: { $/;"	P
-cellPos	071_add_attributes/jscrawl.html	/^          cellPos,$/;"	V
-cellSizePixels	071_add_attributes/jscrawl.html	/^      cellSizePixels: cellSizePixels,$/;"	P
-cellsChanged	071_add_attributes/jscrawl.html	/^        cellsChanged$/;"	V
-cellsChanged	071_add_attributes/jscrawl.html	/^    let cellsChanged = []$/;"	A
-center	071_add_attributes/jscrawl.html	/^        center: true,$/;"	P
-chanceWeight	071_add_attributes/jscrawl.html	/^                chanceWeight: 100, $/;"	P
-chanceWeight	071_add_attributes/jscrawl.html	/^                chanceWeight: 1000, $/;"	P
-chanceWeight	071_add_attributes/jscrawl.html	/^            chanceWeight: 1,$/;"	P
-chanceWeight	071_add_attributes/jscrawl.html	/^            chanceWeight: 1000, $/;"	P
-chanceWeight	071_add_attributes/jscrawl.html	/^            chanceWeight: 1000,$/;"	P
-chanceWeight	071_add_attributes/jscrawl.html	/^            chanceWeight: 20,$/;"	P
-chanceWeight	071_add_attributes/jscrawl.html	/^            chanceWeight: 200, $/;"	P
-chanceWeight	071_add_attributes/jscrawl.html	/^            chanceWeight: 200,$/;"	P
-chanceWeight	071_add_attributes/jscrawl.html	/^            chanceWeight: 2000,$/;"	P
-chanceWeight	071_add_attributes/jscrawl.html	/^            chanceWeight: 300,$/;"	P
-chanceWeight	071_add_attributes/jscrawl.html	/^            chanceWeight: 50, $/;"	P
-chanceWeight	071_add_attributes/jscrawl.html	/^            chanceWeight: 500,$/;"	P
-chanceWeight	071_add_attributes/jscrawl.html	/^        chanceWeight: 1000,$/;"	P
-changeStatusMode	071_add_attributes/jscrawl.html	/^    changeStatusMode: [ 's' ],$/;"	P
-changeStatusMode	071_add_attributes/jscrawl.html	/^  changeStatusMode() {$/;"	M
-changeStatusMode	071_add_attributes/jscrawl.html	/^  changeStatusMode: () => {$/;"	M
-changeString	071_add_attributes/jscrawl.html	/^    let changeString = ''$/;"	V
-channelCommand	071_add_attributes/jscrawl.html	/^    channelCommand: [ 'c' ],$/;"	P
-channelCommand	071_add_attributes/jscrawl.html	/^  channelCommand: () => {$/;"	M
-channelCommandExecuteChange	071_add_attributes/jscrawl.html	/^  channelCommandExecuteChange() {$/;"	M
-channelCommandSelectChannel	071_add_attributes/jscrawl.html	/^  channelCommandSelectChannel() {$/;"	M
-channelCommandSelectFlow	071_add_attributes/jscrawl.html	/^  channelCommandSelectFlow() {$/;"	M
-channelCommandSelectPool	071_add_attributes/jscrawl.html	/^  channelCommandSelectPool() {$/;"	M
-channelCommandSelectPoolType	071_add_attributes/jscrawl.html	/^  channelCommandSelectPoolType() {$/;"	M
-channelCurrent	071_add_attributes/jscrawl.html	/^      channelCurrent: [],  \/\/ integers of openness of each channel$/;"	P
-channelMax	071_add_attributes/jscrawl.html	/^      channelMax: [],      \/\/ integers of max value of each channel$/;"	P
-channelString	071_add_attributes/jscrawl.html	/^  let channelString = [ $/;"	A
-channelsToOutput	071_add_attributes/jscrawl.html	/^    let channelsToOutput = []$/;"	A
-checkPan	071_add_attributes/jscrawl.html	/^  checkPan(window, pos, size) {$/;"	M
-cheese	071_add_attributes/jscrawl.html	/^          cheese: { $/;"	P
-cherry	071_add_attributes/jscrawl.html	/^          cherry: { $/;"	P
-chicken	071_add_attributes/jscrawl.html	/^          chicken: { $/;"	P
-chocolate	071_add_attributes/jscrawl.html	/^          chocolate: { $/;"	P
-classifyLevelSpaces	071_add_attributes/jscrawl.html	/^function classifyLevelSpaces(level, pos, classifiedSpaces = null) {$/;"	F
-clearArray	071_add_attributes/jscrawl.html	/^function clearArray(array) {$/;"	F
-clearLevelCellsChanged	071_add_attributes/jscrawl.html	/^  clearLevelCellsChanged() {$/;"	M
-clearMessages	071_add_attributes/jscrawl.html	/^  clearMessages() {$/;"	M
-clearNumericSelection	071_add_attributes/jscrawl.html	/^    clearNumericSelection: [ 'Backspace' ],$/;"	P
-clearNumericSelection	071_add_attributes/jscrawl.html	/^  clearNumericSelection() {$/;"	M
-clearNumericSelection	071_add_attributes/jscrawl.html	/^  clearNumericSelection: () => {$/;"	M
-clearRect	071_add_attributes/jscrawl.html	/^  clearRect(rect) {$/;"	M
-clearWindow	071_add_attributes/jscrawl.html	/^  clearWindow(screen, window) {$/;"	M
-clearWindowCells	071_add_attributes/jscrawl.html	/^  clearWindowCells(screen, window, cells) {$/;"	M
-cloak	071_add_attributes/jscrawl.html	/^        cloak: null,$/;"	P
-coconut	071_add_attributes/jscrawl.html	/^          coconut: { $/;"	P
-col	071_add_attributes/jscrawl.html	/^        let col = 0$/;"	V
-colorize	071_add_attributes/jscrawl.html	/^const colorize = {$/;"	O
-colorizePoolName	071_add_attributes/jscrawl.html	/^function colorizePoolName(pool) {$/;"	F
-colors	071_add_attributes/jscrawl.html	/^const colors = {$/;"	O
-command	071_add_attributes/jscrawl.html	/^  command: false,$/;"	P
-commandExecution	071_add_attributes/jscrawl.html	/^const commandExecution = {$/;"	O
-compact	071_add_attributes/jscrawl.html	/^  compact: { name: "Courier", size: 14 },$/;"	P
-complexJoin	071_add_attributes/jscrawl.html	/^function complexJoin(list, pad={text:' '}) {$/;"	F
-complexLength	071_add_attributes/jscrawl.html	/^function complexLength(list) {$/;"	F
-connectRooms	071_add_attributes/jscrawl.html	/^function connectRooms(level, map, wallThreshold, randomizer) {$/;"	F
-connectedRooms	071_add_attributes/jscrawl.html	/^  let connectedRooms = 0$/;"	V
-constructor	071_add_attributes/jscrawl.html	/^  constructor() {$/;"	M
-constructor	071_add_attributes/jscrawl.html	/^  constructor(seed) {$/;"	M
-constructor	071_add_attributes/jscrawl.html	/^  constructor(x, y) {$/;"	M
-constructor	071_add_attributes/jscrawl.html	/^  constructor(x1, y1, x2, y2) {$/;"	M
-continue	071_add_attributes/jscrawl.html	/^            continue$/;"	V
-continue	071_add_attributes/jscrawl.html	/^        continue$/;"	V
-continue	071_add_attributes/jscrawl.html	/^      continue$/;"	V
-control	071_add_attributes/jscrawl.html	/^  control: false,$/;"	P
-copper	071_add_attributes/jscrawl.html	/^              copper: 20,$/;"	P
-copper	071_add_attributes/jscrawl.html	/^  copper:  { $/;"	P
-copper	071_add_attributes/jscrawl.html	/^  copper: { $/;"	P
-copperEgg	071_add_attributes/jscrawl.html	/^          copperEgg: { $/;"	P
-coreExperienceCost	071_add_attributes/jscrawl.html	/^    coreExperienceCost: 50,$/;"	P
-count	071_add_attributes/jscrawl.html	/^                count: 10,$/;"	P
-count	071_add_attributes/jscrawl.html	/^            count: 1,$/;"	P
-count	071_add_attributes/jscrawl.html	/^            count: 10,$/;"	P
-count	071_add_attributes/jscrawl.html	/^            count: 100,$/;"	P
-count	071_add_attributes/jscrawl.html	/^          count: count,$/;"	P
-count	071_add_attributes/jscrawl.html	/^        count: 1,$/;"	P
-count	071_add_attributes/jscrawl.html	/^      let count = ''$/;"	V
-count	071_add_attributes/jscrawl.html	/^    let count = 0$/;"	V
-countEmptyCells	071_add_attributes/jscrawl.html	/^  countEmptyCells() {$/;"	M
-countedItem	071_add_attributes/jscrawl.html	/^      const countedItem = { base: template }$/;"	O
-counts	071_add_attributes/jscrawl.html	/^    const counts = []$/;"	A
-creator	071_add_attributes/jscrawl.html	/^  creator: {$/;"	P
-creatorCreateTarget	071_add_attributes/jscrawl.html	/^    creatorCreateTarget: [ 'c' ],$/;"	P
-creatorCreateTarget	071_add_attributes/jscrawl.html	/^  creatorCreateTarget: () => {$/;"	M
-creatorDeleteTarget	071_add_attributes/jscrawl.html	/^    creatorDeleteTarget: [ 'd' ],$/;"	P
-creatorDeleteTarget	071_add_attributes/jscrawl.html	/^  creatorDeleteTarget: () => {$/;"	M
-creatorMode	071_add_attributes/jscrawl.html	/^    creatorMode: false,$/;"	P
-creatorModeCommand	071_add_attributes/jscrawl.html	/^    creatorModeCommand: [ '`' ],$/;"	P
-creatorModeCommand	071_add_attributes/jscrawl.html	/^  creatorModeCommand() {$/;"	M
-creatorModeCommand	071_add_attributes/jscrawl.html	/^  creatorModeCommand: () => {$/;"	M
-creatorModeCreateTarget	071_add_attributes/jscrawl.html	/^  creatorModeCreateTarget() {$/;"	M
-creatorModeDeleteTarget	071_add_attributes/jscrawl.html	/^  creatorModeDeleteTarget() {$/;"	M
-creatorModeRegenLevel	071_add_attributes/jscrawl.html	/^  creatorModeRegenLevel() {$/;"	M
-creatorModeTeleportToTarget	071_add_attributes/jscrawl.html	/^  creatorModeTeleportToTarget() {$/;"	M
-creatorRegenLevel	071_add_attributes/jscrawl.html	/^    creatorRegenLevel: [ 'r' ],$/;"	P
-creatorRegenLevel	071_add_attributes/jscrawl.html	/^  creatorRegenLevel: () => {$/;"	M
-creatorTeleportToTarget	071_add_attributes/jscrawl.html	/^    creatorTeleportToTarget: [ 't' ],$/;"	P
-creatorTeleportToTarget	071_add_attributes/jscrawl.html	/^  creatorTeleportToTarget: () => {$/;"	M
-creature	071_add_attributes/jscrawl.html	/^      creature: {$/;"	P
-criticalHealth	071_add_attributes/jscrawl.html	/^      criticalHealth: 5,$/;"	P
-criticalHealth	071_add_attributes/jscrawl.html	/^  criticalHealth: { $/;"	P
-current	071_add_attributes/jscrawl.html	/^      const current = '' + Math.floor($/;"	V
-currentFlowMagnitude	071_add_attributes/jscrawl.html	/^        currentFlowMagnitude,$/;"	V
-currentMaxFlow	071_add_attributes/jscrawl.html	/^        currentMaxFlow,$/;"	V
-cyan	071_add_attributes/jscrawl.html	/^              cyan: 2, $/;"	P
-cyan	071_add_attributes/jscrawl.html	/^              cyan: 5,$/;"	P
-cyan	071_add_attributes/jscrawl.html	/^  cyan:       { bgStyle: '#00FFFF', style: '#000' },$/;"	P
-cyan	071_add_attributes/jscrawl.html	/^  cyan: { $/;"	P
-damage	071_add_attributes/jscrawl.html	/^                damage: [{$/;"	P
-debug	071_add_attributes/jscrawl.html	/^function debug(message) {$/;"	F
-default	071_add_attributes/jscrawl.html	/^      default: 100,$/;"	P
-default	071_add_attributes/jscrawl.html	/^  default: {$/;"	P
-describeItem	071_add_attributes/jscrawl.html	/^function describeItem(item) {$/;"	F
-dexterity	071_add_attributes/jscrawl.html	/^      dexterity: 10,$/;"	P
-diamond	071_add_attributes/jscrawl.html	/^              diamond: 20,$/;"	P
-diamond	071_add_attributes/jscrawl.html	/^  diamond:  { $/;"	P
-diamond	071_add_attributes/jscrawl.html	/^  diamond: { $/;"	P
-diamondEgg	071_add_attributes/jscrawl.html	/^          diamondEgg: { $/;"	P
-dirtFloor	071_add_attributes/jscrawl.html	/^    dirtFloor: { $/;"	P
-divide	071_add_attributes/jscrawl.html	/^  divide(pair) {$/;"	M
-drawEmptyRect	071_add_attributes/jscrawl.html	/^  drawEmptyRect(rect, style = "#000000") {$/;"	M
-drawFilledRect	071_add_attributes/jscrawl.html	/^  drawFilledRect(rect, style = "#000000") {$/;"	M
-drawLevelWindowCell	071_add_attributes/jscrawl.html	/^  drawLevelWindowCell(screen, window, windowPos) {$/;"	M
-drawLevelWindowCells	071_add_attributes/jscrawl.html	/^  drawLevelWindowCells(screen, window, cells) {$/;"	M
-drawMessagesWindow	071_add_attributes/jscrawl.html	/^  drawMessagesWindow(screen, window) {$/;"	M
-drawStatusWindow	071_add_attributes/jscrawl.html	/^  drawStatusWindow(screen, window, statusList) {$/;"	M
-drawTarget	071_add_attributes/jscrawl.html	/^  drawTarget(screen, window, targetPos) {$/;"	M
-drawText	071_add_attributes/jscrawl.html	/^  drawText(p) {$/;"	M
-drawWindow	071_add_attributes/jscrawl.html	/^  drawWindow(screen, window) {$/;"	M
-drop	071_add_attributes/jscrawl.html	/^  drop: {$/;"	P
-dropItem	071_add_attributes/jscrawl.html	/^  dropItem(item, count) {$/;"	M
-dropItem	071_add_attributes/jscrawl.html	/^  dropItem(type, index, count) {$/;"	M
-durability	071_add_attributes/jscrawl.html	/^        durability: 100,$/;"	P
-eat	071_add_attributes/jscrawl.html	/^  eat: {$/;"	P
-eatItem	071_add_attributes/jscrawl.html	/^  eatItem(item, count) {$/;"	M
-egg	071_add_attributes/jscrawl.html	/^          egg: { $/;"	P
-eggplant	071_add_attributes/jscrawl.html	/^          eggplant: { $/;"	P
-empty	071_add_attributes/jscrawl.html	/^  static empty() {$/;"	M
-emptyCellCount	071_add_attributes/jscrawl.html	/^    let emptyCellCount = 0$/;"	V
-energy	071_add_attributes/jscrawl.html	/^            energy: {$/;"	P
-energyDelta	071_add_attributes/jscrawl.html	/^    energyDelta: {$/;"	P
-enterCreatorMode	071_add_attributes/jscrawl.html	/^    enterCreatorMode: [ 'C' ],$/;"	P
-enterCreatorMode	071_add_attributes/jscrawl.html	/^  enterCreatorMode() {$/;"	M
-enterCreatorMode	071_add_attributes/jscrawl.html	/^  enterCreatorMode: () => {$/;"	M
-enterTargetMode	071_add_attributes/jscrawl.html	/^    enterTargetMode: [ 'x' ],$/;"	P
-enterTargetMode	071_add_attributes/jscrawl.html	/^    enterTargetMode: [],$/;"	P
-enterTargetMode	071_add_attributes/jscrawl.html	/^  enterTargetMode() {$/;"	M
-enterTargetMode	071_add_attributes/jscrawl.html	/^  enterTargetMode: () => {$/;"	M
-equip	071_add_attributes/jscrawl.html	/^      equip: {$/;"	P
-equip	071_add_attributes/jscrawl.html	/^  equip: {$/;"	P
-equipItem	071_add_attributes/jscrawl.html	/^  equipItem(item) {$/;"	M
-err	071_add_attributes/jscrawl.html	/^function err(message) {$/;"	F
-etherea	071_add_attributes/jscrawl.html	/^  etherea: { name: 'etherea', key: 'e', },$/;"	P
-execute	071_add_attributes/jscrawl.html	/^    execute: (item) => {$/;"	M
-execute	071_add_attributes/jscrawl.html	/^    execute: (item, count) => {$/;"	M
-executeAction	071_add_attributes/jscrawl.html	/^  executeAction() {$/;"	M
-executeAction	071_add_attributes/jscrawl.html	/^  executeAction(key) {$/;"	M
-executeAction	071_add_attributes/jscrawl.html	/^  executeAction: (key) => {$/;"	M
-executeAttack	071_add_attributes/jscrawl.html	/^  executeAttack(source, target) {$/;"	M
-executeMove	071_add_attributes/jscrawl.html	/^  executeMove(actor, pos) {$/;"	M
-executeSelectAction	071_add_attributes/jscrawl.html	/^    executeSelectAction: [ 'Enter' ],$/;"	P
-executeSelectAction	071_add_attributes/jscrawl.html	/^  executeSelectAction() {$/;"	M
-executeSelectAction	071_add_attributes/jscrawl.html	/^  executeSelectAction: () => {$/;"	M
-exitSimple	071_add_attributes/jscrawl.html	/^    exitSimple: [ 'Escape' ],$/;"	P
-exitSimple	071_add_attributes/jscrawl.html	/^  exitSimple() {$/;"	M
-exitSimple	071_add_attributes/jscrawl.html	/^  exitSimple: () => {$/;"	M
-exitTargetMode	071_add_attributes/jscrawl.html	/^    exitTargetMode: [ 'Escape' ],$/;"	P
-exitTargetMode	071_add_attributes/jscrawl.html	/^  exitTargetMode: () => {$/;"	M
-exotica	071_add_attributes/jscrawl.html	/^  exotica: { name: 'exotica', key: 'x', },$/;"	P
-expand	071_add_attributes/jscrawl.html	/^  expand(pixels) {$/;"	M
-expandCrack	071_add_attributes/jscrawl.html	/^function expandCrack(level, map, classifiedSpaces, wallThreshold, startPos) {$/;"	F
-experiencePerLevel	071_add_attributes/jscrawl.html	/^    experiencePerLevel: 12,$/;"	P
-experiencePerLevel	071_add_attributes/jscrawl.html	/^    experiencePerLevel: 15,$/;"	P
-fPress	071_add_attributes/jscrawl.html	/^  const [fPress, tPress] = getEffectivePressures($/;"	V
-fRoom	071_add_attributes/jscrawl.html	/^        fRoom,$/;"	V
-false	071_add_attributes/jscrawl.html	/^      false,$/;"	V
-findBestCrack	071_add_attributes/jscrawl.html	/^function findBestCrack(level, map, classifiedSpaces, wallThreshold) {$/;"	F
-findEmptyCellCentrally	071_add_attributes/jscrawl.html	/^function findEmptyCellCentrally(level, randomizer, bounds = null) {$/;"	F
-findEmptyCellSimple	071_add_attributes/jscrawl.html	/^function findEmptyCellSimple(level) {$/;"	F
-fish	071_add_attributes/jscrawl.html	/^          fish: { $/;"	P
-fixed	071_add_attributes/jscrawl.html	/^  fixed: { name: "Courier", size: 26 },$/;"	P
-floor	071_add_attributes/jscrawl.html	/^  floor() {$/;"	M
-floorType	071_add_attributes/jscrawl.html	/^          floorType: { base: ot.dirtFloor }, $/;"	P
-floorType	071_add_attributes/jscrawl.html	/^          floorType: { base: ot.dirtFloor },$/;"	P
-flow	071_add_attributes/jscrawl.html	/^    const flow = 9 - selectedIndex$/;"	V
-fontStyle	071_add_attributes/jscrawl.html	/^      fontStyle: fontStyle, $/;"	P
-fontStyle	071_add_attributes/jscrawl.html	/^const fontStyle = {$/;"	O
-food	071_add_attributes/jscrawl.html	/^        food: [],$/;"	P
-food	071_add_attributes/jscrawl.html	/^      food: {$/;"	P
-for	071_add_attributes/jscrawl.html	/^            for(let t = 0; t < channel.to.length; t++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^          for(let c = 0; c < pool.channelIndexes.length; c++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^          for(let f = 0; f < channel.from.length; f++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^          for(let t = 0; t < channel.to.length; t++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^        for(let adjacentPos of newPos.adjacent(levelSize)) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^        for(let ci = 0; ci < channelList.length; ci++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^        for(let f = 0; f < channel.from.length; f++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^        for(let j = 0; j < hands; j++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^        for(let p = 0; p < poolTypePools.length; p++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^        for(let r = 0; r < window.size.y; r++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^      for(const [windowName, window] of Object.entries(screen.window)) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^      for(let [energyType, amount] of Object.entries(deltas)) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^      for(let [energyType, amount] of Object.entries(item.base.energy)) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^      for(let [key, value] of Object.entries(template.sub)) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^      for(let c = 0; c < pool.channelIndexes.length; c++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^      for(let c = 0; c < poolChannels.length; c++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^      for(let c = 0; c < window.size.x; c++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^      for(let fromY = 0; fromY < fromHeight; fromY++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^      for(let fromY = 0; fromY < size.y; fromY++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^      for(let i = 0; i < subjects.length; i++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^      for(let invItem of group) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^      for(let item of cell.onFloor) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^      for(let pt = 0; pt < poolTypes.length; pt++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^      for(let r = this.y - 1; r <= this.y + 1; r++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^      for(let t = 0; t < channel.to.length; t++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^      for(let y = 0; y < column.length; y++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^      for(let y = 0; y < level[0].length; y++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(const [key, subject] of Object.entries(group)) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(const [screenName, screen] of Object.entries(screens)) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(const [testName, testWindow] of Object.entries(screen.window)) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(const cellPos of cells) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(const poolName of poolList) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(const subject of Object.values(group)) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(const window of Object.values(screen.window)) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(const windowPos of cells) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(i = 0; i < poolChannels.length; i++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(index = 0; index < group.length; index++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let [poolName, pool] of Object.entries(pools)) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let [type, value] of Object.entries(equip)) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let action of actions) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let c = this.x - 1; c <= this.x + 1; c++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let channelIndex of fc.getSelectMeta('channelIndexes')) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let command of Object.keys(keyMap[km])) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let f = 0; f < channel.from.length; f++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let floorItem of cell.onFloor) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let fromX = 0; fromX < size.x; fromX++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let fromY = 0; fromY < fromHeight - 1; fromY += 2) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let fromY = 0; fromY < fromHeight; fromY++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let i = 0; i < adjacent.length; i++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let i = 0; i < floorItems.length; i++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let i = 0; i < fm.selectIndexes.length; i++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let i = 0; i < fm.selectSubjectList.length; i++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let i = 0; i < group.length; i++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let i = 0; i < hand.length; i++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let i = 0; i < items.length; i++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let i = 0; i < list.length; i++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let i = 0; i < p.textToDrawList.length; i++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let i = 0; i < poolChannels.length; i++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let i = 0; i < selectedFloorItems.length; i++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let i = 0; i < subjects.length; i++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let i = 9; i > 0; i--) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let i = 9; i >= 0; i--) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let i = list.length - 1; i >= 0; i--) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let i = pos; i > 0; i--) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let item of cell.onFloor) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let itemKey in itemBase) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let key in inventoryTypes) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let key in species) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let n = 0; n < stuffCount; n++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let p = 0; p < pools.length; p++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let pool of Object.values(subjectPools)) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let poolType of Object.values(poolTypes)) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let r = 0; r < column.length; r++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let r = 0; r < size.y + 2; r++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let r = 0; r < size.y; r++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let row = 0; row < messages.length; row++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let row = 0; row < statusList.length; row++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let x = 0; x < level.length; x++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let y = 0; y < level[x].length; y++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^    for(let y = 0; y < toHeight; y++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^  for(let adjacentPos of adjacentList) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^  for(let adjacentPos of startPos.adjacent(levelSize)) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^  for(let c = 0; c < level.length; c++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^  for(let c = 0; c < size.x + 2; c++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^  for(let c = 0; c < size.x; c++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^  for(let fromX = 0; fromX < fromWidth - 1; fromX += 2) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^  for(let fromX = 0; fromX < fromWidth; fromX++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^  for(let i = 0; i < list.length; i++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^  for(let item of list) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^  for(let key of Object.keys(pools)) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^  for(let x = 0; x < level.length; x++) {$/;"	M
-for	071_add_attributes/jscrawl.html	/^  for(let x = 0; x < toWidth; x++) {$/;"	M
-fork	071_add_attributes/jscrawl.html	/^  fork() {$/;"	M
-found	071_add_attributes/jscrawl.html	/^    let found = [];$/;"	A
-from	071_add_attributes/jscrawl.html	/^    from: [$/;"	P
-from	071_add_attributes/jscrawl.html	/^    from: [pools.blue],$/;"	P
-from	071_add_attributes/jscrawl.html	/^    from: [pools.copper],$/;"	P
-from	071_add_attributes/jscrawl.html	/^    from: [pools.criticalHealth],$/;"	P
-from	071_add_attributes/jscrawl.html	/^    from: [pools.cyan],$/;"	P
-from	071_add_attributes/jscrawl.html	/^    from: [pools.diamond],$/;"	P
-from	071_add_attributes/jscrawl.html	/^    from: [pools.gold],$/;"	P
-from	071_add_attributes/jscrawl.html	/^    from: [pools.gray],$/;"	P
-from	071_add_attributes/jscrawl.html	/^    from: [pools.green],$/;"	P
-from	071_add_attributes/jscrawl.html	/^    from: [pools.indigo],$/;"	P
-from	071_add_attributes/jscrawl.html	/^    from: [pools.majorHealth],$/;"	P
-from	071_add_attributes/jscrawl.html	/^    from: [pools.mana],$/;"	P
-from	071_add_attributes/jscrawl.html	/^    from: [pools.minorHealth],$/;"	P
-from	071_add_attributes/jscrawl.html	/^    from: [pools.moon],$/;"	P
-from	071_add_attributes/jscrawl.html	/^    from: [pools.orange],$/;"	P
-from	071_add_attributes/jscrawl.html	/^    from: [pools.red],$/;"	P
-from	071_add_attributes/jscrawl.html	/^    from: [pools.silver],$/;"	P
-from	071_add_attributes/jscrawl.html	/^    from: [pools.stamina],$/;"	P
-from	071_add_attributes/jscrawl.html	/^    from: [pools.star],$/;"	P
-from	071_add_attributes/jscrawl.html	/^    from: [pools.sun],$/;"	P
-from	071_add_attributes/jscrawl.html	/^    from: [pools.violet],$/;"	P
-from	071_add_attributes/jscrawl.html	/^    from: [pools.willpower],$/;"	P
-from	071_add_attributes/jscrawl.html	/^    from: [pools.yellow],$/;"	P
-frontModel	071_add_attributes/jscrawl.html	/^  frontModel: {$/;"	P
-gameClock	071_add_attributes/jscrawl.html	/^    gameClock: 0,$/;"	P
-generateDiamondSquareMap	071_add_attributes/jscrawl.html	/^function generateDiamondSquareMap(fromMap, randomizer) {$/;"	F
-generateGradient	071_add_attributes/jscrawl.html	/^function generateGradient(width, height, list) {$/;"	F
-generateItem	071_add_attributes/jscrawl.html	/^  generateItem(count, path, currentItem = template.generated) {$/;"	M
-generateLevelEmptyRoom	071_add_attributes/jscrawl.html	/^function generateLevelEmptyRoom(level, size, randomizer) {$/;"	F
-generateLevelSimpleCaves	071_add_attributes/jscrawl.html	/^function generateLevelSimpleCaves(level, size, randomizer, levelCaveGenerator) {$/;"	F
-generated	071_add_attributes/jscrawl.html	/^  generated: {$/;"	P
-getActionModeMessage	071_add_attributes/jscrawl.html	/^  getActionModeMessage() {$/;"	M
-getActionsFor	071_add_attributes/jscrawl.html	/^function getActionsFor(type, allowMultiple) {$/;"	F
-getActors	071_add_attributes/jscrawl.html	/^  getActors() {$/;"	M
-getBias	071_add_attributes/jscrawl.html	/^function getBias(actor, fromPool, toPool) {$/;"	F
-getCell	071_add_attributes/jscrawl.html	/^  getCell(pos) {$/;"	M
-getCellPixelRect	071_add_attributes/jscrawl.html	/^  getCellPixelRect(screen, window, windowPos) {$/;"	M
-getChangeString	071_add_attributes/jscrawl.html	/^  getChangeString(prefix, change) {$/;"	M
-getChannelFlowFromMagnitude	071_add_attributes/jscrawl.html	/^function getChannelFlowFromMagnitude(mag, max) {$/;"	F
-getChannelString	071_add_attributes/jscrawl.html	/^function getChannelString(player, from, to) {$/;"	F
-getCreatorMode	071_add_attributes/jscrawl.html	/^  getCreatorMode() {$/;"	M
-getCurrentScreen	071_add_attributes/jscrawl.html	/^  getCurrentScreen() {$/;"	M
-getEffectivePressures	071_add_attributes/jscrawl.html	/^function getEffectivePressures(actor, fromPool, toPool) {$/;"	F
-getEquipment	071_add_attributes/jscrawl.html	/^  getEquipment() {$/;"	M
-getFloorItemsAt	071_add_attributes/jscrawl.html	/^  getFloorItemsAt(pos) {$/;"	M
-getFloorItemsAtPlayerPos	071_add_attributes/jscrawl.html	/^  getFloorItemsAtPlayerPos() {$/;"	M
-getFontStyle	071_add_attributes/jscrawl.html	/^  getFontStyle(screen, window) {$/;"	M
-getGameClock	071_add_attributes/jscrawl.html	/^  getGameClock() {$/;"	M
-getInventoryGroup	071_add_attributes/jscrawl.html	/^  getInventoryGroup(type) {$/;"	M
-getKeyMode	071_add_attributes/jscrawl.html	/^  getKeyMode() {$/;"	M
-getLevel	071_add_attributes/jscrawl.html	/^  getLevel() {$/;"	M
-getLevelCellsChanged	071_add_attributes/jscrawl.html	/^  getLevelCellsChanged() {$/;"	M
-getLevelChanged	071_add_attributes/jscrawl.html	/^  getLevelChanged() {$/;"	M
-getMessagesChanged	071_add_attributes/jscrawl.html	/^  getMessagesChanged() {$/;"	M
-getNameOf	071_add_attributes/jscrawl.html	/^function getNameOf(article, item, verb) {$/;"	F
-getPlayer	071_add_attributes/jscrawl.html	/^  getPlayer() {$/;"	M
-getPlayerPos	071_add_attributes/jscrawl.html	/^  getPlayerPos() {$/;"	M
-getPlayerSpecies	071_add_attributes/jscrawl.html	/^  getPlayerSpecies() {$/;"	M
-getPoolCurrent	071_add_attributes/jscrawl.html	/^  getPoolCurrent(actor, poolIndex) {$/;"	M
-getPoolCurrentChange	071_add_attributes/jscrawl.html	/^  getPoolCurrentChange(actor, poolIndex) {$/;"	M
-getPoolDigits	071_add_attributes/jscrawl.html	/^  getPoolDigits(actor) {$/;"	M
-getPoolMax	071_add_attributes/jscrawl.html	/^  getPoolMax(actor, poolIndex) {$/;"	M
-getPoolMaxChange	071_add_attributes/jscrawl.html	/^  getPoolMaxChange(actor, poolIndex) {$/;"	M
-getPoolPercent	071_add_attributes/jscrawl.html	/^  getPoolPercent(actor, poolIndex) {$/;"	M
-getSelectAllowMultiple	071_add_attributes/jscrawl.html	/^  getSelectAllowMultiple(allow) {$/;"	M
-getSelectCountByIndex	071_add_attributes/jscrawl.html	/^  getSelectCountByIndex(index) {$/;"	M
-getSelectCountList	071_add_attributes/jscrawl.html	/^  getSelectCountList() {$/;"	M
-getSelectIndexes	071_add_attributes/jscrawl.html	/^  getSelectIndexes() {$/;"	M
-getSelectMeta	071_add_attributes/jscrawl.html	/^  getSelectMeta(key) {$/;"	M
-getSelectSubjectList	071_add_attributes/jscrawl.html	/^  getSelectSubjectList() {$/;"	M
-getSelectedIndex	071_add_attributes/jscrawl.html	/^  getSelectedIndex() {$/;"	M
-getSelectedIndexes	071_add_attributes/jscrawl.html	/^  getSelectedIndexes() {$/;"	M
-getSelectedSubjects	071_add_attributes/jscrawl.html	/^  getSelectedSubjects() {$/;"	M
-getStatusChanged	071_add_attributes/jscrawl.html	/^  getStatusChanged() {$/;"	M
-getStatusList	071_add_attributes/jscrawl.html	/^  getStatusList() {$/;"	M
-getStatusListChannels	071_add_attributes/jscrawl.html	/^  getStatusListChannels(list, player) {$/;"	M
-getStatusListPoolsCompact	071_add_attributes/jscrawl.html	/^  getStatusListPoolsCompact(list, player) {$/;"	M
-getStatusListPoolsExpanded	071_add_attributes/jscrawl.html	/^  getStatusListPoolsExpanded(list, player) {$/;"	M
-getStatusMode	071_add_attributes/jscrawl.html	/^  getStatusMode() {$/;"	M
-getTarget	071_add_attributes/jscrawl.html	/^  getTarget() {$/;"	M
-getWindowPixelRect	071_add_attributes/jscrawl.html	/^  getWindowPixelRect(screen, window) {$/;"	M
-gloves	071_add_attributes/jscrawl.html	/^        gloves: null,$/;"	P
-gold	071_add_attributes/jscrawl.html	/^              gold: 20,$/;"	P
-gold	071_add_attributes/jscrawl.html	/^      gold: 0,$/;"	P
-gold	071_add_attributes/jscrawl.html	/^      gold: {$/;"	P
-gold	071_add_attributes/jscrawl.html	/^  gold:  { $/;"	P
-gold	071_add_attributes/jscrawl.html	/^  gold: { $/;"	P
-gold1	071_add_attributes/jscrawl.html	/^          gold1: { $/;"	P
-gold10	071_add_attributes/jscrawl.html	/^          gold10: { $/;"	P
-gold100	071_add_attributes/jscrawl.html	/^          gold100: { $/;"	P
-goldEgg	071_add_attributes/jscrawl.html	/^          goldEgg: { $/;"	P
-gradient	071_add_attributes/jscrawl.html	/^let gradient = {}$/;"	O
-grapes	071_add_attributes/jscrawl.html	/^          grapes: { $/;"	P
-gray	071_add_attributes/jscrawl.html	/^  gray:    { bgStyle: '#808080', style: '#FFF' },$/;"	P
-gray	071_add_attributes/jscrawl.html	/^  gray: { $/;"	P
-green	071_add_attributes/jscrawl.html	/^              green: 10,$/;"	P
-green	071_add_attributes/jscrawl.html	/^              green: 15,$/;"	P
-green	071_add_attributes/jscrawl.html	/^              green: 3,$/;"	P
-green	071_add_attributes/jscrawl.html	/^              green: 5,$/;"	P
-green	071_add_attributes/jscrawl.html	/^  green:      { bgStyle: '#7FFF00', style: '#000' },$/;"	P
-green	071_add_attributes/jscrawl.html	/^  green: { $/;"	P
-ham	071_add_attributes/jscrawl.html	/^          ham: { $/;"	P
-hand	071_add_attributes/jscrawl.html	/^        hand: [],$/;"	P
-handAxe	071_add_attributes/jscrawl.html	/^              handAxe: {$/;"	P
-handleCreateTarget	071_add_attributes/jscrawl.html	/^  handleCreateTarget(target, template, count) {$/;"	M
-handleKeyDown	071_add_attributes/jscrawl.html	/^  handleKeyDown(event) {$/;"	M
-handleKeyUp	071_add_attributes/jscrawl.html	/^  handleKeyUp(event) {$/;"	M
-hands	071_add_attributes/jscrawl.html	/^                hands: 2,$/;"	P
-hands	071_add_attributes/jscrawl.html	/^        hands: 1,$/;"	P
-hands	071_add_attributes/jscrawl.html	/^    hands: 2,$/;"	P
-handsUsed	071_add_attributes/jscrawl.html	/^  handsUsed() {$/;"	M
-health	071_add_attributes/jscrawl.html	/^            health: 10,$/;"	P
-health	071_add_attributes/jscrawl.html	/^            health: 2,  $/;"	P
-heavyStyle	071_add_attributes/jscrawl.html	/^    const heavyStyle = "#0000C0"$/;"	V
-height	071_add_attributes/jscrawl.html	/^  height: 540,$/;"	P
-helpMode	071_add_attributes/jscrawl.html	/^    helpMode: [ '?' ],$/;"	P
-hitChance	071_add_attributes/jscrawl.html	/^                hitChance: 0,$/;"	P
-human	071_add_attributes/jscrawl.html	/^  human: {$/;"	P
-i	071_add_attributes/jscrawl.html	/^    let i = 0$/;"	V
-if	071_add_attributes/jscrawl.html	/^            if(!innerList) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^            if(!subjects.includes(channelIndex)) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^            if(fromMap[b.x][b.y] > wallThreshold) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^          if(col == maxColumns) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^          if(subject == null) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^          if(value[j]) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^          if(wallStrength <= wallThreshold) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^          if(weakestWall == null || wallStrength < weakestWall) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^        if(!newItem.name) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^        if(!subjects.includes(channelIndex)) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^        if(!this.unequipUntilHandsFree(item.hands)) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^        if(cell.occupiedBy == null) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^        if(fc.motionModeAttack()) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^        if(found > -1) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^        if(fromY < fromHeight - 1) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^        if(indexes[i]) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^        if(itemsEqual(invItem, item)) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^        if(itemsEqual(subject, item)) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^        if(line.length > 2) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^        if(noItemsFound) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^        if(player.equip[slot].length - player.species.hands < 1) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^        if(result) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^        if(subject == null) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^        if(value > wallThreshold && surroundingWalls < requireSurroundingWalls) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^        if(value) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^        if(x+1 < toWidth && toMap[x+1][y] != null) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^        if(x-1 > 0 && toMap[x-1][y] != null) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^        if(y+1 < toHeight && toMap[x][y+1] != null) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^        if(y-1 > 0 && toMap[x][y-1] != null) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(!bc.isEquipped(item)) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(!bc.isFieldPosValid(playerNewPos)) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(!bc.isFieldPosValid(targetNewPos)) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(!fc.motionModeMove()) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(!found) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(!key) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(!maxChannelSize) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(!maxPoolSize) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(!poolsInPoolType) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(!unequipItem(hand[hand.length-1])) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(bc.isEquipped(item)) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(bc.isFieldPosOccupied(playerNewPos)) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(bgStyle) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(c == 0 || r == 0 || c == size.x + 1 || r == size.y + 1) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(c == 0 || r == 0 || c == size.x - 1 || r == size.y - 1) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(c) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(cell.occupiedBy == null && cell.onFloor.length == 0) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(cell.occupiedBy == null) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(cell.occupiedBy == player) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(cell.occupiedBy) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(classifiedSpaces[x][y] == false && !level[x][y].occupiedBy) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(complexLength(list.slice(0, i)) <= pos) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(count == null) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(count) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(damage > 0) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(effectiveRow > maxMessageRow) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(effectiveRow > maxRow) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(fc.isIndexSelected(i)) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(flow) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(fm.selectCount) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(fm.selectIndexes[i]) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(fm.selectKeys.length > 0) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(fm.selectMultiple) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(found) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(group.length > 0) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(group[i] == item) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(group[index] == item) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(hand.length < 1) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(i > 6) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(itemBase[itemKey].sub) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(items.length == 0) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(itemsEqual(floorItem, item)) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(iterationsLeft > 0) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(keyMap[km][command].some(x => event.key == x)) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(map[c][r] > wallThreshold) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(maxCount > 1) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(message == null) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(multipleColumnBlocks) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(newValue < 0) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(p.center && p.cellSizePixels && p.cellSizePixels.y > 0) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(p.offset) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(p.textToDrawList.length > 1) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(pool.type == poolTypes.interna) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(poolChannels[i].to[0].type == poolTypes.interna) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(poolIndex == -1) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(remaining != 0) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(remainingWeight < 0) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(row > header - 1) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(selected == null) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(selected[i]) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(string[i] == ' ') {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(style != this.previousFillStyle) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(subject) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(target == player) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(targetPos) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(testWindow == window) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(this.previousFontStyle != p.fontStyle) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(this.windowPosIsValid(window, cellPos)) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(toMap[x][y] == null) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(type == 'hand' || type == 'ring') {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(typeof name == 'string') {$/;"	M
-if	071_add_attributes/jscrawl.html	/^      if(weight == null) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(!bc.getCreatorMode()) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(!classified && !occupied) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(!count) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(!found) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(!multiColumn) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(!multiple) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(!newItem) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(!pos) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(!slot) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(!target) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(!template.sub) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(!this.frontController.getTarget().pos) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(actionMode == 'attackOrMove') {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(actor.wpFocus) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(attacker.attack != null) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(bc.getCell(toPos).occupiedBy != null) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(bc.getCreatorMode()) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(breakPoint > -1) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(cell.floorType) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(cell.occupiedBy) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(change != 0 && target == player) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(change >= 1) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(changed || forceRefresh) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(classifiedSpaces[adjacentPos.x][adjacentPos.y]) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(count == inventoryCount) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(count > 0) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(damage > 0) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(deltas) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(energyType == 'health') {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(fc.getSelectAllowMultiple()) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(fc.getSelectedIndexes().length > 0) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(fc.getStatusMode() == 'compact') {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(fc.windowPosIsValid(window, windowPos, level)) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(floorItems.length == 0) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(floorItems.length == 1) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(fm.messages.length) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(fm.statusMode == 'compact') {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(fromPos != null) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(fromX < fromWidth - 1) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(index != null) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(index == -1) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(item.base.energy) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(item.base.type != 'food') { $/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(item.base.type == 'gold') {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(item.text) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(itemOnFloor.count == count) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(keyModeName != 'target') {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(maxIterations-- == 0) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(message) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(noItemsFound) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(p.window.offset) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(path.length) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(player.medFocus && didSomething) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(player.medFocus) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(player.wpFocus) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(poolIndexFrom == -1 || poolIndexTo == -1) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(poolTypes.length == 0) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(poolTypes.length > 1) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(pools.length == 0) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(pos) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(possibilities == 0) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(random(3) == 0) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(removed > 0) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(result.length > 0) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(screen.fontStyle) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(selected == null) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(selected) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(selected.sub) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(selectedInventoryType) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(sign > 0) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(slot == 'hand' || slot == 'ring') {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(style != ctx.fillStyle) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(style != ctx.stokeStyle) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(subject.base.act) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(subject.base.occupant) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(subjects.length == 0) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(success) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(target == null) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(target.health <= 0) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(target.pos == null) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(target.pos) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(targetActor.health <= 0) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(targetActor.health == null) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(this.frontModel.fontStyle) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(typeof p.textToDraw == 'string') {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(wallStrength <= wallThreshold) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(weakestWall == null || wallStrength < weakestWall) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(window == mainWindows.level) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(window == screens.main.window.level) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(window.fontStyle) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^    if(window.name == 'status') {$/;"	M
-if	071_add_attributes/jscrawl.html	/^  if(Number.isInteger(article)) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^  if(allResults.length > 0) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^  if(article) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^  if(bounds == null) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^  if(bounds.width < 2 || bounds.height < 2) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^  if(cellToTest.occupiedBy == null && cellToTest.onFloor.length == 0) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^  if(classifiedSpaces == null) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^  if(connectedRooms) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^  if(count != 1 && article) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^  if(fPress > tPress + 0.01) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^  if(item.base.type) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^  if(item.health) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^  if(pos) {$/;"	M
-if	071_add_attributes/jscrawl.html	/^  if(typeof string == 'string') {$/;"	M
-if	071_add_attributes/jscrawl.html	/^  if(verb) {$/;"	M
-increment	071_add_attributes/jscrawl.html	/^  const increment = 1 \/ (list.length + 1)$/;"	V
-index	071_add_attributes/jscrawl.html	/^    const index = fm.selectIndexes.findIndex(x => x)$/;"	F
-index	071_add_attributes/jscrawl.html	/^  let index = 0$/;"	V
-indexToKey	071_add_attributes/jscrawl.html	/^  indexToKey(index) {$/;"	M
-indexes	071_add_attributes/jscrawl.html	/^      let indexes = []$/;"	A
-indigo	071_add_attributes/jscrawl.html	/^              indigo: 10,$/;"	P
-indigo	071_add_attributes/jscrawl.html	/^              indigo: 15,$/;"	P
-indigo	071_add_attributes/jscrawl.html	/^              indigo: 2,$/;"	P
-indigo	071_add_attributes/jscrawl.html	/^  indigo:     { bgStyle: '#583FFF', style: '#FFF' },$/;"	P
-indigo	071_add_attributes/jscrawl.html	/^  indigo: { $/;"	P
-initItems	071_add_attributes/jscrawl.html	/^  initItems(inherited = {}, itemBase = template.generated.sub) {$/;"	M
-initSpecies	071_add_attributes/jscrawl.html	/^  initSpecies() {$/;"	M
-initializePlayer	071_add_attributes/jscrawl.html	/^  initializePlayer() {$/;"	M
-integrity	071_add_attributes/jscrawl.html	/^        integrity: 1,$/;"	P
-intelligence	071_add_attributes/jscrawl.html	/^      intelligence: 10,$/;"	P
-interna	071_add_attributes/jscrawl.html	/^  interna: { name: 'interna', key: 'i', },$/;"	P
-inventory	071_add_attributes/jscrawl.html	/^      inventory: {$/;"	P
-inventoryTypes	071_add_attributes/jscrawl.html	/^const inventoryTypes = {$/;"	O
-invertMultiSelect	071_add_attributes/jscrawl.html	/^    invertMultiSelect: [ ',' ],$/;"	P
-invertMultiSelect	071_add_attributes/jscrawl.html	/^  invertMultiSelect() {$/;"	M
-invertMultiSelect	071_add_attributes/jscrawl.html	/^  invertMultiSelect: () => {$/;"	M
-invertSelectedItems	071_add_attributes/jscrawl.html	/^    invertSelectedItems: [ '\/' ],$/;"	P
-invertSelectedItems	071_add_attributes/jscrawl.html	/^  invertSelectedItems() {$/;"	M
-invertSelectedItems	071_add_attributes/jscrawl.html	/^  invertSelectedItems: () => {$/;"	M
-isEquipped	071_add_attributes/jscrawl.html	/^  isEquipped(item) {$/;"	M
-isFieldPosOccupied	071_add_attributes/jscrawl.html	/^  isFieldPosOccupied(cellPos) {$/;"	M
-isFieldPosValid	071_add_attributes/jscrawl.html	/^  isFieldPosValid(cellPos) {$/;"	M
-isIndexSelected	071_add_attributes/jscrawl.html	/^  isIndexSelected(index) {$/;"	M
-item	071_add_attributes/jscrawl.html	/^        item,$/;"	V
-items	071_add_attributes/jscrawl.html	/^    const items = []$/;"	A
-itemsEqual	071_add_attributes/jscrawl.html	/^function itemsEqual(item1, item2) {$/;"	F
-iterationsLeft	071_add_attributes/jscrawl.html	/^  let iterationsLeft = 5$/;"	V
-jewelry	071_add_attributes/jscrawl.html	/^        jewelry: [],$/;"	P
-keyMap	071_add_attributes/jscrawl.html	/^const keyMap = {$/;"	O
-keyModifiers	071_add_attributes/jscrawl.html	/^let keyModifiers = {$/;"	O
-keyToIndex	071_add_attributes/jscrawl.html	/^  keyToIndex(key) {$/;"	M
-keys	071_add_attributes/jscrawl.html	/^    let keys = []$/;"	A
-lessThan	071_add_attributes/jscrawl.html	/^  lessThan(pair) {$/;"	M
-lessThanOrEqualTo	071_add_attributes/jscrawl.html	/^  lessThanOrEqualTo(pair) {$/;"	M
-level	071_add_attributes/jscrawl.html	/^      level: {$/;"	P
-level	071_add_attributes/jscrawl.html	/^    level: [],$/;"	P
-level	071_add_attributes/jscrawl.html	/^  let level = []$/;"	A
-levelCaveGenerator	071_add_attributes/jscrawl.html	/^    levelCaveGenerator: {$/;"	P
-levelCellsChanged	071_add_attributes/jscrawl.html	/^    levelCellsChanged: [],$/;"	P
-levelChanged	071_add_attributes/jscrawl.html	/^    levelChanged: false,$/;"	P
-levelPosToWindowPos	071_add_attributes/jscrawl.html	/^  levelPosToWindowPos(levelPos) {$/;"	M
-levelSize	071_add_attributes/jscrawl.html	/^  const levelSize = new Pair(level.length, level[0].length)$/;"	V
-levelSize	071_add_attributes/jscrawl.html	/^  let levelSize = new Pair(level.length, level[0].length)$/;"	V
-lightblue	071_add_attributes/jscrawl.html	/^  lightblue:  { bgStyle: '#8FB9FF', style: '#000' },$/;"	P
-lightgreen	071_add_attributes/jscrawl.html	/^  lightgreen: { bgStyle: '#BFFF80', style: '#000' },$/;"	P
-lightorange	071_add_attributes/jscrawl.html	/^  lightorange:{ bgStyle: '#FFDD88', style: '#000' },$/;"	P
-lightred	071_add_attributes/jscrawl.html	/^  lightred:   { bgStyle: '#FF9F9F', style: '#000' },$/;"	P
-lightviolet	071_add_attributes/jscrawl.html	/^  lightviolet:{ bgStyle: '#C89FFF', style: '#000' },$/;"	P
-lightyellow	071_add_attributes/jscrawl.html	/^  lightyellow:{ bgStyle: '#FFFF80', style: '#000' },$/;"	P
-line	071_add_attributes/jscrawl.html	/^        let line = [text(i + ':')]$/;"	A
-line	071_add_attributes/jscrawl.html	/^    let line = ''$/;"	V
-lion	071_add_attributes/jscrawl.html	/^          lion: { $/;"	P
-list	071_add_attributes/jscrawl.html	/^    const list = []$/;"	A
-longBlade	071_add_attributes/jscrawl.html	/^          longBlade: { $/;"	P
-lowerLeftQuarter	071_add_attributes/jscrawl.html	/^  lowerLeftQuarter() {$/;"	M
-lowerRightQuarter	071_add_attributes/jscrawl.html	/^  lowerRightQuarter() {$/;"	M
-lumina	071_add_attributes/jscrawl.html	/^  lumina:  { name: 'lumina',  key: 'l', },$/;"	P
-mace	071_add_attributes/jscrawl.html	/^              mace: {$/;"	P
-mace	071_add_attributes/jscrawl.html	/^          mace: {$/;"	P
-main	071_add_attributes/jscrawl.html	/^  main: {$/;"	P
-majorHealth	071_add_attributes/jscrawl.html	/^      majorHealth: 10,$/;"	P
-majorHealth	071_add_attributes/jscrawl.html	/^  majorHealth: { $/;"	P
-mana	071_add_attributes/jscrawl.html	/^  mana: { $/;"	P
-mango	071_add_attributes/jscrawl.html	/^          mango: { $/;"	P
-map	071_add_attributes/jscrawl.html	/^  let map = [[b, b], [b, b]]$/;"	A
-mapToLevel	071_add_attributes/jscrawl.html	/^function mapToLevel(map, level, wallThreshold, size) {$/;"	F
-max	071_add_attributes/jscrawl.html	/^        max$/;"	V
-max	071_add_attributes/jscrawl.html	/^      const max = '' + Math.floor(bc.getPoolMax(player, index))$/;"	V
-maxChannelSizeDefault	071_add_attributes/jscrawl.html	/^    maxChannelSizeDefault: 10,$/;"	P
-maxChannelSizes	071_add_attributes/jscrawl.html	/^    maxChannelSizes: [],$/;"	P
-maxColumns	071_add_attributes/jscrawl.html	/^        maxColumns: 1,$/;"	P
-maxColumns	071_add_attributes/jscrawl.html	/^    const maxColumns = 3$/;"	V
-maxDamage	071_add_attributes/jscrawl.html	/^    let maxDamage = 0$/;"	V
-maxIterations	071_add_attributes/jscrawl.html	/^  let maxIterations = 10$/;"	V
-maxPoolSizes	071_add_attributes/jscrawl.html	/^    maxPoolSizes: {$/;"	P
-maxWidth	071_add_attributes/jscrawl.html	/^    let maxWidth = 0$/;"	V
-medDepth	071_add_attributes/jscrawl.html	/^      medDepth: 0,$/;"	P
-medFocus	071_add_attributes/jscrawl.html	/^      medFocus: null,$/;"	P
-meditationFocus	071_add_attributes/jscrawl.html	/^    meditationFocus: [ 'm' ],$/;"	P
-meditationFocus	071_add_attributes/jscrawl.html	/^  meditationFocus() {$/;"	M
-meditationFocus	071_add_attributes/jscrawl.html	/^  meditationFocus: () => {$/;"	M
-meditationFocusExecute	071_add_attributes/jscrawl.html	/^  meditationFocusExecute() {$/;"	M
-meditationFocusSelectPool	071_add_attributes/jscrawl.html	/^  meditationFocusSelectPool() {$/;"	M
-meditationFocusSelectPoolType	071_add_attributes/jscrawl.html	/^  meditationFocusSelectPoolType() {$/;"	M
-message	071_add_attributes/jscrawl.html	/^      message: {$/;"	P
-message	071_add_attributes/jscrawl.html	/^    let message;$/;"	V
-messages	071_add_attributes/jscrawl.html	/^    messages: [],$/;"	P
-messagesChanged	071_add_attributes/jscrawl.html	/^    messagesChanged: false,$/;"	P
-messagesHeader	071_add_attributes/jscrawl.html	/^    messagesHeader: 1,$/;"	P
-milk	071_add_attributes/jscrawl.html	/^          milk: { $/;"	P
-minDamage	071_add_attributes/jscrawl.html	/^    let minDamage = 0$/;"	V
-minValue	071_add_attributes/jscrawl.html	/^      let minValue = values.reduce((a,b) => Math.min(a, b), 1)$/;"	F
-minorHealth	071_add_attributes/jscrawl.html	/^      minorHealth: 30,$/;"	P
-minorHealth	071_add_attributes/jscrawl.html	/^  minorHealth: { $/;"	P
-moon	071_add_attributes/jscrawl.html	/^  moon: { $/;"	P
-motionModeAttack	071_add_attributes/jscrawl.html	/^  motionModeAttack() {$/;"	M
-motionModeMove	071_add_attributes/jscrawl.html	/^  motionModeMove() {$/;"	M
-moveDown	071_add_attributes/jscrawl.html	/^    moveDown: [ 'j', 'ArrowDown' ],$/;"	P
-moveDown	071_add_attributes/jscrawl.html	/^  moveDown: () => {$/;"	M
-moveDownFast	071_add_attributes/jscrawl.html	/^    moveDownFast: [ 'J' ],$/;"	P
-moveDownFast	071_add_attributes/jscrawl.html	/^  moveDownFast: () => {$/;"	M
-moveLeft	071_add_attributes/jscrawl.html	/^    moveLeft: [ 'h', 'ArrowLeft' ],$/;"	P
-moveLeft	071_add_attributes/jscrawl.html	/^  moveLeft: () => {$/;"	M
-moveLeftDown	071_add_attributes/jscrawl.html	/^    moveLeftDown: [ 'b' ],$/;"	P
-moveLeftDown	071_add_attributes/jscrawl.html	/^  moveLeftDown: () => {$/;"	M
-moveLeftFast	071_add_attributes/jscrawl.html	/^    moveLeftFast: [ 'H' ],$/;"	P
-moveLeftFast	071_add_attributes/jscrawl.html	/^  moveLeftFast: () => {$/;"	M
-moveLeftUp	071_add_attributes/jscrawl.html	/^    moveLeftUp: [ 'y' ],$/;"	P
-moveLeftUp	071_add_attributes/jscrawl.html	/^  moveLeftUp: () => {$/;"	M
-moveRight	071_add_attributes/jscrawl.html	/^    moveRight: [ 'l', 'ArrowRight' ],$/;"	P
-moveRight	071_add_attributes/jscrawl.html	/^  moveRight: () => {$/;"	M
-moveRightDown	071_add_attributes/jscrawl.html	/^    moveRightDown: [ 'n' ],$/;"	P
-moveRightDown	071_add_attributes/jscrawl.html	/^  moveRightDown: () => {$/;"	M
-moveRightFast	071_add_attributes/jscrawl.html	/^    moveRightFast: [ 'L' ],$/;"	P
-moveRightFast	071_add_attributes/jscrawl.html	/^  moveRightFast: () => {$/;"	M
-moveRightUp	071_add_attributes/jscrawl.html	/^    moveRightUp: [ 'u' ],$/;"	P
-moveRightUp	071_add_attributes/jscrawl.html	/^  moveRightUp: () => {$/;"	M
-moveUp	071_add_attributes/jscrawl.html	/^    moveUp: [ 'k', 'ArrowUp' ],$/;"	P
-moveUp	071_add_attributes/jscrawl.html	/^  moveUp: () => {$/;"	M
-moveUpFast	071_add_attributes/jscrawl.html	/^    moveUpFast: [ 'K' ],$/;"	P
-moveUpFast	071_add_attributes/jscrawl.html	/^  moveUpFast: () => {$/;"	M
-mulchChance	071_add_attributes/jscrawl.html	/^                mulchChance: 1,$/;"	P
-multiply	071_add_attributes/jscrawl.html	/^  multiply(pair) {$/;"	M
-name	071_add_attributes/jscrawl.html	/^          let name = '(empty)'$/;"	V
-name	071_add_attributes/jscrawl.html	/^          let name = []$/;"	A
-name	071_add_attributes/jscrawl.html	/^        let name = '(empty)'$/;"	V
-names	071_add_attributes/jscrawl.html	/^      let names = []$/;"	A
-names	071_add_attributes/jscrawl.html	/^    let names = []$/;"	A
-newItem	071_add_attributes/jscrawl.html	/^        let newItem = { ...itemBase[itemKey], sub: null }$/;"	O
-newPos	071_add_attributes/jscrawl.html	/^        let newPos = new Pair(x, y)$/;"	V
-next	071_add_attributes/jscrawl.html	/^  next(possibilities = 0) {$/;"	M
-oats	071_add_attributes/jscrawl.html	/^          oats: { $/;"	P
-object	071_add_attributes/jscrawl.html	/^  object: {$/;"	P
-occupant	071_add_attributes/jscrawl.html	/^        occupant: false,$/;"	P
-occupant	071_add_attributes/jscrawl.html	/^        occupant: true,$/;"	P
-occupant	071_add_attributes/jscrawl.html	/^      occupant: false, $/;"	P
-occupant	071_add_attributes/jscrawl.html	/^      occupant: true, $/;"	P
-occupantMove	071_add_attributes/jscrawl.html	/^  occupantMove(occupant, toPos) {$/;"	M
-occupiedBy	071_add_attributes/jscrawl.html	/^          occupiedBy: null, $/;"	P
-occupiedBy	071_add_attributes/jscrawl.html	/^          occupiedBy: { base: ot.rockWall }, $/;"	P
-offset	071_add_attributes/jscrawl.html	/^        offset: offset,$/;"	P
-onFloor	071_add_attributes/jscrawl.html	/^          onFloor: [], $/;"	P
-orange	071_add_attributes/jscrawl.html	/^              orange: 10,$/;"	P
-orange	071_add_attributes/jscrawl.html	/^              orange: 15,$/;"	P
-orange	071_add_attributes/jscrawl.html	/^              orange: 3,$/;"	P
-orange	071_add_attributes/jscrawl.html	/^              orange: 5,$/;"	P
-orange	071_add_attributes/jscrawl.html	/^          orange: { $/;"	P
-orange	071_add_attributes/jscrawl.html	/^  orange:     { bgStyle: '#FFAB12', style: '#000' },$/;"	P
-orange	071_add_attributes/jscrawl.html	/^  orange: { $/;"	P
-outputCreatorModeMessages	071_add_attributes/jscrawl.html	/^  outputCreatorModeMessages() {$/;"	M
-outputTargetMessages	071_add_attributes/jscrawl.html	/^  outputTargetMessages() {$/;"	M
-panScrollMargin	071_add_attributes/jscrawl.html	/^        panScrollMargin: 4,$/;"	P
-pickSomethingToGenerate	071_add_attributes/jscrawl.html	/^  pickSomethingToGenerate(group, randomizer) {$/;"	M
-pickUpItem	071_add_attributes/jscrawl.html	/^    pickUpItem: [ ',' ],$/;"	P
-pickUpItem	071_add_attributes/jscrawl.html	/^  pickUpItem() {$/;"	M
-pickUpItem	071_add_attributes/jscrawl.html	/^  pickUpItem: () => {$/;"	M
-pickUpSelectedItems	071_add_attributes/jscrawl.html	/^  pickUpSelectedItems() {$/;"	M
-pizza	071_add_attributes/jscrawl.html	/^          pizza: { $/;"	P
-placeStuffInLevel	071_add_attributes/jscrawl.html	/^  placeStuffInLevel(randomizer) {$/;"	M
-player	071_add_attributes/jscrawl.html	/^    player: { $/;"	P
-playerAttack	071_add_attributes/jscrawl.html	/^  playerAttack(target) {$/;"	M
-playerMotionRelative	071_add_attributes/jscrawl.html	/^  playerMotionRelative(relPos) {$/;"	M
-playerPos	071_add_attributes/jscrawl.html	/^        playerPos,$/;"	V
-polearm	071_add_attributes/jscrawl.html	/^          polearm: {$/;"	P
-poolChannels	071_add_attributes/jscrawl.html	/^const poolChannels = [$/;"	A
-poolCurrent	071_add_attributes/jscrawl.html	/^      poolCurrent: [],     \/\/ integers of how much is in each pool$/;"	P
-poolCurrentPast	071_add_attributes/jscrawl.html	/^      poolCurrentPast: [], \/\/ previous value of poolCurrent$/;"	P
-poolMax	071_add_attributes/jscrawl.html	/^      poolMax: [],         \/\/ integers of how big each pool is$/;"	P
-poolMaxPast	071_add_attributes/jscrawl.html	/^      poolMaxPast: [],     \/\/ previous value of poolMax$/;"	P
-poolOverloadFactorMax	071_add_attributes/jscrawl.html	/^const poolOverloadFactorMax = 1$/;"	V
-poolToIndex	071_add_attributes/jscrawl.html	/^function poolToIndex(poolName) {$/;"	F
-poolTypes	071_add_attributes/jscrawl.html	/^const poolTypes = {$/;"	O
-pools	071_add_attributes/jscrawl.html	/^const pools = {$/;"	O
-poolsToTry	071_add_attributes/jscrawl.html	/^    let poolsToTry = []$/;"	A
-pos	071_add_attributes/jscrawl.html	/^      pos: null,$/;"	P
-potion	071_add_attributes/jscrawl.html	/^        potion: [],$/;"	P
-purple	071_add_attributes/jscrawl.html	/^  purple:  { bgStyle: '#D56FFF', style: '#FFF'  },$/;"	P
-purple	071_add_attributes/jscrawl.html	/^  purple: { $/;"	P
-rainbow	071_add_attributes/jscrawl.html	/^  rainbow: { $/;"	P
-random	071_add_attributes/jscrawl.html	/^function random(possibilities) {$/;"	F
-randomizer	071_add_attributes/jscrawl.html	/^        randomizer,$/;"	V
-randomizer	071_add_attributes/jscrawl.html	/^    const randomizer = new SeededRandomizer(this.backModel.seed)$/;"	V
-randomizer	071_add_attributes/jscrawl.html	/^    randomizer: null,$/;"	P
-range	071_add_attributes/jscrawl.html	/^                  range: 10, $/;"	P
-range	071_add_attributes/jscrawl.html	/^                  range: 2, $/;"	P
-range	071_add_attributes/jscrawl.html	/^                  range: 3, $/;"	P
-range	071_add_attributes/jscrawl.html	/^                  range: 4, $/;"	P
-range	071_add_attributes/jscrawl.html	/^                  range: 8, $/;"	P
-range	071_add_attributes/jscrawl.html	/^            range: 1,$/;"	P
-range	071_add_attributes/jscrawl.html	/^            range: 12,$/;"	P
-range	071_add_attributes/jscrawl.html	/^            range: 2,$/;"	P
-rat	071_add_attributes/jscrawl.html	/^          rat:  { $/;"	P
-red	071_add_attributes/jscrawl.html	/^              red: 10, $/;"	P
-red	071_add_attributes/jscrawl.html	/^              red: 10,$/;"	P
-red	071_add_attributes/jscrawl.html	/^              red: 15,$/;"	P
-red	071_add_attributes/jscrawl.html	/^              red: 20,$/;"	P
-red	071_add_attributes/jscrawl.html	/^              red: 3,$/;"	P
-red	071_add_attributes/jscrawl.html	/^              red: 5,$/;"	P
-red	071_add_attributes/jscrawl.html	/^  red:        { bgStyle: '#FF2F2F', style: '#FFF' },$/;"	P
-red	071_add_attributes/jscrawl.html	/^  red: { $/;"	P
-reduceMap	071_add_attributes/jscrawl.html	/^function reduceMap(fromMap) {$/;"	F
-refresh	071_add_attributes/jscrawl.html	/^  refresh() {$/;"	M
-removeActor	071_add_attributes/jscrawl.html	/^  removeActor(actor) {$/;"	M
-removeIsolatedWalls	071_add_attributes/jscrawl.html	/^function removeIsolatedWalls(fromMap, wallThreshold, requireSurroundingWalls) {$/;"	F
-removeItemFromFloor	071_add_attributes/jscrawl.html	/^  removeItemFromFloor(pos, itemToMatch, count) {$/;"	M
-removeItemFromInventory	071_add_attributes/jscrawl.html	/^  removeItemFromInventory(item, count) {$/;"	M
-removeItemFromInventoryByIndex	071_add_attributes/jscrawl.html	/^  removeItemFromInventoryByIndex(type, index, count) {$/;"	M
-removeSubjectFromLevel	071_add_attributes/jscrawl.html	/^  removeSubjectFromLevel(subject, pos) {$/;"	M
-removed	071_add_attributes/jscrawl.html	/^  let removed = 0$/;"	V
-requireSurroundingWalls	071_add_attributes/jscrawl.html	/^      requireSurroundingWalls: 2,$/;"	P
-resetSelect	071_add_attributes/jscrawl.html	/^  resetSelect() {$/;"	M
-result	071_add_attributes/jscrawl.html	/^    let result = []$/;"	A
-result	071_add_attributes/jscrawl.html	/^  let result = []$/;"	A
-return	071_add_attributes/jscrawl.html	/^          return$/;"	V
-return	071_add_attributes/jscrawl.html	/^        return$/;"	V
-return	071_add_attributes/jscrawl.html	/^      return$/;"	V
-rice	071_add_attributes/jscrawl.html	/^          rice: { $/;"	P
-ring	071_add_attributes/jscrawl.html	/^        ring: [],$/;"	P
-rock	071_add_attributes/jscrawl.html	/^              rock: { $/;"	P
-rock	071_add_attributes/jscrawl.html	/^        rock: [],$/;"	P
-rockWall	071_add_attributes/jscrawl.html	/^    rockWall: { $/;"	P
-screen	071_add_attributes/jscrawl.html	/^          screen,$/;"	V
-screen	071_add_attributes/jscrawl.html	/^        screen: screen, $/;"	P
-screen	071_add_attributes/jscrawl.html	/^        screen: screen,$/;"	P
-screen	071_add_attributes/jscrawl.html	/^      screen,$/;"	V
-screen	071_add_attributes/jscrawl.html	/^      screen: null,$/;"	P
-screenPixelPos	071_add_attributes/jscrawl.html	/^      screenPixelPos: screenPixelPos, $/;"	P
-screens	071_add_attributes/jscrawl.html	/^const screens = {$/;"	O
-scroll	071_add_attributes/jscrawl.html	/^        scroll: [],$/;"	P
-select	071_add_attributes/jscrawl.html	/^  select: {$/;"	P
-selectAction	071_add_attributes/jscrawl.html	/^    selectAction: null,$/;"	P
-selectAllowMultiple	071_add_attributes/jscrawl.html	/^    selectAllowMultiple: true,$/;"	P
-selectCount	071_add_attributes/jscrawl.html	/^        selectCount,$/;"	V
-selectCount	071_add_attributes/jscrawl.html	/^    selectCount: null,$/;"	P
-selectCountList	071_add_attributes/jscrawl.html	/^    selectCountList: [],$/;"	P
-selectCountMax	071_add_attributes/jscrawl.html	/^    selectCountMax: null,$/;"	P
-selectCountMaxList	071_add_attributes/jscrawl.html	/^    selectCountMaxList: [],$/;"	P
-selectIndexes	071_add_attributes/jscrawl.html	/^    selectIndexes: [], \/\/ true or false, whether each index is selected$/;"	P
-selectItem	071_add_attributes/jscrawl.html	/^    selectItem: [],$/;"	P
-selectItem	071_add_attributes/jscrawl.html	/^  selectItem(key) {$/;"	M
-selectItem	071_add_attributes/jscrawl.html	/^  selectItem: (key) => {$/;"	M
-selectKeys	071_add_attributes/jscrawl.html	/^    selectKeys: [], $/;"	P
-selectMaxWidth	071_add_attributes/jscrawl.html	/^    selectMaxWidth: null,$/;"	P
-selectMeta	071_add_attributes/jscrawl.html	/^    selectMeta: {},$/;"	P
-selectMultiple	071_add_attributes/jscrawl.html	/^    selectMultiple: false,$/;"	P
-selectNameList	071_add_attributes/jscrawl.html	/^    selectNameList: [],$/;"	P
-selectPool	071_add_attributes/jscrawl.html	/^  selectPool(afterSelect, allowMultiple) {$/;"	M
-selectPoolType	071_add_attributes/jscrawl.html	/^  selectPoolType(afterSelect, allowMultiple) {$/;"	M
-selectSubjectList	071_add_attributes/jscrawl.html	/^    selectSubjectList: [],$/;"	P
-selectTitle	071_add_attributes/jscrawl.html	/^    selectTitle: [],$/;"	P
-selectedCounts	071_add_attributes/jscrawl.html	/^    let selectedCounts = []$/;"	A
-selectedFloorItems	071_add_attributes/jscrawl.html	/^    let selectedFloorItems = []$/;"	A
-selectedInventoryType	071_add_attributes/jscrawl.html	/^        selectedInventoryType$/;"	V
-selectedSubjects	071_add_attributes/jscrawl.html	/^    let selectedSubjects = []$/;"	A
-setChannelFlow	071_add_attributes/jscrawl.html	/^  setChannelFlow(actor, channelIndex, flow) {$/;"	M
-setCreatorMode	071_add_attributes/jscrawl.html	/^  setCreatorMode() {$/;"	M
-setFloorItemsAt	071_add_attributes/jscrawl.html	/^  setFloorItemsAt(pos, floorItems) {$/;"	M
-setKeyMode	071_add_attributes/jscrawl.html	/^  setKeyMode(keyModeName) {$/;"	M
-setLevelChanged	071_add_attributes/jscrawl.html	/^  setLevelChanged(changed) {$/;"	M
-setMessagesChanged	071_add_attributes/jscrawl.html	/^  setMessagesChanged(changed) {$/;"	M
-setMotionMode	071_add_attributes/jscrawl.html	/^  setMotionMode(mode) {$/;"	M
-setMotionModeAttack	071_add_attributes/jscrawl.html	/^    setMotionModeAttack: [ 'a' ],$/;"	P
-setMotionModeAttack	071_add_attributes/jscrawl.html	/^  setMotionModeAttack: () => {$/;"	M
-setMotionModeAttackOrMove	071_add_attributes/jscrawl.html	/^    setMotionModeAttackOrMove: [ 'A' ],$/;"	P
-setMotionModeAttackOrMove	071_add_attributes/jscrawl.html	/^  setMotionModeAttackOrMove: () => {$/;"	M
-setMotionModeMove	071_add_attributes/jscrawl.html	/^    setMotionModeMove: [ 'M' ],$/;"	P
-setMotionModeMove	071_add_attributes/jscrawl.html	/^  setMotionModeMove: () => {$/;"	M
-setScreen	071_add_attributes/jscrawl.html	/^  setScreen(screenName) {$/;"	M
-setSelectAction	071_add_attributes/jscrawl.html	/^  setSelectAction(action) {$/;"	M
-setSelectAllowMultiple	071_add_attributes/jscrawl.html	/^  setSelectAllowMultiple(allow) {$/;"	M
-setSelectCountMax	071_add_attributes/jscrawl.html	/^  setSelectCountMax(value) {$/;"	M
-setSelectCountMaxList	071_add_attributes/jscrawl.html	/^  setSelectCountMaxList(list) {$/;"	M
-setSelectIndexes	071_add_attributes/jscrawl.html	/^  setSelectIndexes(indexes) {$/;"	M
-setSelectKeys	071_add_attributes/jscrawl.html	/^  setSelectKeys(list) {$/;"	M
-setSelectMaxWidth	071_add_attributes/jscrawl.html	/^  setSelectMaxWidth(maxWidth) {$/;"	M
-setSelectMeta	071_add_attributes/jscrawl.html	/^  setSelectMeta(key, value) {$/;"	M
-setSelectMultiple	071_add_attributes/jscrawl.html	/^  setSelectMultiple(multiple) {$/;"	M
-setSelectNameList	071_add_attributes/jscrawl.html	/^  setSelectNameList(list) {$/;"	M
-setSelectSubjectList	071_add_attributes/jscrawl.html	/^  setSelectSubjectList(list) {$/;"	M
-setSelectTitle	071_add_attributes/jscrawl.html	/^  setSelectTitle(single, multiple) {$/;"	M
-setStatusChanged	071_add_attributes/jscrawl.html	/^  setStatusChanged(changed) {$/;"	M
-setTarget	071_add_attributes/jscrawl.html	/^  setTarget(pos) {$/;"	M
-shift	071_add_attributes/jscrawl.html	/^  shift: false,$/;"	P
-showEquipment	071_add_attributes/jscrawl.html	/^    showEquipment: [ 'e' ],$/;"	P
-showEquipment	071_add_attributes/jscrawl.html	/^  showEquipment() {$/;"	M
-showEquipment	071_add_attributes/jscrawl.html	/^  showEquipment: () => {$/;"	M
-showInventory	071_add_attributes/jscrawl.html	/^    showInventory: [ 'i' ],$/;"	P
-showInventory	071_add_attributes/jscrawl.html	/^  showInventory() {$/;"	M
-showInventory	071_add_attributes/jscrawl.html	/^  showInventory: () => {$/;"	M
-showInventoryActions	071_add_attributes/jscrawl.html	/^  showInventoryActions() {$/;"	M
-showInventoryGroup	071_add_attributes/jscrawl.html	/^  showInventoryGroup() {$/;"	M
-showInventoryGroup	071_add_attributes/jscrawl.html	/^  showInventoryGroup(inventoryGroup) {$/;"	M
-showSelectedItems	071_add_attributes/jscrawl.html	/^  showSelectedItems() {$/;"	M
-silver	071_add_attributes/jscrawl.html	/^              silver: 20,$/;"	P
-silver	071_add_attributes/jscrawl.html	/^  silver:  { $/;"	P
-silver	071_add_attributes/jscrawl.html	/^  silver: { $/;"	P
-silverEgg	071_add_attributes/jscrawl.html	/^          silverEgg: { $/;"	P
-simplePursuit	071_add_attributes/jscrawl.html	/^  simplePursuit(actor) {$/;"	M
-size	071_add_attributes/jscrawl.html	/^  let size = new Pair(fromMap.length, fromMap[0].length)$/;"	V
-spear	071_add_attributes/jscrawl.html	/^              spear: {$/;"	P
-species	071_add_attributes/jscrawl.html	/^      species: null,$/;"	P
-species	071_add_attributes/jscrawl.html	/^const species = {$/;"	O
-spectra	071_add_attributes/jscrawl.html	/^  spectra: { name: 'spectra', key: 's', },$/;"	P
-spinach	071_add_attributes/jscrawl.html	/^          spinach: { $/;"	P
-splitAtBlankBefore	071_add_attributes/jscrawl.html	/^function splitAtBlankBefore(string, pos) {$/;"	F
-stamina	071_add_attributes/jscrawl.html	/^  stamina: { $/;"	P
-star	071_add_attributes/jscrawl.html	/^  star: { $/;"	P
-status	071_add_attributes/jscrawl.html	/^      status: {$/;"	P
-statusChanged	071_add_attributes/jscrawl.html	/^    statusChanged: false,$/;"	P
-stop	071_add_attributes/jscrawl.html	/^  let stop = 0$/;"	V
-strawberries	071_add_attributes/jscrawl.html	/^          strawberries: { $/;"	P
-strength	071_add_attributes/jscrawl.html	/^      strength: 10,$/;"	P
-style	071_add_attributes/jscrawl.html	/^    const style = "#0000C080"$/;"	V
-sub	071_add_attributes/jscrawl.html	/^            sub: {$/;"	P
-sub	071_add_attributes/jscrawl.html	/^        sub: {$/;"	P
-sub	071_add_attributes/jscrawl.html	/^    sub: {$/;"	P
-subjects	071_add_attributes/jscrawl.html	/^      let subjects = []$/;"	A
-subjects	071_add_attributes/jscrawl.html	/^    let subjects = []$/;"	A
-subtract	071_add_attributes/jscrawl.html	/^  subtract(pair) {$/;"	M
-sun	071_add_attributes/jscrawl.html	/^  sun: { $/;"	P
-supportMulti	071_add_attributes/jscrawl.html	/^    supportMulti: true,$/;"	P
-surroundLevelWithWalls	071_add_attributes/jscrawl.html	/^function surroundLevelWithWalls(oldLevel, size) {$/;"	F
-sushiRoll	071_add_attributes/jscrawl.html	/^          sushiRoll: { $/;"	P
-switch	071_add_attributes/jscrawl.html	/^    switch(event.key) {$/;"	M
-switch	071_add_attributes/jscrawl.html	/^    switch(slot) {$/;"	M
-switch	071_add_attributes/jscrawl.html	/^  switch(type) {$/;"	M
-sword	071_add_attributes/jscrawl.html	/^              sword: {$/;"	P
-tPress	071_add_attributes/jscrawl.html	/^  const [fPress, tPress] = getEffectivePressures($/;"	V
-tRoom	071_add_attributes/jscrawl.html	/^        tRoom,$/;"	V
-tab	071_add_attributes/jscrawl.html	/^    const tab = 8$/;"	V
-target	071_add_attributes/jscrawl.html	/^          target: target,$/;"	P
-target	071_add_attributes/jscrawl.html	/^    target: {$/;"	P
-target	071_add_attributes/jscrawl.html	/^  target: {$/;"	P
-template	071_add_attributes/jscrawl.html	/^          template: newTemplate,$/;"	P
-template	071_add_attributes/jscrawl.html	/^const template = {$/;"	O
-text	071_add_attributes/jscrawl.html	/^        text: line $/;"	P
-text	071_add_attributes/jscrawl.html	/^function text(t) {$/;"	F
-textToDraw	071_add_attributes/jscrawl.html	/^        textToDraw: characterToDraw, $/;"	P
-textToDraw	071_add_attributes/jscrawl.html	/^        textToDraw: message$/;"	P
-textToDraw	071_add_attributes/jscrawl.html	/^        textToDraw: statusRow,$/;"	P
-thickness	071_add_attributes/jscrawl.html	/^    const thickness = 3$/;"	V
-throwable	071_add_attributes/jscrawl.html	/^          throwable: {$/;"	P
-tier	071_add_attributes/jscrawl.html	/^    tier: 0,$/;"	P
-tier	071_add_attributes/jscrawl.html	/^    tier: 1,$/;"	P
-tier	071_add_attributes/jscrawl.html	/^    tier: 2,$/;"	P
-tier	071_add_attributes/jscrawl.html	/^    tier: 3,$/;"	P
-tier	071_add_attributes/jscrawl.html	/^    tier: 4,$/;"	P
-tierMultiplier	071_add_attributes/jscrawl.html	/^    const tierMultiplier = 10 ** (from.tier - to.tier)$/;"	V
-to	071_add_attributes/jscrawl.html	/^                to,$/;"	V
-to	071_add_attributes/jscrawl.html	/^              to,$/;"	V
-to	071_add_attributes/jscrawl.html	/^    to,$/;"	V
-to	071_add_attributes/jscrawl.html	/^    to: [$/;"	P
-to	071_add_attributes/jscrawl.html	/^    to: [pools.black],$/;"	P
-to	071_add_attributes/jscrawl.html	/^    to: [pools.blue],$/;"	P
-to	071_add_attributes/jscrawl.html	/^    to: [pools.brown],$/;"	P
-to	071_add_attributes/jscrawl.html	/^    to: [pools.criticalHealth],$/;"	P
-to	071_add_attributes/jscrawl.html	/^    to: [pools.cyan],$/;"	P
-to	071_add_attributes/jscrawl.html	/^    to: [pools.gray],$/;"	P
-to	071_add_attributes/jscrawl.html	/^    to: [pools.green],$/;"	P
-to	071_add_attributes/jscrawl.html	/^    to: [pools.indigo],$/;"	P
-to	071_add_attributes/jscrawl.html	/^    to: [pools.majorHealth],$/;"	P
-to	071_add_attributes/jscrawl.html	/^    to: [pools.mana],$/;"	P
-to	071_add_attributes/jscrawl.html	/^    to: [pools.minorHealth],$/;"	P
-to	071_add_attributes/jscrawl.html	/^    to: [pools.moon],$/;"	P
-to	071_add_attributes/jscrawl.html	/^    to: [pools.orange],$/;"	P
-to	071_add_attributes/jscrawl.html	/^    to: [pools.purple],$/;"	P
-to	071_add_attributes/jscrawl.html	/^    to: [pools.rainbow],$/;"	P
-to	071_add_attributes/jscrawl.html	/^    to: [pools.red],$/;"	P
-to	071_add_attributes/jscrawl.html	/^    to: [pools.stamina],$/;"	P
-to	071_add_attributes/jscrawl.html	/^    to: [pools.star],$/;"	P
-to	071_add_attributes/jscrawl.html	/^    to: [pools.violet],$/;"	P
-to	071_add_attributes/jscrawl.html	/^    to: [pools.willpower],$/;"	P
-to	071_add_attributes/jscrawl.html	/^    to: [pools.yellow],$/;"	P
-toMap	071_add_attributes/jscrawl.html	/^  let toMap = []$/;"	A
-toMapColumn	071_add_attributes/jscrawl.html	/^      let toMapColumn = []$/;"	A
-toMapColumn	071_add_attributes/jscrawl.html	/^    let toMapColumn = []$/;"	A
-toggleSelectedItem	071_add_attributes/jscrawl.html	/^  toggleSelectedItem(index) {$/;"	M
-tomato	071_add_attributes/jscrawl.html	/^          tomato: { $/;"	P
-topController	071_add_attributes/jscrawl.html	/^const topController = new TopController()$/;"	V
-total	071_add_attributes/jscrawl.html	/^    let total = 0$/;"	V
-total	071_add_attributes/jscrawl.html	/^  let total = 0$/;"	V
-totalWeight	071_add_attributes/jscrawl.html	/^    let totalWeight = 0$/;"	V
-true	071_add_attributes/jscrawl.html	/^      true,$/;"	V
-unequip	071_add_attributes/jscrawl.html	/^  unequip: {$/;"	P
-unequipItem	071_add_attributes/jscrawl.html	/^  unequipItem(item) {$/;"	M
-unequipUntilHandsFree	071_add_attributes/jscrawl.html	/^  unequipUntilHandsFree(handsNeeded) {$/;"	M
-upBias	071_add_attributes/jscrawl.html	/^  let upBias = 0$/;"	V
-update	071_add_attributes/jscrawl.html	/^  update(forceRefresh = false) {$/;"	M
-updateScreen	071_add_attributes/jscrawl.html	/^  updateScreen(screen, forceRefresh = false) {$/;"	M
-updateWindow	071_add_attributes/jscrawl.html	/^  updateWindow(screen, window, forceRefresh = false) {$/;"	M
-upperLeftQuarter	071_add_attributes/jscrawl.html	/^  upperLeftQuarter() {$/;"	M
-upperRightQuarter	071_add_attributes/jscrawl.html	/^  upperRightQuarter() {$/;"	M
-values	071_add_attributes/jscrawl.html	/^        let values = []$/;"	A
-values	071_add_attributes/jscrawl.html	/^      let values = []$/;"	A
-violet	071_add_attributes/jscrawl.html	/^              violet: 10,$/;"	P
-violet	071_add_attributes/jscrawl.html	/^              violet: 2,$/;"	P
-violet	071_add_attributes/jscrawl.html	/^              violet: 5,$/;"	P
-violet	071_add_attributes/jscrawl.html	/^  violet:     { bgStyle: '#824FFF', style: '#FFF' },$/;"	P
-violet	071_add_attributes/jscrawl.html	/^  violet: { $/;"	P
-wait	071_add_attributes/jscrawl.html	/^    wait: [ '.' ],$/;"	P
-wait	071_add_attributes/jscrawl.html	/^  wait() {$/;"	M
-wait	071_add_attributes/jscrawl.html	/^  wait: () => {$/;"	M
-wand	071_add_attributes/jscrawl.html	/^        wand: [],$/;"	P
-warn	071_add_attributes/jscrawl.html	/^function warn(message) {$/;"	F
-watermelon	071_add_attributes/jscrawl.html	/^          watermelon: { $/;"	P
-weapon	071_add_attributes/jscrawl.html	/^        weapon: [],$/;"	P
-weapon	071_add_attributes/jscrawl.html	/^      weapon: {$/;"	P
-while	071_add_attributes/jscrawl.html	/^        while(prefix.length + remaining.length >= maxWidth) {$/;"	M
-while	071_add_attributes/jscrawl.html	/^    while(handsAvailable < handsNeeded) {$/;"	M
-while	071_add_attributes/jscrawl.html	/^    while(remaining != 0 && poolsToTry.length) {$/;"	M
-while	071_add_attributes/jscrawl.html	/^  while(map.length < size.x) {$/;"	M
-while	071_add_attributes/jscrawl.html	/^  while(true) {$/;"	M
-white1	071_add_attributes/jscrawl.html	/^  white1:  { bgStyle: '#D0D0D0', style: '#000' },$/;"	P
-white2	071_add_attributes/jscrawl.html	/^  white2:  { bgStyle: '#E8E8E8', style: '#000' },$/;"	P
-white3	071_add_attributes/jscrawl.html	/^  white3:  { bgStyle: '#FFFFFF', style: '#000' },$/;"	P
-width	071_add_attributes/jscrawl.html	/^  width: 1600,$/;"	P
-willpower	071_add_attributes/jscrawl.html	/^              willpower: 10,$/;"	P
-willpower	071_add_attributes/jscrawl.html	/^  willpower: { $/;"	P
-willpowerFocus	071_add_attributes/jscrawl.html	/^    willpowerFocus: [ 'w' ],$/;"	P
-willpowerFocus	071_add_attributes/jscrawl.html	/^  willpowerFocus() {$/;"	M
-willpowerFocus	071_add_attributes/jscrawl.html	/^  willpowerFocus: () => {$/;"	M
-willpowerFocusExecute	071_add_attributes/jscrawl.html	/^  willpowerFocusExecute() {$/;"	M
-willpowerFocusSelectPool	071_add_attributes/jscrawl.html	/^  willpowerFocusSelectPool() {$/;"	M
-willpowerFocusSelectPoolType	071_add_attributes/jscrawl.html	/^  willpowerFocusSelectPoolType() {$/;"	M
-window	071_add_attributes/jscrawl.html	/^          window,$/;"	V
-window	071_add_attributes/jscrawl.html	/^        window: window, $/;"	P
-window	071_add_attributes/jscrawl.html	/^        window: window,$/;"	P
-window	071_add_attributes/jscrawl.html	/^      window,$/;"	V
-window	071_add_attributes/jscrawl.html	/^      window: null,$/;"	P
-window	071_add_attributes/jscrawl.html	/^    window: {$/;"	P
-windowCellPosToLevel	071_add_attributes/jscrawl.html	/^  windowCellPosToLevel(window, windowCellPos) {$/;"	M
-windowCellPosToScreenPixelPos	071_add_attributes/jscrawl.html	/^  windowCellPosToScreenPixelPos(screen, window, windowPos) {$/;"	M
-windowPos	071_add_attributes/jscrawl.html	/^        windowPos: windowPos, $/;"	P
-windowPosIsValid	071_add_attributes/jscrawl.html	/^  windowPosIsValid(window, windowPos) {$/;"	M
-windowToWindowName	071_add_attributes/jscrawl.html	/^  windowToWindowName(screen, window) {$/;"	M
-within	071_add_attributes/jscrawl.html	/^  within(minPair, maxPairExclusive) {$/;"	M
-wpFocus	071_add_attributes/jscrawl.html	/^      wpFocus: null,$/;"	P
-xOffset	071_add_attributes/jscrawl.html	/^    let xOffset = 0$/;"	V
-xOffset	071_add_attributes/jscrawl.html	/^  xOffset: 0,$/;"	P
-xp	071_add_attributes/jscrawl.html	/^      xp: 0,$/;"	P
-yOffset	071_add_attributes/jscrawl.html	/^    let yOffset = 0$/;"	V
-yOffset	071_add_attributes/jscrawl.html	/^  yOffset: 0,$/;"	P
-yellow	071_add_attributes/jscrawl.html	/^              yellow: 10,$/;"	P
-yellow	071_add_attributes/jscrawl.html	/^              yellow: 15,$/;"	P
-yellow	071_add_attributes/jscrawl.html	/^              yellow: 20,$/;"	P
-yellow	071_add_attributes/jscrawl.html	/^              yellow: 3,$/;"	P
-yellow	071_add_attributes/jscrawl.html	/^              yellow: 5, $/;"	P
-yellow	071_add_attributes/jscrawl.html	/^              yellow: 5,$/;"	P
-yellow	071_add_attributes/jscrawl.html	/^  yellow:     { bgStyle: '#FFFF00', style: '#000' },$/;"	P
-yellow	071_add_attributes/jscrawl.html	/^  yellow: { $/;"	P
+BackController	072_experience_potion/jscrawl.html	/^class BackController {$/;"	C
+FrontController	072_experience_potion/jscrawl.html	/^class FrontController {$/;"	C
+InController	072_experience_potion/jscrawl.html	/^class InController {$/;"	C
+OutController	072_experience_potion/jscrawl.html	/^class OutController {$/;"	C
+Pair	072_experience_potion/jscrawl.html	/^class Pair {$/;"	C
+Rect	072_experience_potion/jscrawl.html	/^class Rect {$/;"	C
+SeededRandomizer	072_experience_potion/jscrawl.html	/^class SeededRandomizer {$/;"	C
+TopController	072_experience_potion/jscrawl.html	/^class TopController {$/;"	C
+actionMessage	072_experience_potion/jscrawl.html	/^    let actionMessage = 'Unknown'$/;"	V
+actions	072_experience_potion/jscrawl.html	/^const actions = {$/;"	O
+actor	072_experience_potion/jscrawl.html	/^    actor: [],$/;"	P
+add	072_experience_potion/jscrawl.html	/^  add(pair) {$/;"	M
+addActor	072_experience_potion/jscrawl.html	/^  addActor(actor) {$/;"	M
+addEnergy	072_experience_potion/jscrawl.html	/^  addEnergy(actor, energyType, amount) {$/;"	M
+addItemToFloor	072_experience_potion/jscrawl.html	/^  addItemToFloor(pos, item) {$/;"	M
+addItemToInventory	072_experience_potion/jscrawl.html	/^  addItemToInventory(item) {$/;"	M
+addLevelCellsChanged	072_experience_potion/jscrawl.html	/^  addLevelCellsChanged(pos) {$/;"	M
+addMessage	072_experience_potion/jscrawl.html	/^  addMessage(message, multiColumn = false) {$/;"	M
+addStatusPoolLineCompact	072_experience_potion/jscrawl.html	/^  addStatusPoolLineCompact(list, player, poolList) {$/;"	M
+addStatusPoolLineExpanded	072_experience_potion/jscrawl.html	/^  addStatusPoolLineExpanded(list, player, poolList) {$/;"	M
+addSubjectToLevel	072_experience_potion/jscrawl.html	/^  addSubjectToLevel(subject, pos) {$/;"	M
+adjacent	072_experience_potion/jscrawl.html	/^        let adjacent = new Pair(fromX, fromY).adjacent(size)$/;"	V
+adjacent	072_experience_potion/jscrawl.html	/^  adjacent(size) {$/;"	M
+adjacentCells	072_experience_potion/jscrawl.html	/^  adjacentCells(subjectPos) {$/;"	M
+adjustHealth	072_experience_potion/jscrawl.html	/^  adjustHealth(target, change) {$/;"	M
+adjustLevelPan	072_experience_potion/jscrawl.html	/^  adjustLevelPan(levelWindow, pos, levelSize) {$/;"	M
+advanceEnergyFlow	072_experience_potion/jscrawl.html	/^  advanceEnergyFlow(actor) {$/;"	M
+advanceEnergyFlowChannel	072_experience_potion/jscrawl.html	/^  advanceEnergyFlowChannel(actor, channel, currentMaxFlow) {$/;"	M
+advanceEnergyFlowPools	072_experience_potion/jscrawl.html	/^  advanceEnergyFlowPools(actor, from, to, currentMaxFlow) {$/;"	M
+advanceTime	072_experience_potion/jscrawl.html	/^  advanceTime(playerActive) {$/;"	M
+afterEachTurn	072_experience_potion/jscrawl.html	/^  afterEachTurn() {$/;"	M
+allResults	072_experience_potion/jscrawl.html	/^  let allResults = [] $/;"	A
+alt	072_experience_potion/jscrawl.html	/^  alt: false,$/;"	P
+amulet	072_experience_potion/jscrawl.html	/^        amulet: null,$/;"	P
+apple	072_experience_potion/jscrawl.html	/^          apple: { $/;"	P
+applyEnergyDelta	072_experience_potion/jscrawl.html	/^  applyEnergyDelta(actor) {$/;"	M
+armor	072_experience_potion/jscrawl.html	/^        armor: [],$/;"	P
+attack	072_experience_potion/jscrawl.html	/^            attack: { min: 0, max: 1 }, $/;"	P
+attack	072_experience_potion/jscrawl.html	/^            attack: { min: 0, max: 4 },$/;"	P
+attackSpeed	072_experience_potion/jscrawl.html	/^                attackSpeed: 0,$/;"	P
+attackSpeed	072_experience_potion/jscrawl.html	/^                attackSpeed: 1,$/;"	P
+attributes	072_experience_potion/jscrawl.html	/^    attributes: {$/;"	P
+average	072_experience_potion/jscrawl.html	/^                  average: 1$/;"	P
+average	072_experience_potion/jscrawl.html	/^                  average: 2$/;"	P
+averageValue	072_experience_potion/jscrawl.html	/^        let averageValue = values.reduce((a,b) => a + b, 0) \/ values.length$/;"	F
+axe	072_experience_potion/jscrawl.html	/^          axe: {$/;"	P
+b	072_experience_potion/jscrawl.html	/^  const b = 1 - levelCaveGenerator.openness$/;"	V
+backModel	072_experience_potion/jscrawl.html	/^  backModel: {$/;"	P
+bacon	072_experience_potion/jscrawl.html	/^          bacon: { $/;"	P
+banana	072_experience_potion/jscrawl.html	/^          banana: { $/;"	P
+base	072_experience_potion/jscrawl.html	/^                  base: 20, $/;"	P
+base	072_experience_potion/jscrawl.html	/^                  base: 3, $/;"	P
+base	072_experience_potion/jscrawl.html	/^                  base: 5, $/;"	P
+base	072_experience_potion/jscrawl.html	/^                  base: 8, $/;"	P
+base	072_experience_potion/jscrawl.html	/^      base: {$/;"	P
+base	072_experience_potion/jscrawl.html	/^  base: {$/;"	P
+beef	072_experience_potion/jscrawl.html	/^          beef: { $/;"	P
+beforeEachTurn	072_experience_potion/jscrawl.html	/^  beforeEachTurn() {$/;"	M
+bgStyle	072_experience_potion/jscrawl.html	/^          bgStyle,$/;"	V
+black	072_experience_potion/jscrawl.html	/^              black: 10,$/;"	P
+black	072_experience_potion/jscrawl.html	/^  black:   { bgStyle: '#000000', style: '#FFF' },$/;"	P
+black	072_experience_potion/jscrawl.html	/^  black: { $/;"	P
+blue	072_experience_potion/jscrawl.html	/^              blue: 15,$/;"	P
+blue	072_experience_potion/jscrawl.html	/^              blue: 2,$/;"	P
+blue	072_experience_potion/jscrawl.html	/^              blue: 5, $/;"	P
+blue	072_experience_potion/jscrawl.html	/^              blue: 5,$/;"	P
+blue	072_experience_potion/jscrawl.html	/^  blue:       { bgStyle: '#1F74FF', style: '#FFF' },$/;"	P
+blue	072_experience_potion/jscrawl.html	/^  blue: { $/;"	P
+blueberries	072_experience_potion/jscrawl.html	/^          blueberries: { $/;"	P
+body	072_experience_potion/jscrawl.html	/^        body: null,$/;"	P
+book	072_experience_potion/jscrawl.html	/^        book: [],$/;"	P
+boomerang	072_experience_potion/jscrawl.html	/^              boomerang: { $/;"	P
+boots	072_experience_potion/jscrawl.html	/^        boots: null,$/;"	P
+boulder	072_experience_potion/jscrawl.html	/^              boulder: { $/;"	P
+bread	072_experience_potion/jscrawl.html	/^          bread: { $/;"	P
+break	072_experience_potion/jscrawl.html	/^          break$/;"	V
+break	072_experience_potion/jscrawl.html	/^        break$/;"	V
+break	072_experience_potion/jscrawl.html	/^      break$/;"	V
+break	072_experience_potion/jscrawl.html	/^    break$/;"	V
+brocolli	072_experience_potion/jscrawl.html	/^          brocolli: { $/;"	P
+brown	072_experience_potion/jscrawl.html	/^  brown:   { bgStyle: '#CF9509', style: '#FFF'  },$/;"	P
+brown	072_experience_potion/jscrawl.html	/^  brown: { $/;"	P
+buildLevel	072_experience_potion/jscrawl.html	/^  buildLevel(randomizer) {$/;"	M
+calculateDamageFrom	072_experience_potion/jscrawl.html	/^  calculateDamageFrom(attacker) {$/;"	M
+canvasProps	072_experience_potion/jscrawl.html	/^const canvasProps = {$/;"	O
+carrot	072_experience_potion/jscrawl.html	/^          carrot: { $/;"	P
+cellPos	072_experience_potion/jscrawl.html	/^          cellPos,$/;"	V
+cellSizePixels	072_experience_potion/jscrawl.html	/^      cellSizePixels: cellSizePixels,$/;"	P
+cellsChanged	072_experience_potion/jscrawl.html	/^        cellsChanged$/;"	V
+cellsChanged	072_experience_potion/jscrawl.html	/^    let cellsChanged = []$/;"	A
+center	072_experience_potion/jscrawl.html	/^        center: true,$/;"	P
+chanceWeight	072_experience_potion/jscrawl.html	/^                chanceWeight: 100, $/;"	P
+chanceWeight	072_experience_potion/jscrawl.html	/^                chanceWeight: 1000, $/;"	P
+chanceWeight	072_experience_potion/jscrawl.html	/^            chanceWeight: 1,$/;"	P
+chanceWeight	072_experience_potion/jscrawl.html	/^            chanceWeight: 1000, $/;"	P
+chanceWeight	072_experience_potion/jscrawl.html	/^            chanceWeight: 1000,$/;"	P
+chanceWeight	072_experience_potion/jscrawl.html	/^            chanceWeight: 20,$/;"	P
+chanceWeight	072_experience_potion/jscrawl.html	/^            chanceWeight: 200, $/;"	P
+chanceWeight	072_experience_potion/jscrawl.html	/^            chanceWeight: 200,$/;"	P
+chanceWeight	072_experience_potion/jscrawl.html	/^            chanceWeight: 2000,$/;"	P
+chanceWeight	072_experience_potion/jscrawl.html	/^            chanceWeight: 300,$/;"	P
+chanceWeight	072_experience_potion/jscrawl.html	/^            chanceWeight: 50, $/;"	P
+chanceWeight	072_experience_potion/jscrawl.html	/^            chanceWeight: 500,$/;"	P
+chanceWeight	072_experience_potion/jscrawl.html	/^        chanceWeight: 1000,$/;"	P
+changeStatusMode	072_experience_potion/jscrawl.html	/^    changeStatusMode: [ 's' ],$/;"	P
+changeStatusMode	072_experience_potion/jscrawl.html	/^  changeStatusMode() {$/;"	M
+changeStatusMode	072_experience_potion/jscrawl.html	/^  changeStatusMode: () => {$/;"	M
+changeString	072_experience_potion/jscrawl.html	/^    let changeString = ''$/;"	V
+channelCommand	072_experience_potion/jscrawl.html	/^    channelCommand: [ 'c' ],$/;"	P
+channelCommand	072_experience_potion/jscrawl.html	/^  channelCommand: () => {$/;"	M
+channelCommandExecuteChange	072_experience_potion/jscrawl.html	/^  channelCommandExecuteChange() {$/;"	M
+channelCommandSelectChannel	072_experience_potion/jscrawl.html	/^  channelCommandSelectChannel() {$/;"	M
+channelCommandSelectFlow	072_experience_potion/jscrawl.html	/^  channelCommandSelectFlow() {$/;"	M
+channelCommandSelectPool	072_experience_potion/jscrawl.html	/^  channelCommandSelectPool() {$/;"	M
+channelCommandSelectPoolType	072_experience_potion/jscrawl.html	/^  channelCommandSelectPoolType() {$/;"	M
+channelCurrent	072_experience_potion/jscrawl.html	/^      channelCurrent: [],  \/\/ integers of openness of each channel$/;"	P
+channelMax	072_experience_potion/jscrawl.html	/^      channelMax: [],      \/\/ integers of max value of each channel$/;"	P
+channelString	072_experience_potion/jscrawl.html	/^  let channelString = [ $/;"	A
+channelsToOutput	072_experience_potion/jscrawl.html	/^    let channelsToOutput = []$/;"	A
+checkPan	072_experience_potion/jscrawl.html	/^  checkPan(window, pos, size) {$/;"	M
+cheese	072_experience_potion/jscrawl.html	/^          cheese: { $/;"	P
+cherry	072_experience_potion/jscrawl.html	/^          cherry: { $/;"	P
+chicken	072_experience_potion/jscrawl.html	/^          chicken: { $/;"	P
+chocolate	072_experience_potion/jscrawl.html	/^          chocolate: { $/;"	P
+classifyLevelSpaces	072_experience_potion/jscrawl.html	/^function classifyLevelSpaces(level, pos, classifiedSpaces = null) {$/;"	F
+clearArray	072_experience_potion/jscrawl.html	/^function clearArray(array) {$/;"	F
+clearLevelCellsChanged	072_experience_potion/jscrawl.html	/^  clearLevelCellsChanged() {$/;"	M
+clearMessages	072_experience_potion/jscrawl.html	/^  clearMessages() {$/;"	M
+clearNumericSelection	072_experience_potion/jscrawl.html	/^    clearNumericSelection: [ 'Backspace' ],$/;"	P
+clearNumericSelection	072_experience_potion/jscrawl.html	/^  clearNumericSelection() {$/;"	M
+clearNumericSelection	072_experience_potion/jscrawl.html	/^  clearNumericSelection: () => {$/;"	M
+clearRect	072_experience_potion/jscrawl.html	/^  clearRect(rect) {$/;"	M
+clearWindow	072_experience_potion/jscrawl.html	/^  clearWindow(screen, window) {$/;"	M
+clearWindowCells	072_experience_potion/jscrawl.html	/^  clearWindowCells(screen, window, cells) {$/;"	M
+cloak	072_experience_potion/jscrawl.html	/^        cloak: null,$/;"	P
+coconut	072_experience_potion/jscrawl.html	/^          coconut: { $/;"	P
+col	072_experience_potion/jscrawl.html	/^        let col = 0$/;"	V
+colorize	072_experience_potion/jscrawl.html	/^const colorize = {$/;"	O
+colorizePoolName	072_experience_potion/jscrawl.html	/^function colorizePoolName(pool) {$/;"	F
+colors	072_experience_potion/jscrawl.html	/^const colors = {$/;"	O
+command	072_experience_potion/jscrawl.html	/^  command: false,$/;"	P
+commandExecution	072_experience_potion/jscrawl.html	/^const commandExecution = {$/;"	O
+compact	072_experience_potion/jscrawl.html	/^  compact: { name: "Courier", size: 13 },$/;"	P
+complexJoin	072_experience_potion/jscrawl.html	/^function complexJoin(list, pad={text:' '}) {$/;"	F
+complexLength	072_experience_potion/jscrawl.html	/^function complexLength(list) {$/;"	F
+connectRooms	072_experience_potion/jscrawl.html	/^function connectRooms(level, map, wallThreshold, randomizer) {$/;"	F
+connectedRooms	072_experience_potion/jscrawl.html	/^  let connectedRooms = 0$/;"	V
+constructor	072_experience_potion/jscrawl.html	/^  constructor() {$/;"	M
+constructor	072_experience_potion/jscrawl.html	/^  constructor(seed) {$/;"	M
+constructor	072_experience_potion/jscrawl.html	/^  constructor(x, y) {$/;"	M
+constructor	072_experience_potion/jscrawl.html	/^  constructor(x1, y1, x2, y2) {$/;"	M
+continue	072_experience_potion/jscrawl.html	/^            continue$/;"	V
+continue	072_experience_potion/jscrawl.html	/^        continue$/;"	V
+continue	072_experience_potion/jscrawl.html	/^      continue$/;"	V
+control	072_experience_potion/jscrawl.html	/^  control: false,$/;"	P
+copper	072_experience_potion/jscrawl.html	/^              copper: 20,$/;"	P
+copper	072_experience_potion/jscrawl.html	/^  copper:  { $/;"	P
+copper	072_experience_potion/jscrawl.html	/^  copper: { $/;"	P
+copperEgg	072_experience_potion/jscrawl.html	/^          copperEgg: { $/;"	P
+count	072_experience_potion/jscrawl.html	/^                count: 10,$/;"	P
+count	072_experience_potion/jscrawl.html	/^            count: 1,$/;"	P
+count	072_experience_potion/jscrawl.html	/^            count: 10,$/;"	P
+count	072_experience_potion/jscrawl.html	/^            count: 100,$/;"	P
+count	072_experience_potion/jscrawl.html	/^          count: count,$/;"	P
+count	072_experience_potion/jscrawl.html	/^        count: 1,$/;"	P
+count	072_experience_potion/jscrawl.html	/^      let count = ''$/;"	V
+count	072_experience_potion/jscrawl.html	/^    let count = 0$/;"	V
+countEmptyCells	072_experience_potion/jscrawl.html	/^  countEmptyCells() {$/;"	M
+countedItem	072_experience_potion/jscrawl.html	/^      const countedItem = { base: template }$/;"	O
+counts	072_experience_potion/jscrawl.html	/^    const counts = []$/;"	A
+creator	072_experience_potion/jscrawl.html	/^  creator: {$/;"	P
+creatorCreateTarget	072_experience_potion/jscrawl.html	/^    creatorCreateTarget: [ 'c' ],$/;"	P
+creatorCreateTarget	072_experience_potion/jscrawl.html	/^  creatorCreateTarget: () => {$/;"	M
+creatorDeleteTarget	072_experience_potion/jscrawl.html	/^    creatorDeleteTarget: [ 'd' ],$/;"	P
+creatorDeleteTarget	072_experience_potion/jscrawl.html	/^  creatorDeleteTarget: () => {$/;"	M
+creatorMode	072_experience_potion/jscrawl.html	/^    creatorMode: false,$/;"	P
+creatorModeCommand	072_experience_potion/jscrawl.html	/^    creatorModeCommand: [ '`' ],$/;"	P
+creatorModeCommand	072_experience_potion/jscrawl.html	/^  creatorModeCommand() {$/;"	M
+creatorModeCommand	072_experience_potion/jscrawl.html	/^  creatorModeCommand: () => {$/;"	M
+creatorModeCreateTarget	072_experience_potion/jscrawl.html	/^  creatorModeCreateTarget() {$/;"	M
+creatorModeDeleteTarget	072_experience_potion/jscrawl.html	/^  creatorModeDeleteTarget() {$/;"	M
+creatorModeRegenLevel	072_experience_potion/jscrawl.html	/^  creatorModeRegenLevel() {$/;"	M
+creatorModeTeleportToTarget	072_experience_potion/jscrawl.html	/^  creatorModeTeleportToTarget() {$/;"	M
+creatorRegenLevel	072_experience_potion/jscrawl.html	/^    creatorRegenLevel: [ 'r' ],$/;"	P
+creatorRegenLevel	072_experience_potion/jscrawl.html	/^  creatorRegenLevel: () => {$/;"	M
+creatorTeleportToTarget	072_experience_potion/jscrawl.html	/^    creatorTeleportToTarget: [ 't' ],$/;"	P
+creatorTeleportToTarget	072_experience_potion/jscrawl.html	/^  creatorTeleportToTarget: () => {$/;"	M
+creature	072_experience_potion/jscrawl.html	/^      creature: {$/;"	P
+criticalHealth	072_experience_potion/jscrawl.html	/^      criticalHealth: 5,$/;"	P
+criticalHealth	072_experience_potion/jscrawl.html	/^  criticalHealth: { $/;"	P
+current	072_experience_potion/jscrawl.html	/^      const current = '' + Math.floor($/;"	V
+currentFlowMagnitude	072_experience_potion/jscrawl.html	/^        currentFlowMagnitude,$/;"	V
+currentMaxFlow	072_experience_potion/jscrawl.html	/^        currentMaxFlow,$/;"	V
+cyan	072_experience_potion/jscrawl.html	/^              cyan: 2, $/;"	P
+cyan	072_experience_potion/jscrawl.html	/^              cyan: 5,$/;"	P
+cyan	072_experience_potion/jscrawl.html	/^  cyan:       { bgStyle: '#00FFFF', style: '#000' },$/;"	P
+cyan	072_experience_potion/jscrawl.html	/^  cyan: { $/;"	P
+damage	072_experience_potion/jscrawl.html	/^                damage: [{$/;"	P
+debug	072_experience_potion/jscrawl.html	/^function debug(message) {$/;"	F
+default	072_experience_potion/jscrawl.html	/^      default: 100,$/;"	P
+default	072_experience_potion/jscrawl.html	/^  default: {$/;"	P
+describeItem	072_experience_potion/jscrawl.html	/^function describeItem(item) {$/;"	F
+dexterity	072_experience_potion/jscrawl.html	/^      dexterity: 10,$/;"	P
+diamond	072_experience_potion/jscrawl.html	/^              diamond: 20,$/;"	P
+diamond	072_experience_potion/jscrawl.html	/^  diamond:  { $/;"	P
+diamond	072_experience_potion/jscrawl.html	/^  diamond: { $/;"	P
+diamondEgg	072_experience_potion/jscrawl.html	/^          diamondEgg: { $/;"	P
+dirtFloor	072_experience_potion/jscrawl.html	/^    dirtFloor: { $/;"	P
+divide	072_experience_potion/jscrawl.html	/^  divide(pair) {$/;"	M
+drawEmptyRect	072_experience_potion/jscrawl.html	/^  drawEmptyRect(rect, style = "#000000") {$/;"	M
+drawFilledRect	072_experience_potion/jscrawl.html	/^  drawFilledRect(rect, style = "#000000") {$/;"	M
+drawLevelWindowCell	072_experience_potion/jscrawl.html	/^  drawLevelWindowCell(screen, window, windowPos) {$/;"	M
+drawLevelWindowCells	072_experience_potion/jscrawl.html	/^  drawLevelWindowCells(screen, window, cells) {$/;"	M
+drawMessagesWindow	072_experience_potion/jscrawl.html	/^  drawMessagesWindow(screen, window) {$/;"	M
+drawStatusWindow	072_experience_potion/jscrawl.html	/^  drawStatusWindow(screen, window, statusList) {$/;"	M
+drawTarget	072_experience_potion/jscrawl.html	/^  drawTarget(screen, window, targetPos) {$/;"	M
+drawText	072_experience_potion/jscrawl.html	/^  drawText(p) {$/;"	M
+drawWindow	072_experience_potion/jscrawl.html	/^  drawWindow(screen, window) {$/;"	M
+drop	072_experience_potion/jscrawl.html	/^  drop: {$/;"	P
+dropItem	072_experience_potion/jscrawl.html	/^  dropItem(item, count) {$/;"	M
+dropItem	072_experience_potion/jscrawl.html	/^  dropItem(type, index, count) {$/;"	M
+durability	072_experience_potion/jscrawl.html	/^        durability: 100,$/;"	P
+eat	072_experience_potion/jscrawl.html	/^  eat: {$/;"	P
+eatItem	072_experience_potion/jscrawl.html	/^  eatItem(item, count) {$/;"	M
+egg	072_experience_potion/jscrawl.html	/^          egg: { $/;"	P
+eggplant	072_experience_potion/jscrawl.html	/^          eggplant: { $/;"	P
+empty	072_experience_potion/jscrawl.html	/^  static empty() {$/;"	M
+emptyCellCount	072_experience_potion/jscrawl.html	/^    let emptyCellCount = 0$/;"	V
+energy	072_experience_potion/jscrawl.html	/^            energy: {$/;"	P
+energyDelta	072_experience_potion/jscrawl.html	/^    energyDelta: {$/;"	P
+enterCreatorMode	072_experience_potion/jscrawl.html	/^    enterCreatorMode: [ 'C' ],$/;"	P
+enterCreatorMode	072_experience_potion/jscrawl.html	/^  enterCreatorMode() {$/;"	M
+enterCreatorMode	072_experience_potion/jscrawl.html	/^  enterCreatorMode: () => {$/;"	M
+enterTargetMode	072_experience_potion/jscrawl.html	/^    enterTargetMode: [ 'x' ],$/;"	P
+enterTargetMode	072_experience_potion/jscrawl.html	/^    enterTargetMode: [],$/;"	P
+enterTargetMode	072_experience_potion/jscrawl.html	/^  enterTargetMode() {$/;"	M
+enterTargetMode	072_experience_potion/jscrawl.html	/^  enterTargetMode: () => {$/;"	M
+equip	072_experience_potion/jscrawl.html	/^      equip: {$/;"	P
+equip	072_experience_potion/jscrawl.html	/^  equip: {$/;"	P
+equipItem	072_experience_potion/jscrawl.html	/^  equipItem(item) {$/;"	M
+err	072_experience_potion/jscrawl.html	/^function err(message) {$/;"	F
+etherea	072_experience_potion/jscrawl.html	/^  etherea: { name: 'etherea', key: 'e', },$/;"	P
+execute	072_experience_potion/jscrawl.html	/^    execute: (item) => {$/;"	M
+execute	072_experience_potion/jscrawl.html	/^    execute: (item, count) => {$/;"	M
+executeAction	072_experience_potion/jscrawl.html	/^  executeAction() {$/;"	M
+executeAction	072_experience_potion/jscrawl.html	/^  executeAction(key) {$/;"	M
+executeAction	072_experience_potion/jscrawl.html	/^  executeAction: (key) => {$/;"	M
+executeAttack	072_experience_potion/jscrawl.html	/^  executeAttack(source, target) {$/;"	M
+executeMove	072_experience_potion/jscrawl.html	/^  executeMove(actor, pos) {$/;"	M
+executeSelectAction	072_experience_potion/jscrawl.html	/^    executeSelectAction: [ 'Enter' ],$/;"	P
+executeSelectAction	072_experience_potion/jscrawl.html	/^  executeSelectAction() {$/;"	M
+executeSelectAction	072_experience_potion/jscrawl.html	/^  executeSelectAction: () => {$/;"	M
+exitSimple	072_experience_potion/jscrawl.html	/^    exitSimple: [ 'Escape' ],$/;"	P
+exitSimple	072_experience_potion/jscrawl.html	/^  exitSimple() {$/;"	M
+exitSimple	072_experience_potion/jscrawl.html	/^  exitSimple: () => {$/;"	M
+exitTargetMode	072_experience_potion/jscrawl.html	/^    exitTargetMode: [ 'Escape' ],$/;"	P
+exitTargetMode	072_experience_potion/jscrawl.html	/^  exitTargetMode: () => {$/;"	M
+exotica	072_experience_potion/jscrawl.html	/^  exotica: { name: 'exotica', key: 'x', },$/;"	P
+expand	072_experience_potion/jscrawl.html	/^  expand(pixels) {$/;"	M
+expandCrack	072_experience_potion/jscrawl.html	/^function expandCrack(level, map, classifiedSpaces, wallThreshold, startPos) {$/;"	F
+experiencePerLevel	072_experience_potion/jscrawl.html	/^    experiencePerLevel: 10,$/;"	P
+experiencePerLevel	072_experience_potion/jscrawl.html	/^    experiencePerLevel: 12,$/;"	P
+fPress	072_experience_potion/jscrawl.html	/^  const [fPress, tPress] = getEffectivePressures($/;"	V
+fRoom	072_experience_potion/jscrawl.html	/^        fRoom,$/;"	V
+false	072_experience_potion/jscrawl.html	/^      false,$/;"	V
+findBestCrack	072_experience_potion/jscrawl.html	/^function findBestCrack(level, map, classifiedSpaces, wallThreshold) {$/;"	F
+findEmptyCellCentrally	072_experience_potion/jscrawl.html	/^function findEmptyCellCentrally(level, randomizer, bounds = null) {$/;"	F
+findEmptyCellSimple	072_experience_potion/jscrawl.html	/^function findEmptyCellSimple(level) {$/;"	F
+fish	072_experience_potion/jscrawl.html	/^          fish: { $/;"	P
+fixed	072_experience_potion/jscrawl.html	/^  fixed: { name: "Courier", size: 26 },$/;"	P
+floor	072_experience_potion/jscrawl.html	/^  floor() {$/;"	M
+floorType	072_experience_potion/jscrawl.html	/^          floorType: { base: ot.dirtFloor }, $/;"	P
+floorType	072_experience_potion/jscrawl.html	/^          floorType: { base: ot.dirtFloor },$/;"	P
+flow	072_experience_potion/jscrawl.html	/^    const flow = 9 - selectedIndex$/;"	V
+fontStyle	072_experience_potion/jscrawl.html	/^      fontStyle: fontStyle, $/;"	P
+fontStyle	072_experience_potion/jscrawl.html	/^const fontStyle = {$/;"	O
+food	072_experience_potion/jscrawl.html	/^        food: [],$/;"	P
+food	072_experience_potion/jscrawl.html	/^      food: {$/;"	P
+for	072_experience_potion/jscrawl.html	/^            for(let t = 0; t < channel.to.length; t++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^          for(let c = 0; c < pool.channelIndexes.length; c++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^          for(let f = 0; f < channel.from.length; f++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^          for(let t = 0; t < channel.to.length; t++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^        for(let adjacentPos of newPos.adjacent(levelSize)) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^        for(let ci = 0; ci < channelList.length; ci++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^        for(let f = 0; f < channel.from.length; f++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^        for(let j = 0; j < hands; j++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^        for(let p = 0; p < poolTypePools.length; p++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^        for(let r = 0; r < window.size.y; r++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^      for(const [windowName, window] of Object.entries(screen.window)) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^      for(let [energyType, amount] of Object.entries(deltas)) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^      for(let [energyType, amount] of Object.entries(item.base.energy)) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^      for(let [key, value] of Object.entries(template.sub)) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^      for(let c = 0; c < pool.channelIndexes.length; c++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^      for(let c = 0; c < poolChannels.length; c++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^      for(let c = 0; c < window.size.x; c++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^      for(let fromY = 0; fromY < fromHeight; fromY++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^      for(let fromY = 0; fromY < size.y; fromY++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^      for(let i = 0; i < subjects.length; i++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^      for(let invItem of group) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^      for(let item of cell.onFloor) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^      for(let pt = 0; pt < poolTypes.length; pt++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^      for(let r = this.y - 1; r <= this.y + 1; r++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^      for(let t = 0; t < channel.to.length; t++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^      for(let y = 0; y < column.length; y++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^      for(let y = 0; y < level[0].length; y++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(const [key, subject] of Object.entries(group)) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(const [screenName, screen] of Object.entries(screens)) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(const [testName, testWindow] of Object.entries(screen.window)) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(const cellPos of cells) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(const poolName of poolList) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(const subject of Object.values(group)) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(const window of Object.values(screen.window)) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(const windowPos of cells) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(i = 0; i < poolChannels.length; i++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(index = 0; index < group.length; index++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let [poolName, pool] of Object.entries(pools)) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let [type, value] of Object.entries(equip)) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let action of actions) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let c = this.x - 1; c <= this.x + 1; c++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let channelIndex of fc.getSelectMeta('channelIndexes')) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let command of Object.keys(keyMap[km])) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let f = 0; f < channel.from.length; f++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let floorItem of cell.onFloor) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let fromX = 0; fromX < size.x; fromX++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let fromY = 0; fromY < fromHeight - 1; fromY += 2) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let fromY = 0; fromY < fromHeight; fromY++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let i = 0; i < adjacent.length; i++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let i = 0; i < floorItems.length; i++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let i = 0; i < fm.selectIndexes.length; i++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let i = 0; i < fm.selectSubjectList.length; i++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let i = 0; i < group.length; i++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let i = 0; i < hand.length; i++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let i = 0; i < items.length; i++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let i = 0; i < list.length; i++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let i = 0; i < p.textToDrawList.length; i++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let i = 0; i < poolChannels.length; i++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let i = 0; i < selectedFloorItems.length; i++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let i = 0; i < subjects.length; i++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let i = 9; i > 0; i--) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let i = 9; i >= 0; i--) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let i = list.length - 1; i >= 0; i--) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let i = pos; i > 0; i--) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let item of cell.onFloor) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let itemKey in itemBase) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let key in inventoryTypes) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let key in species) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let n = 0; n < stuffCount; n++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let p = 0; p < pools.length; p++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let pool of Object.values(subjectPools)) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let poolType of Object.values(poolTypes)) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let r = 0; r < column.length; r++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let r = 0; r < size.y + 2; r++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let r = 0; r < size.y; r++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let row = 0; row < messages.length; row++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let row = 0; row < statusList.length; row++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let x = 0; x < level.length; x++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let y = 0; y < level[x].length; y++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^    for(let y = 0; y < toHeight; y++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^  for(let adjacentPos of adjacentList) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^  for(let adjacentPos of startPos.adjacent(levelSize)) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^  for(let c = 0; c < level.length; c++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^  for(let c = 0; c < size.x + 2; c++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^  for(let c = 0; c < size.x; c++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^  for(let fromX = 0; fromX < fromWidth - 1; fromX += 2) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^  for(let fromX = 0; fromX < fromWidth; fromX++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^  for(let i = 0; i < list.length; i++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^  for(let item of list) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^  for(let key of Object.keys(pools)) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^  for(let x = 0; x < level.length; x++) {$/;"	M
+for	072_experience_potion/jscrawl.html	/^  for(let x = 0; x < toWidth; x++) {$/;"	M
+fork	072_experience_potion/jscrawl.html	/^  fork() {$/;"	M
+found	072_experience_potion/jscrawl.html	/^    let found = [];$/;"	A
+from	072_experience_potion/jscrawl.html	/^    from: [$/;"	P
+from	072_experience_potion/jscrawl.html	/^    from: [pools.blue],$/;"	P
+from	072_experience_potion/jscrawl.html	/^    from: [pools.copper],$/;"	P
+from	072_experience_potion/jscrawl.html	/^    from: [pools.criticalHealth],$/;"	P
+from	072_experience_potion/jscrawl.html	/^    from: [pools.cyan],$/;"	P
+from	072_experience_potion/jscrawl.html	/^    from: [pools.diamond],$/;"	P
+from	072_experience_potion/jscrawl.html	/^    from: [pools.gold],$/;"	P
+from	072_experience_potion/jscrawl.html	/^    from: [pools.gray],$/;"	P
+from	072_experience_potion/jscrawl.html	/^    from: [pools.green],$/;"	P
+from	072_experience_potion/jscrawl.html	/^    from: [pools.indigo],$/;"	P
+from	072_experience_potion/jscrawl.html	/^    from: [pools.majorHealth],$/;"	P
+from	072_experience_potion/jscrawl.html	/^    from: [pools.mana],$/;"	P
+from	072_experience_potion/jscrawl.html	/^    from: [pools.minorHealth],$/;"	P
+from	072_experience_potion/jscrawl.html	/^    from: [pools.moon],$/;"	P
+from	072_experience_potion/jscrawl.html	/^    from: [pools.orange],$/;"	P
+from	072_experience_potion/jscrawl.html	/^    from: [pools.red],$/;"	P
+from	072_experience_potion/jscrawl.html	/^    from: [pools.silver],$/;"	P
+from	072_experience_potion/jscrawl.html	/^    from: [pools.stamina],$/;"	P
+from	072_experience_potion/jscrawl.html	/^    from: [pools.star],$/;"	P
+from	072_experience_potion/jscrawl.html	/^    from: [pools.sun],$/;"	P
+from	072_experience_potion/jscrawl.html	/^    from: [pools.violet],$/;"	P
+from	072_experience_potion/jscrawl.html	/^    from: [pools.willpower],$/;"	P
+from	072_experience_potion/jscrawl.html	/^    from: [pools.yellow],$/;"	P
+frontModel	072_experience_potion/jscrawl.html	/^  frontModel: {$/;"	P
+gameClock	072_experience_potion/jscrawl.html	/^    gameClock: 0,$/;"	P
+generateDiamondSquareMap	072_experience_potion/jscrawl.html	/^function generateDiamondSquareMap(fromMap, randomizer) {$/;"	F
+generateGradient	072_experience_potion/jscrawl.html	/^function generateGradient(width, height, list) {$/;"	F
+generateItem	072_experience_potion/jscrawl.html	/^  generateItem(count, path, currentItem = template.generated) {$/;"	M
+generateLevelEmptyRoom	072_experience_potion/jscrawl.html	/^function generateLevelEmptyRoom(level, size, randomizer) {$/;"	F
+generateLevelSimpleCaves	072_experience_potion/jscrawl.html	/^function generateLevelSimpleCaves(level, size, randomizer, levelCaveGenerator) {$/;"	F
+generated	072_experience_potion/jscrawl.html	/^  generated: {$/;"	P
+getActionModeMessage	072_experience_potion/jscrawl.html	/^  getActionModeMessage() {$/;"	M
+getActionsFor	072_experience_potion/jscrawl.html	/^function getActionsFor(type, allowMultiple) {$/;"	F
+getActors	072_experience_potion/jscrawl.html	/^  getActors() {$/;"	M
+getAttributes	072_experience_potion/jscrawl.html	/^  getAttributes(actor) {$/;"	M
+getBias	072_experience_potion/jscrawl.html	/^function getBias(actor, fromPool, toPool) {$/;"	F
+getCell	072_experience_potion/jscrawl.html	/^  getCell(pos) {$/;"	M
+getCellPixelRect	072_experience_potion/jscrawl.html	/^  getCellPixelRect(screen, window, windowPos) {$/;"	M
+getChangeString	072_experience_potion/jscrawl.html	/^  getChangeString(prefix, change) {$/;"	M
+getChannelFlowFromMagnitude	072_experience_potion/jscrawl.html	/^function getChannelFlowFromMagnitude(mag, max) {$/;"	F
+getChannelString	072_experience_potion/jscrawl.html	/^function getChannelString(player, from, to) {$/;"	F
+getCreatorMode	072_experience_potion/jscrawl.html	/^  getCreatorMode() {$/;"	M
+getCurrentScreen	072_experience_potion/jscrawl.html	/^  getCurrentScreen() {$/;"	M
+getEffectivePressures	072_experience_potion/jscrawl.html	/^function getEffectivePressures(actor, fromPool, toPool) {$/;"	F
+getEquipment	072_experience_potion/jscrawl.html	/^  getEquipment() {$/;"	M
+getFloorItemsAt	072_experience_potion/jscrawl.html	/^  getFloorItemsAt(pos) {$/;"	M
+getFloorItemsAtPlayerPos	072_experience_potion/jscrawl.html	/^  getFloorItemsAtPlayerPos() {$/;"	M
+getFontStyle	072_experience_potion/jscrawl.html	/^  getFontStyle(screen, window) {$/;"	M
+getGameClock	072_experience_potion/jscrawl.html	/^  getGameClock() {$/;"	M
+getInventoryGroup	072_experience_potion/jscrawl.html	/^  getInventoryGroup(type) {$/;"	M
+getKeyMode	072_experience_potion/jscrawl.html	/^  getKeyMode() {$/;"	M
+getLevel	072_experience_potion/jscrawl.html	/^  getLevel() {$/;"	M
+getLevelCellsChanged	072_experience_potion/jscrawl.html	/^  getLevelCellsChanged() {$/;"	M
+getLevelChanged	072_experience_potion/jscrawl.html	/^  getLevelChanged() {$/;"	M
+getMessagesChanged	072_experience_potion/jscrawl.html	/^  getMessagesChanged() {$/;"	M
+getNameOf	072_experience_potion/jscrawl.html	/^function getNameOf(article, item, verb) {$/;"	F
+getPlayer	072_experience_potion/jscrawl.html	/^  getPlayer() {$/;"	M
+getPlayerPos	072_experience_potion/jscrawl.html	/^  getPlayerPos() {$/;"	M
+getPlayerSpecies	072_experience_potion/jscrawl.html	/^  getPlayerSpecies() {$/;"	M
+getPoolCurrent	072_experience_potion/jscrawl.html	/^  getPoolCurrent(actor, poolIndex) {$/;"	M
+getPoolCurrentChange	072_experience_potion/jscrawl.html	/^  getPoolCurrentChange(actor, poolIndex) {$/;"	M
+getPoolDigits	072_experience_potion/jscrawl.html	/^  getPoolDigits(actor) {$/;"	M
+getPoolMax	072_experience_potion/jscrawl.html	/^  getPoolMax(actor, poolIndex) {$/;"	M
+getPoolMaxChange	072_experience_potion/jscrawl.html	/^  getPoolMaxChange(actor, poolIndex) {$/;"	M
+getPoolPercent	072_experience_potion/jscrawl.html	/^  getPoolPercent(actor, poolIndex) {$/;"	M
+getSelectAllowMultiple	072_experience_potion/jscrawl.html	/^  getSelectAllowMultiple(allow) {$/;"	M
+getSelectCountByIndex	072_experience_potion/jscrawl.html	/^  getSelectCountByIndex(index) {$/;"	M
+getSelectCountList	072_experience_potion/jscrawl.html	/^  getSelectCountList() {$/;"	M
+getSelectIndexes	072_experience_potion/jscrawl.html	/^  getSelectIndexes() {$/;"	M
+getSelectMeta	072_experience_potion/jscrawl.html	/^  getSelectMeta(key) {$/;"	M
+getSelectSubjectList	072_experience_potion/jscrawl.html	/^  getSelectSubjectList() {$/;"	M
+getSelectedIndex	072_experience_potion/jscrawl.html	/^  getSelectedIndex() {$/;"	M
+getSelectedIndexes	072_experience_potion/jscrawl.html	/^  getSelectedIndexes() {$/;"	M
+getSelectedSubjects	072_experience_potion/jscrawl.html	/^  getSelectedSubjects() {$/;"	M
+getStatusChanged	072_experience_potion/jscrawl.html	/^  getStatusChanged() {$/;"	M
+getStatusList	072_experience_potion/jscrawl.html	/^  getStatusList() {$/;"	M
+getStatusListChannels	072_experience_potion/jscrawl.html	/^  getStatusListChannels(list, player) {$/;"	M
+getStatusListPoolsCompact	072_experience_potion/jscrawl.html	/^  getStatusListPoolsCompact(list, player) {$/;"	M
+getStatusListPoolsExpanded	072_experience_potion/jscrawl.html	/^  getStatusListPoolsExpanded(list, player) {$/;"	M
+getStatusMode	072_experience_potion/jscrawl.html	/^  getStatusMode() {$/;"	M
+getTarget	072_experience_potion/jscrawl.html	/^  getTarget() {$/;"	M
+getWindowPixelRect	072_experience_potion/jscrawl.html	/^  getWindowPixelRect(screen, window) {$/;"	M
+gloves	072_experience_potion/jscrawl.html	/^        gloves: null,$/;"	P
+gold	072_experience_potion/jscrawl.html	/^              gold: 20,$/;"	P
+gold	072_experience_potion/jscrawl.html	/^      gold: 0,$/;"	P
+gold	072_experience_potion/jscrawl.html	/^      gold: {$/;"	P
+gold	072_experience_potion/jscrawl.html	/^  gold:  { $/;"	P
+gold	072_experience_potion/jscrawl.html	/^  gold: { $/;"	P
+gold1	072_experience_potion/jscrawl.html	/^          gold1: { $/;"	P
+gold10	072_experience_potion/jscrawl.html	/^          gold10: { $/;"	P
+gold100	072_experience_potion/jscrawl.html	/^          gold100: { $/;"	P
+goldEgg	072_experience_potion/jscrawl.html	/^          goldEgg: { $/;"	P
+gradient	072_experience_potion/jscrawl.html	/^let gradient = {}$/;"	O
+grapes	072_experience_potion/jscrawl.html	/^          grapes: { $/;"	P
+gray	072_experience_potion/jscrawl.html	/^  gray:    { bgStyle: '#808080', style: '#FFF' },$/;"	P
+gray	072_experience_potion/jscrawl.html	/^  gray: { $/;"	P
+green	072_experience_potion/jscrawl.html	/^              green: 10,$/;"	P
+green	072_experience_potion/jscrawl.html	/^              green: 15,$/;"	P
+green	072_experience_potion/jscrawl.html	/^              green: 3,$/;"	P
+green	072_experience_potion/jscrawl.html	/^              green: 5,$/;"	P
+green	072_experience_potion/jscrawl.html	/^  green:      { bgStyle: '#7FFF00', style: '#000' },$/;"	P
+green	072_experience_potion/jscrawl.html	/^  green: { $/;"	P
+ham	072_experience_potion/jscrawl.html	/^          ham: { $/;"	P
+hand	072_experience_potion/jscrawl.html	/^        hand: [],$/;"	P
+handAxe	072_experience_potion/jscrawl.html	/^              handAxe: {$/;"	P
+handleCreateTarget	072_experience_potion/jscrawl.html	/^  handleCreateTarget(target, template, count) {$/;"	M
+handleKeyDown	072_experience_potion/jscrawl.html	/^  handleKeyDown(event) {$/;"	M
+handleKeyUp	072_experience_potion/jscrawl.html	/^  handleKeyUp(event) {$/;"	M
+hands	072_experience_potion/jscrawl.html	/^                hands: 2,$/;"	P
+hands	072_experience_potion/jscrawl.html	/^        hands: 1,$/;"	P
+hands	072_experience_potion/jscrawl.html	/^    hands: 2,$/;"	P
+handsUsed	072_experience_potion/jscrawl.html	/^  handsUsed() {$/;"	M
+health	072_experience_potion/jscrawl.html	/^            health: 10,$/;"	P
+health	072_experience_potion/jscrawl.html	/^            health: 2,  $/;"	P
+heavyStyle	072_experience_potion/jscrawl.html	/^    const heavyStyle = "#0000C0"$/;"	V
+height	072_experience_potion/jscrawl.html	/^  height: 540,$/;"	P
+helpMode	072_experience_potion/jscrawl.html	/^    helpMode: [ '?' ],$/;"	P
+hitChance	072_experience_potion/jscrawl.html	/^                hitChance: 0,$/;"	P
+human	072_experience_potion/jscrawl.html	/^  human: {$/;"	P
+i	072_experience_potion/jscrawl.html	/^    let i = 0$/;"	V
+if	072_experience_potion/jscrawl.html	/^            if(!innerList) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^            if(!subjects.includes(channelIndex)) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^            if(fromMap[b.x][b.y] > wallThreshold) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^          if(col == maxColumns) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^          if(subject == null) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^          if(value[j]) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^          if(wallStrength <= wallThreshold) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^          if(weakestWall == null || wallStrength < weakestWall) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^        if(!newItem.name) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^        if(!subjects.includes(channelIndex)) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^        if(!this.unequipUntilHandsFree(item.hands)) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^        if(cell.occupiedBy == null) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^        if(fc.motionModeAttack()) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^        if(found > -1) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^        if(fromY < fromHeight - 1) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^        if(indexes[i]) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^        if(itemsEqual(invItem, item)) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^        if(itemsEqual(subject, item)) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^        if(line.length > 2) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^        if(noItemsFound) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^        if(player.equip[slot].length - player.species.hands < 1) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^        if(result) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^        if(subject == null) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^        if(value > wallThreshold && surroundingWalls < requireSurroundingWalls) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^        if(value) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^        if(x+1 < toWidth && toMap[x+1][y] != null) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^        if(x-1 > 0 && toMap[x-1][y] != null) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^        if(y+1 < toHeight && toMap[x][y+1] != null) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^        if(y-1 > 0 && toMap[x][y-1] != null) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(!bc.isEquipped(item)) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(!bc.isFieldPosValid(playerNewPos)) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(!bc.isFieldPosValid(targetNewPos)) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(!fc.motionModeMove()) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(!found) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(!key) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(!maxChannelSize) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(!maxPoolSize) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(!poolsInPoolType) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(!unequipItem(hand[hand.length-1])) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(bc.isEquipped(item)) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(bc.isFieldPosOccupied(playerNewPos)) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(bgStyle) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(c == 0 || r == 0 || c == size.x + 1 || r == size.y + 1) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(c == 0 || r == 0 || c == size.x - 1 || r == size.y - 1) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(c) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(cell.occupiedBy == null && cell.onFloor.length == 0) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(cell.occupiedBy == null) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(cell.occupiedBy == player) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(cell.occupiedBy) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(classifiedSpaces[x][y] == false && !level[x][y].occupiedBy) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(complexLength(list.slice(0, i)) <= pos) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(count == null) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(count) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(damage > 0) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(effectiveRow > maxMessageRow) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(effectiveRow > maxRow) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(fc.isIndexSelected(i)) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(flow) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(fm.selectCount) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(fm.selectIndexes[i]) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(fm.selectKeys.length > 0) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(fm.selectMultiple) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(found) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(group.length > 0) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(group[i] == item) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(group[index] == item) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(hand.length < 1) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(i > 6) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(itemBase[itemKey].sub) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(items.length == 0) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(itemsEqual(floorItem, item)) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(iterationsLeft > 0) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(keyMap[km][command].some(x => event.key == x)) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(map[c][r] > wallThreshold) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(maxCount > 1) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(message == null) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(multipleColumnBlocks) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(newValue < 0) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(p.center && p.cellSizePixels && p.cellSizePixels.y > 0) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(p.offset) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(p.textToDrawList.length > 1) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(pool.type == poolTypes.interna) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(poolChannels[i].to[0].type == poolTypes.interna) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(poolIndex == -1) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(remaining != 0) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(remainingWeight < 0) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(row > header - 1) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(selected == null) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(selected[i]) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(string[i] == ' ') {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(style != this.previousFillStyle) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(subject) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(target == player) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(targetPos) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(testWindow == window) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(this.previousFontStyle != p.fontStyle) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(this.windowPosIsValid(window, cellPos)) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(toMap[x][y] == null) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(type == 'hand' || type == 'ring') {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(typeof name == 'string') {$/;"	M
+if	072_experience_potion/jscrawl.html	/^      if(weight == null) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(!bc.getCreatorMode()) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(!classified && !occupied) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(!count) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(!found) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(!multiColumn) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(!multiple) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(!newItem) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(!pos) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(!slot) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(!target) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(!template.sub) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(!this.frontController.getTarget().pos) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(actionMode == 'attackOrMove') {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(actor.wpFocus) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(attacker.attack != null) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(bc.getCell(toPos).occupiedBy != null) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(bc.getCreatorMode()) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(breakPoint > -1) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(cell.floorType) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(cell.occupiedBy) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(change != 0 && target == player) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(change >= 1) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(changed || forceRefresh) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(classifiedSpaces[adjacentPos.x][adjacentPos.y]) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(count == inventoryCount) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(count > 0) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(damage > 0) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(deltas) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(energyType == 'health') {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(fc.getSelectAllowMultiple()) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(fc.getSelectedIndexes().length > 0) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(fc.getStatusMode() == 'compact') {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(fc.windowPosIsValid(window, windowPos, level)) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(floorItems.length == 0) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(floorItems.length == 1) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(fm.messages.length) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(fm.statusMode == 'compact') {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(fromPos != null) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(fromX < fromWidth - 1) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(index != null) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(index == -1) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(item.base.energy) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(item.base.type != 'food') { $/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(item.base.type == 'gold') {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(item.text) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(itemOnFloor.count == count) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(keyModeName != 'target') {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(maxIterations-- == 0) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(message) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(noItemsFound) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(p.window.offset) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(path.length) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(player.medFocus && didSomething) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(player.medFocus) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(player.wpFocus) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(poolIndexFrom == -1 || poolIndexTo == -1) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(poolTypes.length == 0) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(poolTypes.length > 1) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(pools.length == 0) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(pos) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(possibilities == 0) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(random(3) == 0) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(removed > 0) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(result.length > 0) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(screen.fontStyle) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(selected == null) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(selected) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(selected.sub) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(selectedInventoryType) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(sign > 0) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(slot == 'hand' || slot == 'ring') {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(style != ctx.fillStyle) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(style != ctx.stokeStyle) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(subject.base.act) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(subject.base.occupant) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(subjects.length == 0) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(success) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(target == null) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(target.health <= 0) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(target.pos == null) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(target.pos) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(targetActor.health <= 0) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(targetActor.health == null) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(this.frontModel.fontStyle) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(typeof p.textToDraw == 'string') {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(wallStrength <= wallThreshold) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(weakestWall == null || wallStrength < weakestWall) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(window == mainWindows.level) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(window == screens.main.window.level) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(window.fontStyle) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^    if(window.name == 'status') {$/;"	M
+if	072_experience_potion/jscrawl.html	/^  if(Number.isInteger(article)) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^  if(allResults.length > 0) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^  if(article) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^  if(bounds == null) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^  if(bounds.width < 2 || bounds.height < 2) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^  if(cellToTest.occupiedBy == null && cellToTest.onFloor.length == 0) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^  if(classifiedSpaces == null) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^  if(connectedRooms) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^  if(count != 1 && article) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^  if(fPress > tPress + 0.01) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^  if(item.base.type) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^  if(item.health) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^  if(pos) {$/;"	M
+if	072_experience_potion/jscrawl.html	/^  if(typeof string == 'string') {$/;"	M
+if	072_experience_potion/jscrawl.html	/^  if(verb) {$/;"	M
+increment	072_experience_potion/jscrawl.html	/^  const increment = 1 \/ (list.length + 1)$/;"	V
+index	072_experience_potion/jscrawl.html	/^    const index = fm.selectIndexes.findIndex(x => x)$/;"	F
+index	072_experience_potion/jscrawl.html	/^  let index = 0$/;"	V
+indexToKey	072_experience_potion/jscrawl.html	/^  indexToKey(index) {$/;"	M
+indexes	072_experience_potion/jscrawl.html	/^      let indexes = []$/;"	A
+indigo	072_experience_potion/jscrawl.html	/^              indigo: 10,$/;"	P
+indigo	072_experience_potion/jscrawl.html	/^              indigo: 15,$/;"	P
+indigo	072_experience_potion/jscrawl.html	/^              indigo: 2,$/;"	P
+indigo	072_experience_potion/jscrawl.html	/^  indigo:     { bgStyle: '#583FFF', style: '#FFF' },$/;"	P
+indigo	072_experience_potion/jscrawl.html	/^  indigo: { $/;"	P
+initItems	072_experience_potion/jscrawl.html	/^  initItems(inherited = {}, itemBase = template.generated.sub) {$/;"	M
+initSpecies	072_experience_potion/jscrawl.html	/^  initSpecies() {$/;"	M
+initializePlayer	072_experience_potion/jscrawl.html	/^  initializePlayer() {$/;"	M
+integrity	072_experience_potion/jscrawl.html	/^        integrity: 1,$/;"	P
+intelligence	072_experience_potion/jscrawl.html	/^      intelligence: 10,$/;"	P
+interna	072_experience_potion/jscrawl.html	/^  interna: { name: 'interna', key: 'i', },$/;"	P
+inventory	072_experience_potion/jscrawl.html	/^      inventory: {$/;"	P
+inventoryTypes	072_experience_potion/jscrawl.html	/^const inventoryTypes = {$/;"	O
+invertMultiSelect	072_experience_potion/jscrawl.html	/^    invertMultiSelect: [ ',' ],$/;"	P
+invertMultiSelect	072_experience_potion/jscrawl.html	/^  invertMultiSelect() {$/;"	M
+invertMultiSelect	072_experience_potion/jscrawl.html	/^  invertMultiSelect: () => {$/;"	M
+invertSelectedItems	072_experience_potion/jscrawl.html	/^    invertSelectedItems: [ '\/' ],$/;"	P
+invertSelectedItems	072_experience_potion/jscrawl.html	/^  invertSelectedItems() {$/;"	M
+invertSelectedItems	072_experience_potion/jscrawl.html	/^  invertSelectedItems: () => {$/;"	M
+isEquipped	072_experience_potion/jscrawl.html	/^  isEquipped(item) {$/;"	M
+isFieldPosOccupied	072_experience_potion/jscrawl.html	/^  isFieldPosOccupied(cellPos) {$/;"	M
+isFieldPosValid	072_experience_potion/jscrawl.html	/^  isFieldPosValid(cellPos) {$/;"	M
+isIndexSelected	072_experience_potion/jscrawl.html	/^  isIndexSelected(index) {$/;"	M
+item	072_experience_potion/jscrawl.html	/^        item,$/;"	V
+items	072_experience_potion/jscrawl.html	/^    const items = []$/;"	A
+itemsEqual	072_experience_potion/jscrawl.html	/^function itemsEqual(item1, item2) {$/;"	F
+iterationsLeft	072_experience_potion/jscrawl.html	/^  let iterationsLeft = 5$/;"	V
+jewelry	072_experience_potion/jscrawl.html	/^        jewelry: [],$/;"	P
+keyMap	072_experience_potion/jscrawl.html	/^const keyMap = {$/;"	O
+keyModifiers	072_experience_potion/jscrawl.html	/^let keyModifiers = {$/;"	O
+keyToIndex	072_experience_potion/jscrawl.html	/^  keyToIndex(key) {$/;"	M
+keys	072_experience_potion/jscrawl.html	/^    let keys = []$/;"	A
+lessThan	072_experience_potion/jscrawl.html	/^  lessThan(pair) {$/;"	M
+lessThanOrEqualTo	072_experience_potion/jscrawl.html	/^  lessThanOrEqualTo(pair) {$/;"	M
+level	072_experience_potion/jscrawl.html	/^      level: {$/;"	P
+level	072_experience_potion/jscrawl.html	/^    level: [],$/;"	P
+level	072_experience_potion/jscrawl.html	/^  let level = []$/;"	A
+levelCaveGenerator	072_experience_potion/jscrawl.html	/^    levelCaveGenerator: {$/;"	P
+levelCellsChanged	072_experience_potion/jscrawl.html	/^    levelCellsChanged: [],$/;"	P
+levelChanged	072_experience_potion/jscrawl.html	/^    levelChanged: false,$/;"	P
+levelPosToWindowPos	072_experience_potion/jscrawl.html	/^  levelPosToWindowPos(levelPos) {$/;"	M
+levelSize	072_experience_potion/jscrawl.html	/^  const levelSize = new Pair(level.length, level[0].length)$/;"	V
+levelSize	072_experience_potion/jscrawl.html	/^  let levelSize = new Pair(level.length, level[0].length)$/;"	V
+lightblue	072_experience_potion/jscrawl.html	/^  lightblue:  { bgStyle: '#8FB9FF', style: '#000' },$/;"	P
+lightgreen	072_experience_potion/jscrawl.html	/^  lightgreen: { bgStyle: '#BFFF80', style: '#000' },$/;"	P
+lightorange	072_experience_potion/jscrawl.html	/^  lightorange:{ bgStyle: '#FFDD88', style: '#000' },$/;"	P
+lightred	072_experience_potion/jscrawl.html	/^  lightred:   { bgStyle: '#FF9F9F', style: '#000' },$/;"	P
+lightviolet	072_experience_potion/jscrawl.html	/^  lightviolet:{ bgStyle: '#C89FFF', style: '#000' },$/;"	P
+lightyellow	072_experience_potion/jscrawl.html	/^  lightyellow:{ bgStyle: '#FFFF80', style: '#000' },$/;"	P
+line	072_experience_potion/jscrawl.html	/^        let line = [text(i + ':')]$/;"	A
+line	072_experience_potion/jscrawl.html	/^    let line = ''$/;"	V
+lion	072_experience_potion/jscrawl.html	/^          lion: { $/;"	P
+list	072_experience_potion/jscrawl.html	/^    const list = []$/;"	A
+longBlade	072_experience_potion/jscrawl.html	/^          longBlade: { $/;"	P
+lowerLeftQuarter	072_experience_potion/jscrawl.html	/^  lowerLeftQuarter() {$/;"	M
+lowerRightQuarter	072_experience_potion/jscrawl.html	/^  lowerRightQuarter() {$/;"	M
+lumina	072_experience_potion/jscrawl.html	/^  lumina:  { name: 'lumina',  key: 'l', },$/;"	P
+mace	072_experience_potion/jscrawl.html	/^              mace: {$/;"	P
+mace	072_experience_potion/jscrawl.html	/^          mace: {$/;"	P
+main	072_experience_potion/jscrawl.html	/^  main: {$/;"	P
+majorHealth	072_experience_potion/jscrawl.html	/^      majorHealth: 10,$/;"	P
+majorHealth	072_experience_potion/jscrawl.html	/^  majorHealth: { $/;"	P
+mana	072_experience_potion/jscrawl.html	/^  mana: { $/;"	P
+mango	072_experience_potion/jscrawl.html	/^          mango: { $/;"	P
+map	072_experience_potion/jscrawl.html	/^  let map = [[b, b], [b, b]]$/;"	A
+mapToLevel	072_experience_potion/jscrawl.html	/^function mapToLevel(map, level, wallThreshold, size) {$/;"	F
+max	072_experience_potion/jscrawl.html	/^        max$/;"	V
+max	072_experience_potion/jscrawl.html	/^      const max = '' + Math.floor(bc.getPoolMax(player, index))$/;"	V
+maxChannelSizeDefault	072_experience_potion/jscrawl.html	/^    maxChannelSizeDefault: 10,$/;"	P
+maxChannelSizes	072_experience_potion/jscrawl.html	/^    maxChannelSizes: [],$/;"	P
+maxColumns	072_experience_potion/jscrawl.html	/^        maxColumns: 1,$/;"	P
+maxColumns	072_experience_potion/jscrawl.html	/^    const maxColumns = 3$/;"	V
+maxDamage	072_experience_potion/jscrawl.html	/^    let maxDamage = 0$/;"	V
+maxIterations	072_experience_potion/jscrawl.html	/^  let maxIterations = 10$/;"	V
+maxPoolSizes	072_experience_potion/jscrawl.html	/^    maxPoolSizes: {$/;"	P
+maxWidth	072_experience_potion/jscrawl.html	/^    let maxWidth = 0$/;"	V
+medDepth	072_experience_potion/jscrawl.html	/^      medDepth: 0,$/;"	P
+medFocus	072_experience_potion/jscrawl.html	/^      medFocus: null,$/;"	P
+meditationFocus	072_experience_potion/jscrawl.html	/^    meditationFocus: [ 'm' ],$/;"	P
+meditationFocus	072_experience_potion/jscrawl.html	/^  meditationFocus() {$/;"	M
+meditationFocus	072_experience_potion/jscrawl.html	/^  meditationFocus: () => {$/;"	M
+meditationFocusExecute	072_experience_potion/jscrawl.html	/^  meditationFocusExecute() {$/;"	M
+meditationFocusSelectPool	072_experience_potion/jscrawl.html	/^  meditationFocusSelectPool() {$/;"	M
+meditationFocusSelectPoolType	072_experience_potion/jscrawl.html	/^  meditationFocusSelectPoolType() {$/;"	M
+message	072_experience_potion/jscrawl.html	/^      message: {$/;"	P
+message	072_experience_potion/jscrawl.html	/^    let message;$/;"	V
+messages	072_experience_potion/jscrawl.html	/^    messages: [],$/;"	P
+messagesChanged	072_experience_potion/jscrawl.html	/^    messagesChanged: false,$/;"	P
+messagesHeader	072_experience_potion/jscrawl.html	/^    messagesHeader: 1,$/;"	P
+milk	072_experience_potion/jscrawl.html	/^          milk: { $/;"	P
+minDamage	072_experience_potion/jscrawl.html	/^    let minDamage = 0$/;"	V
+minValue	072_experience_potion/jscrawl.html	/^      let minValue = values.reduce((a,b) => Math.min(a, b), 1)$/;"	F
+minorHealth	072_experience_potion/jscrawl.html	/^      minorHealth: 30,$/;"	P
+minorHealth	072_experience_potion/jscrawl.html	/^  minorHealth: { $/;"	P
+moon	072_experience_potion/jscrawl.html	/^  moon: { $/;"	P
+motionModeAttack	072_experience_potion/jscrawl.html	/^  motionModeAttack() {$/;"	M
+motionModeMove	072_experience_potion/jscrawl.html	/^  motionModeMove() {$/;"	M
+moveDown	072_experience_potion/jscrawl.html	/^    moveDown: [ 'j', 'ArrowDown' ],$/;"	P
+moveDown	072_experience_potion/jscrawl.html	/^  moveDown: () => {$/;"	M
+moveDownFast	072_experience_potion/jscrawl.html	/^    moveDownFast: [ 'J' ],$/;"	P
+moveDownFast	072_experience_potion/jscrawl.html	/^  moveDownFast: () => {$/;"	M
+moveLeft	072_experience_potion/jscrawl.html	/^    moveLeft: [ 'h', 'ArrowLeft' ],$/;"	P
+moveLeft	072_experience_potion/jscrawl.html	/^  moveLeft: () => {$/;"	M
+moveLeftDown	072_experience_potion/jscrawl.html	/^    moveLeftDown: [ 'b' ],$/;"	P
+moveLeftDown	072_experience_potion/jscrawl.html	/^  moveLeftDown: () => {$/;"	M
+moveLeftFast	072_experience_potion/jscrawl.html	/^    moveLeftFast: [ 'H' ],$/;"	P
+moveLeftFast	072_experience_potion/jscrawl.html	/^  moveLeftFast: () => {$/;"	M
+moveLeftUp	072_experience_potion/jscrawl.html	/^    moveLeftUp: [ 'y' ],$/;"	P
+moveLeftUp	072_experience_potion/jscrawl.html	/^  moveLeftUp: () => {$/;"	M
+moveRight	072_experience_potion/jscrawl.html	/^    moveRight: [ 'l', 'ArrowRight' ],$/;"	P
+moveRight	072_experience_potion/jscrawl.html	/^  moveRight: () => {$/;"	M
+moveRightDown	072_experience_potion/jscrawl.html	/^    moveRightDown: [ 'n' ],$/;"	P
+moveRightDown	072_experience_potion/jscrawl.html	/^  moveRightDown: () => {$/;"	M
+moveRightFast	072_experience_potion/jscrawl.html	/^    moveRightFast: [ 'L' ],$/;"	P
+moveRightFast	072_experience_potion/jscrawl.html	/^  moveRightFast: () => {$/;"	M
+moveRightUp	072_experience_potion/jscrawl.html	/^    moveRightUp: [ 'u' ],$/;"	P
+moveRightUp	072_experience_potion/jscrawl.html	/^  moveRightUp: () => {$/;"	M
+moveUp	072_experience_potion/jscrawl.html	/^    moveUp: [ 'k', 'ArrowUp' ],$/;"	P
+moveUp	072_experience_potion/jscrawl.html	/^  moveUp: () => {$/;"	M
+moveUpFast	072_experience_potion/jscrawl.html	/^    moveUpFast: [ 'K' ],$/;"	P
+moveUpFast	072_experience_potion/jscrawl.html	/^  moveUpFast: () => {$/;"	M
+mulchChance	072_experience_potion/jscrawl.html	/^                mulchChance: 1,$/;"	P
+multiply	072_experience_potion/jscrawl.html	/^  multiply(pair) {$/;"	M
+name	072_experience_potion/jscrawl.html	/^          let name = '(empty)'$/;"	V
+name	072_experience_potion/jscrawl.html	/^          let name = []$/;"	A
+name	072_experience_potion/jscrawl.html	/^        let name = '(empty)'$/;"	V
+names	072_experience_potion/jscrawl.html	/^      let names = []$/;"	A
+names	072_experience_potion/jscrawl.html	/^    let names = []$/;"	A
+newItem	072_experience_potion/jscrawl.html	/^        let newItem = { ...itemBase[itemKey], sub: null }$/;"	O
+newPos	072_experience_potion/jscrawl.html	/^        let newPos = new Pair(x, y)$/;"	V
+next	072_experience_potion/jscrawl.html	/^  next(possibilities = 0) {$/;"	M
+oats	072_experience_potion/jscrawl.html	/^          oats: { $/;"	P
+object	072_experience_potion/jscrawl.html	/^  object: {$/;"	P
+occupant	072_experience_potion/jscrawl.html	/^        occupant: false,$/;"	P
+occupant	072_experience_potion/jscrawl.html	/^        occupant: true,$/;"	P
+occupant	072_experience_potion/jscrawl.html	/^      occupant: false, $/;"	P
+occupant	072_experience_potion/jscrawl.html	/^      occupant: true, $/;"	P
+occupantMove	072_experience_potion/jscrawl.html	/^  occupantMove(occupant, toPos) {$/;"	M
+occupiedBy	072_experience_potion/jscrawl.html	/^          occupiedBy: null, $/;"	P
+occupiedBy	072_experience_potion/jscrawl.html	/^          occupiedBy: { base: ot.rockWall }, $/;"	P
+offset	072_experience_potion/jscrawl.html	/^        offset: offset,$/;"	P
+onFloor	072_experience_potion/jscrawl.html	/^          onFloor: [], $/;"	P
+orange	072_experience_potion/jscrawl.html	/^              orange: 10,$/;"	P
+orange	072_experience_potion/jscrawl.html	/^              orange: 15,$/;"	P
+orange	072_experience_potion/jscrawl.html	/^              orange: 3,$/;"	P
+orange	072_experience_potion/jscrawl.html	/^              orange: 5,$/;"	P
+orange	072_experience_potion/jscrawl.html	/^          orange: { $/;"	P
+orange	072_experience_potion/jscrawl.html	/^  orange:     { bgStyle: '#FFAB12', style: '#000' },$/;"	P
+orange	072_experience_potion/jscrawl.html	/^  orange: { $/;"	P
+outputCreatorModeMessages	072_experience_potion/jscrawl.html	/^  outputCreatorModeMessages() {$/;"	M
+outputTargetMessages	072_experience_potion/jscrawl.html	/^  outputTargetMessages() {$/;"	M
+panScrollMargin	072_experience_potion/jscrawl.html	/^        panScrollMargin: 4,$/;"	P
+pickSomethingToGenerate	072_experience_potion/jscrawl.html	/^  pickSomethingToGenerate(group, randomizer) {$/;"	M
+pickUpItem	072_experience_potion/jscrawl.html	/^    pickUpItem: [ ',' ],$/;"	P
+pickUpItem	072_experience_potion/jscrawl.html	/^  pickUpItem() {$/;"	M
+pickUpItem	072_experience_potion/jscrawl.html	/^  pickUpItem: () => {$/;"	M
+pickUpSelectedItems	072_experience_potion/jscrawl.html	/^  pickUpSelectedItems() {$/;"	M
+pizza	072_experience_potion/jscrawl.html	/^          pizza: { $/;"	P
+placeStuffInLevel	072_experience_potion/jscrawl.html	/^  placeStuffInLevel(randomizer) {$/;"	M
+player	072_experience_potion/jscrawl.html	/^    player: { $/;"	P
+playerAttack	072_experience_potion/jscrawl.html	/^  playerAttack(target) {$/;"	M
+playerMotionRelative	072_experience_potion/jscrawl.html	/^  playerMotionRelative(relPos) {$/;"	M
+playerPos	072_experience_potion/jscrawl.html	/^        playerPos,$/;"	V
+polearm	072_experience_potion/jscrawl.html	/^          polearm: {$/;"	P
+poolChannels	072_experience_potion/jscrawl.html	/^const poolChannels = [$/;"	A
+poolCurrent	072_experience_potion/jscrawl.html	/^      poolCurrent: [],     \/\/ integers of how much is in each pool$/;"	P
+poolCurrentPast	072_experience_potion/jscrawl.html	/^      poolCurrentPast: [], \/\/ previous value of poolCurrent$/;"	P
+poolMax	072_experience_potion/jscrawl.html	/^      poolMax: [],         \/\/ integers of how big each pool is$/;"	P
+poolMaxPast	072_experience_potion/jscrawl.html	/^      poolMaxPast: [],     \/\/ previous value of poolMax$/;"	P
+poolOverloadFactorMax	072_experience_potion/jscrawl.html	/^const poolOverloadFactorMax = 1$/;"	V
+poolToIndex	072_experience_potion/jscrawl.html	/^function poolToIndex(poolName) {$/;"	F
+poolTypes	072_experience_potion/jscrawl.html	/^const poolTypes = {$/;"	O
+pools	072_experience_potion/jscrawl.html	/^const pools = {$/;"	O
+poolsToTry	072_experience_potion/jscrawl.html	/^    let poolsToTry = []$/;"	A
+pos	072_experience_potion/jscrawl.html	/^      pos: null,$/;"	P
+potion	072_experience_potion/jscrawl.html	/^        potion: [],$/;"	P
+purple	072_experience_potion/jscrawl.html	/^  purple:  { bgStyle: '#D56FFF', style: '#FFF'  },$/;"	P
+purple	072_experience_potion/jscrawl.html	/^  purple: { $/;"	P
+rainbow	072_experience_potion/jscrawl.html	/^  rainbow: { $/;"	P
+random	072_experience_potion/jscrawl.html	/^function random(possibilities) {$/;"	F
+randomizer	072_experience_potion/jscrawl.html	/^        randomizer,$/;"	V
+randomizer	072_experience_potion/jscrawl.html	/^    const randomizer = new SeededRandomizer(this.backModel.seed)$/;"	V
+randomizer	072_experience_potion/jscrawl.html	/^    randomizer: null,$/;"	P
+range	072_experience_potion/jscrawl.html	/^                  range: 10, $/;"	P
+range	072_experience_potion/jscrawl.html	/^                  range: 2, $/;"	P
+range	072_experience_potion/jscrawl.html	/^                  range: 3, $/;"	P
+range	072_experience_potion/jscrawl.html	/^                  range: 4, $/;"	P
+range	072_experience_potion/jscrawl.html	/^                  range: 8, $/;"	P
+range	072_experience_potion/jscrawl.html	/^            range: 1,$/;"	P
+range	072_experience_potion/jscrawl.html	/^            range: 12,$/;"	P
+range	072_experience_potion/jscrawl.html	/^            range: 2,$/;"	P
+rat	072_experience_potion/jscrawl.html	/^          rat:  { $/;"	P
+red	072_experience_potion/jscrawl.html	/^              red: 10, $/;"	P
+red	072_experience_potion/jscrawl.html	/^              red: 10,$/;"	P
+red	072_experience_potion/jscrawl.html	/^              red: 15,$/;"	P
+red	072_experience_potion/jscrawl.html	/^              red: 20,$/;"	P
+red	072_experience_potion/jscrawl.html	/^              red: 3,$/;"	P
+red	072_experience_potion/jscrawl.html	/^              red: 5,$/;"	P
+red	072_experience_potion/jscrawl.html	/^  red:        { bgStyle: '#FF2F2F', style: '#FFF' },$/;"	P
+red	072_experience_potion/jscrawl.html	/^  red: { $/;"	P
+reduceMap	072_experience_potion/jscrawl.html	/^function reduceMap(fromMap) {$/;"	F
+refresh	072_experience_potion/jscrawl.html	/^  refresh() {$/;"	M
+removeActor	072_experience_potion/jscrawl.html	/^  removeActor(actor) {$/;"	M
+removeIsolatedWalls	072_experience_potion/jscrawl.html	/^function removeIsolatedWalls(fromMap, wallThreshold, requireSurroundingWalls) {$/;"	F
+removeItemFromFloor	072_experience_potion/jscrawl.html	/^  removeItemFromFloor(pos, itemToMatch, count) {$/;"	M
+removeItemFromInventory	072_experience_potion/jscrawl.html	/^  removeItemFromInventory(item, count) {$/;"	M
+removeItemFromInventoryByIndex	072_experience_potion/jscrawl.html	/^  removeItemFromInventoryByIndex(type, index, count) {$/;"	M
+removeSubjectFromLevel	072_experience_potion/jscrawl.html	/^  removeSubjectFromLevel(subject, pos) {$/;"	M
+removed	072_experience_potion/jscrawl.html	/^  let removed = 0$/;"	V
+requireSurroundingWalls	072_experience_potion/jscrawl.html	/^      requireSurroundingWalls: 2,$/;"	P
+resetSelect	072_experience_potion/jscrawl.html	/^  resetSelect() {$/;"	M
+result	072_experience_potion/jscrawl.html	/^    let result = []$/;"	A
+result	072_experience_potion/jscrawl.html	/^  let result = []$/;"	A
+return	072_experience_potion/jscrawl.html	/^          return$/;"	V
+return	072_experience_potion/jscrawl.html	/^        return$/;"	V
+return	072_experience_potion/jscrawl.html	/^      return$/;"	V
+rice	072_experience_potion/jscrawl.html	/^          rice: { $/;"	P
+ring	072_experience_potion/jscrawl.html	/^        ring: [],$/;"	P
+rock	072_experience_potion/jscrawl.html	/^              rock: { $/;"	P
+rock	072_experience_potion/jscrawl.html	/^        rock: [],$/;"	P
+rockWall	072_experience_potion/jscrawl.html	/^    rockWall: { $/;"	P
+screen	072_experience_potion/jscrawl.html	/^          screen,$/;"	V
+screen	072_experience_potion/jscrawl.html	/^        screen: screen, $/;"	P
+screen	072_experience_potion/jscrawl.html	/^        screen: screen,$/;"	P
+screen	072_experience_potion/jscrawl.html	/^      screen,$/;"	V
+screen	072_experience_potion/jscrawl.html	/^      screen: null,$/;"	P
+screenPixelPos	072_experience_potion/jscrawl.html	/^      screenPixelPos: screenPixelPos, $/;"	P
+screens	072_experience_potion/jscrawl.html	/^const screens = {$/;"	O
+scroll	072_experience_potion/jscrawl.html	/^        scroll: [],$/;"	P
+select	072_experience_potion/jscrawl.html	/^  select: {$/;"	P
+selectAction	072_experience_potion/jscrawl.html	/^    selectAction: null,$/;"	P
+selectAllowMultiple	072_experience_potion/jscrawl.html	/^    selectAllowMultiple: true,$/;"	P
+selectCount	072_experience_potion/jscrawl.html	/^        selectCount,$/;"	V
+selectCount	072_experience_potion/jscrawl.html	/^    selectCount: null,$/;"	P
+selectCountList	072_experience_potion/jscrawl.html	/^    selectCountList: [],$/;"	P
+selectCountMax	072_experience_potion/jscrawl.html	/^    selectCountMax: null,$/;"	P
+selectCountMaxList	072_experience_potion/jscrawl.html	/^    selectCountMaxList: [],$/;"	P
+selectIndexes	072_experience_potion/jscrawl.html	/^    selectIndexes: [], \/\/ true or false, whether each index is selected$/;"	P
+selectItem	072_experience_potion/jscrawl.html	/^    selectItem: [],$/;"	P
+selectItem	072_experience_potion/jscrawl.html	/^  selectItem(key) {$/;"	M
+selectItem	072_experience_potion/jscrawl.html	/^  selectItem: (key) => {$/;"	M
+selectKeys	072_experience_potion/jscrawl.html	/^    selectKeys: [], $/;"	P
+selectMaxWidth	072_experience_potion/jscrawl.html	/^    selectMaxWidth: null,$/;"	P
+selectMeta	072_experience_potion/jscrawl.html	/^    selectMeta: {},$/;"	P
+selectMultiple	072_experience_potion/jscrawl.html	/^    selectMultiple: false,$/;"	P
+selectNameList	072_experience_potion/jscrawl.html	/^    selectNameList: [],$/;"	P
+selectPool	072_experience_potion/jscrawl.html	/^  selectPool(afterSelect, allowMultiple) {$/;"	M
+selectPoolType	072_experience_potion/jscrawl.html	/^  selectPoolType(afterSelect, allowMultiple) {$/;"	M
+selectSubjectList	072_experience_potion/jscrawl.html	/^    selectSubjectList: [],$/;"	P
+selectTitle	072_experience_potion/jscrawl.html	/^    selectTitle: [],$/;"	P
+selectedCounts	072_experience_potion/jscrawl.html	/^    let selectedCounts = []$/;"	A
+selectedFloorItems	072_experience_potion/jscrawl.html	/^    let selectedFloorItems = []$/;"	A
+selectedInventoryType	072_experience_potion/jscrawl.html	/^        selectedInventoryType$/;"	V
+selectedSubjects	072_experience_potion/jscrawl.html	/^    let selectedSubjects = []$/;"	A
+setChannelFlow	072_experience_potion/jscrawl.html	/^  setChannelFlow(actor, channelIndex, flow) {$/;"	M
+setCreatorMode	072_experience_potion/jscrawl.html	/^  setCreatorMode() {$/;"	M
+setFloorItemsAt	072_experience_potion/jscrawl.html	/^  setFloorItemsAt(pos, floorItems) {$/;"	M
+setKeyMode	072_experience_potion/jscrawl.html	/^  setKeyMode(keyModeName) {$/;"	M
+setLevelChanged	072_experience_potion/jscrawl.html	/^  setLevelChanged(changed) {$/;"	M
+setMessagesChanged	072_experience_potion/jscrawl.html	/^  setMessagesChanged(changed) {$/;"	M
+setMotionMode	072_experience_potion/jscrawl.html	/^  setMotionMode(mode) {$/;"	M
+setMotionModeAttack	072_experience_potion/jscrawl.html	/^    setMotionModeAttack: [ 'a' ],$/;"	P
+setMotionModeAttack	072_experience_potion/jscrawl.html	/^  setMotionModeAttack: () => {$/;"	M
+setMotionModeAttackOrMove	072_experience_potion/jscrawl.html	/^    setMotionModeAttackOrMove: [ 'A' ],$/;"	P
+setMotionModeAttackOrMove	072_experience_potion/jscrawl.html	/^  setMotionModeAttackOrMove: () => {$/;"	M
+setMotionModeMove	072_experience_potion/jscrawl.html	/^    setMotionModeMove: [ 'M' ],$/;"	P
+setMotionModeMove	072_experience_potion/jscrawl.html	/^  setMotionModeMove: () => {$/;"	M
+setScreen	072_experience_potion/jscrawl.html	/^  setScreen(screenName) {$/;"	M
+setSelectAction	072_experience_potion/jscrawl.html	/^  setSelectAction(action) {$/;"	M
+setSelectAllowMultiple	072_experience_potion/jscrawl.html	/^  setSelectAllowMultiple(allow) {$/;"	M
+setSelectCountMax	072_experience_potion/jscrawl.html	/^  setSelectCountMax(value) {$/;"	M
+setSelectCountMaxList	072_experience_potion/jscrawl.html	/^  setSelectCountMaxList(list) {$/;"	M
+setSelectIndexes	072_experience_potion/jscrawl.html	/^  setSelectIndexes(indexes) {$/;"	M
+setSelectKeys	072_experience_potion/jscrawl.html	/^  setSelectKeys(list) {$/;"	M
+setSelectMaxWidth	072_experience_potion/jscrawl.html	/^  setSelectMaxWidth(maxWidth) {$/;"	M
+setSelectMeta	072_experience_potion/jscrawl.html	/^  setSelectMeta(key, value) {$/;"	M
+setSelectMultiple	072_experience_potion/jscrawl.html	/^  setSelectMultiple(multiple) {$/;"	M
+setSelectNameList	072_experience_potion/jscrawl.html	/^  setSelectNameList(list) {$/;"	M
+setSelectSubjectList	072_experience_potion/jscrawl.html	/^  setSelectSubjectList(list) {$/;"	M
+setSelectTitle	072_experience_potion/jscrawl.html	/^  setSelectTitle(single, multiple) {$/;"	M
+setStatusChanged	072_experience_potion/jscrawl.html	/^  setStatusChanged(changed) {$/;"	M
+setTarget	072_experience_potion/jscrawl.html	/^  setTarget(pos) {$/;"	M
+shift	072_experience_potion/jscrawl.html	/^  shift: false,$/;"	P
+showEquipment	072_experience_potion/jscrawl.html	/^    showEquipment: [ 'e' ],$/;"	P
+showEquipment	072_experience_potion/jscrawl.html	/^  showEquipment() {$/;"	M
+showEquipment	072_experience_potion/jscrawl.html	/^  showEquipment: () => {$/;"	M
+showInventory	072_experience_potion/jscrawl.html	/^    showInventory: [ 'i' ],$/;"	P
+showInventory	072_experience_potion/jscrawl.html	/^  showInventory() {$/;"	M
+showInventory	072_experience_potion/jscrawl.html	/^  showInventory: () => {$/;"	M
+showInventoryActions	072_experience_potion/jscrawl.html	/^  showInventoryActions() {$/;"	M
+showInventoryGroup	072_experience_potion/jscrawl.html	/^  showInventoryGroup() {$/;"	M
+showInventoryGroup	072_experience_potion/jscrawl.html	/^  showInventoryGroup(inventoryGroup) {$/;"	M
+showSelectedItems	072_experience_potion/jscrawl.html	/^  showSelectedItems() {$/;"	M
+silver	072_experience_potion/jscrawl.html	/^              silver: 20,$/;"	P
+silver	072_experience_potion/jscrawl.html	/^  silver:  { $/;"	P
+silver	072_experience_potion/jscrawl.html	/^  silver: { $/;"	P
+silverEgg	072_experience_potion/jscrawl.html	/^          silverEgg: { $/;"	P
+simplePursuit	072_experience_potion/jscrawl.html	/^  simplePursuit(actor) {$/;"	M
+size	072_experience_potion/jscrawl.html	/^  let size = new Pair(fromMap.length, fromMap[0].length)$/;"	V
+spear	072_experience_potion/jscrawl.html	/^              spear: {$/;"	P
+species	072_experience_potion/jscrawl.html	/^      species: null,$/;"	P
+species	072_experience_potion/jscrawl.html	/^const species = {$/;"	O
+spectra	072_experience_potion/jscrawl.html	/^  spectra: { name: 'spectra', key: 's', },$/;"	P
+spinach	072_experience_potion/jscrawl.html	/^          spinach: { $/;"	P
+splitAtBlankBefore	072_experience_potion/jscrawl.html	/^function splitAtBlankBefore(string, pos) {$/;"	F
+stamina	072_experience_potion/jscrawl.html	/^  stamina: { $/;"	P
+star	072_experience_potion/jscrawl.html	/^  star: { $/;"	P
+status	072_experience_potion/jscrawl.html	/^      status: {$/;"	P
+statusChanged	072_experience_potion/jscrawl.html	/^    statusChanged: false,$/;"	P
+stop	072_experience_potion/jscrawl.html	/^  let stop = 0$/;"	V
+strawberries	072_experience_potion/jscrawl.html	/^          strawberries: { $/;"	P
+strength	072_experience_potion/jscrawl.html	/^      strength: 10,$/;"	P
+style	072_experience_potion/jscrawl.html	/^    const style = "#0000C080"$/;"	V
+sub	072_experience_potion/jscrawl.html	/^            sub: {$/;"	P
+sub	072_experience_potion/jscrawl.html	/^        sub: {$/;"	P
+sub	072_experience_potion/jscrawl.html	/^    sub: {$/;"	P
+subjects	072_experience_potion/jscrawl.html	/^      let subjects = []$/;"	A
+subjects	072_experience_potion/jscrawl.html	/^    let subjects = []$/;"	A
+subtract	072_experience_potion/jscrawl.html	/^  subtract(pair) {$/;"	M
+sun	072_experience_potion/jscrawl.html	/^  sun: { $/;"	P
+supportMulti	072_experience_potion/jscrawl.html	/^    supportMulti: true,$/;"	P
+surroundLevelWithWalls	072_experience_potion/jscrawl.html	/^function surroundLevelWithWalls(oldLevel, size) {$/;"	F
+sushiRoll	072_experience_potion/jscrawl.html	/^          sushiRoll: { $/;"	P
+switch	072_experience_potion/jscrawl.html	/^    switch(event.key) {$/;"	M
+switch	072_experience_potion/jscrawl.html	/^    switch(slot) {$/;"	M
+switch	072_experience_potion/jscrawl.html	/^  switch(type) {$/;"	M
+sword	072_experience_potion/jscrawl.html	/^              sword: {$/;"	P
+tPress	072_experience_potion/jscrawl.html	/^  const [fPress, tPress] = getEffectivePressures($/;"	V
+tRoom	072_experience_potion/jscrawl.html	/^        tRoom,$/;"	V
+tab	072_experience_potion/jscrawl.html	/^    const tab = 8$/;"	V
+target	072_experience_potion/jscrawl.html	/^          target: target,$/;"	P
+target	072_experience_potion/jscrawl.html	/^    target: {$/;"	P
+target	072_experience_potion/jscrawl.html	/^  target: {$/;"	P
+template	072_experience_potion/jscrawl.html	/^          template: newTemplate,$/;"	P
+template	072_experience_potion/jscrawl.html	/^const template = {$/;"	O
+text	072_experience_potion/jscrawl.html	/^        text: line $/;"	P
+text	072_experience_potion/jscrawl.html	/^function text(t) {$/;"	F
+textToDraw	072_experience_potion/jscrawl.html	/^        textToDraw: characterToDraw, $/;"	P
+textToDraw	072_experience_potion/jscrawl.html	/^        textToDraw: message$/;"	P
+textToDraw	072_experience_potion/jscrawl.html	/^        textToDraw: statusRow,$/;"	P
+thickness	072_experience_potion/jscrawl.html	/^    const thickness = 3$/;"	V
+throwable	072_experience_potion/jscrawl.html	/^          throwable: {$/;"	P
+tier	072_experience_potion/jscrawl.html	/^    tier: 0,$/;"	P
+tier	072_experience_potion/jscrawl.html	/^    tier: 1,$/;"	P
+tier	072_experience_potion/jscrawl.html	/^    tier: 2,$/;"	P
+tier	072_experience_potion/jscrawl.html	/^    tier: 3,$/;"	P
+tier	072_experience_potion/jscrawl.html	/^    tier: 4,$/;"	P
+tierMultiplier	072_experience_potion/jscrawl.html	/^    const tierMultiplier = 10 ** (from.tier - to.tier)$/;"	V
+to	072_experience_potion/jscrawl.html	/^                to,$/;"	V
+to	072_experience_potion/jscrawl.html	/^              to,$/;"	V
+to	072_experience_potion/jscrawl.html	/^    to,$/;"	V
+to	072_experience_potion/jscrawl.html	/^    to: [$/;"	P
+to	072_experience_potion/jscrawl.html	/^    to: [pools.black],$/;"	P
+to	072_experience_potion/jscrawl.html	/^    to: [pools.blue],$/;"	P
+to	072_experience_potion/jscrawl.html	/^    to: [pools.brown],$/;"	P
+to	072_experience_potion/jscrawl.html	/^    to: [pools.criticalHealth],$/;"	P
+to	072_experience_potion/jscrawl.html	/^    to: [pools.cyan],$/;"	P
+to	072_experience_potion/jscrawl.html	/^    to: [pools.gray],$/;"	P
+to	072_experience_potion/jscrawl.html	/^    to: [pools.green],$/;"	P
+to	072_experience_potion/jscrawl.html	/^    to: [pools.indigo],$/;"	P
+to	072_experience_potion/jscrawl.html	/^    to: [pools.majorHealth],$/;"	P
+to	072_experience_potion/jscrawl.html	/^    to: [pools.mana],$/;"	P
+to	072_experience_potion/jscrawl.html	/^    to: [pools.minorHealth],$/;"	P
+to	072_experience_potion/jscrawl.html	/^    to: [pools.moon],$/;"	P
+to	072_experience_potion/jscrawl.html	/^    to: [pools.orange],$/;"	P
+to	072_experience_potion/jscrawl.html	/^    to: [pools.purple],$/;"	P
+to	072_experience_potion/jscrawl.html	/^    to: [pools.rainbow],$/;"	P
+to	072_experience_potion/jscrawl.html	/^    to: [pools.red],$/;"	P
+to	072_experience_potion/jscrawl.html	/^    to: [pools.stamina],$/;"	P
+to	072_experience_potion/jscrawl.html	/^    to: [pools.star],$/;"	P
+to	072_experience_potion/jscrawl.html	/^    to: [pools.violet],$/;"	P
+to	072_experience_potion/jscrawl.html	/^    to: [pools.willpower],$/;"	P
+to	072_experience_potion/jscrawl.html	/^    to: [pools.yellow],$/;"	P
+toMap	072_experience_potion/jscrawl.html	/^  let toMap = []$/;"	A
+toMapColumn	072_experience_potion/jscrawl.html	/^      let toMapColumn = []$/;"	A
+toMapColumn	072_experience_potion/jscrawl.html	/^    let toMapColumn = []$/;"	A
+toggleSelectedItem	072_experience_potion/jscrawl.html	/^  toggleSelectedItem(index) {$/;"	M
+tomato	072_experience_potion/jscrawl.html	/^          tomato: { $/;"	P
+topController	072_experience_potion/jscrawl.html	/^const topController = new TopController()$/;"	V
+total	072_experience_potion/jscrawl.html	/^    let total = 0$/;"	V
+total	072_experience_potion/jscrawl.html	/^  let total = 0$/;"	V
+totalWeight	072_experience_potion/jscrawl.html	/^    let totalWeight = 0$/;"	V
+true	072_experience_potion/jscrawl.html	/^      true,$/;"	V
+unequip	072_experience_potion/jscrawl.html	/^  unequip: {$/;"	P
+unequipItem	072_experience_potion/jscrawl.html	/^  unequipItem(item) {$/;"	M
+unequipUntilHandsFree	072_experience_potion/jscrawl.html	/^  unequipUntilHandsFree(handsNeeded) {$/;"	M
+upBias	072_experience_potion/jscrawl.html	/^  let upBias = 0$/;"	V
+update	072_experience_potion/jscrawl.html	/^  update(forceRefresh = false) {$/;"	M
+updateScreen	072_experience_potion/jscrawl.html	/^  updateScreen(screen, forceRefresh = false) {$/;"	M
+updateWindow	072_experience_potion/jscrawl.html	/^  updateWindow(screen, window, forceRefresh = false) {$/;"	M
+upperLeftQuarter	072_experience_potion/jscrawl.html	/^  upperLeftQuarter() {$/;"	M
+upperRightQuarter	072_experience_potion/jscrawl.html	/^  upperRightQuarter() {$/;"	M
+values	072_experience_potion/jscrawl.html	/^        let values = []$/;"	A
+values	072_experience_potion/jscrawl.html	/^      let values = []$/;"	A
+violet	072_experience_potion/jscrawl.html	/^              violet: 10,$/;"	P
+violet	072_experience_potion/jscrawl.html	/^              violet: 2,$/;"	P
+violet	072_experience_potion/jscrawl.html	/^              violet: 5,$/;"	P
+violet	072_experience_potion/jscrawl.html	/^  violet:     { bgStyle: '#824FFF', style: '#FFF' },$/;"	P
+violet	072_experience_potion/jscrawl.html	/^  violet: { $/;"	P
+wait	072_experience_potion/jscrawl.html	/^    wait: [ '.' ],$/;"	P
+wait	072_experience_potion/jscrawl.html	/^  wait() {$/;"	M
+wait	072_experience_potion/jscrawl.html	/^  wait: () => {$/;"	M
+wand	072_experience_potion/jscrawl.html	/^        wand: [],$/;"	P
+warn	072_experience_potion/jscrawl.html	/^function warn(message) {$/;"	F
+watermelon	072_experience_potion/jscrawl.html	/^          watermelon: { $/;"	P
+weapon	072_experience_potion/jscrawl.html	/^        weapon: [],$/;"	P
+weapon	072_experience_potion/jscrawl.html	/^      weapon: {$/;"	P
+while	072_experience_potion/jscrawl.html	/^        while(prefix.length + remaining.length >= maxWidth) {$/;"	M
+while	072_experience_potion/jscrawl.html	/^    while(handsAvailable < handsNeeded) {$/;"	M
+while	072_experience_potion/jscrawl.html	/^    while(remaining != 0 && poolsToTry.length) {$/;"	M
+while	072_experience_potion/jscrawl.html	/^  while(map.length < size.x) {$/;"	M
+while	072_experience_potion/jscrawl.html	/^  while(true) {$/;"	M
+white1	072_experience_potion/jscrawl.html	/^  white1:  { bgStyle: '#D0D0D0', style: '#000' },$/;"	P
+white2	072_experience_potion/jscrawl.html	/^  white2:  { bgStyle: '#E8E8E8', style: '#000' },$/;"	P
+white3	072_experience_potion/jscrawl.html	/^  white3:  { bgStyle: '#FFFFFF', style: '#000' },$/;"	P
+width	072_experience_potion/jscrawl.html	/^  width: 1600,$/;"	P
+willpower	072_experience_potion/jscrawl.html	/^              willpower: 10,$/;"	P
+willpower	072_experience_potion/jscrawl.html	/^  willpower: { $/;"	P
+willpowerFocus	072_experience_potion/jscrawl.html	/^    willpowerFocus: [ 'w' ],$/;"	P
+willpowerFocus	072_experience_potion/jscrawl.html	/^  willpowerFocus() {$/;"	M
+willpowerFocus	072_experience_potion/jscrawl.html	/^  willpowerFocus: () => {$/;"	M
+willpowerFocusExecute	072_experience_potion/jscrawl.html	/^  willpowerFocusExecute() {$/;"	M
+willpowerFocusSelectPool	072_experience_potion/jscrawl.html	/^  willpowerFocusSelectPool() {$/;"	M
+willpowerFocusSelectPoolType	072_experience_potion/jscrawl.html	/^  willpowerFocusSelectPoolType() {$/;"	M
+window	072_experience_potion/jscrawl.html	/^          window,$/;"	V
+window	072_experience_potion/jscrawl.html	/^        window: window, $/;"	P
+window	072_experience_potion/jscrawl.html	/^        window: window,$/;"	P
+window	072_experience_potion/jscrawl.html	/^      window,$/;"	V
+window	072_experience_potion/jscrawl.html	/^      window: null,$/;"	P
+window	072_experience_potion/jscrawl.html	/^    window: {$/;"	P
+windowCellPosToLevel	072_experience_potion/jscrawl.html	/^  windowCellPosToLevel(window, windowCellPos) {$/;"	M
+windowCellPosToScreenPixelPos	072_experience_potion/jscrawl.html	/^  windowCellPosToScreenPixelPos(screen, window, windowPos) {$/;"	M
+windowPos	072_experience_potion/jscrawl.html	/^        windowPos: windowPos, $/;"	P
+windowPosIsValid	072_experience_potion/jscrawl.html	/^  windowPosIsValid(window, windowPos) {$/;"	M
+windowToWindowName	072_experience_potion/jscrawl.html	/^  windowToWindowName(screen, window) {$/;"	M
+within	072_experience_potion/jscrawl.html	/^  within(minPair, maxPairExclusive) {$/;"	M
+wpFocus	072_experience_potion/jscrawl.html	/^      wpFocus: null,$/;"	P
+xOffset	072_experience_potion/jscrawl.html	/^    let xOffset = 0$/;"	V
+xOffset	072_experience_potion/jscrawl.html	/^  xOffset: 0,$/;"	P
+xp	072_experience_potion/jscrawl.html	/^      xp: 0,$/;"	P
+yOffset	072_experience_potion/jscrawl.html	/^    let yOffset = 0$/;"	V
+yOffset	072_experience_potion/jscrawl.html	/^  yOffset: 0,$/;"	P
+yellow	072_experience_potion/jscrawl.html	/^              yellow: 10,$/;"	P
+yellow	072_experience_potion/jscrawl.html	/^              yellow: 15,$/;"	P
+yellow	072_experience_potion/jscrawl.html	/^              yellow: 20,$/;"	P
+yellow	072_experience_potion/jscrawl.html	/^              yellow: 3,$/;"	P
+yellow	072_experience_potion/jscrawl.html	/^              yellow: 5, $/;"	P
+yellow	072_experience_potion/jscrawl.html	/^              yellow: 5,$/;"	P
+yellow	072_experience_potion/jscrawl.html	/^  yellow:     { bgStyle: '#FFFF00', style: '#000' },$/;"	P
+yellow	072_experience_potion/jscrawl.html	/^  yellow: { $/;"	P

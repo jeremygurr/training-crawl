@@ -1609,13 +1609,20 @@ class TopController {
     const fc = this.frontController
     const bc = this.backController
     if(item.base.name == 'experience') {
-      fc.drinkExperiencePotionSelectCategory(
-        bc.getGrowthSelection(),
-        bc.getGrowthPerLevel(),
-      )
+      fc.setSelectMeta('item', item)
+      this.drinkExperiencePotion()
     } else {
       err("Unknown potion: " + getNameOf(null, item))
     }
+  }
+
+  drinkExperiencePotion() {
+    const fc = this.frontController
+    const bc = this.backController
+    fc.drinkExperiencePotionSelectCategory(
+      bc.getGrowthSelection(),
+      bc.getGrowthPerLevel(),
+    )
   }
 
   drinkExperiencePotionSelect() {
@@ -1985,13 +1992,14 @@ class TopController {
   exitSimple() {
     const fc = this.frontController
     this.setKeyMode('base')
-    fc.resetSelect()
+    // this causes problems when one select joins to another
+    // fc.resetSelect()
     fc.setStatusChanged(true)
   }
 
   executeAction(key) {
-    this.frontController.executeAction(key)
     this.exitSimple()
+    this.frontController.executeAction(key)
   }
 
   showInventoryActions() {
@@ -4023,7 +4031,7 @@ class FrontController {
     this.setKeyMode('select')
 
     this.setSelectExecute(() => {
-      topController.drinkExperiencePotionSelect()
+      topController.drinkExperiencePotion()
     })
 
     this.showSelectedItems()
@@ -6030,8 +6038,8 @@ function getGrowthSelectCount(growthSelection) {
   for(let key in growthSelection) {
     const value = growthSelection[key]
     if(typeof value == 'boolean') {
-      if(value) total++
-      selected++
+      if(value) selected++
+      total++
     } else {
       const [selected2, total2] = getGrowthSelectCount(value)
       selected += selected2

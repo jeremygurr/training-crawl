@@ -7,7 +7,7 @@ experience potion drinking
         need to bind a selection list to it
     titles can't be dynamic, since they are set at setup instead of after each selection
       [ ] allow a title to be a function instead of a string
-      [ ] replace all titles with a function, removing the plural cases
+      [*] replace all titles with a function, removing the plural cases
     support custom back / escape command
     spend xp on
       attributes +1

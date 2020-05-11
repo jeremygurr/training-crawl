@@ -1320,7 +1320,7 @@ const template = {
     // with values being booleans
     // each representing whether an
     // option is selected or not
-    selectFlags: [],
+    selectFlags: null,
 
     selectKeys: [], 
     selectMultiple: false,
@@ -1634,7 +1634,7 @@ class TopController {
   drinkExperiencePotionExecute() {
     const fc = this.frontController
     const bc = this.backController
-    .....
+    // TODO
     // fill interna
     bc.removeItemFromInventory(item, count)
     fc.addMessage("Drank " + getNameOf(count, item))
@@ -2002,13 +2002,8 @@ class TopController {
 
     const bc = this.backController
     const fc = this.frontController
-    const index = fc.getSelectedIndex()
 
-    if(index == -1) {
-      err("Couldn't find index of selected item.")
-    }
-
-    const selectedInventoryType = fc.getSelectSubjectList()[index]
+    const selectedInventoryType = fc.getSelectedSubject()
 
     if(selectedInventoryType) {
       const inventoryGroup = bc.getInventoryGroup(
@@ -3975,25 +3970,22 @@ class FrontController {
     growthPerLevel,
   ) {
     
-    const [growthSelectCount, _] = 
-      getGrowthSelectCount(growthSelection)
-
-    const selectedString = 
-      '(' 
-    + growthSelectCount 
-    + '/' 
-    + growthPerLevel 
-    + ' growth points used)'
-
     this.resetSelect()
     this.setSelectTitle(
-      () => {
-        'Choose attributes: ' + selectedString
+      (_, growthSelection) => {
+        const [growthSelectCount, _2] = 
+          getGrowthSelectCount(growthSelection)
+        const selectedString = 
+          '(' 
+        + growthSelectCount 
+        + '/' 
+        + growthPerLevel 
+        + ' growth points used)'
+        return 'Choose attributes: ' + selectedString
       }
     )
 
     let names = []
-    let keys = []
 
     for(let attribute in growthSelection.attributes) {
       names.push(attribute)
@@ -4002,20 +3994,14 @@ class FrontController {
     this.setSelectMultiple(true)
     this.setSelectFlags(growthSelection.attributes)
     this.setSelectNameList(names)
-    this.setSelectKeys(keys)
     this.setKeyMode('select')
 
-    this.setSelectAction(() => {
-      topController.drinkExperiencePotionSelect()
-    })
-
     this.setSelectExecute(() => {
-      topController.drinkExperiencePotionExecute()
+      topController.drinkExperiencePotionSelect()
     })
 
     this.showSelectedItems()
 
-    
   }
 
   getStatusMode() {
@@ -4321,8 +4307,8 @@ class FrontController {
   }
 
   selectItem(key) {
-    const fm = this.frontModel
 
+    const fm = this.frontModel
     const keyInt = parseInt(key)
 
     if(
@@ -4422,7 +4408,11 @@ class FrontController {
   }
 
   setSelectNameList(list) {
-    this.frontModel.selectNameList = list
+    const fm = this.frontModel
+    fm.selectNameList = list
+    if(fm.selectFlags == null) {
+      fm.selectFlags = new Array(list.length).fill(false)
+    }
   }
 
   setSelectKeys(list) {
@@ -4468,7 +4458,7 @@ class FrontController {
     fm.selectCountList = []
     fm.selectCountMaxList = []
     fm.selectCountMax = null
-    fm.selectFlags = []
+    fm.selectFlags = null
     fm.selectKeys = []
     fm.selectMultiple = false
     fm.selectNameList = []
@@ -4582,7 +4572,7 @@ class FrontController {
     const items = fm.selectNameList
     const keys = fm.selectKeys
 
-    for(let i in items) {
+    for(let i = 0; i < items.length; i++) {
 
       let key = keys[i]
       if(!key) {
@@ -4684,7 +4674,7 @@ class FrontController {
   showInventoryActions() {
 
     const fm = this.frontModel
-    const [items, count] = this.getSelectedSubjectsAndCounts()
+    const [items, counts] = this.getSelectedSubjectsAndCounts()
 
     let subjects = []
     const actions = getActionsFor(
@@ -4725,8 +4715,9 @@ class FrontController {
     this.setSelectSubjectList(inventoryGroup)
     this.setSelectTitle(
       (multi) => {
-      if(multi) return 'Choose items:'
-      return 'Choose item:'
+        if(multi) return 'Choose items:'
+        return 'Choose item:'
+      }
     )
     this.setSelectAction(
       () => { topController.showInventoryActions() }
@@ -6005,6 +5996,19 @@ function getChannelString(player, from, to) {
 
   return channelString
 
+}
+
+function getGrowthSelectCount(growthSelection) {
+  let total = 0
+  for(let key in growthSelection) {
+    const value = growthSelection[key]
+    if(typeof value == 'boolean') {
+      if(value) total++
+    } else {
+      total += getGrowthSelectCount(value)
+    }
+  }
+  return total
 }
 
 let didSomething = false

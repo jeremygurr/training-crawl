@@ -2088,6 +2088,7 @@ class TopController {
     let noItemsFound = true
     let names = []
     let subjects = []
+    let keys = []
 
     for(let key in inventoryTypes) {
       const type = inventoryTypes[key]
@@ -2098,6 +2099,7 @@ class TopController {
         }
         names.push(type + ' (' + group.length + ' items)')
         subjects.push(type)
+        keys.push(key)
       }
     }
 
@@ -2110,6 +2112,7 @@ class TopController {
 
       fc.resetSelect()
       fc.setSelectNameList(names)
+      fc.setSelectKeys(keys)
       this.setKeyMode('select')
       fc.setSelectAllowMultiple(false)
       fc.setSelectTitle(() => 'Choose an inventory type:')
@@ -3099,6 +3102,14 @@ class BackController {
     this.initializePlayer()
   }
 
+  getGrowthSelection() {
+    return this.backModel.player.growthSelection
+  }
+
+  getGrowthPerLevel() {
+    return this.backModel.player.species.experiencePerLevel
+  }
+
   getAttributes(actor) {
     return actor.species.attributes
   }
@@ -3374,6 +3385,18 @@ class BackController {
 
       i++
 
+    }
+
+    const growth = player.growth
+    const growthSelection = player.growthSelection
+
+    for(const key in growth) {
+      growthSelection[key] = {}
+    }
+
+    for(const attribute in player.species.attributes) {
+      growth.attributes[attribute] = 0
+      growthSelection.attributes[attribute] = false
     }
 
   }
@@ -3688,6 +3711,9 @@ class BackController {
     
     bm.level[target.x][target.y+1].occupiedBy = null
     bm.level[target.x][target.y+1].onFloor = [gold]
+
+    const potion = this.generateItem(1, ['potion','experience'])
+    this.addItemToInventory(potion)
   }
 
   generateItem(count, path, currentItem = template.generated) {
@@ -5999,16 +6025,20 @@ function getChannelString(player, from, to) {
 }
 
 function getGrowthSelectCount(growthSelection) {
+  let selected = 0
   let total = 0
   for(let key in growthSelection) {
     const value = growthSelection[key]
     if(typeof value == 'boolean') {
       if(value) total++
+      selected++
     } else {
-      total += getGrowthSelectCount(value)
+      const [selected2, total2] = getGrowthSelectCount(value)
+      selected += selected2
+      total += total2
     }
   }
-  return total
+  return [selected, total]
 }
 
 let didSomething = false

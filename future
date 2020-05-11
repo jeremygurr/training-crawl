@@ -1,18 +1,7 @@
 experience potion drinking
-  drink action
-    spend xp on
-      energy pools x1.25
-      energy channels x1.25
-      energy usage efficiency x1.25
-      skill +1
-  getAttribute
-    factor in base species attribute plus growth
-  getPoolCap
-  getPoolEfficiency
-  getChannelCap
-  getSkillLevel
-    takes into account base skill, growth, and aptitude
-  display result in select attribute / etc panels
+  energy channels x1.25
+  energy usage efficiency x1.25
+  skill +1
 meditation enhances willpower energy or sense focus, not a separate focus
   automatically happens when resting while focussed
   med rate doubles each turn:
@@ -27,6 +16,7 @@ creator mode:
   allow multiple item creation, or disable multiselect
   move CREATOR MODE to right of action
 core awakening
+  show level
   only happens once at level 10
   pool capacity increases x3
   pool energy efficiency increases x3

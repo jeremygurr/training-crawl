@@ -158,7 +158,7 @@ const skillTypes = {
 // immutable
 // name is automatically added
 const skills = {
-  dodge: { type = skillTypes.defense }
+  dodge: { type: skillTypes.defense }
 }
 
 // immutable
@@ -1623,6 +1623,27 @@ class TopController {
     this.refresh()
   }
 
+  getAttribute(actor, key, boost) {
+    return this.backController.getAttribute(actor, key, boost)
+  }
+
+  getPoolMax(actor, key, boost) {
+    return this.backController.getPoolMax(actor, key, boost)
+  }
+
+  getEnergyEfficiency(actor, key, boost) {
+    return this.backController.getEnergyEfficiency(actor, key, boost)
+  }
+
+  getChannelMaxFlow(actor, key, boost) {
+    return this.backController.getChannelMaxFlow(actor, key, boost)
+  }
+
+  getSkill(actor, key, boost) {
+    return this.backController.getSkill(actor, key, boost)
+  }
+
+
   drinkPotion(item, count) {
     const fc = this.frontController
     const bc = this.backController
@@ -1699,42 +1720,42 @@ class TopController {
   }
 
   drinkExperiencePotionSelectAttributes() {
-    drinkExperiencePotionSelectSomething(
+    this.drinkExperiencePotionSelectSomething(
       'attributes',
       'attributes',
-      (actor, key, boost) => bc.getAttribute(actor, key, boost),
+      (actor, key, boost) => topController.getAttribute(actor, key, boost),
     )
   }
 
   drinkExperiencePotionSelectPoolCapacity() {
-    drinkExperiencePotionSelectSomething(
+    this.drinkExperiencePotionSelectSomething(
       'pool capacity',
       'poolCapacity',
-      (actor, key, boost) => bc.getPoolMax(actor, key, boost),
+      (actor, key, boost) => topController.getPoolMax(actor, key, boost),
     )
   }
 
   drinkExperiencePotionSelectEnergyEfficiency() {
-    drinkExperiencePotionSelectSomething(
+    this.drinkExperiencePotionSelectSomething(
       'energy efficiency',
       'energyEfficiency',
-      (actor, key, boost) => bc.getEnergyEfficiency(actor, key, boost),
+      (actor, key, boost) => topController.getEnergyEfficiency(actor, key, boost),
     )
   }
 
   drinkExperiencePotionSelectChannelMaxFlow() {
-    drinkExperiencePotionSelectSomething(
+    this.drinkExperiencePotionSelectSomething(
       'channel max flow',
       'channelMaxFlow',
-      (actor, key, boost) => bc.getChannelMaxFlow(actor, key, boost),
+      (actor, key, boost) => topController.getChannelMaxFlow(actor, key, boost),
     )
   }
 
   drinkExperiencePotionSelectSkills() {
-    drinkExperiencePotionSelectSomething(
+    this.drinkExperiencePotionSelectSomething(
       'skills',
       'skills',
-      (actor, key, boost) => bc.getSkill(actor, key, boost),
+      (actor, key, boost) => topController.getSkill(actor, key, boost),
     )
   }
 
@@ -3316,12 +3337,12 @@ class BackController {
     }
     for(let i = 0; i < poolChannels.length; i++) {
       const currentFlowMagnitude = actor.channelCurrent[i]
-      const max = actor.channelMax[i]
+      const channel = poolChannels[i]
+      const max = this.getChannelMaxFlow(actor, channel.name)
       const currentMaxFlow = getChannelFlowFromMagnitude(
         currentFlowMagnitude,
         max
       )
-      const channel = poolChannels[i]
       this.advanceEnergyFlowChannel(actor, channel, currentMaxFlow)
     }
   }
@@ -3508,9 +3529,7 @@ class BackController {
 
   getChannelMaxFlow(actor, channelName, boost = 0) {
     const channelIndex = getPoolChannelByName(channelName)
-    let value = 
-      actor.species.maxChannelSizes[channelIndex]
-      || actor.species.maxChannelSizeDefault
+    let value = actor.channelMax[channelIndex]
     if(actor.growth) {
       let growth = actor.growth.channelMaxFlow[channelName]
       growth += boost
@@ -3562,12 +3581,12 @@ class BackController {
 
       let fromName = channel.from[0].shortName
       if(channel.from.length > 1) {
-        fromName[1] = '*'
+        fromName = fromName[0] + '*'
       }
 
       let toName = channel.to[0].shortName
       if(channel.to.length > 1) {
-        toName[1] = '*'
+        toName = toName[0] + '*'
       }
 
       channel.name = name
@@ -4236,7 +4255,7 @@ class FrontController {
     let subjects = []
     let keys = []
 
-    drinkExperiencePotionSelectCategory_addCategory(
+    this.drinkExperiencePotionSelectCategory_addCategory(
       'a', 'attributes', 'attributes', 
       () => { 
         topController.drinkExperiencePotionSelectAttributes() 
@@ -4244,32 +4263,32 @@ class FrontController {
       names, subjects, keys, growthSelection,
     )
 
-    drinkExperiencePotionSelectCategory_addCategory(
-      'p', 'pool capacity', growthSelection.poolCapacity, 
+    this.drinkExperiencePotionSelectCategory_addCategory(
+      'p', 'poolCapacity', 'pool capacity', 
       () => { 
         topController.drinkExperiencePotionSelectPoolCapacity() 
       },
       names, subjects, keys, growthSelection,
     )
 
-    drinkExperiencePotionSelectCategory_addCategory(
-      'e', 'energy efficiency', growthSelection.energyEfficiency, 
+    this.drinkExperiencePotionSelectCategory_addCategory(
+      'e', 'energyEfficiency', 'energy efficiency',
       () => { 
         topController.drinkExperiencePotionSelectEnergyEfficiency() 
       },
       names, subjects, keys, growthSelection,
     )
 
-    drinkExperiencePotionSelectCategory_addCategory(
-      'c', 'channel max flow', growthSelection.channelMaxFlow, 
+    this.drinkExperiencePotionSelectCategory_addCategory(
+      'c', 'channelMaxFlow', 'channel max flow',
       () => { 
         topController.drinkExperiencePotionSelectChannelMaxFlow() 
       },
       names, subjects, keys, growthSelection,
     )
 
-    drinkExperiencePotionSelectCategory_addCategory(
-      's', 'skills', growthSelection.skills, 
+    this.drinkExperiencePotionSelectCategory_addCategory(
+      's', 'skills', 'skills',
       () => { 
         topController.drinkExperiencePotionSelectSkills() 
       },
@@ -6307,6 +6326,21 @@ function getGrowthSelectCount(growthSelection) {
     }
   }
   return [selected, total]
+}
+
+function getPoolChannelByName(channelName) {
+  let result = null
+  for(let i in poolChannels) {
+    const channel = poolChannels[i]
+    if(channel.name == channelName) {
+      result = channel
+      break
+    }
+  }
+  if(result == null) {
+    err("Couldn't find channel " + channelName)
+  }
+  return result
 }
 
 let didSomething = false

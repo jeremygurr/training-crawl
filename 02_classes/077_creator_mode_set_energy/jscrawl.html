@@ -1977,21 +1977,22 @@ class TopController {
       fc.addMessage('Invalid command.')
     } else {
       const target = fc.getTarget().pos
-      this.handleCreateTarget(target, template.generated, 1)
+      this.handleCreateTarget(target, template.generated)
       this.setKeyMode('select')
     }
   }
 
-  handleCreateTarget(target, template, count) {
+  handleCreateTarget(target, template) {
 
     const bc = this.backController
     const fc = this.frontController
+    let count = 1 
 
     if(!target) {
 
       let [subjects, counts] = fc.getSelectedSubjectsAndCounts()
       let found = subjects[0]
-      let count = counts[0]
+      count = counts[0]
 
       if(found) {
         target = found.target
@@ -2024,11 +2025,11 @@ class TopController {
         subjects.push({
           target: target,
           template: newTemplate,
-          count: count,
         })
       }
 
       fc.resetSelect()
+      fc.setSelectAllowMultiple(false)
       fc.setSelectNameList(names)
       fc.setSelectSubjectList(subjects)
       fc.setSelectTitle(() => 'Choose something to create:')
@@ -2824,10 +2825,6 @@ class TopController {
     const list = []
     const player = bc.getPlayer()
 
-    if(bc.getCreatorMode()) {
-      list.push(colorize.rainbow('***** CREATOR MODE *****'))
-    }
-
     list.push('Action: ' + fc.getActionModeMessage())
     list.push(
       'Time:' + bc.getGameClock()
@@ -2848,16 +2845,20 @@ class TopController {
       this.getStatusListPoolsExpanded(list, player)
     }
 
+    if(bc.getCreatorMode()) {
+      list.push(colorize.rainbow('***** CREATOR MODE *****'))
+    }
+
     if(player.wpFocus) {
       list.push([
         text('willpower focus: '),
         colorizePoolName(player.wpFocus),
       ])
       if(player.medDepth) {
-        list.push([
-          text('meditation depth: '),
-          text('' + autoRound(player.medDepth)),
-        ])
+        list.push(
+          'meditation depth: '
+          + autoRound(player.medDepth)
+        )
       }
     }
 
@@ -5662,14 +5663,30 @@ function getNameOf(article, item, verb) {
     count = article
   }
 
-  if(count != 1 && article) {
-    article = count
-    name = name + 's'
-    if(verb == 'is') verb = 'are'
-  }
+  let of = null
 
   if(item.base && item.base.type == 'potion') {
-    name = 'potion of ' + name
+    of = 'potion'
+  }
+
+  if(count != 1) {
+
+    if(of) {
+      of += 's'
+    } else {
+      name = name + 's'
+    }
+
+    if(article) {
+      article = count
+    }
+
+    if(verb == 'is') verb = 'are'
+
+  }
+
+  if(of) {
+    name = of + ' of ' + name
   }
 
   if(article) {

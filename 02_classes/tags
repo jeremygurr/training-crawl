@@ -64,6 +64,7 @@ afterEachTurn	077_creator_mode_set_energy/jscrawl.html	/^  afterEachTurn() {$/;"
 afterEachTurn	077_creator_mode_set_energy/jscrawl.html	/^  afterEachTurn() {$/;"	M
 allResults	077_creator_mode_set_energy/jscrawl.html	/^  let allResults = [] $/;"	A
 alt	077_creator_mode_set_energy/jscrawl.html	/^  alt: false,$/;"	P
+amount	077_creator_mode_set_energy/jscrawl.html	/^        amount = max * selectedSubject$/;"	F
 amulet	077_creator_mode_set_energy/jscrawl.html	/^        amulet: null,$/;"	P
 apple	077_creator_mode_set_energy/jscrawl.html	/^          apple: { $/;"	P
 applyEnergyDelta	077_creator_mode_set_energy/jscrawl.html	/^  applyEnergyDelta(actor) {$/;"	F
@@ -222,6 +223,8 @@ clearNumericSelection	077_creator_mode_set_energy/jscrawl.html	/^  clearNumericS
 clearNumericSelection	077_creator_mode_set_energy/jscrawl.html	/^  clearNumericSelection: () => {$/;"	M
 clearRect	077_creator_mode_set_energy/jscrawl.html	/^  clearRect(rect) {$/;"	F
 clearRect	077_creator_mode_set_energy/jscrawl.html	/^  clearRect(rect) {$/;"	M
+clearSelectMeta	077_creator_mode_set_energy/jscrawl.html	/^  clearSelectMeta(key) {$/;"	F
+clearSelectMeta	077_creator_mode_set_energy/jscrawl.html	/^  clearSelectMeta(key) {$/;"	M
 clearWindow	077_creator_mode_set_energy/jscrawl.html	/^  clearWindow(screen, window) {$/;"	F
 clearWindow	077_creator_mode_set_energy/jscrawl.html	/^  clearWindow(screen, window) {$/;"	M
 clearWindowCells	077_creator_mode_set_energy/jscrawl.html	/^  clearWindowCells(screen, window, cells) {$/;"	F
@@ -397,7 +400,7 @@ const	077_creator_mode_set_energy/jscrawl.html	/^    const mainWindows = screens
 const	077_creator_mode_set_energy/jscrawl.html	/^    const maxColumns = 3$/;"	F
 const	077_creator_mode_set_energy/jscrawl.html	/^    const maxMessageRow = window.smallCellSize.y - 1$/;"	F
 const	077_creator_mode_set_energy/jscrawl.html	/^    const maxRow = screens.main.window.status.smallCellSize.y - 1$/;"	F
-const	077_creator_mode_set_energy/jscrawl.html	/^    const maxValue = actor.poolMax[poolIndex]$/;"	F
+const	077_creator_mode_set_energy/jscrawl.html	/^    const maxValue = this.getPoolMax(actor, pool.name)$/;"	F
 const	077_creator_mode_set_energy/jscrawl.html	/^    const messages = fm.messages$/;"	F
 const	077_creator_mode_set_energy/jscrawl.html	/^    const mode = this.frontModel.motionMode$/;"	F
 const	077_creator_mode_set_energy/jscrawl.html	/^    const n = $/;"	F
@@ -426,6 +429,7 @@ const	077_creator_mode_set_energy/jscrawl.html	/^    const poolIndex = pool.inde
 const	077_creator_mode_set_energy/jscrawl.html	/^    const poolIndex = poolToIndex(poolName)$/;"	F
 const	077_creator_mode_set_energy/jscrawl.html	/^    const poolIndexFrom = poolToIndex(from.name)$/;"	F
 const	077_creator_mode_set_energy/jscrawl.html	/^    const poolIndexTo = poolToIndex(to.name)$/;"	F
+const	077_creator_mode_set_energy/jscrawl.html	/^    const pools = fc.getSelectMeta('subjects')$/;"	F
 const	077_creator_mode_set_energy/jscrawl.html	/^    const posLowerRight = posUpperLeft.add(window.cellPixelDimensions)$/;"	F
 const	077_creator_mode_set_energy/jscrawl.html	/^    const posLowerRight = posUpperLeft.add(window.size.multiply(window.cellPixelDimensions))$/;"	F
 const	077_creator_mode_set_energy/jscrawl.html	/^    const posUpperLeft = this.windowCellPosToScreenPixelPos(screen, window, Pair.empty())$/;"	F
@@ -437,6 +441,7 @@ const	077_creator_mode_set_energy/jscrawl.html	/^    const screen = screens[cs]$
 const	077_creator_mode_set_energy/jscrawl.html	/^    const screen = this.frontController.getCurrentScreen()$/;"	F
 const	077_creator_mode_set_energy/jscrawl.html	/^    const screenPixelPos = this.windowCellPosToScreenPixelPos($/;"	F
 const	077_creator_mode_set_energy/jscrawl.html	/^    const screenPixelPos = window.pos.multiply($/;"	F
+const	077_creator_mode_set_energy/jscrawl.html	/^    const selectCount = fc.getSelectCount()$/;"	F
 const	077_creator_mode_set_energy/jscrawl.html	/^    const selectFlagsList = Object.values(fm.selectFlags)$/;"	F
 const	077_creator_mode_set_energy/jscrawl.html	/^    const selected = fm.selectFlags$/;"	F
 const	077_creator_mode_set_energy/jscrawl.html	/^    const selectedIndex = fc.getSelectedIndex()$/;"	F
@@ -552,11 +557,15 @@ countedItem	077_creator_mode_set_energy/jscrawl.html	/^      const countedItem =
 counts	077_creator_mode_set_energy/jscrawl.html	/^      let [subjects, counts] = fc.getSelectedSubjectsAndCounts()$/;"	V
 counts	077_creator_mode_set_energy/jscrawl.html	/^    const [items, counts] = this.getSelectedSubjectsAndCounts()$/;"	V
 creator	077_creator_mode_set_energy/jscrawl.html	/^  creator: {$/;"	P
+creatorAdvanceLevel	077_creator_mode_set_energy/jscrawl.html	/^    creatorAdvanceLevel: [ 'x' ],$/;"	P
+creatorAdvanceLevel	077_creator_mode_set_energy/jscrawl.html	/^  creatorAdvanceLevel: () => {$/;"	M
 creatorCreateTarget	077_creator_mode_set_energy/jscrawl.html	/^    creatorCreateTarget: [ 'c' ],$/;"	P
 creatorCreateTarget	077_creator_mode_set_energy/jscrawl.html	/^  creatorCreateTarget: () => {$/;"	M
 creatorDeleteTarget	077_creator_mode_set_energy/jscrawl.html	/^    creatorDeleteTarget: [ 'd' ],$/;"	P
 creatorDeleteTarget	077_creator_mode_set_energy/jscrawl.html	/^  creatorDeleteTarget: () => {$/;"	M
 creatorMode	077_creator_mode_set_energy/jscrawl.html	/^    creatorMode: false,$/;"	P
+creatorModeAdvanceLevel	077_creator_mode_set_energy/jscrawl.html	/^  creatorModeAdvanceLevel() {$/;"	F
+creatorModeAdvanceLevel	077_creator_mode_set_energy/jscrawl.html	/^  creatorModeAdvanceLevel() {$/;"	M
 creatorModeCommand	077_creator_mode_set_energy/jscrawl.html	/^    creatorModeCommand: [ '`' ],$/;"	P
 creatorModeCommand	077_creator_mode_set_energy/jscrawl.html	/^  creatorModeCommand() {$/;"	F
 creatorModeCommand	077_creator_mode_set_energy/jscrawl.html	/^  creatorModeCommand() {$/;"	M
@@ -567,10 +576,20 @@ creatorModeDeleteTarget	077_creator_mode_set_energy/jscrawl.html	/^  creatorMode
 creatorModeDeleteTarget	077_creator_mode_set_energy/jscrawl.html	/^  creatorModeDeleteTarget() {$/;"	M
 creatorModeRegenLevel	077_creator_mode_set_energy/jscrawl.html	/^  creatorModeRegenLevel() {$/;"	F
 creatorModeRegenLevel	077_creator_mode_set_energy/jscrawl.html	/^  creatorModeRegenLevel() {$/;"	M
+creatorModeSetEnergy	077_creator_mode_set_energy/jscrawl.html	/^  creatorModeSetEnergy() {$/;"	F
+creatorModeSetEnergy	077_creator_mode_set_energy/jscrawl.html	/^  creatorModeSetEnergy() {$/;"	M
+creatorModeSetEnergyExecute	077_creator_mode_set_energy/jscrawl.html	/^  creatorModeSetEnergyExecute() {$/;"	F
+creatorModeSetEnergyExecute	077_creator_mode_set_energy/jscrawl.html	/^  creatorModeSetEnergyExecute() {$/;"	M
+creatorModeSetEnergyGetAmount	077_creator_mode_set_energy/jscrawl.html	/^  creatorModeSetEnergyGetAmount() {$/;"	F
+creatorModeSetEnergyGetAmount	077_creator_mode_set_energy/jscrawl.html	/^  creatorModeSetEnergyGetAmount() {$/;"	M
+creatorModeSetEnergySelectPool	077_creator_mode_set_energy/jscrawl.html	/^  creatorModeSetEnergySelectPool() {$/;"	F
+creatorModeSetEnergySelectPool	077_creator_mode_set_energy/jscrawl.html	/^  creatorModeSetEnergySelectPool() {$/;"	M
 creatorModeTeleportToTarget	077_creator_mode_set_energy/jscrawl.html	/^  creatorModeTeleportToTarget() {$/;"	F
 creatorModeTeleportToTarget	077_creator_mode_set_energy/jscrawl.html	/^  creatorModeTeleportToTarget() {$/;"	M
 creatorRegenLevel	077_creator_mode_set_energy/jscrawl.html	/^    creatorRegenLevel: [ 'r' ],$/;"	P
 creatorRegenLevel	077_creator_mode_set_energy/jscrawl.html	/^  creatorRegenLevel: () => {$/;"	M
+creatorSetEnergy	077_creator_mode_set_energy/jscrawl.html	/^    creatorSetEnergy: [ 'e' ],$/;"	P
+creatorSetEnergy	077_creator_mode_set_energy/jscrawl.html	/^  creatorSetEnergy: () => {$/;"	M
 creatorTeleportToTarget	077_creator_mode_set_energy/jscrawl.html	/^    creatorTeleportToTarget: [ 't' ],$/;"	P
 creatorTeleportToTarget	077_creator_mode_set_energy/jscrawl.html	/^  creatorTeleportToTarget: () => {$/;"	M
 creature	077_creator_mode_set_energy/jscrawl.html	/^      creature: {$/;"	P
@@ -828,6 +847,8 @@ for	077_creator_mode_set_energy/jscrawl.html	/^    for(const key in growthSelect
 for	077_creator_mode_set_energy/jscrawl.html	/^    for(const key in growthSelection) {$/;"	M
 for	077_creator_mode_set_energy/jscrawl.html	/^    for(const pool of Object.values(pools)) {$/;"	F
 for	077_creator_mode_set_energy/jscrawl.html	/^    for(const pool of Object.values(pools)) {$/;"	M
+for	077_creator_mode_set_energy/jscrawl.html	/^    for(const pool of pools) {$/;"	F
+for	077_creator_mode_set_energy/jscrawl.html	/^    for(const pool of pools) {$/;"	M
 for	077_creator_mode_set_energy/jscrawl.html	/^    for(const poolName in pools) {$/;"	F
 for	077_creator_mode_set_energy/jscrawl.html	/^    for(const poolName in pools) {$/;"	M
 for	077_creator_mode_set_energy/jscrawl.html	/^    for(const poolName of poolList) {$/;"	F
@@ -1140,6 +1161,8 @@ getSelectAction	077_creator_mode_set_energy/jscrawl.html	/^  getSelectAction(act
 getSelectAction	077_creator_mode_set_energy/jscrawl.html	/^  getSelectAction(action) {$/;"	M
 getSelectAllowMultiple	077_creator_mode_set_energy/jscrawl.html	/^  getSelectAllowMultiple(allow) {$/;"	F
 getSelectAllowMultiple	077_creator_mode_set_energy/jscrawl.html	/^  getSelectAllowMultiple(allow) {$/;"	M
+getSelectCount	077_creator_mode_set_energy/jscrawl.html	/^  getSelectCount() {$/;"	F
+getSelectCount	077_creator_mode_set_energy/jscrawl.html	/^  getSelectCount() {$/;"	M
 getSelectCountByIndex	077_creator_mode_set_energy/jscrawl.html	/^  getSelectCountByIndex(index) {$/;"	F
 getSelectCountByIndex	077_creator_mode_set_energy/jscrawl.html	/^  getSelectCountByIndex(index) {$/;"	M
 getSelectExecute	077_creator_mode_set_energy/jscrawl.html	/^  getSelectExecute() {$/;"	F
@@ -1386,6 +1409,8 @@ if	077_creator_mode_set_energy/jscrawl.html	/^      if(i == index) {$/;"	F
 if	077_creator_mode_set_energy/jscrawl.html	/^      if(i == index) {$/;"	M
 if	077_creator_mode_set_energy/jscrawl.html	/^      if(i > 6) {$/;"	F
 if	077_creator_mode_set_energy/jscrawl.html	/^      if(i > 6) {$/;"	M
+if	077_creator_mode_set_energy/jscrawl.html	/^      if(item) {$/;"	F
+if	077_creator_mode_set_energy/jscrawl.html	/^      if(item) {$/;"	M
 if	077_creator_mode_set_energy/jscrawl.html	/^      if(itemBase[itemKey].sub) {$/;"	F
 if	077_creator_mode_set_energy/jscrawl.html	/^      if(itemBase[itemKey].sub) {$/;"	M
 if	077_creator_mode_set_energy/jscrawl.html	/^      if(items.length == 0) {$/;"	F
@@ -1432,6 +1457,8 @@ if	077_creator_mode_set_energy/jscrawl.html	/^      if(selectAction) {$/;"	F
 if	077_creator_mode_set_energy/jscrawl.html	/^      if(selectAction) {$/;"	M
 if	077_creator_mode_set_energy/jscrawl.html	/^      if(selectFlagsList[i]) {$/;"	F
 if	077_creator_mode_set_energy/jscrawl.html	/^      if(selectFlagsList[i]) {$/;"	M
+if	077_creator_mode_set_energy/jscrawl.html	/^      if(selectedSubject) {$/;"	F
+if	077_creator_mode_set_energy/jscrawl.html	/^      if(selectedSubject) {$/;"	M
 if	077_creator_mode_set_energy/jscrawl.html	/^      if(selected[key]) {$/;"	F
 if	077_creator_mode_set_energy/jscrawl.html	/^      if(selected[key]) {$/;"	M
 if	077_creator_mode_set_energy/jscrawl.html	/^      if(string[i] == ' ') {$/;"	F
@@ -1461,6 +1488,8 @@ if	077_creator_mode_set_energy/jscrawl.html	/^      if(typeof value == 'boolean'
 if	077_creator_mode_set_energy/jscrawl.html	/^      if(value) selected++$/;"	F
 if	077_creator_mode_set_energy/jscrawl.html	/^      if(weight == null) {$/;"	F
 if	077_creator_mode_set_energy/jscrawl.html	/^      if(weight == null) {$/;"	M
+if	077_creator_mode_set_energy/jscrawl.html	/^    if(!bc.getCreatorMode() && selected < total) {$/;"	F
+if	077_creator_mode_set_energy/jscrawl.html	/^    if(!bc.getCreatorMode() && selected < total) {$/;"	M
 if	077_creator_mode_set_energy/jscrawl.html	/^    if(!bc.getCreatorMode()) {$/;"	F
 if	077_creator_mode_set_energy/jscrawl.html	/^    if(!bc.getCreatorMode()) {$/;"	M
 if	077_creator_mode_set_energy/jscrawl.html	/^    if(!classified && !occupied) {$/;"	F
@@ -1613,8 +1642,6 @@ if	077_creator_mode_set_energy/jscrawl.html	/^    if(result.length > 0) {$/;"	F
 if	077_creator_mode_set_energy/jscrawl.html	/^    if(result.length > 0) {$/;"	M
 if	077_creator_mode_set_energy/jscrawl.html	/^    if(screen.fontStyle) {$/;"	F
 if	077_creator_mode_set_energy/jscrawl.html	/^    if(screen.fontStyle) {$/;"	M
-if	077_creator_mode_set_energy/jscrawl.html	/^    if(selected < total) {$/;"	F
-if	077_creator_mode_set_energy/jscrawl.html	/^    if(selected < total) {$/;"	M
 if	077_creator_mode_set_energy/jscrawl.html	/^    if(selected == null) {$/;"	F
 if	077_creator_mode_set_energy/jscrawl.html	/^    if(selected == null) {$/;"	M
 if	077_creator_mode_set_energy/jscrawl.html	/^    if(selected.sub) {$/;"	F
@@ -1809,6 +1836,7 @@ let	077_creator_mode_set_energy/jscrawl.html	/^        let surroundingWalls = ad
 let	077_creator_mode_set_energy/jscrawl.html	/^        let value = fromMap[fromX][fromY]$/;"	F
 let	077_creator_mode_set_energy/jscrawl.html	/^        let values = []$/;"	F
 let	077_creator_mode_set_energy/jscrawl.html	/^      let [subjects, counts] = fc.getSelectedSubjectsAndCounts()$/;"	F
+let	077_creator_mode_set_energy/jscrawl.html	/^      let amount = selectCount$/;"	F
 let	077_creator_mode_set_energy/jscrawl.html	/^      let cell = bc.getCell(pos)$/;"	F
 let	077_creator_mode_set_energy/jscrawl.html	/^      let cell = column[r]$/;"	F
 let	077_creator_mode_set_energy/jscrawl.html	/^      let characterToDraw$/;"	F
@@ -1833,6 +1861,7 @@ let	077_creator_mode_set_energy/jscrawl.html	/^      let indexes = []$/;"	F
 let	077_creator_mode_set_energy/jscrawl.html	/^      let item = selectedFloorItems[i]$/;"	F
 let	077_creator_mode_set_energy/jscrawl.html	/^      let key = keys[i]$/;"	F
 let	077_creator_mode_set_energy/jscrawl.html	/^      let list = player.equip[slot]$/;"	F
+let	077_creator_mode_set_energy/jscrawl.html	/^      let max = bc.getPoolMax(player, pool.name)$/;"	F
 let	077_creator_mode_set_energy/jscrawl.html	/^      let maxChannelSize = player.species.maxChannelSizes[i]$/;"	F
 let	077_creator_mode_set_energy/jscrawl.html	/^      let maxPoolSize = player.species.maxPoolSizes[poolName]$/;"	F
 let	077_creator_mode_set_energy/jscrawl.html	/^      let maxSize$/;"	F
@@ -2369,6 +2398,7 @@ return	077_creator_mode_set_energy/jscrawl.html	/^    return this.frontModel.lev
 return	077_creator_mode_set_energy/jscrawl.html	/^    return this.frontModel.messagesChanged $/;"	F
 return	077_creator_mode_set_energy/jscrawl.html	/^    return this.frontModel.selectAction$/;"	F
 return	077_creator_mode_set_energy/jscrawl.html	/^    return this.frontModel.selectAllowMultiple$/;"	F
+return	077_creator_mode_set_energy/jscrawl.html	/^    return this.frontModel.selectCount$/;"	F
 return	077_creator_mode_set_energy/jscrawl.html	/^    return this.frontModel.selectCountList[index]$/;"	F
 return	077_creator_mode_set_energy/jscrawl.html	/^    return this.frontModel.selectExecute$/;"	F
 return	077_creator_mode_set_energy/jscrawl.html	/^    return this.frontModel.selectMeta[key]$/;"	F
@@ -2421,6 +2451,8 @@ select	077_creator_mode_set_energy/jscrawl.html	/^  select: {$/;"	P
 selectAction	077_creator_mode_set_energy/jscrawl.html	/^        selectAction()$/;"	F
 selectAction	077_creator_mode_set_energy/jscrawl.html	/^    selectAction: null,$/;"	P
 selectAllowMultiple	077_creator_mode_set_energy/jscrawl.html	/^    selectAllowMultiple: true,$/;"	P
+selectAmount	077_creator_mode_set_energy/jscrawl.html	/^  selectAmount(afterSelect) {$/;"	F
+selectAmount	077_creator_mode_set_energy/jscrawl.html	/^  selectAmount(afterSelect) {$/;"	M
 selectCount	077_creator_mode_set_energy/jscrawl.html	/^        selectCount,$/;"	V
 selectCount	077_creator_mode_set_energy/jscrawl.html	/^    selectCount: null,$/;"	P
 selectCountList	077_creator_mode_set_energy/jscrawl.html	/^    selectCountList: [],$/;"	P
@@ -2474,6 +2506,8 @@ setMotionModeAttackOrMove	077_creator_mode_set_energy/jscrawl.html	/^    setMoti
 setMotionModeAttackOrMove	077_creator_mode_set_energy/jscrawl.html	/^  setMotionModeAttackOrMove: () => {$/;"	M
 setMotionModeMove	077_creator_mode_set_energy/jscrawl.html	/^    setMotionModeMove: [ 'M' ],$/;"	P
 setMotionModeMove	077_creator_mode_set_energy/jscrawl.html	/^  setMotionModeMove: () => {$/;"	M
+setPool	077_creator_mode_set_energy/jscrawl.html	/^  setPool(actor, pool, amount) {$/;"	F
+setPool	077_creator_mode_set_energy/jscrawl.html	/^  setPool(actor, pool, amount) {$/;"	M
 setScreen	077_creator_mode_set_energy/jscrawl.html	/^  setScreen(screenName) {$/;"	F
 setScreen	077_creator_mode_set_energy/jscrawl.html	/^  setScreen(screenName) {$/;"	M
 setSelectAction	077_creator_mode_set_energy/jscrawl.html	/^  setSelectAction(action) {$/;"	F
@@ -2654,6 +2688,7 @@ total	077_creator_mode_set_energy/jscrawl.html	/^  let total = 0$/;"	V
 total2	077_creator_mode_set_energy/jscrawl.html	/^      const [selected2, total2] = getGrowthSelectCount(value)$/;"	V
 totalWeight	077_creator_mode_set_energy/jscrawl.html	/^      totalWeight += weight$/;"	F
 totalWeight	077_creator_mode_set_energy/jscrawl.html	/^    let totalWeight = 0$/;"	V
+true	077_creator_mode_set_energy/jscrawl.html	/^        true,$/;"	V
 true	077_creator_mode_set_energy/jscrawl.html	/^      true,$/;"	V
 unequip	077_creator_mode_set_energy/jscrawl.html	/^  unequip: {$/;"	P
 unequipItem	077_creator_mode_set_energy/jscrawl.html	/^  unequipItem(item) {$/;"	F

@@ -1,6 +1,4 @@
-creator mode: 
-  allow multiple item creation, or disable multiselect
-  move CREATOR MODE to right of action
+separate experience potion drinking from growth focus menu
 core awakening
   show level
   only happens once at level 10
@@ -256,6 +254,9 @@ spawned items
     opal: changes to the energy type of the highest pressure energy the user has at the time they first hold it
     pearl: white
     ruby: red
+gems and runes (stones) can be merged into weapons
+  sockets aren't used
+  each insertion reduces durability (1/3)
 shops
   fixed shops
   monsters can't enter
@@ -599,14 +600,16 @@ potions
 item durability:
   when it's used, it reduces durability
   impossible to add durability
-  when item is destroyed, you get the stones back
+  when item is destroyed, stones are lost
   but you can slow down decay with runes or skill
   typical durability loss is 1 per usage
-  wands, consumables, books don't have durability
-  only armor and weapons have durability
-  average durability is 100
-    low durability is 20
-    high durability is 500
+  consumables, books don't have durability
+  only armor, weapons, and wands have durability
+  if players armor is hit, one piece of armor has it's duration reduced randomly
+  average durability is 1000
+    low durability is 200
+    high durability is 5000
+  when durability is gone, item has a 1/10 chance of breaking
 books
   can provide study disciplines
   or can boost skill aptitudes
@@ -669,6 +672,10 @@ skills
     stealth
     disguise
   misc
+    weapons
+      reduces durability loss when using weapons
+    armor
+      reduces durability loss when using armor
     fighting
     spellcasting
     cooking

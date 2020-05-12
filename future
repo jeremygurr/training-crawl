@@ -1,15 +1,3 @@
-experience potion drinking
-  fix rounding
-  force 12 points to be spent
-
-meditation enhances willpower energy or sense focus, not a separate focus
-  automatically happens when resting while focussed
-  med rate doubles each turn:
-    +0.2
-    +0.4
-    +0.8
-    +1.6
-    +3.2
 creator mode: 
   set energy pool
   advanceLevel

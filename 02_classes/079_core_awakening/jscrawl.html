@@ -141,7 +141,7 @@ const species = {
       willpower: -0.1,
     },
 
-    poolAwakeningLevels: [ 1, 10, 30 ]
+    poolAwakeningLevels: [ 10, 30, 90 ]
 
   },
 
@@ -931,7 +931,7 @@ const template = {
             sub: {
               sword: {
                 chanceWeight: 100, 
-                showAs: '⚔️',
+                showAs: '🗡',
                 hitChance: 0,
                 attackSpeed: 1,
                 damage: [{
@@ -969,7 +969,7 @@ const template = {
             sub: {
               spear: {
                 chanceWeight: 100, 
-                showAs: '𐃆',
+                showAs: '🔱',
                 hitChance: 0,
                 attackSpeed: -1,
                 damage: [{
@@ -1261,8 +1261,11 @@ const template = {
   // this will become mutable once cloned
   backModel: {
     actor: [],
-    seed: 'test',
-    randomizer: null,
+    seed: 'test2',
+    randomizers: {
+      awakening: null,
+      level: null,
+    },
     levelCaveGenerator: {
       openness: 0.2,
       wallThreshold: 0.5,
@@ -1470,6 +1473,7 @@ const keyMap = {
     creatorRegenLevel: [ 'r' ],
     creatorSetEnergy: [ 'e' ],
     creatorAdvanceLevel: [ 'x' ],
+    creatorAwakenPool: [ 'a' ],
   },
   select: {
     exitSimple: [ 'Escape' ],
@@ -1588,6 +1592,9 @@ const commandExecution = {
   creatorAdvanceLevel: () => {
     topController.creatorModeAdvanceLevel()
   },
+  creatorAwakenPool: () => {
+    topController.creatorModeAwakenPool()
+  },
   creatorModeCommand: () => {
     topController.creatorModeCommand()
   },
@@ -1612,18 +1619,20 @@ function random(possibilities) {
 class SeededRandomizer {
   constructor(seed) {
     this.generator = new Math.seedrandom(seed)
+    this.current = this.next()
   }
 
   next(possibilities = 0) {
+    this.current = this.generator()
     if(possibilities == 0) {
-      return this.generator()
+      return this.current
     } else {
-      return Math.floor(this.generator() * possibilities)
+      return Math.floor(this.current * possibilities)
     }
   }
 
   fork() {
-    return new SeededRandomizer(next())
+    return new SeededRandomizer(this.current)
   }
 }
 
@@ -1649,18 +1658,6 @@ class TopController {
 
   getAttribute(actor, key, boost) {
     return this.backController.getAttribute(actor, key, boost)
-  }
-
-  getPoolMax(actor, key, boost) {
-    return this.backController.getPoolMax(actor, key, boost)
-  }
-
-  getEnergyEfficiency(actor, key, boost) {
-    return this.backController.getEnergyEfficiency(actor, key, boost)
-  }
-
-  getChannelMaxFlow(actor, key, boost) {
-    return this.backController.getChannelMaxFlow(actor, key, boost)
   }
 
   getSkill(actor, key, boost) {
@@ -1734,12 +1731,49 @@ class TopController {
       return true
     })
 
-    const choice = random(possiblePools.length)
-    const pool = possiblePools[choice]
-    player.awakenedPools.push(pool)
+    const spectra = possiblePools.filter(pool => 
+      pool.type == poolTypes.spectra
+    )
 
-    fc.addMessage("You have awakened the " + pool.longName + " energy pool.")
-    fc.setStatusChanged(true)
+    const etherea = possiblePools.filter(pool => 
+      pool.type == poolTypes.etherea
+    )
+
+    const lumina = possiblePools.filter(pool => 
+      pool.type == poolTypes.lumina
+    )
+
+    const exotica = possiblePools.filter(pool => 
+      pool.type == poolTypes.exotica
+    )
+
+    const randomizer = bc.getRandomizer('awakening')
+
+    let choice
+
+    if(randomizer.next(4) > 0 && spectra.length) {
+      choice = spectra[randomizer.next(spectra.length)]
+    } else if(randomizer.next(4) > 0 && etherea.length) {
+      choice = etherea[randomizer.next(etherea.length)]
+    } else if(randomizer.next(4) > 0 && lumina.length) {
+      choice = lumina[randomizer.next(lumina.length)]
+    } else if(randomizer.next(4) > 0 && exotica.length) {
+      choice = exotica[randomizer.next(exotica.length)]
+    } else if(possiblePools.length) {
+      choice = possiblePools[randomizer.next(possiblePools.length)]
+    } else {
+      fc.addMessage("Awakening failed, no pools available")
+    }
+
+    if(choice) {
+      player.awakenedPools.push(choice)
+      fc.addMessage(
+        "You have awakened the "
+        + choice.longName 
+        + " energy pool."
+      )
+      fc.setStatusChanged(true)
+    }
 
   }
 
@@ -1810,7 +1844,7 @@ class TopController {
     this.editGrowthAllocationSelectSomething(
       'pool capacity',
       'poolCapacity',
-      (actor, key, boost) => topController.getPoolMax(actor, key, boost),
+      (actor, key, boost) => getPoolMax(actor, key, boost),
     )
   }
 
@@ -1818,7 +1852,7 @@ class TopController {
     this.editGrowthAllocationSelectSomething(
       'energy efficiency',
       'energyEfficiency',
-      (actor, key, boost) => topController.getEnergyEfficiency(actor, key, boost),
+      (actor, key, boost) => getEnergyEfficiency(actor, key, boost),
     )
   }
 
@@ -1826,7 +1860,7 @@ class TopController {
     this.editGrowthAllocationSelectSomething(
       'channel max flow',
       'channelMaxFlow',
-      (actor, key, boost) => topController.getChannelMaxFlow(actor, key, boost),
+      (actor, key, boost) => getChannelMaxFlow(actor, key, boost),
     )
   }
 
@@ -2133,7 +2167,7 @@ class TopController {
     if(!bc.getCreatorMode()) {
       fc.addMessage('Invalid command.')
     } else {
-      bc.buildLevel(bc.backModel.randomizer)
+      bc.buildLevel()
       fc.setLevelChanged(true)
     } 
     this.exitSimple()
@@ -2169,7 +2203,7 @@ class TopController {
     const selectCount = fc.getSelectCount()
     for(const pool of pools) {
       let amount = selectCount
-      let max = bc.getPoolMax(player, pool.name)
+      let max = getPoolMax(player, pool.name)
       if(selectedSubject) {
         amount = max * selectedSubject
       }
@@ -2177,6 +2211,17 @@ class TopController {
     }
     fc.setStatusChanged(true)
     this.exitSimple()
+  }
+
+  creatorModeAwakenPool() {
+    const bc = this.backController
+    const fc = this.frontController
+    if(!bc.getCreatorMode()) {
+      fc.addMessage('Invalid command.')
+    } else {
+      this.poolAwakening()
+      this.exitSimple()
+    } 
   }
 
   creatorModeAdvanceLevel() {
@@ -2906,14 +2951,27 @@ class TopController {
       list.push(colorize.rainbow('***** CREATOR MODE *****'))
     }
 
+    if(player.awakenedPools.length) {
+
+      let awakenedList = [ text('Awakened:') ]
+
+      player.awakenedPools.forEach(pool => {
+        awakenedList.push(text(' '))
+        awakenedList.push(colorizePoolName(pool))
+      })
+      
+      list.push(awakenedList)
+
+    }
+
     if(player.wpFocus) {
       list.push([
-        text('willpower focus: '),
+        text('Willpower Focus: '),
         colorizePoolName(player.wpFocus),
       ])
       if(player.medDepth) {
         list.push(
-          'meditation depth: '
+          'Meditation Depth: '
           + autoRound(player.medDepth)
         )
       }
@@ -2951,7 +3009,7 @@ class TopController {
       const current = '' + Math.floor(
         bc.getPoolCurrent(player, index)
       )
-      const max = '' + Math.floor(bc.getPoolMax(player, poolName))
+      const max = '' + Math.floor(getPoolMax(player, poolName))
       const currentChange = bc.getPoolCurrentChange(player, index)
       // const maxChange = bc.getPoolMaxChange(player, index)
       let currentChangeString = this.getChangeString(
@@ -3328,11 +3386,26 @@ class BackController {
 
   constructor() {
     this.backModel = _.cloneDeep(template.backModel)
-    const randomizer = new SeededRandomizer(this.backModel.seed)
+    this.initRandomizers()
     this.initItems()
-    this.buildLevel(randomizer)
+    this.buildLevel()
     this.initSpecies()
     this.initializePlayer()
+  }
+
+  initRandomizers() {
+    const bm = this.backModel
+    const randomizer = new SeededRandomizer(
+      this.backModel.seed
+    )
+    for(const key in bm.randomizers) {
+      bm.randomizers[key] = randomizer.fork()
+      randomizer.next()
+    }
+  }
+
+  getRandomizer(name) {
+    return this.backModel.randomizers[name]
   }
 
   getAttribute(actor, attribute, boost = 0) {
@@ -3435,7 +3508,7 @@ class BackController {
     for(let i = 0; i < poolChannels.length; i++) {
       const currentFlowMagnitude = actor.channelCurrent[i]
       const channel = poolChannels[i]
-      const max = this.getChannelMaxFlow(actor, channel.name)
+      const max = getChannelMaxFlow(actor, channel.name)
       const currentMaxFlow = getChannelFlowFromMagnitude(
         currentFlowMagnitude,
         max
@@ -3465,8 +3538,8 @@ class BackController {
 
     const fCur = actor.poolCurrent[poolIndexFrom]
     const tCur = actor.poolCurrent[poolIndexTo]
-    const fMax = this.getPoolMax(actor, from.name)
-    const tMax = this.getPoolMax(actor, to.name)
+    const fMax = getPoolMax(actor, from.name)
+    const tMax = getPoolMax(actor, to.name)
 
     const tierMultiplier = 10 ** (from.tier - to.tier)
     const fCur2 = fCur * tierMultiplier
@@ -3528,7 +3601,7 @@ class BackController {
 
   fillPool(actor, pool) {
     const poolIndex = pool.index
-    const maxValue = this.getPoolMax(actor, pool.name)
+    const maxValue = getPoolMax(actor, pool.name)
     if(actor.poolCurrent[poolIndex] < maxValue) {
       actor.poolCurrent[poolIndex] = maxValue
     }
@@ -3562,7 +3635,7 @@ class BackController {
 
       let oldValue = actor.poolCurrent[poolIndex]
       let newValue = oldValue + amount
-      let maxValue = this.getPoolMax(actor, energyType) * poolOverloadFactorMax
+      let maxValue = getPoolMax(actor, energyType) * poolOverloadFactorMax
 
       if(newValue < 0) {
         remaining = newValue
@@ -3586,7 +3659,7 @@ class BackController {
     return ('' + Math.floor(
       actor.poolCurrent[poolIndex] * 100
       /
-      this.getPoolMax(actor, poolIndexToName(poolIndex))
+      getPoolMax(actor, poolIndexToName(poolIndex))
       )
     ).padStart(3, '0')
   }
@@ -3603,72 +3676,6 @@ class BackController {
   getPoolMaxChange(actor, poolIndex) {
     return actor.poolMax[poolIndex] 
       - actor.poolMaxPast[poolIndex]
-  }
-
-  getPoolMax(actor, poolName, boost = 0) {
-    const poolIndex = poolNameToIndex(poolName)
-    let value = actor.poolMax[poolIndex]
-    if(actor.growth) {
-      let growth = actor.growth.poolCapacity[poolName]
-      growth += boost
-      value *= 1.25 ** growth
-    }
-    if(
-      actor.awakenedPools 
-      && actor.awakenedPools.find(x => x == pools[poolName])
-    ) {
-      value *= 3
-    }
-    return Math.floor(value)
-  }
-
-  getEnergyEfficiency(actor, poolName, boost = 0) {
-    const poolIndex = poolNameToIndex(poolName)
-    let value = 
-      actor.species.energyEfficiency[poolName]
-      || actor.species.energyEfficiency.default
-    if(actor.growth) {
-      let growth = actor.growth.energyEfficiency[poolName]
-      growth += boost
-      value *= 1.25 ** growth
-    }
-    if(
-      actor.awakenedPools 
-      && actor.awakenedPools.find(x => x == pools[poolName])
-    ) {
-      value *= 3
-    }
-    return autoRound(value)
-  }
-
-  getChannelMaxFlow(actor, channelName, boost = 0) {
-    const channel = getPoolChannelByName(channelName)
-    const channelIndex = channel.index
-    let value = actor.channelMax[channelIndex]
-    if(actor.growth) {
-      let growth = actor.growth.channelMaxFlow[channelName]
-      growth += boost
-      value *= 1.25 ** growth
-    }
-    let awakened = false
-    if(actor.awakenedPools) {
-      out: for(let aPool of actor.awakenedPools) {
-        for(let cPool of channel.from) {
-          if(cPool == aPool) {
-            awakened = true
-            break out
-          }
-        }
-        for(let cPool of channel.to) {
-          if(cPool == aPool) {
-            awakened = true
-            break out
-          }
-        }
-      }
-    }
-    if(awakened) value *= 3
-    return autoRound(value)
   }
 
   getSkill(actor, skillName, boost = 0) {
@@ -4090,10 +4097,10 @@ class BackController {
     return subjectPos.adjacent(bm.levelSize)
   }
 
-  buildLevel(randomizer) {
+  buildLevel() {
 
     const bm = this.backModel
-    bm.randomizer = randomizer
+    const randomizer = this.getRandomizer('level')
 
     bm.level = generateLevelSimpleCaves(
       [], 
@@ -4359,6 +4366,10 @@ class FrontController {
     this.addMessage(
       keyMap.creator.creatorAdvanceLevel 
     + ' - advance experience level'
+    )
+    this.addMessage(
+      keyMap.creator.creatorAwakenPool
+    + ' - awaken pool'
     )
   }
 
@@ -6483,14 +6494,80 @@ function getEffectivePressures(actor, fromPool, toPool) {
   const poolIndexTo = poolNameToIndex(toPool.name)
   const fCur = actor.poolCurrent[poolIndexFrom]
   const tCur = actor.poolCurrent[poolIndexTo]
-  const fMax = actor.poolMax[poolIndexFrom]
-  const tMax = actor.poolMax[poolIndexTo]
+  const fMax = getPoolMax(actor, poolIndexToName(poolIndexFrom))
+  const tMax = getPoolMax(actor, poolIndexToName(poolIndexTo))
   const bias = getBias(actor, fromPool, toPool)
   const upBias = bias.upBias
   const downBias = bias.downBias
   const fPress = fCur / (fMax * (1 + upBias))
   const tPress = tCur / (tMax * (1 + downBias))
   return [fPress, tPress]
+}
+
+function getPoolMax(actor, poolName, boost = 0) {
+  const poolIndex = poolNameToIndex(poolName)
+  let value = actor.poolMax[poolIndex]
+  if(actor.growth) {
+    let growth = actor.growth.poolCapacity[poolName]
+    growth += boost
+    value *= 1.25 ** growth
+  }
+  if(
+    actor.awakenedPools 
+    && actor.awakenedPools.find(x => x == pools[poolName])
+  ) {
+    value *= 3
+  }
+  return Math.floor(value)
+}
+
+function getEnergyEfficiency(actor, poolName, boost = 0) {
+  const poolIndex = poolNameToIndex(poolName)
+  let value = 
+    actor.species.energyEfficiency[poolName]
+    || actor.species.energyEfficiency.default
+  if(actor.growth) {
+    let growth = actor.growth.energyEfficiency[poolName]
+    growth += boost
+    value *= 1.25 ** growth
+  }
+  if(
+    actor.awakenedPools 
+    && actor.awakenedPools.find(x => x == pools[poolName])
+  ) {
+    value *= 3
+  }
+  return autoRound(value)
+}
+
+function getChannelMaxFlow(actor, channelName, boost = 0) {
+  const channel = getPoolChannelByName(channelName)
+  const channelIndex = channel.index
+  let value = actor.channelMax[channelIndex]
+  if(actor.growth) {
+    let growth = actor.growth.channelMaxFlow[channelName]
+    growth += boost
+    value *= 1.25 ** growth
+  }
+  let awakened = false
+  if(actor.awakenedPools) {
+    out: for(let aPool of actor.awakenedPools) {
+      for(let cPool of channel.from) {
+        if(cPool == aPool) {
+          awakened = true
+          break out
+        }
+      }
+      for(let cPool of channel.to) {
+        if(cPool == aPool) {
+          awakened = true
+          break out
+        }
+      }
+    }
+  }
+  if(awakened) value *= 3
+  return autoRound(value)
 }
 
 function text(t) {

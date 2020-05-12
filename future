@@ -1,5 +1,6 @@
 experience potion drinking
-  implement getPoolChannelByName
+  fix rounding
+  force 12 points to be spent
 
 meditation enhances willpower energy or sense focus, not a separate focus
   automatically happens when resting while focussed

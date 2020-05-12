@@ -68,6 +68,7 @@ amulet	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        amulet: 
 apple	075_experience_gain_add_energy_efficiency/jscrawl.html	/^          apple: { $/;"	P
 applyEnergyDelta	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  applyEnergyDelta(actor) {$/;"	F
 applyEnergyDelta	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  applyEnergyDelta(actor) {$/;"	M
+aptitudes	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    aptitudes: {$/;"	P
 armor	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        armor: [],$/;"	P
 article	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    article = count$/;"	F
 attack	075_experience_gain_add_energy_efficiency/jscrawl.html	/^            attack: { min: 0, max: 1 }, $/;"	P
@@ -76,8 +77,7 @@ attackSpeed	075_experience_gain_add_energy_efficiency/jscrawl.html	/^           
 attackSpeed	075_experience_gain_add_energy_efficiency/jscrawl.html	/^                attackSpeed: 1,$/;"	P
 attributes	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        attributes: { },$/;"	P
 attributes	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    attributes: {$/;"	P
-attributesSelected	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    const [ attributesSelected, attributesTotal ] = $/;"	V
-attributesTotal	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    const [ attributesSelected, attributesTotal ] = $/;"	V
+autoRound	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function autoRound(n) {$/;"	F
 average	075_experience_gain_add_energy_efficiency/jscrawl.html	/^                  average: 1$/;"	P
 average	075_experience_gain_add_energy_efficiency/jscrawl.html	/^                  average: 2$/;"	P
 averageValue	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        let averageValue = values.reduce((a,b) => a + b, 0) \/ values.length$/;"	F
@@ -168,11 +168,9 @@ changeStatusMode	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    ch
 changeStatusMode	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  changeStatusMode() {$/;"	F
 changeStatusMode	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  changeStatusMode() {$/;"	M
 changeStatusMode	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  changeStatusMode: () => {$/;"	M
-changeString	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      changeString = prefix + '+' + Math.floor(change * 1000) \/ 1000$/;"	F
-changeString	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      changeString = prefix + '+' + Math.floor(change)$/;"	F
-changeString	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      changeString = prefix + '-' + Math.floor(-change * 1000) \/ 1000$/;"	F
-changeString	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      changeString = prefix + '-' + Math.floor(-change)$/;"	F
-changeString	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let changeString = ''$/;"	V
+changeString	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        changeString = prefix + '+' + autoRound(change)$/;"	F
+changeString	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        changeString = prefix + '-' + autoRound(-change)$/;"	F
+changeString	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      changeString = ''$/;"	F
 changed	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      changed = fc.getLevelChanged() $/;"	F
 changed	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      changed = fc.getMessagesChanged() $/;"	F
 changed	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      changed = fc.getStatusChanged() $/;"	F
@@ -190,8 +188,8 @@ channelCommandSelectPoolType	075_experience_gain_add_energy_efficiency/jscrawl.h
 channelCommandSelectPoolType	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  channelCommandSelectPoolType() {$/;"	M
 channelCurrent	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      channelCurrent: [],  \/\/ integers of openness of each channel$/;"	P
 channelMax	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      channelMax: [],      \/\/ integers of max value of each channel$/;"	P
+channelMaxFlow	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        channelMaxFlow: { },$/;"	P
 channelString	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  let channelString = [ $/;"	A
-channels	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        channels: { },$/;"	P
 channelsToOutput	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let channelsToOutput = []$/;"	A
 characterToDraw	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        characterToDraw = cell.floorType.base.showAs;$/;"	F
 characterToDraw	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        characterToDraw = cell.occupiedBy.base.showAs;$/;"	F
@@ -258,7 +256,6 @@ const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^          const c
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^          const from = channel.from[f]$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^          const out = type + ' ' + (j+1)$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^          const pool = poolTypePools[p]$/;"	F
-const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        const [growthSelectCount, _2] = $/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        const [growthSelectCount] = $/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        const channel = poolChannels[i]$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        const channelIndex = pool.channelIndexes[c]$/;"	F
@@ -280,6 +277,7 @@ const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const cell 
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const cell = bc.getCell(target)$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const cell = level[levelPos.x][levelPos.y]$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const channel = poolChannels[i]$/;"	F
+const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const channelName = channel.name$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const countedItem = { base: template }$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const current = '' + Math.floor($/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const currentChange = bc.getPoolCurrentChange(player, index)$/;"	F
@@ -297,8 +295,7 @@ const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const item 
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const items = fm.selectNameList$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const levelPos = fc.windowCellPosToLevel(window, windowPos)$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const max = '' + Math.floor(bc.getPoolMax(player, poolName))$/;"	F
-const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const max = actor.channelMax[i]$/;"	F
-const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const maxChange = bc.getPoolMaxChange(player, index)$/;"	F
+const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const max = this.getChannelMaxFlow(actor, channel.name)$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const maxCount = fm.selectCountMaxList[i]$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const name = items[i]$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const percent = bc.getPoolPercent(player, index)$/;"	F
@@ -307,7 +304,10 @@ const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const playe
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const playerOldPos = bc.getPlayerPos()$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const pool = pools[p]$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const pool = pools[poolName]$/;"	F
+const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const poolType = poolTypes[i]$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const remaining = this.addEnergy(actor, 'willpower', -1)$/;"	F
+const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const skill = skills[i]$/;"	F
+const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const skillType = skillTypes[i]$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const statusList = this.getStatusList()$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const style = textToDrawObject.style || '#000000'$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const target = fc.getTarget().pos$/;"	F
@@ -321,8 +321,7 @@ const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const textW
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const type = inventoryTypes[key]$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const value = growthSelection[key]$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const windowName = fc.windowToWindowName(screen, window)$/;"	F
-const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    const [ attributesSelected, attributesTotal ] = $/;"	F
-const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    const [ poolCapacitySelected, poolCapacityTotal ] = $/;"	F
+const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    const [ selected, total ] = $/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    const [growthSelectCount, _] = $/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    const [items, counts] = this.getSelectedSubjectsAndCounts()$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    const action = subject.action$/;"	F
@@ -341,6 +340,8 @@ const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    const cell = 
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    const cell = this.getCell(pos)$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    const cellBoundary = this.getCellPixelRect(screen, window, windowPos).add(new Pair(0,-1))$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    const cellSizePixels = p.window.cellPixelDimensions$/;"	F
+const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    const channel = poolChannels[i]$/;"	F
+const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    const channelIndex = getPoolChannelByName(channelName).index$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    const classified = classifiedSpaces[adjacentPos.x][adjacentPos.y]$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    const code = key.charCodeAt(0)$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    const counts = subject.counts$/;"	F
@@ -509,6 +510,8 @@ const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^const poolOverloa
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^const poolTypes = {$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^const pools = {$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^const screens = {$/;"	F
+const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^const skillTypes = {$/;"	F
+const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^const skills = {$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^const species = {$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^const template = {$/;"	F
 const	075_experience_gain_add_energy_efficiency/jscrawl.html	/^const topController = new TopController()$/;"	F
@@ -590,6 +593,7 @@ debug	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function debug(me
 default	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      default: 1,$/;"	P
 default	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      default: 100,$/;"	P
 default	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  default: {$/;"	P
+defense	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  defense: {},$/;"	P
 describeItem	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function describeItem(item) {$/;"	F
 dexterity	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      dexterity: 10,$/;"	P
 diamond	075_experience_gain_add_energy_efficiency/jscrawl.html	/^              diamond: 20,$/;"	P
@@ -603,6 +607,7 @@ direction	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    direction
 dirtFloor	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    dirtFloor: { $/;"	P
 divide	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  divide(pair) {$/;"	F
 divide	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  divide(pair) {$/;"	M
+dodge	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  dodge: { type: skillTypes.defense }$/;"	P
 drawEmptyRect	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  drawEmptyRect(rect, style = "#000000") {$/;"	F
 drawEmptyRect	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  drawEmptyRect(rect, style = "#000000") {$/;"	M
 drawFilledRect	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  drawFilledRect(rect, style = "#000000") {$/;"	F
@@ -631,8 +636,16 @@ drinkExperiencePotionSelect	075_experience_gain_add_energy_efficiency/jscrawl.ht
 drinkExperiencePotionSelectAttributes	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  drinkExperiencePotionSelectAttributes() {$/;"	F
 drinkExperiencePotionSelectAttributes	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  drinkExperiencePotionSelectAttributes() {$/;"	M
 drinkExperiencePotionSelectCategory	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  drinkExperiencePotionSelectCategory($/;"	F
+drinkExperiencePotionSelectCategory_addCategory	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  drinkExperiencePotionSelectCategory_addCategory($/;"	F
+drinkExperiencePotionSelectChannelMaxFlow	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  drinkExperiencePotionSelectChannelMaxFlow() {$/;"	F
+drinkExperiencePotionSelectChannelMaxFlow	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  drinkExperiencePotionSelectChannelMaxFlow() {$/;"	M
+drinkExperiencePotionSelectEnergyEfficiency	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  drinkExperiencePotionSelectEnergyEfficiency() {$/;"	F
+drinkExperiencePotionSelectEnergyEfficiency	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  drinkExperiencePotionSelectEnergyEfficiency() {$/;"	M
 drinkExperiencePotionSelectPoolCapacity	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  drinkExperiencePotionSelectPoolCapacity() {$/;"	F
 drinkExperiencePotionSelectPoolCapacity	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  drinkExperiencePotionSelectPoolCapacity() {$/;"	M
+drinkExperiencePotionSelectSkills	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  drinkExperiencePotionSelectSkills() {$/;"	F
+drinkExperiencePotionSelectSkills	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  drinkExperiencePotionSelectSkills() {$/;"	M
+drinkExperiencePotionSelectSomething	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  drinkExperiencePotionSelectSomething($/;"	F
 drinkPotion	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  drinkPotion(item, count) {$/;"	F
 drinkPotion	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  drinkPotion(item, count) {$/;"	M
 drop	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  drop: {$/;"	P
@@ -684,8 +697,9 @@ err	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      err("Unknown 
 err	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      err($/;"	F
 err	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      err('Invalid inventory type: ' + type)$/;"	F
 err	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      err('Not food: ' + getNameOf(null, item))$/;"	F
+err	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    err("Couldn't find channel " + channelName)$/;"	F
 err	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function err(message) {$/;"	F
-etherea	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  etherea: { name: 'etherea', key: 'e', },$/;"	P
+etherea	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  etherea: { key: 'e', },$/;"	P
 execute	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    execute: (item) => {$/;"	M
 execute	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    execute: (item, count) => {$/;"	M
 executeAction	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        executeAction()$/;"	F
@@ -709,7 +723,7 @@ exitSimple	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  exitSimple
 exitSimple	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  exitSimple: () => {$/;"	M
 exitTargetMode	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    exitTargetMode: [ 'Escape' ],$/;"	P
 exitTargetMode	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  exitTargetMode: () => {$/;"	M
-exotica	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  exotica: { name: 'exotica', key: 'x', },$/;"	P
+exotica	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  exotica: { key: 'x', },$/;"	P
 expand	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  expand(pixels) {$/;"	F
 expand	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  expand(pixels) {$/;"	M
 expandCrack	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function expandCrack(level, map, classifiedSpaces, wallThreshold, startPos) {$/;"	F
@@ -723,6 +737,8 @@ fRoom	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        fRoom,$/;
 fRoom	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      fRoom = fCur2$/;"	F
 fRoom	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      fRoom = fMax2 * poolOverloadFactorMax - fCur2$/;"	F
 false	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      false,$/;"	V
+fill	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      fill(this.frontModel.selectFlags, false)$/;"	F
+fill	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function fill(objectOrArray, value) {$/;"	F
 fillEnergy	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  fillEnergy(actor, poolTypeToFill = null, poolToFill = null) {$/;"	F
 fillEnergy	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  fillEnergy(actor, poolTypeToFill = null, poolToFill = null) {$/;"	M
 fillPool	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  fillPool(actor, pool) {$/;"	F
@@ -803,6 +819,8 @@ for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(const attri
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(const attribute in player.species.attributes) {$/;"	M
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(const cellPos of cells) {$/;"	F
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(const cellPos of cells) {$/;"	M
+for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(const channel of poolChannels) {$/;"	F
+for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(const channel of poolChannels) {$/;"	M
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(const key in growth) {$/;"	F
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(const key in growth) {$/;"	M
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(const key in growthSelection) {$/;"	F
@@ -813,6 +831,8 @@ for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(const poolN
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(const poolName in pools) {$/;"	M
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(const poolName of poolList) {$/;"	F
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(const poolName of poolList) {$/;"	M
+for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(const skill in skills) {$/;"	F
+for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(const skill in skills) {$/;"	M
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(const subject of Object.values(group)) {$/;"	F
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(const subject of Object.values(group)) {$/;"	M
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(const window of Object.values(screen.window)) {$/;"	F
@@ -821,6 +841,12 @@ for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(const windo
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(const windowPos of cells) {$/;"	M
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(i = 0; i < poolChannels.length; i++) {$/;"	F
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(i = 0; i < poolChannels.length; i++) {$/;"	M
+for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(i in poolTypes) {$/;"	F
+for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(i in poolTypes) {$/;"	M
+for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(i in skillTypes) {$/;"	F
+for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(i in skillTypes) {$/;"	M
+for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(i in skills) {$/;"	F
+for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(i in skills) {$/;"	M
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(index = 0; index < group.length; index++) {$/;"	F
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(index = 0; index < group.length; index++) {$/;"	M
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(let [poolName, pool] of Object.entries(pools)) {$/;"	F
@@ -829,8 +855,8 @@ for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(let [type, 
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(let [type, value] of Object.entries(equip)) {$/;"	M
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(let action of actions) {$/;"	F
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(let action of actions) {$/;"	M
-for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(let attribute in growthSelection.attributes) {$/;"	F
-for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(let attribute in growthSelection.attributes) {$/;"	M
+for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(let attribute in growthSelection[growthKey]) {$/;"	F
+for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(let attribute in growthSelection[growthKey]) {$/;"	M
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(let c = this.x - 1; c <= this.x + 1; c++) {$/;"	F
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(let c = this.x - 1; c <= this.x + 1; c++) {$/;"	M
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(let channelIndex of fc.getSelectMeta('channelIndexes')) {$/;"	F
@@ -895,8 +921,6 @@ for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(let p = 0; 
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(let p = 0; p < pools.length; p++) {$/;"	M
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(let pool of Object.values(subjectPools)) {$/;"	F
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(let pool of Object.values(subjectPools)) {$/;"	M
-for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(let poolName in growthSelection.poolCapacity) {$/;"	F
-for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(let poolName in growthSelection.poolCapacity) {$/;"	M
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(let poolType of Object.values(poolTypes)) {$/;"	F
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(let poolType of Object.values(poolTypes)) {$/;"	M
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(let r = 0; r < column.length; r++) {$/;"	F
@@ -915,6 +939,8 @@ for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(let y = 0; 
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(let y = 0; y < level[x].length; y++) {$/;"	M
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(let y = 0; y < toHeight; y++) {$/;"	F
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    for(let y = 0; y < toHeight; y++) {$/;"	M
+for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  for(i in objectOrArray) {$/;"	F
+for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  for(i in objectOrArray) {$/;"	M
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  for(let adjacentPos of adjacentList) {$/;"	F
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  for(let adjacentPos of adjacentList) {$/;"	M
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  for(let adjacentPos of startPos.adjacent(levelSize)) {$/;"	F
@@ -931,6 +957,8 @@ for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  for(let fromX = 0
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  for(let fromX = 0; fromX < fromWidth; fromX++) {$/;"	M
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  for(let i = 0; i < list.length; i++) {$/;"	F
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  for(let i = 0; i < list.length; i++) {$/;"	M
+for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  for(let i in poolChannels) {$/;"	F
+for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  for(let i in poolChannels) {$/;"	M
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  for(let item of list) {$/;"	F
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  for(let item of list) {$/;"	M
 for	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  for(let key in growthSelection) {$/;"	F
@@ -970,7 +998,9 @@ from	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    from: [pools.v
 from	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    from: [pools.willpower],$/;"	P
 from	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    from: [pools.yellow],$/;"	P
 fromMap	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      fromMap = toMap$/;"	F
+fromName	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        fromName = fromName[0] + '*'$/;"	F
 frontModel	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  frontModel: {$/;"	P
+function	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function autoRound(n) {$/;"	F
 function	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function classifyLevelSpaces(level, pos, classifiedSpaces = null) {$/;"	F
 function	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function clearArray(array) {$/;"	F
 function	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function colorizePoolName(pool) {$/;"	F
@@ -981,6 +1011,7 @@ function	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function debug
 function	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function describeItem(item) {$/;"	F
 function	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function err(message) {$/;"	F
 function	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function expandCrack(level, map, classifiedSpaces, wallThreshold, startPos) {$/;"	F
+function	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function fill(objectOrArray, value) {$/;"	F
 function	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function findBestCrack(level, map, classifiedSpaces, wallThreshold) {$/;"	F
 function	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function findEmptyCellCentrally(level, randomizer, bounds = null) {$/;"	F
 function	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function findEmptyCellSimple(level) {$/;"	F
@@ -995,6 +1026,7 @@ function	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function getCh
 function	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function getEffectivePressures(actor, fromPool, toPool) {$/;"	F
 function	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function getGrowthSelectCount(growthSelection) {$/;"	F
 function	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function getNameOf(article, item, verb) {$/;"	F
+function	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function getPoolChannelByName(channelName) {$/;"	F
 function	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function itemsEqual(item1, item2) {$/;"	F
 function	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function mapToLevel(map, level, wallThreshold, size) {$/;"	F
 function	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function poolToIndex(poolName) {$/;"	F
@@ -1020,6 +1052,9 @@ getActors	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getActors()
 getActors	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getActors() {$/;"	M
 getAttribute	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getAttribute(actor, attribute, boost = 0) {$/;"	F
 getAttribute	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getAttribute(actor, attribute, boost = 0) {$/;"	M
+getAttribute	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getAttribute(actor, key, boost) {$/;"	F
+getAttribute	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getAttribute(actor, key, boost) {$/;"	M
+getAttributeFunction	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    getAttributeFunction,$/;"	V
 getAttributes	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getAttributes(actor) {$/;"	F
 getAttributes	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getAttributes(actor) {$/;"	M
 getBias	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function getBias(actor, fromPool, toPool) {$/;"	F
@@ -1034,12 +1069,20 @@ getChannelFlowFromMagnitude	075_experience_gain_add_energy_efficiency/jscrawl.ht
 getChannelFlowFromMagnitude	075_experience_gain_add_energy_efficiency/jscrawl.html	/^          getChannelFlowFromMagnitude(i, 10000)$/;"	F
 getChannelFlowFromMagnitude	075_experience_gain_add_energy_efficiency/jscrawl.html	/^          getChannelFlowFromMagnitude(i, 100000)$/;"	F
 getChannelFlowFromMagnitude	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function getChannelFlowFromMagnitude(mag, max) {$/;"	F
+getChannelMaxFlow	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getChannelMaxFlow(actor, channelName, boost = 0) {$/;"	F
+getChannelMaxFlow	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getChannelMaxFlow(actor, channelName, boost = 0) {$/;"	M
+getChannelMaxFlow	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getChannelMaxFlow(actor, key, boost) {$/;"	F
+getChannelMaxFlow	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getChannelMaxFlow(actor, key, boost) {$/;"	M
 getChannelString	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function getChannelString(player, from, to) {$/;"	F
 getCreatorMode	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getCreatorMode() {$/;"	F
 getCreatorMode	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getCreatorMode() {$/;"	M
 getCurrentScreen	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getCurrentScreen() {$/;"	F
 getCurrentScreen	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getCurrentScreen() {$/;"	M
 getEffectivePressures	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function getEffectivePressures(actor, fromPool, toPool) {$/;"	F
+getEnergyEfficiency	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getEnergyEfficiency(actor, key, boost) {$/;"	F
+getEnergyEfficiency	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getEnergyEfficiency(actor, key, boost) {$/;"	M
+getEnergyEfficiency	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getEnergyEfficiency(actor, poolName, boost = 0) {$/;"	F
+getEnergyEfficiency	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getEnergyEfficiency(actor, poolName, boost = 0) {$/;"	M
 getEquipment	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getEquipment() {$/;"	F
 getEquipment	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getEquipment() {$/;"	M
 getFloorItemsAt	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getFloorItemsAt(pos) {$/;"	F
@@ -1054,8 +1097,7 @@ getGrowthPerLevel	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  get
 getGrowthPerLevel	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getGrowthPerLevel() {$/;"	M
 getGrowthSelectCount	075_experience_gain_add_energy_efficiency/jscrawl.html	/^          getGrowthSelectCount(growthSelection)$/;"	F
 getGrowthSelectCount	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      getGrowthSelectCount(growthSelection)$/;"	F
-getGrowthSelectCount	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      getGrowthSelectCount(growthSelection.attributes)$/;"	F
-getGrowthSelectCount	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      getGrowthSelectCount(growthSelection.poolCapacity)$/;"	F
+getGrowthSelectCount	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      getGrowthSelectCount(growthSelection[name])$/;"	F
 getGrowthSelectCount	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function getGrowthSelectCount(growthSelection) {$/;"	F
 getGrowthSelection	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getGrowthSelection() {$/;"	F
 getGrowthSelection	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getGrowthSelection() {$/;"	M
@@ -1078,12 +1120,15 @@ getPlayerPos	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getPlaye
 getPlayerPos	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getPlayerPos() {$/;"	M
 getPlayerSpecies	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getPlayerSpecies() {$/;"	F
 getPlayerSpecies	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getPlayerSpecies() {$/;"	M
+getPoolChannelByName	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function getPoolChannelByName(channelName) {$/;"	F
 getPoolCurrent	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getPoolCurrent(actor, poolIndex) {$/;"	F
 getPoolCurrent	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getPoolCurrent(actor, poolIndex) {$/;"	M
 getPoolCurrentChange	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getPoolCurrentChange(actor, poolIndex) {$/;"	F
 getPoolCurrentChange	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getPoolCurrentChange(actor, poolIndex) {$/;"	M
 getPoolDigits	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getPoolDigits(actor) {$/;"	F
 getPoolDigits	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getPoolDigits(actor) {$/;"	M
+getPoolMax	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getPoolMax(actor, key, boost) {$/;"	F
+getPoolMax	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getPoolMax(actor, key, boost) {$/;"	M
 getPoolMax	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getPoolMax(actor, poolName, boost = 0) {$/;"	F
 getPoolMax	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getPoolMax(actor, poolName, boost = 0) {$/;"	M
 getPoolMaxChange	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getPoolMaxChange(actor, poolIndex) {$/;"	F
@@ -1110,6 +1155,10 @@ getSelectedSubjects	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  g
 getSelectedSubjects	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getSelectedSubjects() {$/;"	M
 getSelectedSubjectsAndCounts	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getSelectedSubjectsAndCounts() {$/;"	F
 getSelectedSubjectsAndCounts	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getSelectedSubjectsAndCounts() {$/;"	M
+getSkill	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getSkill(actor, key, boost) {$/;"	F
+getSkill	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getSkill(actor, key, boost) {$/;"	M
+getSkill	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getSkill(actor, skillName, boost = 0) {$/;"	F
+getSkill	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getSkill(actor, skillName, boost = 0) {$/;"	M
 getStatusChanged	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getStatusChanged() {$/;"	F
 getStatusChanged	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getStatusChanged() {$/;"	M
 getStatusList	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  getStatusList() {$/;"	F
@@ -1148,8 +1197,8 @@ green	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  green:      { b
 green	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  green: { $/;"	P
 growth	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      growth += boost$/;"	F
 growth	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      growth: {$/;"	P
+growthKey	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    growthKey,$/;"	V
 growthPerLevel	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    growthPerLevel$/;"	V
-growthSelectCount	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        const [growthSelectCount, _2] = $/;"	V
 growthSelectCount	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        const [growthSelectCount] = $/;"	V
 growthSelectCount	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    const [growthSelectCount, _] = $/;"	V
 growthSelection	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      growthSelection: { },$/;"	P
@@ -1237,6 +1286,7 @@ if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        if(selected)
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        if(selectedCount == null) selectedCount = 0$/;"	F
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        if(value > wallThreshold && surroundingWalls < requireSurroundingWalls) {$/;"	F
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        if(value > wallThreshold && surroundingWalls < requireSurroundingWalls) {$/;"	M
+if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        if(value) growth[key]++$/;"	F
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        if(value) {$/;"	F
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        if(value) {$/;"	M
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        if(x+1 < toWidth && toMap[x+1][y] != null) {$/;"	F
@@ -1289,6 +1339,14 @@ if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      if(cell.occupi
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      if(cell.occupiedBy == player) {$/;"	M
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      if(cell.occupiedBy) {$/;"	F
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      if(cell.occupiedBy) {$/;"	M
+if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      if(change >= 0) {$/;"	F
+if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      if(change >= 0) {$/;"	M
+if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      if(channel.from.length > 1) {$/;"	F
+if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      if(channel.from.length > 1) {$/;"	M
+if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      if(channel.to.length > 1) {$/;"	F
+if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      if(channel.to.length > 1) {$/;"	M
+if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      if(channel.to[0].type == poolTypes.interna) {$/;"	F
+if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      if(channel.to[0].type == poolTypes.interna) {$/;"	M
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      if(classifiedSpaces[x][y] == false && !level[x][y].occupiedBy) {$/;"	F
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      if(classifiedSpaces[x][y] == false && !level[x][y].occupiedBy) {$/;"	M
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      if(complexLength(list.slice(0, i)) <= pos) {$/;"	F
@@ -1358,8 +1416,6 @@ if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      if(p.textToDra
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      if(player.medDepth > 4) player.medDepth = 4$/;"	F
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      if(pool.type == poolTypes.interna) {$/;"	F
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      if(pool.type == poolTypes.interna) {$/;"	M
-if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      if(poolChannels[i].to[0].type == poolTypes.interna) {$/;"	F
-if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      if(poolChannels[i].to[0].type == poolTypes.interna) {$/;"	M
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      if(poolIndex == -1) {$/;"	F
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      if(poolIndex == -1) {$/;"	M
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      if(poolTypeToFill && pool.type == poolTypeToFill) {$/;"	F
@@ -1449,10 +1505,12 @@ if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    if(cell.occupied
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    if(cell.occupiedBy) {$/;"	M
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    if(change != 0 && target == player) {$/;"	F
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    if(change != 0 && target == player) {$/;"	M
-if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    if(change >= 1) {$/;"	F
-if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    if(change >= 1) {$/;"	M
+if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    if(change < 0.001 && change > -0.001) {$/;"	F
+if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    if(change < 0.001 && change > -0.001) {$/;"	M
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    if(changed || forceRefresh) {$/;"	F
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    if(changed || forceRefresh) {$/;"	M
+if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    if(channel.name == channelName) {$/;"	F
+if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    if(channel.name == channelName) {$/;"	M
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    if(classifiedSpaces[adjacentPos.x][adjacentPos.y]) {$/;"	F
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    if(classifiedSpaces[adjacentPos.x][adjacentPos.y]) {$/;"	M
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    if(count < 1) count = 1$/;"	F
@@ -1593,6 +1651,8 @@ if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    if(targetActor.h
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    if(targetActor.health == null) {$/;"	M
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    if(this.frontModel.fontStyle) {$/;"	F
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    if(this.frontModel.fontStyle) {$/;"	M
+if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    if(this.frontModel.selectCount != null) {$/;"	F
+if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    if(this.frontModel.selectCount != null) {$/;"	M
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    if(typeof p.textToDraw == 'string') {$/;"	F
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    if(typeof p.textToDraw == 'string') {$/;"	M
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    if(typeof value == 'boolean') {$/;"	F
@@ -1640,8 +1700,12 @@ if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  if(item.base.type)
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  if(item.base.type) {$/;"	M
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  if(item.health) {$/;"	F
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  if(item.health) {$/;"	M
+if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  if(n >= 10) {$/;"	F
+if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  if(n >= 10) {$/;"	M
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  if(pos) {$/;"	F
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  if(pos) {$/;"	M
+if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  if(result == null) {$/;"	F
+if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  if(result == null) {$/;"	M
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  if(result) allResults.push(result)$/;"	F
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  if(typeof string == 'string') {$/;"	F
 if	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  if(typeof string == 'string') {$/;"	M
@@ -1662,7 +1726,6 @@ indigo	075_experience_gain_add_energy_efficiency/jscrawl.html	/^              in
 indigo	075_experience_gain_add_energy_efficiency/jscrawl.html	/^              indigo: 2,$/;"	P
 indigo	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  indigo:     { bgStyle: '#583FFF', style: '#FFF' },$/;"	P
 indigo	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  indigo: { $/;"	P
-inherited	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        inherited = found.inherited$/;"	F
 initItems	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  initItems(inherited = {}, itemBase = template.generated.sub) {$/;"	F
 initItems	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  initItems(inherited = {}, itemBase = template.generated.sub) {$/;"	M
 initSpecies	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  initSpecies() {$/;"	F
@@ -1672,7 +1735,7 @@ initializePlayer	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  init
 innerList	075_experience_gain_add_energy_efficiency/jscrawl.html	/^              innerList = []$/;"	F
 integrity	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        integrity: 1,$/;"	P
 intelligence	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      intelligence: 10,$/;"	P
-interna	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  interna: { name: 'interna', key: 'i', },$/;"	P
+interna	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  interna: { key: 'i', },$/;"	P
 inventory	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      inventory: {$/;"	P
 inventoryTypes	075_experience_gain_add_energy_efficiency/jscrawl.html	/^const inventoryTypes = {$/;"	O
 invertMultiSelect	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    invertMultiSelect: [ ',' ],$/;"	P
@@ -1756,14 +1819,17 @@ let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      let found = f
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      let found = list.indexOf(item)$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      let found = subjects[0]$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      let fromMapValue = fromMap[fromX][fromY]$/;"	F
+let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      let fromName = channel.from[0].shortName$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      let growth = actor.growth.attributes[attribute]$/;"	F
+let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      let growth = actor.growth.channelMaxFlow[channelName]$/;"	F
+let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      let growth = actor.growth.energyEfficiency[poolName]$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      let growth = actor.growth.poolCapacity[poolName]$/;"	F
+let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      let growth = actor.growth.skills[skillName]$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      let index$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      let indexes = []$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      let item = selectedFloorItems[i]$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      let key = keys[i]$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      let list = player.equip[slot]$/;"	F
-let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      let maxChangeString = this.getChangeString(' max',maxChange)$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      let maxChannelSize = player.species.maxChannelSizes[i]$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      let maxPoolSize = player.species.maxPoolSizes[poolName]$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      let maxSize$/;"	F
@@ -1787,14 +1853,16 @@ let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      let statusRow
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      let subject$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      let subjects = []$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      let toMapColumn = []$/;"	F
+let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      let toName = channel.to[0].shortName$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      let values = []$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      let weight = subject.chanceWeight$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      let xOffset = canvasProps.xOffset $/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      let yOffset = canvasProps.yOffset$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let actionMessage = 'Unknown'$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let actionMode = fm.motionMode$/;"	F
+let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let aptitude = $/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let cellsChanged = []$/;"	F
-let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let changeString = ''$/;"	F
+let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let changeString$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let changed = false$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let channelsToOutput = []$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let column = level[c]$/;"	F
@@ -1808,6 +1876,7 @@ let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let found = -1;
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let found = false$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let handsAvailable = $/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let i = 0$/;"	F
+let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let i$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let index = cell.onFloor.findIndex($/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let index = null$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let index$/;"	F
@@ -1857,6 +1926,9 @@ let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let target = fc
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let toMapColumn = []$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let total = 0$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let totalWeight = 0$/;"	F
+let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let value = $/;"	F
+let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let value = 0$/;"	F
+let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let value = actor.channelMax[channelIndex]$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let value = actor.poolMax[poolIndex]$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let value = actor.species.attributes[attribute]$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let wallStrength = map[adjacentPos.x][adjacentPos.y]$/;"	F
@@ -1885,6 +1957,7 @@ let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  let newBounds$/;"
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  let pos = null$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  let removed = 0$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  let result = []$/;"	F
+let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  let result = null$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  let result$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  let selected = 0$/;"	F
 let	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  let size = new Pair(fromMap.length, fromMap[0].length)$/;"	F
@@ -1929,7 +2002,7 @@ lowerLeftQuarter	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  lowe
 lowerLeftQuarter	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  lowerLeftQuarter() {$/;"	M
 lowerRightQuarter	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  lowerRightQuarter() {$/;"	F
 lowerRightQuarter	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  lowerRightQuarter() {$/;"	M
-lumina	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  lumina:  { name: 'lumina',  key: 'l', },$/;"	P
+lumina	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  lumina:  { key: 'l', },$/;"	P
 mace	075_experience_gain_add_energy_efficiency/jscrawl.html	/^              mace: {$/;"	P
 mace	075_experience_gain_add_energy_efficiency/jscrawl.html	/^          mace: {$/;"	P
 main	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  main: {$/;"	P
@@ -2035,6 +2108,7 @@ name	075_experience_gain_add_energy_efficiency/jscrawl.html	/^          name + '
 name	075_experience_gain_add_energy_efficiency/jscrawl.html	/^          name = getNameOf(null, value) $/;"	F
 name	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        let name = '(empty)'$/;"	V
 name	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        name = getNameOf(count, item)$/;"	F
+name	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      name + ' (' $/;"	F
 name	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    name += ' ' + verb$/;"	F
 name	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    name = 'potion of ' + name$/;"	F
 name	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    name = article + ' ' + name$/;"	F
@@ -2110,8 +2184,6 @@ playerMotionRelative	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  
 playerPos	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        playerPos,$/;"	V
 polearm	075_experience_gain_add_energy_efficiency/jscrawl.html	/^          polearm: {$/;"	P
 poolCapacity	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        poolCapacity: { },$/;"	P
-poolCapacitySelected	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    const [ poolCapacitySelected, poolCapacityTotal ] = $/;"	V
-poolCapacityTotal	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    const [ poolCapacitySelected, poolCapacityTotal ] = $/;"	V
 poolChannels	075_experience_gain_add_energy_efficiency/jscrawl.html	/^const poolChannels = [$/;"	A
 poolCurrent	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      poolCurrent: [],     \/\/ integers of how much is in each pool$/;"	P
 poolCurrentPast	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      poolCurrentPast: [], \/\/ previous value of poolCurrent$/;"	P
@@ -2188,6 +2260,7 @@ result	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      result = [
 result	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      result = [ list.slice(0, breakPoint), list.slice(breakPoint) ]$/;"	F
 result	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      result = [ string, '' ]$/;"	F
 result	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      result = [ string.substring(0, breakPoint), string.substring(breakPoint+1) ]$/;"	F
+result	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      result = channel$/;"	F
 result	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      result = found > -1$/;"	F
 result	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      result = player.equip[slot] == item$/;"	F
 result	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      result = selected$/;"	F
@@ -2201,10 +2274,9 @@ return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^          return
 return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^          return 'Choose channels:'$/;"	F
 return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^          return 'Choose item to pick up:'$/;"	F
 return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^          return$/;"	V
+return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        return 'Choose ' + title + ': ' + selectedString$/;"	F
 return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        return 'Choose an equipped item:'$/;"	F
-return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        return 'Choose attributes: ' + selectedString$/;"	F
 return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        return 'Choose item:'$/;"	F
-return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        return 'Choose pool to upgrade capacity of: ' + selectedString$/;"	F
 return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        return 'Choose pool type:'$/;"	F
 return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        return 'Choose pool:'$/;"	F
 return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        return new Pair(c, r)$/;"	F
@@ -2223,7 +2295,13 @@ return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      return tru
 return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      return window.fontStyle$/;"	F
 return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      return$/;"	V
 return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return ('' + Math.floor($/;"	F
+return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return 0$/;"	F
 return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return Math.floor(Math.random() * (1 + maxDamage - minDamage)) + minDamage$/;"	F
+return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return Math.floor(n)$/;"	F
+return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return Math.floor(n*10)\/10$/;"	F
+return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return Math.floor(n*100)\/100$/;"	F
+return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return Math.floor(n*1000)\/1000$/;"	F
+return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return Math.floor(n*10000)\/10000$/;"	F
 return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return Math.floor(value)$/;"	F
 return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return Object.values(this.frontModel.selectFlags)[index] $/;"	F
 return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return [selectedSubjects, selectedCounts]$/;"	F
@@ -2234,6 +2312,7 @@ return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return actor
 return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return actor.poolMax[poolIndex] $/;"	F
 return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return actor.species.attributes$/;"	F
 return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return allResults[randomizer.next(allResults.length)]$/;"	F
+return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return autoRound(value)$/;"	F
 return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return c$/;"	F
 return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return cellPos.within(Pair.empty(), this.backModel.levelSize)$/;"	F
 return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return changeString$/;"	F
@@ -2270,7 +2349,12 @@ return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return resul
 return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return screen$/;"	F
 return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return screenPixelPos.add(windowPixelPos)$/;"	F
 return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return subjectPos.adjacent(bm.levelSize)$/;"	F
+return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return this.backController.getAttribute(actor, key, boost)$/;"	F
+return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return this.backController.getChannelMaxFlow(actor, key, boost)$/;"	F
+return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return this.backController.getEnergyEfficiency(actor, key, boost)$/;"	F
 return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return this.backController.getPlayerPos()$/;"	F
+return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return this.backController.getPoolMax(actor, key, boost)$/;"	F
+return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return this.backController.getSkill(actor, key, boost)$/;"	F
 return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return this.backModel.actor$/;"	F
 return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return this.backModel.creatorMode$/;"	F
 return	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    return this.backModel.gameClock$/;"	F
@@ -2370,6 +2454,7 @@ selectTitle	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    selectT
 selected	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        selected = subject$/;"	F
 selected	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      selected += selected2$/;"	F
 selected	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      selected = selected ? ' + ' : ' - '$/;"	F
+selected	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    const [ selected, total ] = $/;"	V
 selected	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  let selected = 0$/;"	V
 selected2	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const [selected2, total2] = getGrowthSelectCount(value)$/;"	V
 selectedCounts	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let selectedCounts = []$/;"	A
@@ -2453,11 +2538,13 @@ simplePursuit	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  simpleP
 simplePursuit	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  simplePursuit(actor) {$/;"	M
 size	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        size = size.divide(window.cellPixelDimensions).floor()$/;"	F
 size	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  let size = new Pair(fromMap.length, fromMap[0].length)$/;"	V
+skillTypes	075_experience_gain_add_energy_efficiency/jscrawl.html	/^const skillTypes = {$/;"	O
 skills	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        skills: { },$/;"	P
+skills	075_experience_gain_add_energy_efficiency/jscrawl.html	/^const skills = {$/;"	O
 spear	075_experience_gain_add_energy_efficiency/jscrawl.html	/^              spear: {$/;"	P
 species	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      species: null,$/;"	P
 species	075_experience_gain_add_energy_efficiency/jscrawl.html	/^const species = {$/;"	O
-spectra	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  spectra: { name: 'spectra', key: 's', },$/;"	P
+spectra	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  spectra: { key: 's', },$/;"	P
 spinach	075_experience_gain_add_energy_efficiency/jscrawl.html	/^          spinach: { $/;"	P
 splitAtBlankBefore	075_experience_gain_add_energy_efficiency/jscrawl.html	/^            splitAtBlankBefore(remaining, maxWidth - prefix.length)$/;"	F
 splitAtBlankBefore	075_experience_gain_add_energy_efficiency/jscrawl.html	/^function splitAtBlankBefore(string, pos) {$/;"	F
@@ -2528,6 +2615,7 @@ tier	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    tier: 2,$/;"	P
 tier	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    tier: 3,$/;"	P
 tier	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    tier: 4,$/;"	P
 tierMultiplier	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    const tierMultiplier = 10 ** (from.tier - to.tier)$/;"	V
+title	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    title,$/;"	V
 to	075_experience_gain_add_energy_efficiency/jscrawl.html	/^                to,$/;"	V
 to	075_experience_gain_add_energy_efficiency/jscrawl.html	/^              to,$/;"	V
 to	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    to,$/;"	V
@@ -2558,6 +2646,7 @@ toMap	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  let toMap = []$
 toMapColumn	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      let toMapColumn = []$/;"	A
 toMapColumn	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      toMapColumn = []$/;"	F
 toMapColumn	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let toMapColumn = []$/;"	A
+toName	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        toName = toName[0] + '*'$/;"	F
 toggleSelectedItem	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  toggleSelectedItem(index) {$/;"	F
 toggleSelectedItem	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  toggleSelectedItem(index) {$/;"	M
 tomato	075_experience_gain_add_energy_efficiency/jscrawl.html	/^          tomato: { $/;"	P
@@ -2566,6 +2655,7 @@ total	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      total += co
 total	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      total += hand[i].hands$/;"	F
 total	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      total += item.text.length$/;"	F
 total	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      total += total2$/;"	F
+total	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    const [ selected, total ] = $/;"	V
 total	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let total = 0$/;"	V
 total	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  let total = 0$/;"	V
 total2	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      const [selected2, total2] = getGrowthSelectCount(value)$/;"	V
@@ -2590,6 +2680,9 @@ upperRightQuarter	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  upp
 upperRightQuarter	075_experience_gain_add_energy_efficiency/jscrawl.html	/^  upperRightQuarter() {$/;"	M
 value	075_experience_gain_add_energy_efficiency/jscrawl.html	/^          value = 0$/;"	F
 value	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        value *= 1.25 ** growth$/;"	F
+value	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      value *= 1.25 ** growth$/;"	F
+value	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      value += growth * aptitude$/;"	F
+value	075_experience_gain_add_energy_efficiency/jscrawl.html	/^    let value = 0$/;"	V
 values	075_experience_gain_add_energy_efficiency/jscrawl.html	/^        let values = []$/;"	A
 values	075_experience_gain_add_energy_efficiency/jscrawl.html	/^      let values = []$/;"	A
 violet	075_experience_gain_add_energy_efficiency/jscrawl.html	/^              violet: 10,$/;"	P

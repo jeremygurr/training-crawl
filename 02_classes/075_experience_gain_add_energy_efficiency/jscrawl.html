@@ -1682,7 +1682,7 @@ class TopController {
     
     fc.resetSelect()
     fc.setSelectTitle(
-      (_, growthSelection) => {
+      () => {
         const [growthSelectCount] = 
           getGrowthSelectCount(growthSelection)
         const selectedString = 
@@ -1763,13 +1763,26 @@ class TopController {
     const fc = this.frontController
     const bc = this.backController
     const player = bc.getPlayer()
-    bc.addGrowthSelectionToGrowth()
-    bc.fillEnergy(player, poolTypes.interna)
-    const item = fc.getSelectMeta('item')
-    bc.removeItemFromInventory(item, 1)
-    fc.addMessage("Drank " + getNameOf('a', item))
-    fc.setStatusChanged(true)
-    this.exitSimple()
+    const [selected, _] = getGrowthSelectCount(
+      bc.getGrowthSelection()
+    )
+    const total = bc.getGrowthPerLevel()
+    if(selected < total) {
+      fc.addMessage("You must use all of your growth points.")
+      fc.showSelectedItems()
+    } else if(selected > total) {
+      fc.addMessage("You have used too many growth points.")
+      fc.addMessage("Reduce your selections and try again.")
+      fc.showSelectedItems()
+    } else {
+      bc.addGrowthSelectionToGrowth()
+      bc.fillEnergy(player, poolTypes.interna)
+      const item = fc.getSelectMeta('item')
+      bc.removeItemFromInventory(item, 1)
+      fc.addMessage("Drank " + getNameOf('a', item))
+      fc.setStatusChanged(true)
+      this.exitSimple()
+    }
   }
 
   wait() {
@@ -1998,7 +2011,6 @@ class TopController {
 
       if(found) {
         target = found.target
-        inherited = found.inherited
         template = found.template
       } else {
         err("No subjects were selected.")
@@ -2824,15 +2836,15 @@ class TopController {
   }
 
   getChangeString(prefix, change) {
-    let changeString = ''
-    if(change >= 1) {
-      changeString = prefix + '+' + Math.floor(change)
-    } else if(change <= -1) {
-      changeString = prefix + '-' + Math.floor(-change)
-    } else if(change >= 0.001) {
-      changeString = prefix + '+' + Math.floor(change * 1000) / 1000
-    } else if(change <= -0.001) {
-      changeString = prefix + '-' + Math.floor(-change * 1000) / 1000
+    let changeString
+    if(change < 0.001 && change > -0.001) {
+      changeString = ''
+    } else {
+      if(change >= 0) {
+        changeString = prefix + '+' + autoRound(change)
+      } else if(change < 0) {
+        changeString = prefix + '-' + autoRound(-change)
+      }
     }
     return changeString
   }
@@ -2851,19 +2863,18 @@ class TopController {
       )
       const max = '' + Math.floor(bc.getPoolMax(player, poolName))
       const currentChange = bc.getPoolCurrentChange(player, index)
-      const maxChange = bc.getPoolMaxChange(player, index)
+      // const maxChange = bc.getPoolMaxChange(player, index)
       let currentChangeString = this.getChangeString(
         ' ',currentChange
       )
-      let maxChangeString = this.getChangeString(' max',maxChange)
+      // let maxChangeString = this.getChangeString(' max',maxChange)
       const digits = bc.getPoolDigits(player)
 
       line += pool.shortName[1] + ': ' 
         + current.padStart(digits)
         + '/' 
-        + max.padStart(digits) + maxChangeString
+        + max.padStart(digits)
         + currentChangeString 
-        + maxChangeString
 
       line = [{ 
         style: pool.color.style, 
@@ -3261,7 +3272,7 @@ class BackController {
     for(const key in growthSelection) {
       const value = growthSelection[key]
       if(typeof value == 'boolean') {
-        growth[key]++
+        if(value) growth[key]++
       } else {
         this.addGrowthSelectionToGrowth2(
           growthSelection[key], 
@@ -3524,18 +3535,18 @@ class BackController {
       growth += boost
       value *= 1.25 ** growth
     }
-    return Math.floor(value)
+    return autoRound(value)
   }
 
   getChannelMaxFlow(actor, channelName, boost = 0) {
-    const channelIndex = getPoolChannelByName(channelName)
+    const channelIndex = getPoolChannelByName(channelName).index
     let value = actor.channelMax[channelIndex]
     if(actor.growth) {
       let growth = actor.growth.channelMaxFlow[channelName]
       growth += boost
       value *= 1.25 ** growth
     }
-    return Math.floor(value)
+    return autoRound(value)
   }
 
   getSkill(actor, skillName, boost = 0) {
@@ -3548,7 +3559,7 @@ class BackController {
       growth += boost
       value += growth * aptitude
     }
-    return Math.floor(value)
+    return autoRound(value)
   }
 
   initializePlayer() {
@@ -3589,7 +3600,7 @@ class BackController {
         toName = toName[0] + '*'
       }
 
-      channel.name = name
+      channel.name = fromName + '-' + toName
 
       if(channel.to[0].type == poolTypes.interna) {
         player.channelCurrent[i] = 9
@@ -3649,6 +3660,9 @@ class BackController {
 
     }
 
+    player.poolCurrentPast = [ ...player.poolCurrent ]
+    player.poolMaxPast = [ ...player.poolMax ]
+
     const growth = player.growth
     const growthSelection = player.growthSelection
 
@@ -3668,7 +3682,7 @@ class BackController {
       growthSelection.energyEfficiency[poolName] = false
     }
 
-    for(const channel in poolChannels) {
+    for(const channel of poolChannels) {
       const channelName = channel.name
       growth.channelMaxFlow[channelName] = 0
       growthSelection.channelMaxFlow[channelName] = false
@@ -4615,7 +4629,11 @@ class FrontController {
   }
 
   clearNumericSelection() {
-    this.frontModel.selectCount = null
+    if(this.frontModel.selectCount != null) {
+      this.frontModel.selectCount = null
+    } else {
+      fill(this.frontModel.selectFlags, false)
+    }
     this.showSelectedItems()
   }
 
@@ -6341,6 +6359,28 @@ function getPoolChannelByName(channelName) {
     err("Couldn't find channel " + channelName)
   }
   return result
+}
+
+function autoRound(n) {
+  if(n >= 10) {
+    return Math.floor(n)
+  } else if(n >= 1) {
+    return Math.floor(n*10)/10
+  } else if(n >= 0.1) {
+    return Math.floor(n*100)/100
+  } else if(n >= 0.01) {
+    return Math.floor(n*1000)/1000
+  } else if(n >= 0.001) {
+    return Math.floor(n*10000)/10000
+  } else {
+    return 0
+  }
+}
+
+function fill(objectOrArray, value) {
+  for(i in objectOrArray) {
+    objectOrArray[i] = value
+  }
 }
 
 let didSomething = false

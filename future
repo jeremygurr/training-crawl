@@ -1,7 +1,11 @@
 experience potion drinking
-  energy channels x1.25
-  energy usage efficiency x1.25
-  skill +1
+  replace other places that calculate max channel flow
+  implement getPoolChannelByName
+  get function for: 
+    energy efficiency
+    channel flow
+    skills
+
 meditation enhances willpower energy or sense focus, not a separate focus
   automatically happens when resting while focussed
   med rate doubles each turn:

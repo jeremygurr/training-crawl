@@ -1,6 +1,4 @@
 creator mode: 
-  set energy pool
-  advanceLevel
   allow multiple item creation, or disable multiselect
   move CREATOR MODE to right of action
 core awakening

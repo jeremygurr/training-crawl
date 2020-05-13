@@ -37,9 +37,6 @@ const ctx = canvas.getContext("2d")
 
 // immutable
 class Pair {
-  static empty() {
-    return new Pair(0, 0)
-  }
 
   constructor(x, y) {
     this.x = x
@@ -51,14 +48,13 @@ class Pair {
     return new Pair(this.x + pair.x, this.y + pair.y)
   }
 
-  addAndWrap(pair, size) {
-    if(!pair) return this
-    if(typeof pair == 'number') {
-      pair = new Pair(pair, pair)
+  wrap(size) {
+    if(typeof size == 'number') {
+      size = new Pair(size, size)
     }
-    let newX = wrap(this.x + pair.x, size.x)
-    let newY = wrap(this.y + pair.y, size.y)
-    return new Pair(this.x + pair.x, this.y + pair.y)
+    let newX = wrap(this.x, size.x)
+    let newY = wrap(this.y, size.y)
+    return new Pair(newX, newY)
   }
 
   subtract(pair) {
@@ -100,16 +96,25 @@ class Pair {
     for(let c = this.x - 1; c <= this.x + 1; c++) {
       for(let r = this.y - 1; r <= this.y + 1; r++) {
         if(c == this.x && r == this.y) continue
-        let c2 = c
-        let r2 = r
-        if(c2 < 0) c2 += size.x
-        if(r2 < 0) r2 += size.y
-        result.push(new Pair(c, r))
+        result.push(
+          new Pair(
+            wrap(c, size.x), 
+            wrap(r, size.y),
+          )
+        )
       }
     }
 
     return result
   }
+
+}
+
+// this only needs to be created once, since it is immutable
+emptyPair = new Pair(0, 0)
+
+function pair(m) {
+  return new Pair(m, m)
 }
 
 // immutable
@@ -1298,7 +1303,7 @@ const template = {
         showAs: '🙂', 
         name: 'player', 
       },
-      pos: Pair.empty(), 
+      pos: emptyPair, 
       gold: 0,
       level: 0,
       awakenedPools: [],
@@ -1410,7 +1415,7 @@ const screens = {
 
       // smallCellSize is added to each of these
       status: {
-        pos: Pair.empty(),
+        pos: emptyPair,
         size: new Pair(15, 18),
         offset: new Pair(7, 2),
         cellPixelDimensions: new Pair(8.4, 16),
@@ -1422,8 +1427,7 @@ const screens = {
         size: new Pair(30, 18),
         cellPixelDimensions: new Pair(26, 30),
         fontStyle: fontStyle.fixed,
-        panCellOffset: Pair.empty(),
-        panScrollMargin: 4,
+        panCellOffset: emptyPair,
       },
 
       message: {
@@ -2690,7 +2694,10 @@ class TopController {
 
     if(target.pos == null) {
       const playerOldPos = bc.getPlayerPos()
-      const playerNewPos = playerOldPos.add(relPos)
+      const playerNewPos = 
+        playerOldPos
+        .add(relPos)
+        .wrap(bc.getLevelSize())
 
       if(!bc.isFieldPosValid(playerNewPos)) {
         fc.addMessage("You can't move there.")
@@ -2721,7 +2728,11 @@ class TopController {
       this.advanceTime(true);
     } else {
       // target mode is on
-      const targetNewPos = target.pos.add(relPos)
+      const targetNewPos = 
+        target
+          .pos
+          .add(relPos)
+          .wrap(bc.getLevelSize())
 
       if(!bc.isFieldPosValid(targetNewPos)) {
         return
@@ -2815,7 +2826,7 @@ class TopController {
       pos = bc.getPlayerPos()
     }
 
-    this.checkPan(window, pos, bc.backModel.levelSize)
+    fc.checkPan(window, pos, bc.getLevelSize())
 
     let changed = false
     let cellsChanged = []
@@ -2871,7 +2882,7 @@ class TopController {
 
       const targetPos = fc.getTarget().pos
       if(targetPos) {
-        fc.drawTarget(screen, window, targetPos)
+        fc.drawTarget(screen, window, targetPos, bc.getLevelSize())
       }
 
     } else if(window == mainWindows.message) {
@@ -2906,7 +2917,11 @@ class TopController {
 
     if(fc.windowPosIsValid(window, windowPos, level)) {
 
-      const levelPos = fc.windowCellPosToLevel(window, windowPos)
+      const levelPos = fc.windowCellPosToLevel(
+        window, 
+        windowPos, 
+        bc.getLevelSize(),
+      )
       const cell = level[levelPos.x][levelPos.y]
       let characterToDraw
       let offset
@@ -3240,12 +3255,6 @@ class TopController {
     }
   }
 
-  checkPan(window, pos, size) {
-    if(window == screens.main.window.level) {
-      this.adjustLevelPan(window, pos, size)
-    }
-  }
-
   advanceTime(playerActive) {
     const bc = this.backController
     const fc = this.frontController
@@ -3335,7 +3344,9 @@ class TopController {
     const fromPos = occupant.pos
     if(fromPos != null) {
       bc.getCell(fromPos).occupiedBy = null
-      fc.addLevelCellsChanged(fc.levelPosToWindowPos(fromPos))
+      fc.addLevelCellsChanged(
+        fc.levelPosToWindowPos(fromPos, bc.getLevelSize())
+      )
     }
     if(bc.getCell(toPos).occupiedBy != null) {
       err(
@@ -3344,7 +3355,9 @@ class TopController {
       )
     }
     bc.getCell(toPos).occupiedBy = occupant
-    fc.addLevelCellsChanged(fc.levelPosToWindowPos(toPos))
+    fc.addLevelCellsChanged(
+      fc.levelPosToWindowPos(toPos, bc.getLevelSize())
+    )
 
     occupant.pos = toPos
   }
@@ -4329,6 +4342,10 @@ class BackController {
     return this.backModel.level
   }
 
+  getLevelSize() {
+    return this.backModel.levelSize
+  }
+
   getPlayer() {
     return this.backModel.player
   }
@@ -4342,7 +4359,7 @@ class BackController {
   }
 
   isFieldPosValid(cellPos) {
-    return cellPos.within(Pair.empty(), this.backModel.levelSize)
+    return cellPos.within(emptyPair, this.backModel.levelSize)
   }
 
   isFieldPosOccupied(cellPos) {
@@ -4371,69 +4388,24 @@ class FrontController {
     this.outController = new OutController()
   }
 
+  checkPan(window, pos, size) {
+    if(window == screens.main.window.level) {
+      this.adjustLevelPan(window, pos, size)
+    }
+  }
+
   adjustLevelPan(levelWindow, pos, levelSize) {
 
-    const margin = levelWindow.panScrollMargin
+    const windowSize = levelWindow.size
 
-    const edgeProximity = 
-      pos.addAndWrap(
-        levelWindow.panCellOffset.negate(),
-        levelSize,
-      )
-
-    const windowBottomRightCorner = 
-      levelWindow.size.addAndWrap(
-        levelWindow.panCellOffset.negate(),
-        levelSize,
-      )
-
-    const edgeProximity2 = 
-      pos.negate().addAndWrap(
-        windowBottomRightCorner,
-        levelSize,
-      )
-
-    if(
-      edgeProximity.x
-      < margin 
-    ) {
-      levelWindow.panCellOffset.x = 
-        wrap(pos.x - margin, levelSize.x)
-      this.setLevelChanged(true)
-    } 
-
-    if(
-      edgeProximity.y
-      < margin 
-    ) {
-      levelWindow.panCellOffset.y = 
-        wrap(pos.y - margin, levelSize.y)
-      this.setLevelChanged(true)
-    } 
-
-    if(
-      edgeProximity2.x
-      < margin 
-    ) {
-      levelWindow.panCellOffset.x = 
-        wrap(
-          pos.x + margin - levelWindow.size.x
-          , levelSize.x
+    levelWindow.panCellOffset = 
+      pos
+        .subtract(
+          windowSize.divide(pair(2)).floor()
         )
-      this.setLevelChanged(true)
-    } 
+        .wrap(levelSize)
 
-    if(
-      edgeProximity2.y
-      < margin 
-    ) {
-      levelWindow.panCellOffset.y = 
-        wrap(
-          pos.y + margin - levelWindow.size.y
-          , levelSize.y
-        )
-      this.setLevelChanged(true)
-    } 
+    this.setLevelChanged(true)
 
   }
 
@@ -5412,11 +5384,10 @@ class FrontController {
     this.frontModel.currentScreen = screenName
   }
 
-  levelPosToWindowPos(levelPos) {
-    const panOffset = 
-      screens.main
-      .window.level.panCellOffset
-    return levelPos.subtract(panOffset)
+  levelPosToWindowPos(levelPos, levelSize) {
+    const window = screens.main.window.level
+    const panOffset = window.panCellOffset
+    return levelPos.subtract(panOffset).wrap(levelSize)
   }
 
   getKeyMode() {
@@ -5437,15 +5408,17 @@ class FrontController {
     return screenPixelPos.add(windowPixelPos)
   }
 
-  windowCellPosToLevel(window, windowCellPos) {
-    return windowCellPos.add(window.panCellOffset)
+  windowCellPosToLevel(window, windowCellPos, levelSize) {
+    return windowCellPos
+      .add(window.panCellOffset)
+      .wrap(levelSize)
   }
 
   clearWindow(screen, window) {
     const screenPixelPos = this.windowCellPosToScreenPixelPos(
       screen,
       window,
-      Pair.empty(),
+      emptyPair,
       )
 
     this.outController.clearRect(
@@ -5497,13 +5470,13 @@ class FrontController {
   }
 
   getWindowPixelRect(screen, window) {
-    const posUpperLeft = this.windowCellPosToScreenPixelPos(screen, window, Pair.empty())
+    const posUpperLeft = this.windowCellPosToScreenPixelPos(screen, window, emptyPair)
     const posLowerRight = posUpperLeft.add(window.size.multiply(window.cellPixelDimensions))
     return new Rect(posUpperLeft.x, posUpperLeft.y, posLowerRight.x, posLowerRight.y)
   }
 
-  drawTarget(screen, window, targetPos) {
-    const windowPos = this.levelPosToWindowPos(targetPos)
+  drawTarget(screen, window, targetPos, levelSize) {
+    const windowPos = this.levelPosToWindowPos(targetPos, levelSize)
     const cellBoundary = this.getCellPixelRect(screen, window, windowPos).add(new Pair(0,-1))
     const windowBoundary = this.getWindowPixelRect(screen, window)
     const yMid = (cellBoundary.y1 + cellBoundary.y2) / 2
@@ -6343,7 +6316,7 @@ function generateLevelSimpleCaves(level, size, randomizer, levelCaveGenerator) {
   map = removeIsolatedWalls(map, wallThreshold, requireSurroundingWalls)
   mapToLevel(map, level, wallThreshold, size)
   connectRooms(level, map, wallThreshold, randomizer)
-  level = surroundLevelWithWalls(level, size)
+  // level = surroundLevelWithWalls(level, size)
   return level
 }
 
@@ -6785,10 +6758,10 @@ function fill(objectOrArray, value) {
 }
 
 function wrap(n, size) {
-  if(n < 0) {
+  while(n < 0) {
     n += size
   }
-  if(n >= size) {
+  while(n >= size) {
     n -= size
   }
   return n

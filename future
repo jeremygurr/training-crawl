@@ -1,36 +1,6 @@
+energy core should actually generate energy, but slowly
 basic senses
-  how to view different senses?
-    view command switches view
-      vision
-      hearing
-      smell
-      feel
-      energy
-    dimensions
   vision
-    how to calculate visibility
-      follow cells back to player
-      if it impacts a known invisible cell, we can stop
-      right, down, or diagonal
-      ?xxxx..O............
-      .....xxxx...........
-      .....OO..xxx@.......
-      ......OOO...........
-      if a cell is visible or invisible, everything in between is also
-      . . . \ . . . . x | . . . . . / . . . . 
-      . . . . \ . . . x | . . . . / . . . . . 
-      . . . . . \ . . x | . . . / . . . . . . 
-      . . . . . . \ . . x . . / . . . . . . . 
-      . . . . . . . \ . x . / . . . . . . . . 
-      . . . . . . . . \ x / . . . . . . . . . 
-      - - - - - - - - - @ - - - - - - - - - - 
-      use y=mx+b form to determine y position for each x
-       or x=my+b form
-      need to take into account darkness
-      how do monsters see?
-      might be easier to track light from the player outward to the edges of the window
-        only have to test circumference of window, instead of area
-        can work from circles immediately around the player, steadily outward, until 
     back model
       memory grid
         holds layers for each sense
@@ -40,6 +10,15 @@ basic senses
       if not, is it in memory?
     torch must be wielded to provide light
       can chase some creatures away
+    haze: can see twice as far for vague shapes, but not identify until in actual visual range
+  how to view different senses?
+    view command switches view
+      vision
+      hearing
+      smell
+      feel
+      energy
+    dimensions
   hearing
     grid of arrows with brightness, pointing the flow of sound
     player can 'hear' the grid around them based on their hearing sensitivity

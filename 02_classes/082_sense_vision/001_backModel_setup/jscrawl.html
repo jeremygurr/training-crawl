@@ -172,6 +172,14 @@ const species = {
       willpower: -0.1,
     },
 
+    senses: {
+      vision: 10,
+      hearing: 10,
+      smell: 10,
+      feel: 10,
+      energy: 10,
+    },
+
     poolAwakeningLevels: [ 10, 30, 90 ]
 
   },
@@ -362,9 +370,9 @@ const colors = {
   yellow:     { bgStyle: '#FFFF00', style: '#000' },
   green:      { bgStyle: '#7FFF00', style: '#000' },
   cyan:       { bgStyle: '#00FFFF', style: '#000' },
-  blue:       { bgStyle: '#1F74FF', style: '#FFF' },
-  indigo:     { bgStyle: '#583FFF', style: '#FFF' },
-  violet:     { bgStyle: '#824FFF', style: '#FFF' },
+  blue:       { bgStyle: '#0084FF', style: '#FFF' },
+  indigo:     { bgStyle: '#413FFF', style: '#FFF' },
+  violet:     { bgStyle: '#825FFF', style: '#FFF' },
   rainbow: { 
     bgStyle: gradient.lightRainbow, 
     style: '#000',
@@ -1319,6 +1327,7 @@ const template = {
       species: null,
       wpFocus: null,
       medDepth: 0,
+      seen: [],
       equip: {
         hand: [],
         ring: [],
@@ -3514,6 +3523,9 @@ class BackController {
       if(remaining != 0) {
         actor.wpFocus = null
       }
+    }
+    for(let pool of actor.awakenedPools) {
+      this.addEnergy(actor, pool.name, 0.1)
     }
     for(let i = 0; i < poolChannels.length; i++) {
       const currentFlowMagnitude = actor.channelCurrent[i]

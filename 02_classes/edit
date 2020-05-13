@@ -6,4 +6,4 @@ if [ ! -f "$1" ]; then
 fi
 
 ./generateTags "$1"
-vi +vsp +vsp "$1"
+vi +vsp +vsp '+winc h' "$1"

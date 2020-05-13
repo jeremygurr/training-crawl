@@ -1,17 +1,22 @@
-core awakening
-  2/3 chance of spectra
-  2/3 chance of etherea
-  2/3 chance of lumina
-  remaining chance of exotica
 minor health can't go up until major
-  make room function which calculates how much room a pool has to increase
+  adjust max function to lower ceiling until dependent pools are filled?
+  fix draining I3 bug
 basic senses
   light
     torch must be wielded to provide light
       can chase some creatures away
   sound
+    grid of arrows with brightness, pointing the flow of sound
+    player can 'hear' the grid around them based on their hearing sensitivity
+      (3x3 grid is poor, 4x4 is avg, 5x5+ is good)
+    there can be multiple overlapping sounds
+      can only detect the top 2-4 depending on sense
+    enhanced by meditation state
+    can focus on one sound at a time
   smell
+    can only smell a small grid around the player 1x1 - 3x3
   feel: 
+    can only feel squares immediately around the player
     heat
     vibration / pressure
     energy
@@ -26,6 +31,10 @@ energy in environment
 external channels
   all pools can vent except interna
   OO=SG OO=ED
+movement
+  fast / loud
+  normal (lowest stamina usage)
+  slow / quiet
 weapon usage
   weapon prioritization
   chance to hit
@@ -1098,3 +1107,8 @@ energy management
         connects to *all* lumina
       Purple
         connects to red AND blue
+dynamic monsters
+  not fixed
+  a-z A-Z
+  probably not fun
+

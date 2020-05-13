@@ -1,9 +1,3 @@
-should levels wrap?
-  eliminates the weird edge of board situation
-  spreads out energy flow, etc
-  allows more escape routes
-  go through all code to support wrapping
-  increase panCellMargin
 basic senses
   how to view different senses?
     view command switches view

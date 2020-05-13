@@ -58,14 +58,23 @@ class Pair {
   }
 
   subtract(pair) {
+    if(typeof pair == 'number') {
+      pair = new Pair(pair, pair)
+    }
     return new Pair(this.x - pair.x, this.y - pair.y)
   }
 
   multiply(pair) {
+    if(typeof pair == 'number') {
+      pair = new Pair(pair, pair)
+    }
     return new Pair(this.x * pair.x, this.y * pair.y)
   }
 
   divide(pair) {
+    if(typeof pair == 'number') {
+      pair = new Pair(pair, pair)
+    }
     return new Pair(this.x / pair.x, this.y / pair.y)
   }
 
@@ -2885,6 +2894,8 @@ class TopController {
         fc.drawTarget(screen, window, targetPos, bc.getLevelSize())
       }
 
+      fc.drawCenterLines(screen, window, bc.getLevelSize())
+
     } else if(window == mainWindows.message) {
 
       fc.drawMessagesWindow(screen, window)
@@ -5475,13 +5486,90 @@ class FrontController {
     return new Rect(posUpperLeft.x, posUpperLeft.y, posLowerRight.x, posLowerRight.y)
   }
 
-  drawTarget(screen, window, targetPos, levelSize) {
-    const windowPos = this.levelPosToWindowPos(targetPos, levelSize)
-    const cellBoundary = this.getCellPixelRect(screen, window, windowPos).add(new Pair(0,-1))
+  drawCenterLines(screen, window, levelSize) {
+
+    const baselinePos = 
+      this.levelPosToWindowPos(emptyPair, levelSize)
+    let cellBoundary = 
+      this.getCellPixelRect(
+        screen, window, baselinePos
+      ).add(new Pair(0,-1))
     const windowBoundary = this.getWindowPixelRect(screen, window)
+
+    const thickness = 1
+    let style = "#8080C080"
+
+    if(baselinePos.x < window.size.x) {
+      this.outController.drawEmptyRect(
+        new Rect(
+          cellBoundary.x1 - thickness, 
+          windowBoundary.y1, 
+          cellBoundary.x1 + thickness,
+          windowBoundary.y2,
+        )
+        , style
+      )
+    }
+
+    if(baselinePos.y < window.size.y) {
+      this.outController.drawEmptyRect(
+        new Rect(
+          windowBoundary.x1, 
+          cellBoundary.y1 - thickness, 
+          windowBoundary.x2,
+          cellBoundary.y1 + thickness,
+        )
+        , style
+      )
+    }
+
+    const midlinePos = 
+      this.levelPosToWindowPos(levelSize.divide(2), levelSize)
+
+    cellBoundary = 
+      this.getCellPixelRect(
+        screen, window, midlinePos
+      ).add(new Pair(0,-1))
+    style = "#C0808080"
+
+    if(midlinePos.x < window.size.x) {
+      this.outController.drawEmptyRect(
+        new Rect(
+          cellBoundary.x1 - thickness, 
+          windowBoundary.y1, 
+          cellBoundary.x1 + thickness,
+          windowBoundary.y2,
+        )
+        , style
+      )
+    }
+
+    if(midlinePos.y < window.size.y) {
+      this.outController.drawEmptyRect(
+        new Rect(
+          windowBoundary.x1, 
+          cellBoundary.y1 - thickness, 
+          windowBoundary.x2,
+          cellBoundary.y1 + thickness,
+        )
+        , style
+      )
+    }
+
+  }
+
+  drawTarget(screen, window, targetPos, levelSize) {
+    const windowPos = 
+      this.levelPosToWindowPos(targetPos, levelSize)
+    const cellBoundary = 
+      this.getCellPixelRect(
+        screen, window, windowPos
+      ).add(new Pair(0,-1))
+    const windowBoundary = 
+      this.getWindowPixelRect(screen, window)
     const yMid = (cellBoundary.y1 + cellBoundary.y2) / 2
     const xMid = (cellBoundary.x1 + cellBoundary.x2) / 2
-    const thickness = 3
+    const thickness = 2
     const style = "#0000C080"
     const heavyStyle = "#0000C0"
     this.outController.drawEmptyRect(

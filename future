@@ -1,11 +1,52 @@
-minor health can't go up until major
-  adjust max function to lower ceiling until dependent pools are filled?
-  fix draining I3 bug
+should levels wrap?
+  eliminates the weird edge of board situation
+  spreads out energy flow, etc
+  allows more escape routes
+  go through all code to support wrapping
+  increase panCellMargin
 basic senses
-  light
+  how to view different senses?
+    view command switches view
+      vision
+      hearing
+      smell
+      feel
+      energy
+    dimensions
+  vision
+    how to calculate visibility
+      follow cells back to player
+      if it impacts a known invisible cell, we can stop
+      right, down, or diagonal
+      ?xxxx..O............
+      .....xxxx...........
+      .....OO..xxx@.......
+      ......OOO...........
+      if a cell is visible or invisible, everything in between is also
+      . . . \ . . . . x | . . . . . / . . . . 
+      . . . . \ . . . x | . . . . / . . . . . 
+      . . . . . \ . . x | . . . / . . . . . . 
+      . . . . . . \ . . x . . / . . . . . . . 
+      . . . . . . . \ . x . / . . . . . . . . 
+      . . . . . . . . \ x / . . . . . . . . . 
+      - - - - - - - - - @ - - - - - - - - - - 
+      use y=mx+b form to determine y position for each x
+       or x=my+b form
+      need to take into account darkness
+      how do monsters see?
+      might be easier to track light from the player outward to the edges of the window
+        only have to test circumference of window, instead of area
+        can work from circles immediately around the player, steadily outward, until 
+    back model
+      memory grid
+        holds layers for each sense
+      mark occupants as seen or not
+    drawing level view 
+      consider if square is visible right now
+      if not, is it in memory?
     torch must be wielded to provide light
       can chase some creatures away
-  sound
+  hearing
     grid of arrows with brightness, pointing the flow of sound
     player can 'hear' the grid around them based on their hearing sensitivity
       (3x3 grid is poor, 4x4 is avg, 5x5+ is good)
@@ -19,7 +60,7 @@ basic senses
     can only feel squares immediately around the player
     heat
     vibration / pressure
-    energy
+  energy
   if one sense is lost, others should be magnified
 energy in environment
   cells store energy
@@ -693,7 +734,10 @@ skills
     mining
     wands
   magic
-spells
+spells / magic
+  teleportation requires setting up a target
+    which requires distance vision
+    this process can be disrupted, or even altered to a different target
   transformation tree
     levels
       subatomic
@@ -764,6 +808,13 @@ spells
   no armor (challenge +5)
   dexterity boost
   intelligence boost
+  pool types
+    spectra determines nature of change
+    lumina determines level of change
+    etherea determines permanence / duration
+    exotica can influence other aspects of the spell itself
+      cost, speed, success, disruption resistance
+    mp is used for connecting and guiding energy
 macros
   can save keystrokes, especially for spells
 traps

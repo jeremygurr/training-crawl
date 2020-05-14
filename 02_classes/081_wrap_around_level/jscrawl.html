@@ -845,8 +845,7 @@ const template = {
         type: 'potion',
         showAs: '!', 
         occupant: false,
-        chanceWeight: 100,
-        count: 1,
+        chanceWeight: 0,
         sub: {
           experience: { 
             chanceWeight: 0, 
@@ -856,7 +855,7 @@ const template = {
 
       gold: {
         type: 'gold',
-        showAs: '$', 
+        showAs: '💰', 
         occupant: false,
         chanceWeight: 1000,
         sub: {
@@ -897,15 +896,36 @@ const template = {
         },
       },
 
+      tool: {
+        type: 'tool',
+        occupant: false,
+        chanceWeight: 1000,
+        durability: 1000,
+        showAs: '🛠'
+        equipSlot: 'hand',
+        hands: 1,
+        sub: {
+          torch: {
+            chanceWeight: 1000,
+            durability: 100,
+            light: 3,
+            showAs: '🔦',
+          },
+          candle: {
+            chanceWeight: 1000,
+            light: 2,
+            showAs: '🕯',
+          },
+        },
+      },
+
       weapon: {
         type: 'weapon',
         occupant: false,
         chanceWeight: 1000,
-        count: 1,
         equipSlot: 'hand',
         hands: 1,
         durability: 100,
-        integrity: 1,
         sub: {
           throwable: {
             skill: 'throwing',
@@ -914,7 +934,6 @@ const template = {
               rock: { 
                 chanceWeight: 1000, 
                 showAs: 'o', 
-                count: 10,
                 hitChance: -2,
                 attackSpeed: 0,
                 damage: [{
@@ -1038,7 +1057,6 @@ const template = {
         occupant: false,
         chanceWeight: 1000,
         showAs: '🍖',
-        count: 1,
         sub: {
           beef: { 
             chanceWeight: 1000,

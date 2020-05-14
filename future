@@ -1,15 +1,10 @@
-energy core should actually generate energy, but slowly
 basic senses
   vision
-    back model
-      memory grid
-        holds layers for each sense
-      mark occupants as seen or not
+    torch must be wielded to provide light
+      can chase some creatures away
     drawing level view 
       consider if square is visible right now
       if not, is it in memory?
-    torch must be wielded to provide light
-      can chase some creatures away
     haze: can see twice as far for vague shapes, but not identify until in actual visual range
   how to view different senses?
     view command switches view

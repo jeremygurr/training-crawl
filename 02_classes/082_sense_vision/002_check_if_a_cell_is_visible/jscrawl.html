@@ -152,9 +152,12 @@ const species = {
     },
 
     maxPoolSizes: {
-      criticalHealth: 5,
+      criticalHealth: 10,
       majorHealth: 10,
-      minorHealth: 30,
+      minorHealth: 10,
+      stamina: 20,
+      mana: 20,
+      willpower: 20,
       default: 100,
     },
 
@@ -1318,7 +1321,7 @@ const template = {
   // this will become mutable once cloned
   backModel: {
     actor: [],
-    seed: 'test2',
+    seed: 'test',
     randomizers: {
       awakening: null,
       level: null,
@@ -1838,6 +1841,7 @@ class TopController {
         + choice.longName 
         + " energy pool."
       )
+      bc.fillPool(player, choice)
       fc.setStatusChanged(true)
     }
 
@@ -1942,10 +1946,12 @@ class TopController {
     const fc = this.frontController
     const bc = this.backController
     const player = bc.getPlayer()
-    if(player.medDepth == 0) {
-      player.medDepth = 0.2
-    } else {
-      player.medDepth *= 2
+    if(player.wpFocus) {
+      if(player.medDepth == 0) {
+        player.medDepth = 0.2
+      } else {
+        player.medDepth *= 2
+      }
     }
     if(player.medDepth > 4) player.medDepth = 4
     fc.setStatusChanged(true)
@@ -3087,10 +3093,10 @@ class TopController {
 
       const index = poolNameToIndex(poolName)
       const pool = pools[poolName]
-      const current = '' + Math.floor(
+      const current = '' + Math.round(
         getPoolCurrent(player, index)
       )
-      const max = '' + Math.floor(getPoolMax(player, poolName))
+      const max = '' + Math.round(getPoolMax(player, poolName))
       const currentChange = bc.getPoolCurrentChange(player, index)
       // const maxChange = bc.getPoolMaxChange(player, index)
       let currentChangeString = this.getChangeString(
@@ -3460,9 +3466,7 @@ class BackController {
     if(actor.growth) {
       let growth = actor.growth.attributes[attribute]
       growth += boost
-      if(growth > 0) {
-        value *= 1.25 ** growth
-      }
+      value += growth
     }
     return Math.floor(value)
   }
@@ -3618,10 +3622,10 @@ class BackController {
     if(sign > 0) {
       // flowing down
       fRoom = fCur2
-      tRoom = tMaxLimit - Math.floor(tCur)
+      tRoom = tMaxLimit - tCur
     } else {
       // flowing up
-      fRoom = fMaxLimit2 - Math.floor(fCur2)
+      fRoom = fMaxLimit2 - fCur2
       tRoom = tCur
     }
 
@@ -3639,20 +3643,6 @@ class BackController {
       const delta = deltaAbs * sign
       actor.poolCurrent[poolIndexFrom] -= delta / tierMultiplier
       actor.poolCurrent[poolIndexTo]   += delta
-      if(
-        (
-          from.shortName == 'I3' 
-          || to.shortName == 'I3' 
-        )
-        && Math.abs(delta) > 0.01
-      ) {
-        debug(
-          from.shortName + '-=' + (delta / tierMultiplier)
-        )
-        debug(
-          to.shortName + '+=' + (delta)
-        )
-      }
 //    }
 
   }
@@ -3741,7 +3731,7 @@ class BackController {
 
   // returns the pool percentage as a padded string
   getPoolPercent(actor, poolIndex) {
-    return ('' + Math.floor(
+    return ('' + Math.round(
       actor.poolCurrent[poolIndex] * 100
       /
       getPoolMax(actor, poolIndexToName(poolIndex))
@@ -6714,9 +6704,6 @@ function getPoolMax(
   let value
   const poolIndex = poolNameToIndex(poolName)
   const current = getPoolCurrent(actor, poolIndex)
-  if(poolName == 'majorHealth') {
-    debug('major')
-  }
 
   if(
     handleDependencies &&
@@ -6737,7 +6724,7 @@ function getPoolMax(
     if(actor.growth) {
       let growth = actor.growth.poolCapacity[poolName]
       growth += boost
-      value *= 1.25 ** growth
+      value *= 1.1 ** growth
     }
     if(
       actor.awakenedPools 
@@ -6757,7 +6744,7 @@ function getEnergyEfficiency(actor, poolName, boost = 0) {
   if(actor.growth) {
     let growth = actor.growth.energyEfficiency[poolName]
     growth += boost
-    value *= 1.25 ** growth
+    value *= 1.1 ** growth
   }
   if(
     actor.awakenedPools 
@@ -6775,7 +6762,7 @@ function getChannelMaxFlow(actor, channelName, boost = 0) {
   if(actor.growth) {
     let growth = actor.growth.channelMaxFlow[channelName]
     growth += boost
-    value *= 1.25 ** growth
+    value *= 1.1 ** growth
   }
   let awakened = false
   if(actor.awakenedPools) {

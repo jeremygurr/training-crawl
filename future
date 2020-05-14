@@ -1,7 +1,5 @@
 basic senses
   vision
-    torch must be wielded to provide light
-      can chase some creatures away
     drawing level view 
       consider if square is visible right now
       if not, is it in memory?
@@ -72,6 +70,17 @@ armor
 different times for actions
 game clock
   enemy actions don't execute until they have received enough time
+receiving major / critical damage will have different effects
+  minor damage has no effect
+  major damage
+    causes random damage to other interna: mana, stamina, and willpower
+  critical damage gives a chance of a bad status: (in addition to major damage effect)
+    confused (occasional misdirected attack / movement)
+    stunned (occasional missed turn)
+    slowed (all movement is 25% slower)
+    dulled (senses are reduced in effectiveness)
+    these statuses are removed as healing energy enters this interna, which is absorbed by the
+      status before increasing the actual pool
 generate stores
 ? general help
   another section at the bottom for 3 lines of menus / messages
@@ -473,14 +482,6 @@ multiplayer in same dungeon
   real time simultaneous changes, but each player that moves gives the level a turn also
     maybe disabled when monsters are around?
 experience / levels
-  every 10 levels gives a chance of a energy core awakening
-    can happen before level 10, but less likely
-      force = current level
-      resistance = 15*(energy cores)
-    one core becomes a producer, randomly chosen
-      you can alter the chances to some degree
-      influenced by amount of energy in each energy pool
-      may be the same core twice, which doubles the output of that energy
   growth points expand any given property by 10%
   if species changes, then base changes, but same growth is applied to it
   experienced gained from
@@ -492,6 +493,7 @@ experience / levels
     gives 10 growth points
     1 growp = +1 attribute
     1 growp = +apt skill (average being 4)
+    100 experience potions in the game always
   status shows direction of experience potion in floor
 challenge / defense calculation
   diff = challenge - defense 

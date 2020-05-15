@@ -3446,6 +3446,24 @@ class BackController {
     this.initializePlayer()
   }
 
+  updateCellVisionMemory(actor, pos, character) {
+    actor.memory.vision[pos.x][pos.y] = character
+  }
+
+  fetchCellFromVisionMemory(actor, pos) {
+    return actor.memory.vision[pos.x][pos.y]
+  }
+
+  checkCellVisibility(actor, pos) {
+    const radius = this.getVisionRadius(actor)
+
+    ...
+  }
+
+  getVisionRadius(actor) {
+    .....
+  }
+
   initRandomizers() {
     const bm = this.backModel
     const randomizer = new SeededRandomizer(

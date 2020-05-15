@@ -2702,6 +2702,7 @@ class TopController {
     const bc = this.backController
     const fc = this.frontController
     const level = bc.getLevel()
+    const playerPos = bc.getPlayerPos()
 
     if(fc.windowPosIsValid(window, windowPos, level)) {
 
@@ -2709,28 +2710,55 @@ class TopController {
       const cell = level[levelPos.x][levelPos.y]
       let characterToDraw
       let offset
+      const visibility = bc.checkCellVisibility(playerPos, levelPos)
 
-      if(cell.occupiedBy) {
-        characterToDraw = cell.occupiedBy.base.showAs;
-        offset = cell.occupiedBy.offset;
-      } else if(cell.onFloor.length > 0) {
-        characterToDraw = cell.onFloor[0].base.showAs;
-        offset = cell.onFloor[0].offset;
+      if(visibility > 0) {
+        if(cell.occupiedBy) {
+          if(visibility == 2) {
+            characterToDraw = cell.occupiedBy.base.showAs;
+          } else {
+            characterToDraw
+          }
+          offset = cell.occupiedBy.offset;
+        } else if(cell.onFloor.length > 0 && visibility > 1) {
+          characterToDraw = cell.onFloor[0].base.showAs;
+          offset = cell.onFloor[0].offset;
+        } else {
+          characterToDraw = cell.floorType.base.showAs;
+          offset = cell.floorType.offset;
+        }
+        bc.updateCellImageMemory(player, levelPos, characterToDraw)
       } else {
-        characterToDraw = cell.floorType.base.showAs;
-        offset = cell.floorType.offset;
+        // cell isn't visible
+        let remembered = bc.fetchCellImageFromMemory(
+          player, levelPos,
+        )
+        if(remembered) {
+          characterToDraw = remembered
+        }
       }
 
-      fc.drawText({
-        screen: screen,
-        window: window,
-        windowPos: windowPos, 
-        textToDraw: characterToDraw, 
-        offset: offset,
-        center: true,
-        cellSizePixels: window.cellPixelDimensions,
-        maxColumns: 1,
-      })
+      if(characterToDraw) {
+        
+        if(visibility == 1) {
+          characterToDraw = [{
+            text: characterToDraw,
+            style: '#00000080',
+          }]
+        }
+
+        fc.drawText({
+          screen: screen,
+          window: window,
+          windowPos: windowPos, 
+          textToDraw: characterToDraw, 
+          offset: offset,
+          center: true,
+          cellSizePixels: window.cellPixelDimensions,
+          maxColumns: 1,
+        })
+
+      }
 
     }
 

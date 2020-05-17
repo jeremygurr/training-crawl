@@ -43,6 +43,10 @@ class Pair {
     this.y = y
   }
 
+  equals(pair) {
+    return this.x === pair.x && this.y === pair.y
+  }
+
   add(pair) {
     if(!pair) return this
     return new Pair(this.x + pair.x, this.y + pair.y)
@@ -117,6 +121,27 @@ class Pair {
     return result
   }
 
+  // returns the unwrapped perimeter cells of a given radius
+  // radius should be a whole number
+  perimeter(radius) {
+    let result = []
+    for(let x = this.x - radius; x < this.x + radius + 1; x++) {
+      result.push(new Pair(x, this.y - radius))
+      result.push(new Pair(x, this.y + radius))
+    }
+    for(let y = this.y - radius; y < this.y + radius + 1; y++) {
+      result.push(new Pair(this.x - radius, y))
+      result.push(new Pair(this.x + radius, y))
+    }
+  }
+
+  distance(target) {
+    return Math.sqrt(
+      (target.x - this.x) ** 2 
+    + (target.y - this.y) ** 2
+    )
+  }
+
 }
 
 // this only needs to be created once, since it is immutable
@@ -133,6 +158,15 @@ const fontStyle = {
 }
 
 // immutable
+const senses = {
+  vision: {},
+  hearing: {},
+  smell: {}.
+  feeling: {},
+  energy: {},
+}
+
+// immutable
 const species = {
 
   default: {
@@ -143,6 +177,14 @@ const species = {
       strength: 10,
       dexterity: 10,
       intelligence: 10,
+    },
+
+    senses: {
+      vision: 10,
+      hearing: 10,
+      smell: 10,
+      feeling: 10,
+      energy: 10,
     },
 
     experiencePerLevel: 10,
@@ -828,6 +870,12 @@ const poolChannels = [
   },
 ]
 
+const size = {
+  large: 2,
+  medium: 1,
+  small: 0,
+}
+
 // immutable
 const template = {
 
@@ -835,12 +883,14 @@ const template = {
     dirtFloor: { 
       type: 'floor', 
       occupant: false, 
+      size: size.large,
       name: 'dirt', 
       showAs: '.' 
     },
     rockWall: { 
       type: 'wall', 
       occupant: true, 
+      size: size.large,
       name: 'rock', 
       showAs: '🀆', 
       offset: new Pair(0, 1) 
@@ -849,6 +899,7 @@ const template = {
 
   generated: {
     fillRatio: 0.020,
+    size: size.small,
 
     sub: {
 
@@ -889,6 +940,7 @@ const template = {
         type: 'creature',
         occupant: true,
         chanceWeight: 1000,
+        size: size.medium,
         sub: {
           rat:  { 
             chanceWeight: 1000, 
@@ -1397,6 +1449,9 @@ const template = {
       },
       // this is filled in during initialization
       growthSelection: { },
+      visibilityPos: null,
+      visibilityGrid: [], // a 2d grid of null, 0, 1, or 2 
+                          // (2 meaning fully visible)
     },
   },
 
@@ -2897,7 +2952,7 @@ class TopController {
       this.drawLevelWindowCells(
         screen, 
         window, 
-        cellsChanged
+        cellsChanged,
       )
     }
 
@@ -2966,6 +3021,7 @@ class TopController {
     const bc = this.backController
     const fc = this.frontController
     const level = bc.getLevel()
+    const player = bc.getPlayer()
 
     if(fc.windowPosIsValid(window, windowPos, level)) {
 
@@ -2977,29 +3033,56 @@ class TopController {
       const cell = level[levelPos.x][levelPos.y]
       let characterToDraw
       let offset
+      const visibility = 
+        bc.checkCellVisibility(player, levelPos)
 
-      if(cell.occupiedBy) {
-        characterToDraw = cell.occupiedBy.base.showAs;
-        offset = cell.occupiedBy.offset;
-      } else if(cell.onFloor.length > 0) {
-        characterToDraw = cell.onFloor[0].base.showAs;
-        offset = cell.onFloor[0].offset;
+      if(visibility > 0) {
+        if(cell.occupiedBy) {
+          if(visibility == 2) {
+            characterToDraw = cell.occupiedBy.base.showAs;
+          } else {
+            characterToDraw
+          }
+          offset = cell.occupiedBy.offset;
+        } else if(cell.onFloor.length > 0 && visibility > 1) {
+          characterToDraw = cell.onFloor[0].base.showAs;
+          offset = cell.onFloor[0].offset;
+        } else {
+          characterToDraw = cell.floorType.base.showAs;
+          offset = cell.floorType.offset;
+        }
+        bc.updateCellVisionMemory(player, levelPos, characterToDraw)
       } else {
-        characterToDraw = cell.floorType.base.showAs;
-        offset = cell.floorType.offset;
+        // cell isn't visible
+        let remembered = bc.fetchCellFromVisionMemory(
+          player, levelPos,
+        )
+        if(remembered) {
+          characterToDraw = remembered
+        }
       }
 
-      fc.drawText({
-        screen: screen,
-        window: window,
-        windowPos: windowPos, 
-        textToDraw: characterToDraw, 
-        offset: offset,
-        center: true,
-        cellSizePixels: window.cellPixelDimensions,
-        maxColumns: 1,
-      })
+      if(characterToDraw) {
+        
+        if(visibility == 1) {
+          characterToDraw = [{
+            text: characterToDraw,
+            style: '#00000080',
+          }]
+        }
 
+        fc.drawText({
+          screen: screen,
+          window: window,
+          windowPos: windowPos, 
+          textToDraw: characterToDraw, 
+          offset: offset,
+          center: true,
+          cellSizePixels: window.cellPixelDimensions,
+          maxColumns: 1,
+        })
+
+      }
     }
 
   }
@@ -3447,21 +3530,216 @@ class BackController {
   }
 
   updateCellVisionMemory(actor, pos, character) {
-    actor.memory.vision[pos.x][pos.y] = character
+    set(actor.memory.vision, [pos.x, pos.y], character)
   }
 
   fetchCellFromVisionMemory(actor, pos) {
-    return actor.memory.vision[pos.x][pos.y]
+    return actor.memory.vision[pos.x]?.[pos.y]
   }
 
   checkCellVisibility(actor, pos) {
-    const radius = this.getVisionRadius(actor)
 
-    ...
+    if(!actor.visibilityPos.equal(actor.pos)) {
+      actor.visibilityGrid = []
+      actor.visibilityPos = actor.pos
+    }
+
+    let visibility = actor.visibilityGrid[pos.x]?.[pos.y]
+
+    if(!visibility) {
+      const radius = this.getVisionRadius(actor) * 2
+      const highRadius = Math.ceil(radius)
+      const perimeter = pos.perimeter(highRadius)
+      for(let edge of perimeter) {
+        this.updateCellVisibilityToEdge(actor, edge)
+      }
+      visibility = actor.visibilityGrid[pos.x][pos.y]
+    }
+
+    return visibility
+
+  }
+
+  updateCellVisibilityToEdge(actor, edge) {
+    const from = actor.pos
+    const fullDelta = edge.subtract(from)
+    if(fullDelta.x == 0 || fullDelta.y == 0) {
+      updateCellVisibilityToEdgeOrthagonal(actor, edge, fullDelta)
+    } else {
+      updateCellVisibilityToEdgeDiagonal(actor, edge, fullDelta)
+    }
+  }
+
+  updateCellVisibilityToEdgeOrthagonal(actor, edge, fullDelta) {
+
+    let from
+    let to
+    let horizontal
+    let increment
+
+    if(fullDelta.x != 0) {
+      from = actor.pos.x
+      to = edge.x
+      horizontal = true
+    } else {
+      from = actor.pos.y
+      to = edge.y
+      horizontal = false
+    }
+
+    increment = Math.sign(to - from)
+    const level = this.getLevel()
+    
+    let blocked = false
+    const vg = actor.visibilityGrid
+    for(let i = from + increment; i <= to; i += increment) {
+      let pos
+      if(horizontal) {
+        pos = new Pair(i, edge.y)
+      } else {
+        pos = new Pair(edge.x, i)
+      }
+      if(vg[pos.x]?.[pos.y] == null) {
+        if(blocked) {
+          set(vg, [pos.x, pos.y], 0)
+        } else {
+          if(
+            !pos.equals(actor.pos)
+            &&
+            this.cellBlocksLight(pos, level[pos.x][pos.y])
+          ) {
+            blocked = true
+            set(vg, [pos.x, pos.y], 0)
+          } else {
+            let v = 2
+            const d = actor.pos.distance(pos)
+            const r = this.getVisionRadius(actor)
+            if(d > r) v = 1
+            set(vg, [pos.x, pos.y], v)
+          }
+        }
+      }
+    }
+
+  }
+
+  updateCellVisibilityToEdgeDiagonal(actor, edge, fullDelta) {
+
+    const from = actor.pos
+    const to = edge
+    let horizontal
+    let dx
+
+    const slope = fullDelta.y / fullDelta.x
+    if(Math.abs(fullDelta.x) < Math.abs(fullDelta.y)) {
+      horizontal = true
+      dx = 1 / slope
+    } else {
+      horizontal = false
+      dx = slope
+    }
+
+    const dy = slope * dx
+    const level = this.getLevel()
+    let blocked = false
+    const vg = actor.visibilityGrid
+    const yIntercept = from.y - slope * from.x
+    const line = new Line(slope, yIntercept)
+
+    for(let x = from.x; i <= to.x; i += increment) {
+      const y = slope * x + yIntercept
+      const pos = new Pair(x, y)
+      if(vg[pos.x]?.[pos.y] == null) {
+        if(blocked) {
+          set(vg, [pos.x, pos.y], 0)
+        } else {
+          if(
+            !pos.equals(actor.pos)
+            &&
+            this.cellBlocksLight(
+              pos, level[pos.x][pos.y], line
+            )
+          ) {
+            blocked = true
+            set(vg, [pos.x, pos.y], 0)
+          } else {
+            let v = 2
+            const d = actor.pos.distance(pos)
+            const r = this.getVisionRadius(actor)
+            if(d > r) v = 1
+            set(vg, [pos.x, pos.y], v)
+          }
+        }
+      }
+    }
+
   }
 
   getVisionRadius(actor) {
-    .....
+    const floorBrightness = this.getCurrentFloorBrightness()
+    const baseVision = actor.species.senses.vision / 10
+    let focusEnhancement = 1
+    if(actor.wpFocus == senses.vision) {
+      focusEnhancement = 
+    }
+  }
+
+  cellBlocksLight(pos, cell, line) {
+
+    let blocksLight = false
+
+    if(cell.occupiedBy.size > size.medium) {
+      if(
+        slope == null
+        || !this.interceptedCorner(pos, line)
+      ) {
+        blocksLight = true
+      }
+    }
+
+    return blocksLight
+
+  }
+
+  interceptedCorner(pos, line) {
+    const result = false
+
+    const segments = {
+      topLeft: 
+        new Segment(pos.x - 0.5, pos.y - 0.5, pos.x, pos.y - 0.5),
+      topRight:
+        new Segment(pos.x, pos.y - 0.5, pos.x + 0.5, pos.y - 0.5),
+      rightTop:
+        new Segment(pos.x + 0.5, pos.y - 0.5, pos.x + 0.5, pos.y),
+      rightBottom:
+        new Segment(pos.x + 0.5, pos.y, pos.x + 0.5, pos.y + 0.5),
+      bottomLeft:
+        new Segment(pos.x - 0.5, pos.y + 0.5, pos.x, pos.y + 0.5),
+      bottomRight:
+        new Segment(pos.x, pos.y + 0.5, pos.x + 0.5, pos.y + 0.5),
+      leftTop:
+        new Segment(pos.x - 0.5, pos.y - 0.5, pos.x - 0.5, pos.y),
+      leftBottom:
+        new Segment(pos.x - 0.5, pos.y, pos.x - 0.5, pos.y + 0.5),
+    }
+
+    if(
+      line.interceptsSegment(segments.topLeft)
+      && line.interceptsSegment(segments.leftTop)
+      ||
+      line.interceptsSegment(segments.topRight)
+      && line.interceptsSegment(segments.rightTop)
+      ||
+      line.interceptsSegment(segments.bottomLeft)
+      && line.interceptsSegment(segments.leftBottom)
+      ||
+      line.interceptsSegment(segments.bottomRight)
+      && line.interceptsSegment(segments.rightBottom)
+    ) {
+      result = true
+    }
+
+    return result
   }
 
   initRandomizers() {
@@ -6906,7 +7184,50 @@ function wrap(n, size) {
   return n
 }
 
+// sets a value for a multi-dimensional dimensional array, creating
+// intermediate arrays as needed
+function set(array, indexes, value) {
+  array ?? err("You must pass in a non-null array to set()")
+  let currentArray = array
+  const lastIndex = indexes.length - 1
+  for(let i = 0; i < lastIndex; i++) {
+    const index = indexes[i]
+    if(currentArray[index] == undefined) {
+      currentArray[index] = []
+    }
+    currentArray = currentArray[index]
+  }
+  currentArray[lastIndex] = value
+}
+
 let didSomething = false
+
+class Line {
+
+  // either define slope and yIntercept 
+  //   OR xIntercept (for veritcal lines)
+  constructor(slope, yIntercept, xIntercept) {
+    this.slope = slope
+    this.yIntercept = yIntercept
+    this.xIntercept = xIntercept
+  }
+
+  interceptsSegment(segment) {
+    .....
+  }
+
+  interceptsLine(line) {
+    .....
+  }
+
+}
+
+class Segment {
+  constructor(pos1, pos2) {
+    this.pos1 = pos1
+    this.pos2 = pos2
+  }
+}
 
 const topController = new TopController()
 

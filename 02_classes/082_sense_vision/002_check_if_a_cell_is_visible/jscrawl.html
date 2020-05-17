@@ -3589,7 +3589,6 @@ class BackController {
     }
 
     let blocked = false
-    const levelSize = this.backModel.levelSize
     if(from < to) {
       for(let i = from + 1; i <= to; i++) {
         let pos
@@ -3599,7 +3598,7 @@ class BackController {
           pos = new Pair(edge.x, i)
         }
         blocked = 
-          updateCellVisibilityToEdgeOrthagonal2(actor, pos, blocked)
+          this.updateCellVisibilityToEdgeOrthagonal2(actor, pos, blocked)
       }
     } else {
       for(let i = from - 1; i >= to; i--) {
@@ -3610,41 +3609,48 @@ class BackController {
           pos = new Pair(edge.x, i)
         }
         blocked = 
-          updateCellVisibilityToEdgeOrthagonal2(actor, pos, blocked)
+          this.updateCellVisibilityToEdgeOrthagonal2(actor, pos, blocked)
       }
     }
 
   }
 
   updateCellVisibilityToEdgeOrthagonal2(actor, pos, blocked) {
+
     const level = this.getLevel()
+    const levelSize = this.backModel.levelSize
     const vg = actor.visibilityGrid
-    if(vg[pos.x]?.[pos.y] == null) {
+    const wpos = pos.wrap(levelSize)
+
+    if(vg[wpos.x]?.[wpos.y] == null) {
+
       if(blocked) {
-        set(vg, [pos.x, pos.y], 0)
+        set(vg, [wpos.x, wpos.y], 0)
       } else {
+
         if(
-          !pos.equals(actor.pos)
+          !wpos.equals(actor.pos)
           &&
           this.cellBlocksLight(
             pos, 
-            level
-              [wrap(pos.x, levelSize.x)]
-              [wrap(pos.y, levelSize.y)]
+            level[wpos.x][wpos.y]
           )
         ) {
           blocked = true
-          set(vg, [pos.x, pos.y], 0)
-        } else {
-          let v = 2
-          const d = actor.pos.distance(pos)
-          const r = this.getVisionRadius(actor)
-          if(d > r) v = 1
-          set(vg, [pos.x, pos.y], v)
         }
+
+        let v = 2
+        const d = actor.pos.distance(pos)
+        const r = this.getVisionRadius(actor)
+        if(d > r) v = 1
+        set(vg, [wpos.x, wpos.y], v)
+
       }
+
     }
+
     return blocked
+
   }
 
   updateCellVisibilityToEdgeDiagonal(actor, edge, fullDelta) {
@@ -3696,11 +3702,12 @@ class BackController {
     const level = this.getLevel()
     const levelSize = this.backModel.levelSize
     const vg = actor.visibilityGrid
+    const wpos = pos.wrap(levelSize)
 
-    if(vg[pos.x]?.[pos.y] == null) {
+    if(vg[wpos.x]?.[wpos.y] == null) {
 
       if(blocked) {
-        set(vg, [pos.x, pos.y], 0)
+        set(vg, [wpos.x, wpos.y], 0)
       } else {
 
         if(
@@ -3708,25 +3715,20 @@ class BackController {
           &&
           this.cellBlocksLight(
             pos,
-            level
-              [wrap(pos.x, levelSize.x)]
-              [wrap(pos.y, levelSize.y)],
+            level[wpos.x][wpos.y],
             line,
           )
         ) {
 
           blocked = true
-          set(vg, [pos.x, pos.y], 0)
-
-        } else {
-
-          let v = 2
-          const d = actor.pos.distance(pos)
-          const r = this.getVisionRadius(actor)
-          if(d > r) v = 1
-          set(vg, [pos.x, pos.y], v)
 
         }
+
+        let v = 2
+        const d = actor.pos.distance(pos)
+        const r = this.getVisionRadius(actor)
+        if(d > r) v = 1
+        set(vg, [wpos.x, wpos.y], v)
 
       }
 
@@ -7302,7 +7304,7 @@ function set(array, indexes, value) {
     }
     currentArray = currentArray[index]
   }
-  currentArray[lastIndex] = value
+  currentArray[indexes[lastIndex]] = value
 }
 
 let didSomething = false

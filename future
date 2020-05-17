@@ -1,9 +1,7 @@
+vision bugs:
+  showing walls even past blocked point
+  O is used for rat
 basic senses
-  vision
-    drawing level view 
-      consider if square is visible right now
-      if not, is it in memory?
-    haze: can see twice as far for vague shapes, but not identify until in actual visual range
   how to view different senses?
     view command switches view
       vision

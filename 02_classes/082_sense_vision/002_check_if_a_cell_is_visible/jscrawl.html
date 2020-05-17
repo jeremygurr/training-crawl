@@ -133,6 +133,7 @@ class Pair {
       result.push(new Pair(this.x - radius, y))
       result.push(new Pair(this.x + radius, y))
     }
+    return result
   }
 
   distance(target) {
@@ -161,7 +162,7 @@ const fontStyle = {
 const senses = {
   vision: {},
   hearing: {},
-  smell: {}.
+  smell: {},
   feeling: {},
   energy: {},
 }
@@ -971,12 +972,12 @@ const template = {
           torch: {
             chanceWeight: 1000,
             durability: 100,
-            light: 3,
+            glow: 3,
             showAs: '🔦',
           },
           candle: {
             chanceWeight: 1000,
-            light: 2,
+            glow: 2,
             showAs: '🕯',
           },
         },
@@ -3539,23 +3540,23 @@ class BackController {
 
   checkCellVisibility(actor, pos) {
 
-    if(!actor.visibilityPos.equal(actor.pos)) {
+    if(actor.pos.equals(pos)) return 2
+
+    if(
+      actor.visibilityPos == null 
+      || !actor.visibilityPos.equals(actor.pos)
+    ) {
       actor.visibilityGrid = []
       actor.visibilityPos = actor.pos
-    }
-
-    let visibility = actor.visibilityGrid[pos.x]?.[pos.y]
-
-    if(!visibility) {
       const radius = this.getVisionRadius(actor) * 2
-      const highRadius = Math.ceil(radius)
-      const perimeter = pos.perimeter(highRadius)
+      const highRadius = Math.min(10, Math.ceil(radius))
+      const perimeter = actor.pos.perimeter(highRadius)
       for(let edge of perimeter) {
         this.updateCellVisibilityToEdge(actor, edge)
       }
-      visibility = actor.visibilityGrid[pos.x][pos.y]
     }
 
+    const visibility = actor.visibilityGrid[pos.x]?.[pos.y]
     return visibility
 
   }
@@ -3564,9 +3565,9 @@ class BackController {
     const from = actor.pos
     const fullDelta = edge.subtract(from)
     if(fullDelta.x == 0 || fullDelta.y == 0) {
-      updateCellVisibilityToEdgeOrthagonal(actor, edge, fullDelta)
+      this.updateCellVisibilityToEdgeOrthagonal(actor, edge, fullDelta)
     } else {
-      updateCellVisibilityToEdgeDiagonal(actor, edge, fullDelta)
+      this.updateCellVisibilityToEdgeDiagonal(actor, edge, fullDelta)
     }
   }
 
@@ -3587,46 +3588,72 @@ class BackController {
       horizontal = false
     }
 
-    increment = Math.sign(to - from)
-    const level = this.getLevel()
-    
     let blocked = false
-    const vg = actor.visibilityGrid
-    for(let i = from + increment; i <= to; i += increment) {
-      let pos
-      if(horizontal) {
-        pos = new Pair(i, edge.y)
-      } else {
-        pos = new Pair(edge.x, i)
-      }
-      if(vg[pos.x]?.[pos.y] == null) {
-        if(blocked) {
-          set(vg, [pos.x, pos.y], 0)
+    const levelSize = this.backModel.levelSize
+    if(from < to) {
+      for(let i = from + 1; i <= to; i++) {
+        let pos
+        if(horizontal) {
+          pos = new Pair(i, edge.y)
         } else {
-          if(
-            !pos.equals(actor.pos)
-            &&
-            this.cellBlocksLight(pos, level[pos.x][pos.y])
-          ) {
-            blocked = true
-            set(vg, [pos.x, pos.y], 0)
-          } else {
-            let v = 2
-            const d = actor.pos.distance(pos)
-            const r = this.getVisionRadius(actor)
-            if(d > r) v = 1
-            set(vg, [pos.x, pos.y], v)
-          }
+          pos = new Pair(edge.x, i)
         }
+        blocked = 
+          updateCellVisibilityToEdgeOrthagonal2(actor, pos, blocked)
+      }
+    } else {
+      for(let i = from - 1; i >= to; i--) {
+        let pos
+        if(horizontal) {
+          pos = new Pair(i, edge.y)
+        } else {
+          pos = new Pair(edge.x, i)
+        }
+        blocked = 
+          updateCellVisibilityToEdgeOrthagonal2(actor, pos, blocked)
       }
     }
 
+  }
+
+  updateCellVisibilityToEdgeOrthagonal2(actor, pos, blocked) {
+    const level = this.getLevel()
+    const vg = actor.visibilityGrid
+    if(vg[pos.x]?.[pos.y] == null) {
+      if(blocked) {
+        set(vg, [pos.x, pos.y], 0)
+      } else {
+        if(
+          !pos.equals(actor.pos)
+          &&
+          this.cellBlocksLight(
+            pos, 
+            level
+              [wrap(pos.x, levelSize.x)]
+              [wrap(pos.y, levelSize.y)]
+          )
+        ) {
+          blocked = true
+          set(vg, [pos.x, pos.y], 0)
+        } else {
+          let v = 2
+          const d = actor.pos.distance(pos)
+          const r = this.getVisionRadius(actor)
+          if(d > r) v = 1
+          set(vg, [pos.x, pos.y], v)
+        }
+      }
+    }
+    return blocked
   }
 
   updateCellVisibilityToEdgeDiagonal(actor, edge, fullDelta) {
 
     const from = actor.pos
     const to = edge
+    if(from.equals(to)) {
+      err("from and to must be different.")
+    }
     let horizontal
     let dx
 
@@ -3639,56 +3666,125 @@ class BackController {
       dx = slope
     }
 
-    const dy = slope * dx
-    const level = this.getLevel()
+    dx = Math.abs(dx)
     let blocked = false
-    const vg = actor.visibilityGrid
     const yIntercept = from.y - slope * from.x
     const line = new Line(slope, yIntercept)
 
-    for(let x = from.x; i <= to.x; i += increment) {
-      const y = slope * x + yIntercept
-      const pos = new Pair(x, y)
-      if(vg[pos.x]?.[pos.y] == null) {
-        if(blocked) {
-          set(vg, [pos.x, pos.y], 0)
-        } else {
-          if(
-            !pos.equals(actor.pos)
-            &&
-            this.cellBlocksLight(
-              pos, level[pos.x][pos.y], line
-            )
-          ) {
-            blocked = true
-            set(vg, [pos.x, pos.y], 0)
-          } else {
-            let v = 2
-            const d = actor.pos.distance(pos)
-            const r = this.getVisionRadius(actor)
-            if(d > r) v = 1
-            set(vg, [pos.x, pos.y], v)
-          }
-        }
+    if(from.x < to.x) {
+
+      for(let x = from.x + dx; x <= to.x; x += dx) {
+        const y = slope * x + yIntercept
+        const pos = new Pair(Math.floor(x), Math.floor(y))
+        blocked = this.updateCellVisibilityToEdgeDiagonal2(actor, pos, line, blocked)
       }
+
+    } else {
+
+      for(let x = from.x - dx; x >= to.x; x -= dx) {
+        const y = slope * x + yIntercept
+        const pos = new Pair(Math.floor(x), Math.floor(y))
+        blocked = this.updateCellVisibilityToEdgeDiagonal2(actor, pos, line, blocked)
+      }
+
     }
 
   }
 
+  updateCellVisibilityToEdgeDiagonal2(actor, pos, line, blocked) {
+
+    const level = this.getLevel()
+    const levelSize = this.backModel.levelSize
+    const vg = actor.visibilityGrid
+
+    if(vg[pos.x]?.[pos.y] == null) {
+
+      if(blocked) {
+        set(vg, [pos.x, pos.y], 0)
+      } else {
+
+        if(
+          !pos.equals(actor.pos)
+          &&
+          this.cellBlocksLight(
+            pos,
+            level
+              [wrap(pos.x, levelSize.x)]
+              [wrap(pos.y, levelSize.y)],
+            line,
+          )
+        ) {
+
+          blocked = true
+          set(vg, [pos.x, pos.y], 0)
+
+        } else {
+
+          let v = 2
+          const d = actor.pos.distance(pos)
+          const r = this.getVisionRadius(actor)
+          if(d > r) v = 1
+          set(vg, [pos.x, pos.y], v)
+
+        }
+
+      }
+
+    }
+
+    return blocked
+
+  }
+
   getVisionRadius(actor) {
-    const floorBrightness = this.getCurrentFloorBrightness()
+    const floorBrightness = 
+      this.getCurrentFloorBrightness()
+      + this.getEquipBrightness(actor)
     const baseVision = actor.species.senses.vision / 10
     let focusEnhancement = 1
     if(actor.wpFocus == senses.vision) {
-      focusEnhancement = 
+      focusEnhancement += actor.medDepth * 0.1
     }
+    const radius = floorBrightness * baseVision * focusEnhancement
+    if(!radius) {
+      err("Invalid radius: " + radius)
+    }
+    return radius
+  }
+
+  getCurrentFloorBrightness() {
+    // right now all floors are the same
+    return 4
+  }
+
+  getEquipBrightness(actor) {
+    let totalBrightness = 0
+    const equip = actor.equip
+    for(const [key, value] of Object.entries(equip)) {
+      if(key == 'hand' || key == 'ring') {
+        for(const item of equip[key]) {
+          totalBrightness += this.getItemBrightness(item)
+        }
+      } else {
+        totalBrightness += this.getItemBrightness(equip[key])
+      }
+    }
+    return totalBrightness
+  }
+
+  getItemBrightness(item) {
+    let brightness = 0
+    if(item && item.glow) {
+      brightness += item.glow
+    }
+    return brightness
   }
 
   cellBlocksLight(pos, cell, line) {
 
     let blocksLight = false
 
-    if(cell.occupiedBy.size > size.medium) {
+    if(cell.occupiedBy && cell.occupiedBy.size > size.medium) {
       if(
         slope == null
         || !this.interceptedCorner(pos, line)
@@ -7175,11 +7271,20 @@ function fill(objectOrArray, value) {
 }
 
 function wrap(n, size) {
+  let iterations = 10
   while(n < 0) {
     n += size
+    iterations--
+    if(!iterations) {
+      err("Too many iterations")
+    }
   }
   while(n >= size) {
     n -= size
+    iterations--
+    if(!iterations) {
+      err("Too many iterations")
+    }
   }
   return n
 }
@@ -7202,6 +7307,7 @@ function set(array, indexes, value) {
 
 let didSomething = false
 
+// this class handles all lines, including vertical ones
 class Line {
 
   // either define slope and yIntercept 
@@ -7213,11 +7319,51 @@ class Line {
   }
 
   interceptsSegment(segment) {
-    .....
+    const line = this.fromSegment(segment)
+    const intersection = this.intersection(line)
+    const intercepts = 
+      intersection != null
+      && intersection.x >= segment.x1 
+      && intersection.x < segment.x2
+    return intercepts
   }
 
-  interceptsLine(line) {
-    .....
+  fromSegment(segment) {
+    const dx = segment.x2 - segment.x1
+    let line
+    if(dx == 0)  {
+      line = new Line(null, null, segment.x1)
+    } else {
+      const dy = segment.y2 - segment.y1
+      const slope = dy / dx
+      const yIntercept = segment.y1 - slope * segment.x1
+      line = new Line(slope, yIntercept)
+    }
+    return line
+  }
+
+  intersection(line) {
+    let intersection
+    if(this.slope != null && line.slope != null) {
+      if(this.slope != line.slope) {
+        const x = 
+          (line.yIntercept - this.yIntercept) 
+          / (this.slope - line.slope)
+        const y = this.slope * x + this.yIntercept
+        intersection = new Pair(x, y)
+      } // otherwise the slopes are parallel
+        //   and there is no intersection
+    } else if(this.slope != null && line.slope == null) {
+      const x = line.xIntercept
+      const y = this.slope * x + this.yIntercept
+      intersection = new Pair(x, y)
+    } else if(this.slope == null && line.slope != null) {
+      const x = this.xIntercept
+      const y = line.slope * x + line.yIntercept
+      intersection = new Pair(x, y)
+    } // otherwise both slopes are vertical, and we don't
+      //   have an intersection
+    return intersection
   }
 
 }

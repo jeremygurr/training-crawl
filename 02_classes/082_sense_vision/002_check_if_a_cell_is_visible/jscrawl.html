@@ -3834,21 +3834,45 @@ class BackController {
 
     const segments = {
       topLeft: 
-        new Segment(pos.x - 0.5, pos.y - 0.5, pos.x, pos.y - 0.5),
+        new Segment(
+          new Pair(pos.x - 0.5, pos.y - 0.5), 
+          new Pair(pos.x, pos.y - 0.5)
+        ),
       topRight:
-        new Segment(pos.x, pos.y - 0.5, pos.x + 0.5, pos.y - 0.5),
+        new Segment(
+          new Pair(pos.x, pos.y - 0.5), 
+          new Pair(pos.x + 0.5, pos.y - 0.5)
+        ),
       rightTop:
-        new Segment(pos.x + 0.5, pos.y - 0.5, pos.x + 0.5, pos.y),
+        new Segment(
+          new Pair(pos.x + 0.5, pos.y - 0.5), 
+          new Pair(pos.x + 0.5, pos.y)
+        ),
       rightBottom:
-        new Segment(pos.x + 0.5, pos.y, pos.x + 0.5, pos.y + 0.5),
+        new Segment(
+          new Pair(pos.x + 0.5, pos.y), 
+          new Pair(pos.x + 0.5, pos.y + 0.5)
+        ),
       bottomLeft:
-        new Segment(pos.x - 0.5, pos.y + 0.5, pos.x, pos.y + 0.5),
+        new Segment(
+          new Pair(pos.x - 0.5, pos.y + 0.5), 
+          new Pair(pos.x, pos.y + 0.5)
+        ),
       bottomRight:
-        new Segment(pos.x, pos.y + 0.5, pos.x + 0.5, pos.y + 0.5),
+        new Segment(
+          new Pair(pos.x, pos.y + 0.5), 
+          new Pair(pos.x + 0.5, pos.y + 0.5)
+        ),
       leftTop:
-        new Segment(pos.x - 0.5, pos.y - 0.5, pos.x - 0.5, pos.y),
+        new Segment(
+          new Pair(pos.x - 0.5, pos.y - 0.5), 
+          new Pair(pos.x - 0.5, pos.y)
+        ),
       leftBottom:
-        new Segment(pos.x - 0.5, pos.y, pos.x - 0.5, pos.y + 0.5),
+        new Segment(
+          new Pair(pos.x - 0.5, pos.y), 
+          new Pair(pos.x - 0.5, pos.y + 0.5)
+        ),
     }
 
     if(
@@ -7355,20 +7379,20 @@ class Line {
     const intersection = this.intersection(line)
     const intercepts = 
       intersection != null
-      && intersection.x >= segment.x1 
-      && intersection.x < segment.x2
+      && intersection.x >= segment.pos1.x 
+      && intersection.x < segment.pos2.x
     return intercepts
   }
 
   fromSegment(segment) {
-    const dx = segment.x2 - segment.x1
+    const dx = segment.pos2.x - segment.pos1.x
     let line
     if(dx == 0)  {
-      line = new Line(null, null, segment.x1)
+      line = new Line(null, null, segment.pos1.x)
     } else {
-      const dy = segment.y2 - segment.y1
+      const dy = segment.pos2.y - segment.pos1.y
       const slope = dy / dx
-      const yIntercept = segment.y1 - slope * segment.x1
+      const yIntercept = segment.pos1.y - slope * segment.pos1.x
       line = new Line(slope, yIntercept)
     }
     return line

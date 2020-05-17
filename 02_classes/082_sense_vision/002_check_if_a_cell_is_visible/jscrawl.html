@@ -3043,42 +3043,59 @@ class TopController {
       const visibility = 
         bc.checkCellVisibility(player, levelPos)
 
-      if(visibility > 0) {
-        const occupant = cell.occupiedBy
-        if(occupant) {
-          if(visibility == 2) {
-            characterToDraw = occupant.base.showAs
-          } else {
-            if(occupant.base.size > size.medium) {
-              characterToDraw = template.object.somethingBig.showAs
-            } else {
-              characterToDraw = template.object.somethingSmall.showAs
-            }
-          }
-          offset = cell.occupiedBy.offset
-        } else if(cell.onFloor.length > 0 && visibility > 1) {
-          characterToDraw = cell.onFloor[0].base.showAs
-          offset = cell.onFloor[0].offset
+      const remembered = bc.fetchCellFromVisionMemory(
+        player, levelPos,
+      )
+      let subject
+      if(visibility == 2) {
+        if(cell.occupiedBy) {
+          subject = cell.occupiedBy.base
+          characterToDraw = subject.showAs
+        } else if(cell.onFloor.length > 0) {
+          subject = cell.onFloor[0].base
+          characterToDraw = subject.showAs
         } else {
-          characterToDraw = cell.floorType.base.showAs
-          offset = cell.floorType.offset
+          subject = cell.floorType.base
+          characterToDraw = subject.showAs
         }
-        if(visibility == 2) {
-          bc.updateCellVisionMemory(player, levelPos, characterToDraw)
+        offset = subject.offset
+        bc.updateCellVisionMemory(
+          player, 
+          levelPos, 
+          { 
+            toDraw: characterToDraw,
+            size: subject.size,
+          },
+        )
+      } else if(visibility == 1) {
+        if(cell.occupiedBy) {
+          subject = cell.occupiedBy.base
+          if(subject.size > size.medium) {
+            characterToDraw = template.object.somethingBig.showAs
+          } else {
+            characterToDraw = template.object.somethingSmall.showAs
+          }
+        } else if(cell.onFloor.length > 0 && visibility > 1) {
+          subject = cell.onFloor[0].base
+          characterToDraw = subject.showAs
+        } else {
+          subject = cell.floorType.base
+          characterToDraw = subject.showAs
+        }
+        offset = subject.offset
+        if(remembered && remembered.size == subject.size) {
+          characterToDraw = remembered.toDraw
         }
       } else {
         // cell isn't visible
-        const remembered = bc.fetchCellFromVisionMemory(
-          player, levelPos,
-        )
         if(remembered) {
-          characterToDraw = remembered
+          characterToDraw = remembered.toDraw
         }
       }
 
       if(characterToDraw) {
         
-        if(visibility == 1) {
+        if(visibility < 2) {
           characterToDraw = [{
             text: characterToDraw,
             style: '#00000080',

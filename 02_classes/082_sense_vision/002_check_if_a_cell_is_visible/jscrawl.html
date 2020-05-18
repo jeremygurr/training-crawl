@@ -147,6 +147,7 @@ class Pair {
 
 // this only needs to be created once, since it is immutable
 emptyPair = new Pair(0, 0)
+halfPair = new Pair(0.5, 0.5)
 
 function pair(m) {
   return new Pair(m, m)
@@ -3657,8 +3658,9 @@ class BackController {
 
     let blocked = false
 
-    const from = actor.pos
-    const to = edge
+    const from = actor.pos.add(halfPair)
+    const to = edge.add(halfPair)
+
     if(from.equals(to)) {
       err("from and to must be different.")
     }
@@ -3670,7 +3672,7 @@ class BackController {
     } else {
       dx = slope
     }
-    dx = Math.abs(dx) / 2
+    dx = Math.abs(dx) // / 2
 
     const yIntercept = from.y - slope * from.x
     const line = new Line(slope, yIntercept)
@@ -3679,7 +3681,7 @@ class BackController {
 
       for(let x = from.x + dx; x < to.x; x += dx) {
         const y = slope * x + yIntercept
-        const pos = new Pair(Math.round(x), Math.round(y))
+        const pos = new Pair(Math.floor(x), Math.floor(y))
         if(!pos.equals(edge)) {
           blocked = 
             this.checkCellVisibilityToEdge(actor, pos, line)
@@ -3693,7 +3695,7 @@ class BackController {
 
       for(let x = from.x - dx; x > to.x; x -= dx) {
         const y = slope * x + yIntercept
-        const pos = new Pair(Math.round(x), Math.round(y))
+        const pos = new Pair(Math.floor(x), Math.floor(y))
         if(!pos.equals(edge)) {
           blocked = 
             this.checkCellVisibilityToEdge(actor, pos, line)
@@ -3716,16 +3718,14 @@ class BackController {
     const levelSize = this.backModel.levelSize
     const wpos = pos.wrap(levelSize)
 
-    if(
-      !wpos.equals(actor.pos)
-      &&
-      this.cellBlocksLight(
+    if(!wpos.equals(actor.pos)) {
+      if(this.cellBlocksLight(
         pos, 
         level[wpos.x][wpos.y],
         line,
-      )
-    ) {
-      blocked = true
+      )) {
+        blocked = true
+      }
     }
 
     return blocked
@@ -3799,43 +3799,43 @@ class BackController {
     const segments = {
       topLeft: 
         new Segment(
-          new Pair(pos.x - 0.5, pos.y - 0.5), 
-          new Pair(pos.x, pos.y - 0.5)
+          new Pair(pos.x      , pos.y), 
+          new Pair(pos.x + 0.5, pos.y),
         ),
       topRight:
         new Segment(
-          new Pair(pos.x, pos.y - 0.5), 
-          new Pair(pos.x + 0.5, pos.y - 0.5)
+          new Pair(pos.x + 0.5, pos.y), 
+          new Pair(pos.x + 1  , pos.y),
         ),
       rightTop:
         new Segment(
-          new Pair(pos.x + 0.5, pos.y - 0.5), 
-          new Pair(pos.x + 0.5, pos.y)
+          new Pair(pos.x + 1, pos.y      ), 
+          new Pair(pos.x + 1, pos.y + 0.5),
         ),
       rightBottom:
         new Segment(
-          new Pair(pos.x + 0.5, pos.y), 
-          new Pair(pos.x + 0.5, pos.y + 0.5)
+          new Pair(pos.x + 1, pos.y + 0.5), 
+          new Pair(pos.x + 1, pos.y + 1  ),
         ),
       bottomLeft:
         new Segment(
-          new Pair(pos.x - 0.5, pos.y + 0.5), 
-          new Pair(pos.x, pos.y + 0.5)
+          new Pair(pos.x      , pos.y + 1), 
+          new Pair(pos.x + 0.5, pos.y + 1),
         ),
       bottomRight:
         new Segment(
-          new Pair(pos.x, pos.y + 0.5), 
-          new Pair(pos.x + 0.5, pos.y + 0.5)
+          new Pair(pos.x + 0.5, pos.y + 1), 
+          new Pair(pos.x + 1  , pos.y + 1),
         ),
       leftTop:
         new Segment(
-          new Pair(pos.x - 0.5, pos.y - 0.5), 
-          new Pair(pos.x - 0.5, pos.y)
+          new Pair(pos.x, pos.y      ), 
+          new Pair(pos.x, pos.y + 0.5),
         ),
       leftBottom:
         new Segment(
-          new Pair(pos.x - 0.5, pos.y), 
-          new Pair(pos.x - 0.5, pos.y + 0.5)
+          new Pair(pos.x, pos.y + 0.5), 
+          new Pair(pos.x, pos.y + 1  ),
         ),
     }
 

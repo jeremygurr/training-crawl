@@ -922,7 +922,7 @@ const template = {
     dirtFloor: { 
       type: 'floor', 
       occupant: false, 
-      size: size.large,
+      size: size.small,
       name: 'dirt', 
       showAs: '.' 
     },
@@ -943,8 +943,8 @@ const template = {
   },
 
   generated: {
+
     fillRatio: 0.020,
-    size: size.small,
 
     sub: {
 
@@ -953,6 +953,7 @@ const template = {
         showAs: '!', 
         occupant: false,
         chanceWeight: 0,
+        size: size.small,
         sub: {
           experience: { 
             chanceWeight: 0, 
@@ -965,6 +966,7 @@ const template = {
         showAs: '💰', 
         occupant: false,
         chanceWeight: 1000,
+        size: size.small,
         sub: {
           gold1: { 
             chanceWeight: 1000, 
@@ -1012,6 +1014,7 @@ const template = {
         showAs: '🛠',
         equipSlot: 'hand',
         hands: 1,
+        size: size.small,
         sub: {
           torch: {
             chanceWeight: 1000,
@@ -1034,6 +1037,7 @@ const template = {
         equipSlot: 'hand',
         hands: 1,
         durability: 100,
+        size: size.small,
         sub: {
           throwable: {
             skill: 'throwing',
@@ -1165,6 +1169,7 @@ const template = {
         occupant: false,
         chanceWeight: 1000,
         showAs: '🍖',
+        size: size.small,
         sub: {
           beef: { 
             chanceWeight: 1000,
@@ -3112,7 +3117,7 @@ class TopController {
           } else {
             characterToDraw = template.object.somethingSmall.showAs
           }
-        } else if(cell.onFloor.length > 0 && visibility > 1) {
+        } else if(cell.onFloor.length > 0) {
           subject = cell.onFloor[0].base
           characterToDraw = subject.showAs
         } else {
@@ -3120,6 +3125,9 @@ class TopController {
           characterToDraw = subject.showAs
         }
         offset = subject.offset
+        if(subject.size == null) {
+          err("Item is missing size property")
+        }
         if(remembered && remembered.size == subject.size) {
           characterToDraw = remembered.toDraw
         }

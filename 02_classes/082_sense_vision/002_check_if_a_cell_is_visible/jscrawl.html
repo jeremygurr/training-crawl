@@ -1456,9 +1456,6 @@ const template = {
       },
       // this is filled in during initialization
       growthSelection: { },
-      visibilityPos: null,
-      visibilityGrid: [], // a 2d grid of null, 0, 1, or 2 
-                          // (2 meaning fully visible)
     },
   },
 
@@ -3570,43 +3567,54 @@ class BackController {
 
   checkCellVisibility(actor, pos) {
 
-    if(actor.pos.equals(pos)) return 2
+    let visibility = 0
 
-    if(
-      actor.visibilityPos == null 
-      || !actor.visibilityPos.equals(actor.pos)
-    ) {
-      actor.visibilityGrid = []
-      actor.visibilityPos = actor.pos
-      const radius = this.getVisionRadius(actor) * 2
-      const highRadius = Math.min(10, Math.ceil(radius))
-      const perimeter = actor.pos.perimeter(highRadius)
-      for(let edge of perimeter) {
-        this.updateCellVisibilityToEdge(actor, edge)
+    if(actor.pos.equals(pos)) {
+      visibility = 2
+    } else {
+
+      const distance = actor.pos.distance(pos)
+      const visionRadius = this.getVisionRadius(actor)
+
+      if(distance > visionRadius * 2) {
+        visibility = 0
+      } else {
+
+        const fullDelta = pos.subtract(actor.pos)
+        let blocked = false
+
+        if(fullDelta.x == 0 || fullDelta.y == 0) {
+          blocked = this.checkCellVisibilityToEdgeOrthagonal(
+            actor, pos, fullDelta
+          )
+        } else {
+          blocked = this.checkCellVisibilityToEdgeDiagonal(
+            actor, pos, fullDelta
+          )
+        }
+
+        visibility = 2
+        if(blocked) {
+          visibility = 0
+        } else if(distance > visionRadius) { 
+          visibility = 1
+        }
+
       }
+
     }
 
-    const visibility = actor.visibilityGrid[pos.x]?.[pos.y]
     return visibility
 
   }
 
-  updateCellVisibilityToEdge(actor, edge) {
-    const from = actor.pos
-    const fullDelta = edge.subtract(from)
-    if(fullDelta.x == 0 || fullDelta.y == 0) {
-      this.updateCellVisibilityToEdgeOrthagonal(actor, edge, fullDelta)
-    } else {
-      this.updateCellVisibilityToEdgeDiagonal(actor, edge, fullDelta)
-    }
-  }
-
-  updateCellVisibilityToEdgeOrthagonal(actor, edge, fullDelta) {
+  checkCellVisibilityToEdgeOrthagonal(actor, edge, fullDelta) {
 
     let from
     let to
     let horizontal
     let increment
+    let blocked = false
 
     if(fullDelta.x != 0) {
       from = actor.pos.x
@@ -3618,64 +3626,81 @@ class BackController {
       horizontal = false
     }
 
-    let blocked = false
     if(from < to) {
-      for(let i = from + 1; i <= to; i++) {
+      for(let i = from + 1; i < to; i++) {
         let pos
         if(horizontal) {
           pos = new Pair(i, edge.y)
         } else {
           pos = new Pair(edge.x, i)
         }
-        blocked = 
-          this.updateCellVisibilityToEdgeOrthagonal2(actor, pos, blocked)
+        blocked = this.checkCellVisibilityToEdge(actor, pos)
+        if(blocked) break
       }
     } else {
-      for(let i = from - 1; i >= to; i--) {
+      for(let i = from - 1; i > to; i--) {
         let pos
         if(horizontal) {
           pos = new Pair(i, edge.y)
         } else {
           pos = new Pair(edge.x, i)
         }
-        blocked = 
-          this.updateCellVisibilityToEdgeOrthagonal2(actor, pos, blocked)
+        blocked = this.checkCellVisibilityToEdge(actor, pos)
+        if(blocked) break
       }
     }
 
+    return blocked
   }
 
-  updateCellVisibilityToEdgeOrthagonal2(actor, pos, blocked) {
+  checkCellVisibilityToEdgeDiagonal(actor, edge, fullDelta) {
 
-    const level = this.getLevel()
-    const levelSize = this.backModel.levelSize
-    const vg = actor.visibilityGrid
-    const wpos = pos.wrap(levelSize)
+    let blocked = false
 
-    if(vg[wpos.x]?.[wpos.y] == null) {
+    const from = actor.pos
+    const to = edge
+    if(from.equals(to)) {
+      err("from and to must be different.")
+    }
 
-      if(blocked) {
-        set(vg, [wpos.x, wpos.y], 0)
-      } else {
+    let dx
+    const slope = fullDelta.y / fullDelta.x
+    if(Math.abs(fullDelta.x) < Math.abs(fullDelta.y)) {
+      dx = 1 / slope
+    } else {
+      dx = slope
+    }
+    dx = Math.abs(dx) / 2
 
-        if(
-          !wpos.equals(actor.pos)
-          &&
-          this.cellBlocksLight(
-            pos, 
-            level[wpos.x][wpos.y]
-          )
-        ) {
-          blocked = true
+    const yIntercept = from.y - slope * from.x
+    const line = new Line(slope, yIntercept)
+
+    if(from.x < to.x) {
+
+      for(let x = from.x + dx; x < to.x; x += dx) {
+        const y = slope * x + yIntercept
+        const pos = new Pair(Math.round(x), Math.round(y))
+        if(!pos.equals(edge)) {
+          blocked = 
+            this.checkCellVisibilityToEdge(actor, pos, line)
+          if(blocked) break
+        } else {
+          break
         }
+      }
 
-        let v = 2
-        const d = actor.pos.distance(pos)
-        const r = this.getVisionRadius(actor)
-        if(d > r) v = 1
-        if(d > 2 * r) v = 0
-        set(vg, [wpos.x, wpos.y], v)
+    } else {
 
+      for(let x = from.x - dx; x > to.x; x -= dx) {
+        const y = slope * x + yIntercept
+        const pos = new Pair(Math.round(x), Math.round(y))
+        if(!pos.equals(edge)) {
+          blocked = 
+            this.checkCellVisibilityToEdge(actor, pos, line)
+          if(blocked) break
+        } else {
+          break
+        }
       }
 
     }
@@ -3684,90 +3709,23 @@ class BackController {
 
   }
 
-  updateCellVisibilityToEdgeDiagonal(actor, edge, fullDelta) {
+  checkCellVisibilityToEdge(actor, pos, line) {
 
-    const from = actor.pos
-    const to = edge
-    if(from.equals(to)) {
-      err("from and to must be different.")
-    }
-    let dx
-
-    const slope = fullDelta.y / fullDelta.x
-    if(Math.abs(fullDelta.x) < Math.abs(fullDelta.y)) {
-      dx = 1 / slope
-    } else {
-      dx = slope
-    }
-
-    dx = Math.abs(dx) / 2
     let blocked = false
-    const yIntercept = from.y - slope * from.x
-    const line = new Line(slope, yIntercept)
-
-    if(from.x < to.x) {
-
-      for(let x = from.x + dx; x <= to.x; x += dx) {
-        const y = slope * x + yIntercept
-        const pos = new Pair(Math.round(x), Math.round(y))
-        blocked = this.updateCellVisibilityToEdgeDiagonal2(actor, pos, line, blocked)
-      }
-
-    } else {
-
-      for(let x = from.x - dx; x >= to.x; x -= dx) {
-        const y = slope * x + yIntercept
-        const pos = new Pair(Math.round(x), Math.round(y))
-        blocked = this.updateCellVisibilityToEdgeDiagonal2(actor, pos, line, blocked)
-      }
-
-    }
-
-  }
-
-  updateCellVisibilityToEdgeDiagonal2(actor, pos, line, blocked) {
-
     const level = this.getLevel()
     const levelSize = this.backModel.levelSize
-    const vg = actor.visibilityGrid
     const wpos = pos.wrap(levelSize)
 
-    if(blocked) {
-      set(vg, [wpos.x, wpos.y], 0)
-    } else {
-
-      if(
-        !pos.equals(actor.pos)
-        &&
-        this.cellBlocksLight(
-          pos,
-          level[wpos.x][wpos.y],
-          line,
-        )
-      ) {
-
-        blocked = true
-
-      }
-
-      let v = 2
-      const d = actor.pos.distance(pos)
-      const r = this.getVisionRadius(actor)
-      if(d > r) v = 1
-      if(d > 2 * r) v = 0
-      set(vg, [wpos.x, wpos.y], v)
-
-    }
-
-    if(vg[wpos.x]?.[wpos.y] == null) {
-
-    } else {
-      
-      // this visibilityGrid cell was already computed
-      if(vg[wpos.x][wpos.y] == 0) {
-        blocked = true
-      }
-
+    if(
+      !wpos.equals(actor.pos)
+      &&
+      this.cellBlocksLight(
+        pos, 
+        level[wpos.x][wpos.y],
+        line,
+      )
+    ) {
+      blocked = true
     }
 
     return blocked

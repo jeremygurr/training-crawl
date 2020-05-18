@@ -3672,7 +3672,7 @@ class BackController {
     } else {
       dx = slope
     }
-    dx = Math.abs(dx) // / 2
+    dx = Math.abs(dx)
 
     const yIntercept = from.y - slope * from.x
     const line = new Line(slope, yIntercept)
@@ -7346,18 +7346,18 @@ class Line {
       && 
       ( 
         intersection.x >= segment.pos1.x 
-        && intersection.x <= segment.pos2.x
+        && intersection.x < segment.pos2.x
         ||
         intersection.x <= segment.pos1.x 
-        && intersection.x >= segment.pos2.x
+        && intersection.x > segment.pos2.x
       )
       && 
       ( 
         intersection.y >= segment.pos1.y 
-        && intersection.y <= segment.pos2.y
+        && intersection.y < segment.pos2.y
         ||
         intersection.y <= segment.pos1.y 
-        && intersection.y >= segment.pos2.y
+        && intersection.y > segment.pos2.y
       )
     return intercepts
   }

@@ -3673,6 +3673,7 @@ class BackController {
         const d = actor.pos.distance(pos)
         const r = this.getVisionRadius(actor)
         if(d > r) v = 1
+        if(d > 2 * r) v = 0
         set(vg, [wpos.x, wpos.y], v)
 
       }
@@ -3758,6 +3759,7 @@ class BackController {
         const d = actor.pos.distance(pos)
         const r = this.getVisionRadius(actor)
         if(d > r) v = 1
+        if(d > 2 * r) v = 0
         set(vg, [wpos.x, wpos.y], v)
 
       }
@@ -3830,7 +3832,7 @@ class BackController {
   }
 
   interceptedCorner(pos, line) {
-    const result = false
+    let result = false
 
     const segments = {
       topLeft: 
@@ -7379,8 +7381,22 @@ class Line {
     const intersection = this.intersection(line)
     const intercepts = 
       intersection != null
-      && intersection.x >= segment.pos1.x 
-      && intersection.x < segment.pos2.x
+      && 
+      ( 
+        intersection.x >= segment.pos1.x 
+        && intersection.x <= segment.pos2.x
+        ||
+        intersection.x <= segment.pos1.x 
+        && intersection.x >= segment.pos2.x
+      )
+      && 
+      ( 
+        intersection.y >= segment.pos1.y 
+        && intersection.y <= segment.pos2.y
+        ||
+        intersection.y <= segment.pos1.y 
+        && intersection.y >= segment.pos2.y
+      )
     return intercepts
   }
 

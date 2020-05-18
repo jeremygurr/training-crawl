@@ -3819,8 +3819,8 @@ class BackController {
 
   getItemBrightness(item) {
     let brightness = 0
-    if(item && item.glow) {
-      brightness += item.glow
+    if(item && item.base.glow) {
+      brightness += item.base.glow
     }
     return brightness
   }

@@ -3691,15 +3691,12 @@ class BackController {
     if(from.equals(to)) {
       err("from and to must be different.")
     }
-    let horizontal
     let dx
 
     const slope = fullDelta.y / fullDelta.x
     if(Math.abs(fullDelta.x) < Math.abs(fullDelta.y)) {
-      horizontal = true
       dx = 1 / slope
     } else {
-      horizontal = false
       dx = slope
     }
 
@@ -3712,7 +3709,7 @@ class BackController {
 
       for(let x = from.x + dx; x <= to.x; x += dx) {
         const y = slope * x + yIntercept
-        const pos = new Pair(Math.floor(x), Math.floor(y))
+        const pos = new Pair(Math.round(x), Math.round(y))
         blocked = this.updateCellVisibilityToEdgeDiagonal2(actor, pos, line, blocked)
       }
 
@@ -3720,7 +3717,7 @@ class BackController {
 
       for(let x = from.x - dx; x >= to.x; x -= dx) {
         const y = slope * x + yIntercept
-        const pos = new Pair(Math.floor(x), Math.floor(y))
+        const pos = new Pair(Math.round(x), Math.round(y))
         blocked = this.updateCellVisibilityToEdgeDiagonal2(actor, pos, line, blocked)
       }
 
@@ -3762,6 +3759,13 @@ class BackController {
         if(d > 2 * r) v = 0
         set(vg, [wpos.x, wpos.y], v)
 
+      }
+
+    } else {
+      
+      // this visibilityGrid cell was already computed
+      if(vg[wpos.x][wpos.y] == 0) {
+        blocked = true
       }
 
     }

@@ -43,6 +43,10 @@ class Pair {
     this.y = y
   }
 
+  equals(pair) {
+    return this.x === pair.x && this.y === pair.y
+  }
+
   add(pair) {
     if(!pair) return this
     return new Pair(this.x + pair.x, this.y + pair.y)
@@ -82,6 +86,12 @@ class Pair {
     return new Pair(-this.x, -this.y)
   }
 
+  round(n) {
+    const newX = Math.round(this.x * 10 ** n) / 10 ** n
+    const newY = Math.round(this.y * 10 ** n) / 10 ** n
+    return new Pair(newX, newY)
+  }
+
   floor() {
     return new Pair(Math.floor(this.x), Math.floor(this.y))
   }
@@ -117,10 +127,56 @@ class Pair {
     return result
   }
 
+  // returns the unwrapped perimeter cells of a given radius
+  // radius should be a whole number
+  perimeter(radius) {
+    let result = []
+    for(let x = this.x - radius; x < this.x + radius + 1; x++) {
+      result.push(new Pair(x, this.y - radius))
+      result.push(new Pair(x, this.y + radius))
+    }
+    for(let y = this.y - radius; y < this.y + radius + 1; y++) {
+      result.push(new Pair(this.x - radius, y))
+      result.push(new Pair(this.x + radius, y))
+    }
+    return result
+  }
+
+  distance(target) {
+    return Math.sqrt(
+      (target.x - this.x) ** 2 
+    + (target.y - this.y) ** 2
+    )
+  }
+
+  wrappedDistance(target, size) {
+    let dx = Math.abs(target.x - this.x)
+    if(dx > size.x / 2) dx -= size.x
+    let dy = Math.abs(target.y - this.y)
+    if(dy > size.y / 2) dy -= size.y
+    return Math.sqrt(
+      dx ** 2 
+    + dy ** 2
+    )
+  }
+
+  unwrap(target, size) {
+    let newX = this.x
+    if(Math.abs(target.x - this.x) > size.x / 2) {
+      newX -= size.x
+    }
+    let newY = this.y
+    if(Math.abs(target.y - this.y) > size.y / 2) {
+      newY -= size.y
+    }
+    return new Pair(newX, newY)
+  }
+
 }
 
 // this only needs to be created once, since it is immutable
 emptyPair = new Pair(0, 0)
+halfPair = new Pair(0.5, 0.5)
 
 function pair(m) {
   return new Pair(m, m)
@@ -130,6 +186,15 @@ function pair(m) {
 const fontStyle = {
   fixed: { name: "Courier", size: 26 },
   compact: { name: "Courier", size: 13 },
+}
+
+// immutable
+const senses = {
+  vision: {},
+  hearing: {},
+  smell: {},
+  feeling: {},
+  energy: {},
 }
 
 // immutable
@@ -143,6 +208,14 @@ const species = {
       strength: 10,
       dexterity: 10,
       intelligence: 10,
+    },
+
+    senses: {
+      vision: 10,
+      hearing: 10,
+      smell: 10,
+      feeling: 10,
+      energy: 10,
     },
 
     experiencePerLevel: 10,
@@ -828,6 +901,12 @@ const poolChannels = [
   },
 ]
 
+const size = {
+  large: 2,
+  medium: 1,
+  small: 0,
+}
+
 // immutable
 const template = {
 
@@ -835,20 +914,29 @@ const template = {
     dirtFloor: { 
       type: 'floor', 
       occupant: false, 
+      size: size.large,
       name: 'dirt', 
       showAs: '.' 
     },
     rockWall: { 
       type: 'wall', 
       occupant: true, 
+      size: size.large,
       name: 'rock', 
       showAs: '🀆', 
       offset: new Pair(0, 1) 
+    },
+    somethingBig: {
+      showAs: 'X', 
+    },
+    somethingSmall: {
+      showAs: 'x', 
     },
   },
 
   generated: {
     fillRatio: 0.020,
+    size: size.small,
 
     sub: {
 
@@ -889,6 +977,7 @@ const template = {
         type: 'creature',
         occupant: true,
         chanceWeight: 1000,
+        size: size.medium,
         sub: {
           rat:  { 
             chanceWeight: 1000, 
@@ -919,12 +1008,12 @@ const template = {
           torch: {
             chanceWeight: 1000,
             durability: 100,
-            light: 3,
+            glow: 3,
             showAs: '🔦',
           },
           candle: {
             chanceWeight: 1000,
-            light: 2,
+            glow: 2,
             showAs: '🕯',
           },
         },
@@ -2897,7 +2986,7 @@ class TopController {
       this.drawLevelWindowCells(
         screen, 
         window, 
-        cellsChanged
+        cellsChanged,
       )
     }
 
@@ -2966,6 +3055,7 @@ class TopController {
     const bc = this.backController
     const fc = this.frontController
     const level = bc.getLevel()
+    const player = bc.getPlayer()
 
     if(fc.windowPosIsValid(window, windowPos, level)) {
 
@@ -2977,29 +3067,82 @@ class TopController {
       const cell = level[levelPos.x][levelPos.y]
       let characterToDraw
       let offset
+      const visibility = 
+        bc.checkCellVisibility(player, levelPos)
 
-      if(cell.occupiedBy) {
-        characterToDraw = cell.occupiedBy.base.showAs;
-        offset = cell.occupiedBy.offset;
-      } else if(cell.onFloor.length > 0) {
-        characterToDraw = cell.onFloor[0].base.showAs;
-        offset = cell.onFloor[0].offset;
+      const remembered = bc.fetchCellFromVisionMemory(
+        player, levelPos,
+      )
+      let subject
+      if(visibility == 2) {
+        if(cell.occupiedBy) {
+          subject = cell.occupiedBy.base
+          characterToDraw = subject.showAs
+        } else if(cell.onFloor.length > 0) {
+          subject = cell.onFloor[0].base
+          characterToDraw = subject.showAs
+        } else {
+          subject = cell.floorType.base
+          characterToDraw = subject.showAs
+        }
+        offset = subject.offset
+        if(!levelPos.equals(player.pos)) {
+          bc.updateCellVisionMemory(
+            player, 
+            levelPos, 
+            { 
+              toDraw: characterToDraw,
+              size: subject.size,
+            },
+          )
+        }
+      } else if(visibility == 1) {
+        if(cell.occupiedBy) {
+          subject = cell.occupiedBy.base
+          if(subject.size > size.medium) {
+            characterToDraw = template.object.somethingBig.showAs
+          } else {
+            characterToDraw = template.object.somethingSmall.showAs
+          }
+        } else if(cell.onFloor.length > 0 && visibility > 1) {
+          subject = cell.onFloor[0].base
+          characterToDraw = subject.showAs
+        } else {
+          subject = cell.floorType.base
+          characterToDraw = subject.showAs
+        }
+        offset = subject.offset
+        if(remembered && remembered.size == subject.size) {
+          characterToDraw = remembered.toDraw
+        }
       } else {
-        characterToDraw = cell.floorType.base.showAs;
-        offset = cell.floorType.offset;
+        // cell isn't visible
+        if(remembered) {
+          characterToDraw = remembered.toDraw
+        }
       }
 
-      fc.drawText({
-        screen: screen,
-        window: window,
-        windowPos: windowPos, 
-        textToDraw: characterToDraw, 
-        offset: offset,
-        center: true,
-        cellSizePixels: window.cellPixelDimensions,
-        maxColumns: 1,
-      })
+      if(characterToDraw) {
+        
+        if(visibility < 2) {
+          characterToDraw = [{
+            text: characterToDraw,
+            style: '#00000080',
+          }]
+        }
 
+        fc.drawText({
+          screen: screen,
+          window: window,
+          windowPos: windowPos, 
+          textToDraw: characterToDraw, 
+          offset: offset,
+          center: true,
+          cellSizePixels: window.cellPixelDimensions,
+          maxColumns: 1,
+        })
+
+      }
     }
 
   }
@@ -3447,21 +3590,305 @@ class BackController {
   }
 
   updateCellVisionMemory(actor, pos, character) {
-    actor.memory.vision[pos.x][pos.y] = character
+    set(actor.memory.vision, [pos.x, pos.y], character)
   }
 
   fetchCellFromVisionMemory(actor, pos) {
-    return actor.memory.vision[pos.x][pos.y]
+    return actor.memory.vision[pos.x]?.[pos.y]
   }
 
-  checkCellVisibility(actor, pos) {
-    const radius = this.getVisionRadius(actor)
+  checkCellVisibility(actor, wrappedPos) {
 
-    ...
+    let visibility = 0
+
+    if(actor.pos.equals(wrappedPos)) {
+      visibility = 2
+    } else {
+
+      const levelSize = this.backModel.levelSize
+      const pos = wrappedPos.unwrap(actor.pos, levelSize)
+      const distance = actor.pos.distance(pos)
+      const visionRadius = this.getVisionRadius(actor)
+
+      if(distance > visionRadius * 2) {
+        visibility = 0
+      } else {
+
+        const fullDelta = pos.subtract(actor.pos)
+        let blocked = false
+
+        if(fullDelta.x == 0 || fullDelta.y == 0) {
+          blocked = this.checkCellVisibilityToEdgeOrthagonal(
+            actor, pos, fullDelta
+          )
+        } else {
+          blocked = this.checkCellVisibilityToEdgeDiagonal(
+            actor, pos, fullDelta
+          )
+        }
+
+        visibility = 2
+        if(blocked) {
+          visibility = 0
+        } else if(distance > visionRadius) { 
+          visibility = 1
+        }
+
+      }
+
+    }
+
+    return visibility
+
+  }
+
+  checkCellVisibilityToEdgeOrthagonal(actor, edge, fullDelta) {
+
+    let from
+    let to
+    let horizontal
+    let increment
+    let blocked = false
+
+    if(fullDelta.x != 0) {
+      from = actor.pos.x
+      to = edge.x
+      horizontal = true
+    } else {
+      from = actor.pos.y
+      to = edge.y
+      horizontal = false
+    }
+
+    if(from < to) {
+      for(let i = from + 1; i < to; i++) {
+        let pos
+        if(horizontal) {
+          pos = new Pair(i, edge.y)
+        } else {
+          pos = new Pair(edge.x, i)
+        }
+        blocked = this.checkCellVisibilityToEdge(actor, pos)
+        if(blocked) break
+      }
+    } else {
+      for(let i = from - 1; i > to; i--) {
+        let pos
+        if(horizontal) {
+          pos = new Pair(i, edge.y)
+        } else {
+          pos = new Pair(edge.x, i)
+        }
+        blocked = this.checkCellVisibilityToEdge(actor, pos)
+        if(blocked) break
+      }
+    }
+
+    return blocked
+  }
+
+  checkCellVisibilityToEdgeDiagonal(actor, edge, fullDelta) {
+
+    let blocked = false
+
+    const from = actor.pos.add(halfPair)
+    const to = edge.add(halfPair)
+
+    if(from.equals(to)) {
+      err("from and to must be different.")
+    }
+
+    let dx
+    const slope = fullDelta.y / fullDelta.x
+    if(Math.abs(fullDelta.x) < Math.abs(fullDelta.y)) {
+      dx = 1 / slope
+    } else {
+      dx = slope
+    }
+    dx = Math.abs(dx)
+
+    const yIntercept = from.y - slope * from.x
+    const line = new Line(slope, yIntercept)
+
+    if(from.x < to.x) {
+
+      for(let x = from.x + dx; x < to.x; x += dx) {
+        const y = slope * x + yIntercept
+        const pos = new Pair(Math.floor(x), Math.floor(y))
+        if(!pos.equals(edge)) {
+          blocked = 
+            this.checkCellVisibilityToEdge(actor, pos, line)
+          if(blocked) break
+        } else {
+          break
+        }
+      }
+
+    } else {
+
+      for(let x = from.x - dx; x > to.x; x -= dx) {
+        const y = slope * x + yIntercept
+        const pos = new Pair(Math.floor(x), Math.floor(y))
+        if(!pos.equals(edge)) {
+          blocked = 
+            this.checkCellVisibilityToEdge(actor, pos, line)
+          if(blocked) break
+        } else {
+          break
+        }
+      }
+
+    }
+
+    return blocked
+
+  }
+
+  checkCellVisibilityToEdge(actor, pos, line) {
+
+    let blocked = false
+    const level = this.getLevel()
+    const levelSize = this.backModel.levelSize
+    const wpos = pos.wrap(levelSize)
+
+    if(!wpos.equals(actor.pos)) {
+      if(this.cellBlocksLight(
+        pos, 
+        level[wpos.x][wpos.y],
+        line,
+      )) {
+        blocked = true
+      }
+    }
+
+    return blocked
+
   }
 
   getVisionRadius(actor) {
-    .....
+    const floorBrightness = 
+      this.getCurrentFloorBrightness()
+      + this.getEquipBrightness(actor)
+    const baseVision = actor.species.senses.vision / 10
+    let focusEnhancement = 1
+    if(actor.wpFocus == senses.vision) {
+      focusEnhancement += actor.medDepth * 0.1
+    }
+    const radius = floorBrightness * baseVision * focusEnhancement
+    if(!radius) {
+      err("Invalid radius: " + radius)
+    }
+    return radius
+  }
+
+  getCurrentFloorBrightness() {
+    // right now all floors are the same
+    return 4
+  }
+
+  getEquipBrightness(actor) {
+    let totalBrightness = 0
+    const equip = actor.equip
+    for(const [key, value] of Object.entries(equip)) {
+      if(key == 'hand' || key == 'ring') {
+        for(const item of equip[key]) {
+          totalBrightness += this.getItemBrightness(item)
+        }
+      } else {
+        totalBrightness += this.getItemBrightness(equip[key])
+      }
+    }
+    return totalBrightness
+  }
+
+  getItemBrightness(item) {
+    let brightness = 0
+    if(item && item.glow) {
+      brightness += item.glow
+    }
+    return brightness
+  }
+
+  cellBlocksLight(pos, cell, line) {
+
+    let blocksLight = false
+
+    if(cell.occupiedBy && cell.occupiedBy.base.size > size.medium) {
+      if(
+        line == null
+        || !this.interceptedCorner(pos, line)
+      ) {
+        blocksLight = true
+      }
+    }
+
+    return blocksLight
+
+  }
+
+  interceptedCorner(pos, line) {
+    let result = false
+
+    const segments = {
+      topLeft: 
+        new Segment(
+          new Pair(pos.x       , pos.y), 
+          new Pair(pos.x + 0.49, pos.y),
+        ),
+      topRight:
+        new Segment(
+          new Pair(pos.x + 0.51, pos.y), 
+          new Pair(pos.x + 1   , pos.y),
+        ),
+      rightTop:
+        new Segment(
+          new Pair(pos.x + 1, pos.y       ), 
+          new Pair(pos.x + 1, pos.y + 0.49),
+        ),
+      rightBottom:
+        new Segment(
+          new Pair(pos.x + 1, pos.y + 0.51), 
+          new Pair(pos.x + 1, pos.y + 1   ),
+        ),
+      bottomLeft:
+        new Segment(
+          new Pair(pos.x + 0.49, pos.y + 1),
+          new Pair(pos.x       , pos.y + 1), 
+        ),
+      bottomRight:
+        new Segment(
+          new Pair(pos.x + 1   , pos.y + 1),
+          new Pair(pos.x + 0.51, pos.y + 1), 
+        ),
+      leftTop:
+        new Segment(
+          new Pair(pos.x, pos.y + 0.49),
+          new Pair(pos.x, pos.y       ), 
+        ),
+      leftBottom:
+        new Segment(
+          new Pair(pos.x, pos.y + 1   ),
+          new Pair(pos.x, pos.y + 0.51), 
+        ),
+    }
+
+    if(
+      line.interceptsSegment(segments.topLeft)
+      && line.interceptsSegment(segments.leftTop)
+      ||
+      line.interceptsSegment(segments.topRight)
+      && line.interceptsSegment(segments.rightTop)
+      ||
+      line.interceptsSegment(segments.bottomLeft)
+      && line.interceptsSegment(segments.leftBottom)
+      ||
+      line.interceptsSegment(segments.bottomRight)
+      && line.interceptsSegment(segments.rightBottom)
+    ) {
+      result = true
+    }
+
+    return result
   }
 
   initRandomizers() {
@@ -6897,16 +7324,135 @@ function fill(objectOrArray, value) {
 }
 
 function wrap(n, size) {
+  let iterations = 10
   while(n < 0) {
     n += size
+    iterations--
+    if(!iterations) {
+      err("Too many iterations")
+    }
   }
   while(n >= size) {
     n -= size
+    iterations--
+    if(!iterations) {
+      err("Too many iterations")
+    }
   }
   return n
 }
 
+// sets a value for a multi-dimensional dimensional array, creating
+// intermediate arrays as needed
+function set(array, indexes, value) {
+  array ?? err("You must pass in a non-null array to set()")
+  let currentArray = array
+  const lastIndex = indexes.length - 1
+  for(let i = 0; i < lastIndex; i++) {
+    const index = indexes[i]
+    if(currentArray[index] == undefined) {
+      currentArray[index] = []
+    }
+    currentArray = currentArray[index]
+  }
+  currentArray[indexes[lastIndex]] = value
+}
+
 let didSomething = false
+
+// this class handles all lines, including vertical ones
+class Line {
+
+  // either define slope and yIntercept 
+  //   OR xIntercept (for veritcal lines)
+  constructor(slope, yIntercept, xIntercept) {
+    this.slope = slope
+    this.yIntercept = yIntercept
+    this.xIntercept = xIntercept
+  }
+
+  interceptsSegment(segment) {
+    const line = this.fromSegment(segment)
+    const intersection = this.intersection(line).round(5)
+    const intercepts = 
+      intersection != null
+      && 
+      ( 
+        intersection.x >= segment.pos1.x 
+        && (
+          intersection.x < segment.pos2.x 
+          || segment.pos1.x == segment.pos2.x
+        )
+        ||
+        intersection.x <= segment.pos1.x 
+        && (
+          intersection.x > segment.pos2.x 
+          || segment.pos1.x == segment.pos2.x
+        )
+      )
+      && 
+      ( 
+        intersection.y >= segment.pos1.y 
+        && (
+          intersection.y < segment.pos2.y 
+          || segment.pos1.y == segment.pos2.y
+        )
+        ||
+        intersection.y <= segment.pos1.y 
+        && (
+          intersection.y > segment.pos2.y 
+          || segment.pos1.y == segment.pos2.y
+        )
+      )
+    return intercepts
+  }
+
+  fromSegment(segment) {
+    const dx = segment.pos2.x - segment.pos1.x
+    let line
+    if(dx == 0)  {
+      line = new Line(null, null, segment.pos1.x)
+    } else {
+      const dy = segment.pos2.y - segment.pos1.y
+      const slope = dy / dx
+      const yIntercept = segment.pos1.y - slope * segment.pos1.x
+      line = new Line(slope, yIntercept)
+    }
+    return line
+  }
+
+  intersection(line) {
+    let intersection
+    if(this.slope != null && line.slope != null) {
+      if(this.slope != line.slope) {
+        const x = 
+          (line.yIntercept - this.yIntercept) 
+          / (this.slope - line.slope)
+        const y = this.slope * x + this.yIntercept
+        intersection = new Pair(x, y)
+      } // otherwise the slopes are parallel
+        //   and there is no intersection
+    } else if(this.slope != null && line.slope == null) {
+      const x = line.xIntercept
+      const y = this.slope * x + this.yIntercept
+      intersection = new Pair(x, y)
+    } else if(this.slope == null && line.slope != null) {
+      const x = this.xIntercept
+      const y = line.slope * x + line.yIntercept
+      intersection = new Pair(x, y)
+    } // otherwise both slopes are vertical, and we don't
+      //   have an intersection
+    return intersection
+  }
+
+}
+
+class Segment {
+  constructor(pos1, pos2) {
+    this.pos1 = pos1
+    this.pos2 = pos2
+  }
+}
 
 const topController = new TopController()
 

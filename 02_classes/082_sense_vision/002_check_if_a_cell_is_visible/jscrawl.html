@@ -163,11 +163,19 @@ class Pair {
   unwrap(target, size) {
     let newX = this.x
     if(Math.abs(target.x - this.x) > size.x / 2) {
-      newX -= size.x
+      if(newX > size.x / 2) {
+        newX -= size.x
+      } else {
+        newX += size.x
+      }
     }
     let newY = this.y
     if(Math.abs(target.y - this.y) > size.y / 2) {
-      newY -= size.y
+      if(newY > size.y / 2) {
+        newY -= size.y
+      } else {
+        newY += size.y
+      }
     }
     return new Pair(newX, newY)
   }
@@ -3012,8 +3020,6 @@ class TopController {
       for(let c = 0; c < window.size.x; c++) {
         for(let r = 0; r < window.size.y; r++) {
           this.drawLevelWindowCell(
-            screen, 
-            window, 
             new Pair(c, r),
           )
         }
@@ -3046,16 +3052,18 @@ class TopController {
 
   drawLevelWindowCells(screen, window, cells) {
     for(const windowPos of cells) {
-      this.drawLevelWindowCell(screen, window, windowPos)
+      this.drawLevelWindowCell(windowPos)
     }
   }
 
-  drawLevelWindowCell(screen, window, windowPos) {
+  drawLevelWindowCell(windowPos) {
 
     const bc = this.backController
     const fc = this.frontController
     const level = bc.getLevel()
     const player = bc.getPlayer()
+    const screen = screens.main
+    const window = screens.main.window.level
 
     if(fc.windowPosIsValid(window, windowPos, level)) {
 

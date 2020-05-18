@@ -1,6 +1,6 @@
-vision bugs:
-  fix seeing through wall crack bug
-  fix crossover memory of player
+crossing over below fails to see through blue line
+some items disappear
+break it up into smaller steps
 make target not reveal things not yet seen
 basic senses
   how to view different senses?

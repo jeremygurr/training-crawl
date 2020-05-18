@@ -143,6 +143,29 @@ class Pair {
     )
   }
 
+  wrappedDistance(target, size) {
+    let dx = Math.abs(target.x - this.x)
+    if(dx > size.x / 2) dx -= size.x
+    let dy = Math.abs(target.y - this.y)
+    if(dy > size.y / 2) dy -= size.y
+    return Math.sqrt(
+      dx ** 2 
+    + dy ** 2
+    )
+  }
+
+  unwrap(target, size) {
+    let newX = this.x
+    if(Math.abs(target.x - this.x) > size.x / 2) {
+      newX -= size.x
+    }
+    let newY = this.y
+    if(Math.abs(target.y - this.y) > size.y / 2) {
+      newY -= size.y
+    }
+    return new Pair(newX, newY)
+  }
+
 }
 
 // this only needs to be created once, since it is immutable
@@ -3566,14 +3589,16 @@ class BackController {
     return actor.memory.vision[pos.x]?.[pos.y]
   }
 
-  checkCellVisibility(actor, pos) {
+  checkCellVisibility(actor, wrappedPos) {
 
     let visibility = 0
 
-    if(actor.pos.equals(pos)) {
+    if(actor.pos.equals(wrappedPos)) {
       visibility = 2
     } else {
 
+      const levelSize = this.backModel.levelSize
+      const pos = wrappedPos.unwrap(actor.pos, levelSize)
       const distance = actor.pos.distance(pos)
       const visionRadius = this.getVisionRadius(actor)
 

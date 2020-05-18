@@ -7346,18 +7346,30 @@ class Line {
       && 
       ( 
         intersection.x >= segment.pos1.x 
-        && intersection.x < segment.pos2.x
+        && (
+          intersection.x < segment.pos2.x 
+          || segment.pos1.x == segment.pos2.x
+        )
         ||
         intersection.x <= segment.pos1.x 
-        && intersection.x > segment.pos2.x
+        && (
+          intersection.x > segment.pos2.x 
+          || segment.pos1.x == segment.pos2.x
+        )
       )
       && 
       ( 
         intersection.y >= segment.pos1.y 
-        && intersection.y < segment.pos2.y
+        && (
+          intersection.y < segment.pos2.y 
+          || segment.pos1.y == segment.pos2.y
+        )
         ||
         intersection.y <= segment.pos1.y 
-        && intersection.y > segment.pos2.y
+        && (
+          intersection.y > segment.pos2.y 
+          || segment.pos1.y == segment.pos2.y
+        )
       )
     return intercepts
   }

@@ -1,7 +1,6 @@
 vision bugs:
-  skipping above square and going straight to diagonal
-    same for orthagonal?
-  blocked is not being propogated when the visibility of that wall is already 2
+  fix seeing through wall crack bug
+  fix crossover memory of player
 make target not reveal things not yet seen
 basic senses
   how to view different senses?

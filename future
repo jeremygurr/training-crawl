@@ -1,6 +1,7 @@
 vision bugs:
-  showing walls even past blocked point
-  O is used for rat
+  skipping above square and going straight to diagonal
+    same for orthagonal?
+  blocked is not being propogated when the visibility of that wall is already 2
 basic senses
   how to view different senses?
     view command switches view

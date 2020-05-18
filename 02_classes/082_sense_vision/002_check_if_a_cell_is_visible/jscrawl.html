@@ -3086,14 +3086,16 @@ class TopController {
           characterToDraw = subject.showAs
         }
         offset = subject.offset
-        bc.updateCellVisionMemory(
-          player, 
-          levelPos, 
-          { 
-            toDraw: characterToDraw,
-            size: subject.size,
-          },
-        )
+        if(!levelPos.equals(player.pos)) {
+          bc.updateCellVisionMemory(
+            player, 
+            levelPos, 
+            { 
+              toDraw: characterToDraw,
+              size: subject.size,
+            },
+          )
+        }
       } else if(visibility == 1) {
         if(cell.occupiedBy) {
           subject = cell.occupiedBy.base

@@ -3700,7 +3700,7 @@ class BackController {
       dx = slope
     }
 
-    dx = Math.abs(dx)
+    dx = Math.abs(dx) / 2
     let blocked = false
     const yIntercept = from.y - slope * from.x
     const line = new Line(slope, yIntercept)
@@ -3732,34 +3732,34 @@ class BackController {
     const vg = actor.visibilityGrid
     const wpos = pos.wrap(levelSize)
 
-    if(vg[wpos.x]?.[wpos.y] == null) {
+    if(blocked) {
+      set(vg, [wpos.x, wpos.y], 0)
+    } else {
 
-      if(blocked) {
-        set(vg, [wpos.x, wpos.y], 0)
-      } else {
+      if(
+        !pos.equals(actor.pos)
+        &&
+        this.cellBlocksLight(
+          pos,
+          level[wpos.x][wpos.y],
+          line,
+        )
+      ) {
 
-        if(
-          !pos.equals(actor.pos)
-          &&
-          this.cellBlocksLight(
-            pos,
-            level[wpos.x][wpos.y],
-            line,
-          )
-        ) {
-
-          blocked = true
-
-        }
-
-        let v = 2
-        const d = actor.pos.distance(pos)
-        const r = this.getVisionRadius(actor)
-        if(d > r) v = 1
-        if(d > 2 * r) v = 0
-        set(vg, [wpos.x, wpos.y], v)
+        blocked = true
 
       }
+
+      let v = 2
+      const d = actor.pos.distance(pos)
+      const r = this.getVisionRadius(actor)
+      if(d > r) v = 1
+      if(d > 2 * r) v = 0
+      set(vg, [wpos.x, wpos.y], v)
+
+    }
+
+    if(vg[wpos.x]?.[wpos.y] == null) {
 
     } else {
       

@@ -1,7 +1,5 @@
-fix unequip bug
 basic senses
-  can reduce senses (like channels)
-  sense focus
+  focus shouldn't drain willpower but mental energy
   how to view different senses?
     view command switches view
       vision
@@ -29,7 +27,9 @@ basic senses
     vibration / pressure
   energy
   if one sense is lost, others should be magnified
-  negative versions
+  negative impact
+  can reduce senses (like channels)
+  senses are species specific, and can't easily be enhanced
 energy in environment
   cells store energy
   energy moves between cells
@@ -1131,6 +1131,10 @@ energy management
         connects to *all* lumina
       Purple
         connects to red AND blue
+night vision
+  two kinds:
+    low light magnification
+    infra red
 dynamic monsters
   not fixed
   a-z A-Z

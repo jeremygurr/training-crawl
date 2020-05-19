@@ -1,7 +1,7 @@
-make target not reveal things not yet seen
+fix unequip bug
 basic senses
-  glowing items on ground are visible even outside of distance limits
   can reduce senses (like channels)
+  sense focus
   how to view different senses?
     view command switches view
       vision
@@ -37,60 +37,7 @@ energy in environment
       typically slow (1-3)
     capacity different for different materials
       typically fairly large (1000)
-environmental effects
-  cycle
-    sun
-      boosts sun energy effectiveness (2.0)
-      boosts red (fire) effectiveness (2.0)
-      black (0.5)
-      special:
-        comet: 
-          red effectivness (8.0)
-        eclipse:
-          red effectiveness reduction (0.5)
-          black effectivness increase (8.0)
-      night: 
-        black (2.0)
-        meteor shower
-          star (8.0)
-        star (2.0)
-    moon (phase changes each day)
-      boosts moon energy effectiveness
-      phases:
-        new moon: 
-          blue (0.5)
-          moon (0.5)
-          black (2.0)
-        crescent: (1.5)
-        half: (2.0)
-        gibbous: (3.0)
-        full: (4.0)
-      special:
-        blood: 
-          blue (2.0)
-          red (8.0)
-          purple (8.0)
-  weather
-    cloudy
-      reduces sun, moon, and star boosts
-      increases air boost
-    wind
-      boosts air effectiveness
-      alters smell flow
-      special:
-        blizzard
-          cyan (4.0)
-          wind (4.0)
-    rain
-      boosts blue (water) effectiveness
-      sub-types:
-        thunder
-          boosts electric effectiveness
-        hail
-          cyan (8.0)
-        snow
-          cyan (4.0)
-       
+make target not reveal things not yet seen
 external channels
   all pools can vent except interna
   OO=SG OO=ED
@@ -1188,4 +1135,57 @@ dynamic monsters
   not fixed
   a-z A-Z
   probably not fun
-
+environmental effects
+  cycle
+    sun
+      boosts sun energy effectiveness (2.0)
+      boosts red (fire) effectiveness (2.0)
+      black (0.5)
+      special:
+        comet: 
+          red effectivness (8.0)
+        eclipse:
+          red effectiveness reduction (0.5)
+          black effectivness increase (8.0)
+      night: 
+        black (2.0)
+        meteor shower
+          star (8.0)
+        star (2.0)
+    moon (phase changes each day)
+      boosts moon energy effectiveness
+      phases:
+        new moon: 
+          blue (0.5)
+          moon (0.5)
+          black (2.0)
+        crescent: (1.5)
+        half: (2.0)
+        gibbous: (3.0)
+        full: (4.0)
+      special:
+        blood: 
+          blue (2.0)
+          red (8.0)
+          purple (8.0)
+  weather
+    cloudy
+      reduces sun, moon, and star boosts
+      increases air boost
+    wind
+      boosts air effectiveness
+      alters smell flow
+      special:
+        blizzard
+          cyan (4.0)
+          wind (4.0)
+    rain
+      boosts blue (water) effectiveness
+      sub-types:
+        thunder
+          boosts electric effectiveness
+        hail
+          cyan (8.0)
+        snow
+          cyan (4.0)
+       

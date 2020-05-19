@@ -1,2 +1,2 @@
 #!/bin/bash
-for d in */*; do [ ! -f $d/jscrawl.html ] && continue; wc -l "$d/jscrawl.html"; done
+for d in `find . -name jscrawl.html | sort`; do wc -l "$d"; done

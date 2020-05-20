@@ -1,5 +1,14 @@
 basic senses
-  focus shouldn't drain willpower but mental energy
+  smell
+    can only smell a small grid around the player 1x1 - 3x3
+    decaying average of adjacent squares for each smell
+    smells are saved in level
+  feel 
+    can only feel squares immediately around the player
+    heat
+      moves like energy
+    vibration / pressure
+  energy
   how to view different senses?
     view command switches view
       vision
@@ -8,28 +17,11 @@ basic senses
       feel
       energy
     dimensions
-  hearing
-    is specific to one location
-    have a list of sound generators, that we iterate over to determine distance and direction
-    will not store grid info for this
-    there can be multiple overlapping sounds
-      can only detect the top 2-4 depending on sense
-    enhanced by meditation state
-    can focus on one sound at a time
-  smell
-    can only smell a small grid around the player 1x1 - 3x3
-    decaying average of adjacent squares for each smell
-    smells are saved in level
-  feel: 
-    can only feel squares immediately around the player
-    heat
-      moves like energy
-    vibration / pressure
-  energy
   if one sense is lost, others should be magnified
   negative impact
   can reduce senses (like channels)
   senses are species specific, and can't easily be enhanced
+generate different quantities of items
 energy in environment
   cells store energy
   energy moves between cells

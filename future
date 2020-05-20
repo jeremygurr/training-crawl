@@ -1,3 +1,7 @@
+experience potion compass
+ranged count item generation
+creator mode set skill
+fix drink multiple potions bug
 basic senses
   smell
     can only smell a small grid around the player 1x1 - 3x3
@@ -33,6 +37,9 @@ make target not reveal things not yet seen
 external channels
   all pools can vent except interna
   OO=SG OO=ED
+different times for actions
+game clock
+  enemy actions don't execute until they have received enough time
 movement
   fast / loud
   normal (lowest stamina usage)
@@ -62,9 +69,6 @@ weapon usage
 ranged attacks
 export / import game
 armor
-different times for actions
-game clock
-  enemy actions don't execute until they have received enough time
 receiving major / critical damage will have different effects
   minor damage has no effect
   major damage
@@ -105,11 +109,32 @@ how to vary item generation?
   top floor starts with 100 points of each generation color
   each floor has a core, which adds points to that generation color * the level of the floor
 core attributes
-cell attributes
-  5 levels of depth
-  smells (5 levels)
-  energy (each energy pool)
-  temperature
+  str
+  dex
+  int
+  charisma 
+    good for a summoner
+  constitution
+    does not boost health, but does improve disease and poison resistance
+example spell masteries
+  necromancer
+  timelord
+  shapeshifter
+  summoner
+  elementalist
+  planeswalker
+  translocator
+  beast tamer
+  alchemist
+  healer
+  enchanter
+  evoker
+  inscriber
+  jeweler
+  artificer
+  weapon smith
+  armor smith
+  hunter
 farming
   hoe
     can be used to plant something into the ground
@@ -245,7 +270,6 @@ spawned items
     sp (boost orange -> sp regen)
   runes ~: alters attribute of holder permanently while carrying it, or item it's installed into
     always a simple attribute boost of whatever it's inserted in, or the user if they wield it
-    durability
     accuracy
     damage
     defense
@@ -326,7 +350,7 @@ branches
   20 runes total (one for each energy pool)
   each branch is of a single energy pool color
     branches will tend to be found on a floor of the same color, but if there are no floors of that color, a random one will be chosen
-  difficulty level of the branch is the difficulty level of the floor on which the branch entrance is found + level of branch
+  difficulty level of the branch is the difficulty level of the floor on which the branch entrance is found, with each level of the branch increasing difficulty by 20%
 dimensions
   5 z positions for each cell?
   w dimension to get to ketheric, etheric, astral, dungeon, abyss, void, pandemonium, oblivion
@@ -442,6 +466,8 @@ altars
   always require a certain kind of sacrifice in exchange for a temporary boost of some attribute or gifted item
   sacrifices
     experience potions
+    skill levels
+    attributes
     hand
     gold
     gem
@@ -476,20 +502,6 @@ multiplayer in same dungeon
   playing with a separate character
   real time simultaneous changes, but each player that moves gives the level a turn also
     maybe disabled when monsters are around?
-experience / levels
-  growth points expand any given property by 10%
-  if species changes, then base changes, but same growth is applied to it
-  experienced gained from
-    [ ] exploring a floor
-    [ ] killing monsters
-    [ ] getting deeper in the dungeon
-    [*] experience potions (one per floor)
-  one level up per experience potion
-    gives 10 growth points
-    1 growp = +1 attribute
-    1 growp = +apt skill (average being 4)
-    100 experience potions in the game always
-  status shows direction of experience potion in floor
 challenge / defense calculation
   diff = challenge - defense 
   power = 2^(diff/4)
@@ -558,6 +570,8 @@ scrolls
 wands
   some wands auto-recharge, which boosts their value considerably
   some wands auto-discharge
+  some wands draw energy directly from the user
+  have durability
   digging
   wall
   teleportation

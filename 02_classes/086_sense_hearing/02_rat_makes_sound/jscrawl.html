@@ -989,6 +989,11 @@ const template = {
             health: 2,  
             attack: { min: 0, max: 1 }, 
             act: 'simplePursuit',
+            sound: {
+              name: 'a squeak',
+              volume: 4,
+              chance: 0.2,
+            },
           },
           lion: { 
             chanceWeight: 300,
@@ -3525,6 +3530,14 @@ class TopController {
         this.executeMove(actor, pos)
       }
     }
+
+    const sound = actor.base.sound
+    if(sound) {
+      if(random(1000) < sound.chance * 1000) {
+        bc.makeSound(sound.name, sound.volume, actor.pos)
+        this.frontController.setStatusChanged(true)
+      }
+    }
   }
 
   calculateDamageFrom(attacker) {
@@ -3628,6 +3641,20 @@ class BackController {
     this.buildLevel()
     this.initSpecies()
     this.initializePlayer()
+  }
+
+  getSounds() {
+    const sounds = this.backModel.sounds
+    return sounds
+  }
+
+  makeSound(name, volume, pos) {
+    const sounds = this.backModel.sounds
+    sounds.push({
+      name: name,
+      volume: volume * 2,
+      pos: pos,
+    })
   }
 
   getCellGlow(pos) {

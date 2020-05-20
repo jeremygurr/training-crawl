@@ -47,6 +47,38 @@ class Pair {
     return this.x === pair.x && this.y === pair.y
   }
 
+  directionTo(pair) {
+    const dx = pair.x - this.x
+    const dy = pair.y - this.y
+    let direction = '?'
+    if(dx === 0) {
+      if(dy > 0) {
+        direction = 'S'
+      } else if(dy < 0) {
+        direction = 'N'
+      }
+    } else if(dy === 0) {
+      if(dx > 0) {
+        direction = 'E'
+      } else if(dx < 0) {
+        direction = 'W'
+      }
+    } else if(dx > 0) {
+      if(dy > 0) {
+        direction = 'SE'
+      } else if(dy < 0) {
+        direction = 'NE'
+      }
+    } else if(dx < 0) {
+      if(dy > 0) {
+        direction = 'SW'
+      } else if(dy < 0) {
+        direction = 'NW'
+      }
+    }
+    return direction
+  }
+
   add(pair) {
     if(!pair) return this
     return new Pair(this.x + pair.x, this.y + pair.y)
@@ -3222,9 +3254,61 @@ class TopController {
     this.getStatusListAwakened(list, player)
     this.getStatusListFocus(list, player)
     this.getStatusListChannels(list, player)
+    this.getStatusListSounds(list, player)
 
     return list
 
+  }
+
+  getStatusListSounds(list, player) {
+
+    const bc = this.backController
+    const sounds = bc.getSounds()
+
+    if(sounds.length) {
+
+      const backgroundNoise = bc.getLevelBackgroundNoise()
+      const sensitivity = bc.getHearingSensitivity(player)
+      const threshold = 1 / sensitivity
+      const heard = []
+      const levelSize = bc.getLevelSize()
+
+      for(const sound of sounds) {
+
+        const distance = 
+          sound.pos.wrappedDistance(player.pos, levelSize)
+        const volume = sound.volume * 2 ** (-distance / 10)
+        const unwrappedTarget = 
+          sound.pos.unwrap(player.pos, levelSize)
+        if(volume > threshold && volume > backgroundNoise) {
+          heard.push({
+            name: sound.name,
+            volume: volume,
+            direction: player.pos.directionTo(unwrappedTarget),
+          })
+        }
+
+      }
+
+      if(heard.length) {
+        list.push('Heard:')
+        heard.sort( (a, b) => b.volume - a.volume )
+        const hearingDepth = Math.floor(bc.getHearingDepth(player))
+        heard.length = Math.min(heard.length, hearingDepth)
+        heard.forEach((sound) => {
+          list.push(
+            '  ' 
+          + sound.name 
+          + ' (' 
+          + autoRound(sound.volume)
+          + '/' 
+          + sound.direction 
+          + ')'
+          )
+        })
+      }
+
+    }
   }
 
   getStatusListAwakened(list, player) {
@@ -3849,6 +3933,31 @@ class BackController {
 
     return blocked
 
+  }
+
+  getLevelBackgroundNoise() {
+    // fixed for now
+    return 0.5
+  }
+
+  getHearingSensitivity(actor) {
+    const baseHearing = actor.species.senses.hearing / 10
+    let focusEnhancement = 1
+    if(actor.focus === senses.hearing) {
+      focusEnhancement += actor.medDepth * 0.1
+    }
+    const sensitivity = baseHearing * focusEnhancement
+    return sensitivity
+  }
+
+  getHearingDepth(actor) {
+    const baseHearing = actor.species.senses.hearing / 10
+    let focusEnhancement = 1
+    if(actor.focus === senses.hearing) {
+      focusEnhancement += actor.medDepth * 0.1
+    }
+    const hearingDepth = baseHearing * focusEnhancement * 2
+    return hearingDepth
   }
 
   getVisionRadius(actor) {

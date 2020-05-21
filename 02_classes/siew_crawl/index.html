@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Training: Crawl Game</title>
+    <style>
+      * { padding: 0; margin: 0; }
+      canvas { background: #eee; display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+<script>
+"use strict";
+
+const canvasProps = {
+  width: 600,
+  height: 300,
+  color: '#EEE',
+  xOffset: 3,
+  yOffset: 0,
+}
+
+document.write('<canvas id="mainCanvas" color="' + canvasProps.color + '" width="' + canvasProps.width + '" height="' + canvasProps.height + '"></canvas>');
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+<script>
+canvas = document.getElementById("mainCanvas");
+ctx = canvas.getContext("2d");
+
+//These templates should never be altered. They are used to create other objects which may be altered.
+const template = {
+  object: {
+    dirtFloor: { 
+      type: 'floor',
+	  occupant: 'false',
+	  name: 'dirt',
+	  showAs: '.' 
+	},
+
+    rockWall: { 
+	  type: 'wall',
+	  occupant: 'true',
+	  name: 'rock',
+	  showAs: '🀆'
+	},
+  },
+
+
+  frontModel: {
+	messages: [],
+  },
+
+  backModel: {
+	height: 30,
+	width: 30,
+	level: [],
+  },
+}
+
+class TopController {
+  constructor() {
+	this.frontController = new FrontController()
+	this.backController = new BackController(this.frontController)
+  }
+
+//function addMessage() {
+//  }
+
+}
+
+
+//Use these as abreviations within each constructor:  const fm = this.frontModel  const bm = this.backModel  const bc = this.backController  const fc = this.frontController  const ot = template.object
+
+class FrontController {
+
+  constructor() {
+    let fm = _.cloneDeep(template.frontModel)
+    this.frontModel = fm
+  }
+}
+
+class BackController {
+  constructor() {
+	this.backModel = _.cloneDeep(template.backModel)
+	this.buildLevel()
+  }
+
+  buildLevel() {
+	const bm = this.backModel
+	const ot = template.object
+
+	for(let c = 0; c < bm.width; c++) {
+	  bm.level[c] = []
+	  for(let r = 0; r < bm.height; r++) {
+        if(c == 0 || r == 0 || c == bm.width - 1 || r == bm.height - 1) {
+		  bm.level[c][r] = { occupiedBy: ot.rockWall, onFloor: null, levelType: ot.dirtFloor }
+		} else {
+		  bm.level[c][r] = { occupiedBy: null, onFloor: null, levelType: ot.dirtFloor }
+		}
+	  }
+	}
+  }
+}
+
+const topController = new TopController()
+
+
+// class InController {}
+
+// class OutController {}
+
+
+
+</script>
+</body>
+</html>

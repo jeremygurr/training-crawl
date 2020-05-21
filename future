@@ -1,8 +1,21 @@
-vision bugs:
-  fix seeing through wall crack bug
-  fix crossover memory of player
-make target not reveal things not yet seen
 basic senses
+  smell
+    how to see
+    smells have an id, which is the key used to look up that smell in the smell grid
+    can only smell a small grid around the player 1x1 - 3x3
+    decaying average of adjacent squares for each smell
+    smells are saved in level
+  feel 
+    can only feel squares immediately around the player
+    heat
+      moves like energy
+    vibration / pressure
+  energy
+    not lost like smell
+      unless absorbed into an energy sink
+    for each cell
+      choose a single random adjacent cell
+      do normal pressure based energy transfer
   how to view different senses?
     view command switches view
       vision
@@ -11,26 +24,11 @@ basic senses
       feel
       energy
     dimensions
-  hearing
-    is specific to one location
-    have a list of sound generators, that we iterate over to determine distance and direction
-    will not store grid info for this
-    there can be multiple overlapping sounds
-      can only detect the top 2-4 depending on sense
-    enhanced by meditation state
-    can focus on one sound at a time
-  smell
-    can only smell a small grid around the player 1x1 - 3x3
-    decaying average of adjacent squares for each smell
-    smells are saved in level
-  feel: 
-    can only feel squares immediately around the player
-    heat
-      moves like energy
-    vibration / pressure
-  energy
   if one sense is lost, others should be magnified
-  negative versions
+  negative impact
+  can reduce senses (like channels)
+  senses are species specific, and can't easily be enhanced
+generate different quantities of items
 energy in environment
   cells store energy
   energy moves between cells
@@ -38,67 +36,18 @@ energy in environment
       typically slow (1-3)
     capacity different for different materials
       typically fairly large (1000)
-environmental effects
-  cycle
-    sun
-      boosts sun energy effectiveness (2.0)
-      boosts red (fire) effectiveness (2.0)
-      black (0.5)
-      special:
-        comet: 
-          red effectivness (8.0)
-        eclipse:
-          red effectiveness reduction (0.5)
-          black effectivness increase (8.0)
-      night: 
-        black (2.0)
-        meteor shower
-          star (8.0)
-        star (2.0)
-    moon (phase changes each day)
-      boosts moon energy effectiveness
-      phases:
-        new moon: 
-          blue (0.5)
-          moon (0.5)
-          black (2.0)
-        crescent: (1.5)
-        half: (2.0)
-        gibbous: (3.0)
-        full: (4.0)
-      special:
-        blood: 
-          blue (2.0)
-          red (8.0)
-          purple (8.0)
-  weather
-    cloudy
-      reduces sun, moon, and star boosts
-      increases air boost
-    wind
-      boosts air effectiveness
-      alters smell flow
-      special:
-        blizzard
-          cyan (4.0)
-          wind (4.0)
-    rain
-      boosts blue (water) effectiveness
-      sub-types:
-        thunder
-          boosts electric effectiveness
-        hail
-          cyan (8.0)
-        snow
-          cyan (4.0)
-       
+make target not reveal things not yet seen
 external channels
   all pools can vent except interna
   OO=SG OO=ED
+different times for actions
+game clock
+  enemy actions don't execute until they have received enough time
 movement
   fast / loud
   normal (lowest stamina usage)
   slow / quiet
+ranged count item generation
 weapon usage
   weapon prioritization
   chance to hit
@@ -124,9 +73,6 @@ weapon usage
 ranged attacks
 export / import game
 armor
-different times for actions
-game clock
-  enemy actions don't execute until they have received enough time
 receiving major / critical damage will have different effects
   minor damage has no effect
   major damage
@@ -167,11 +113,32 @@ how to vary item generation?
   top floor starts with 100 points of each generation color
   each floor has a core, which adds points to that generation color * the level of the floor
 core attributes
-cell attributes
-  5 levels of depth
-  smells (5 levels)
-  energy (each energy pool)
-  temperature
+  str
+  dex
+  int
+  charisma 
+    good for a summoner
+  constitution
+    does not boost health, but does improve disease and poison resistance
+example spell masteries
+  necromancer
+  timelord
+  shapeshifter
+  summoner
+  elementalist
+  planeswalker
+  translocator
+  beast tamer
+  alchemist
+  healer
+  enchanter
+  evoker
+  inscriber
+  jeweler
+  artificer
+  weapon smith
+  armor smith
+  hunter
 farming
   hoe
     can be used to plant something into the ground
@@ -307,7 +274,6 @@ spawned items
     sp (boost orange -> sp regen)
   runes ~: alters attribute of holder permanently while carrying it, or item it's installed into
     always a simple attribute boost of whatever it's inserted in, or the user if they wield it
-    durability
     accuracy
     damage
     defense
@@ -388,7 +354,7 @@ branches
   20 runes total (one for each energy pool)
   each branch is of a single energy pool color
     branches will tend to be found on a floor of the same color, but if there are no floors of that color, a random one will be chosen
-  difficulty level of the branch is the difficulty level of the floor on which the branch entrance is found + level of branch
+  difficulty level of the branch is the difficulty level of the floor on which the branch entrance is found, with each level of the branch increasing difficulty by 20%
 dimensions
   5 z positions for each cell?
   w dimension to get to ketheric, etheric, astral, dungeon, abyss, void, pandemonium, oblivion
@@ -504,6 +470,8 @@ altars
   always require a certain kind of sacrifice in exchange for a temporary boost of some attribute or gifted item
   sacrifices
     experience potions
+    skill levels
+    attributes
     hand
     gold
     gem
@@ -538,20 +506,6 @@ multiplayer in same dungeon
   playing with a separate character
   real time simultaneous changes, but each player that moves gives the level a turn also
     maybe disabled when monsters are around?
-experience / levels
-  growth points expand any given property by 10%
-  if species changes, then base changes, but same growth is applied to it
-  experienced gained from
-    [ ] exploring a floor
-    [ ] killing monsters
-    [ ] getting deeper in the dungeon
-    [*] experience potions (one per floor)
-  one level up per experience potion
-    gives 10 growth points
-    1 growp = +1 attribute
-    1 growp = +apt skill (average being 4)
-    100 experience potions in the game always
-  status shows direction of experience potion in floor
 challenge / defense calculation
   diff = challenge - defense 
   power = 2^(diff/4)
@@ -620,6 +574,8 @@ scrolls
 wands
   some wands auto-recharge, which boosts their value considerably
   some wands auto-discharge
+  some wands draw energy directly from the user
+  have durability
   digging
   wall
   teleportation
@@ -1185,8 +1141,65 @@ energy management
         connects to *all* lumina
       Purple
         connects to red AND blue
+night vision
+  two kinds:
+    low light magnification
+    infra red
 dynamic monsters
   not fixed
   a-z A-Z
   probably not fun
-
+environmental effects
+  cycle
+    sun
+      boosts sun energy effectiveness (2.0)
+      boosts red (fire) effectiveness (2.0)
+      black (0.5)
+      special:
+        comet: 
+          red effectivness (8.0)
+        eclipse:
+          red effectiveness reduction (0.5)
+          black effectivness increase (8.0)
+      night: 
+        black (2.0)
+        meteor shower
+          star (8.0)
+        star (2.0)
+    moon (phase changes each day)
+      boosts moon energy effectiveness
+      phases:
+        new moon: 
+          blue (0.5)
+          moon (0.5)
+          black (2.0)
+        crescent: (1.5)
+        half: (2.0)
+        gibbous: (3.0)
+        full: (4.0)
+      special:
+        blood: 
+          blue (2.0)
+          red (8.0)
+          purple (8.0)
+  weather
+    cloudy
+      reduces sun, moon, and star boosts
+      increases air boost
+    wind
+      boosts air effectiveness
+      alters smell flow
+      special:
+        blizzard
+          cyan (4.0)
+          wind (4.0)
+    rain
+      boosts blue (water) effectiveness
+      sub-types:
+        thunder
+          boosts electric effectiveness
+        hail
+          cyan (8.0)
+        snow
+          cyan (4.0)
+       

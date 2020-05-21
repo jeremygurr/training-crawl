@@ -38,7 +38,7 @@ let screen = {
   main: 'main',
 }
 
-let window = {
+let mywindow = {
   level: 'level',
   status: 'status',
   message: 'message',
@@ -79,12 +79,12 @@ let viewStructure = {
   initialScreen: mainScreen,
   screen: {
     level: {
-      window: {
-        window.level,
-        window.status,
-        window.message,
+      mywindow: {
+        mywindow.level,
+        mywindow.status,
+        mywindow.message,
       },
-      initialWindow: window.level,
+      initialWindow: mywindow.level,
       cellWidth: 26,
       cellHeight: 30,
       columnCount: null,  // calculated
@@ -92,7 +92,7 @@ let viewStructure = {
     },
   },
 
-  window: {
+  mywindow: {
     level: {
       initialKeyMode: keyMode.main,
     },

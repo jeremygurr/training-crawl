@@ -1437,6 +1437,7 @@ const template = {
     },
     levelSize: new Pair(50, 50),
     level: [],
+    glowGrid: [],
     gameClock: 0,
     creatorMode: false,
     player: { 
@@ -2652,9 +2653,9 @@ class TopController {
 
       let item = selectedFloorItems[i]
       let selectCount = selectedCounts[i]
-      item = bc.removeItemFromFloor(
-        playerPos,
+      item = bc.removeSubjectFromLevel(
         item,
+        playerPos,
         selectCount,
       )
       bc.addItemToInventory(item)
@@ -2683,7 +2684,10 @@ class TopController {
     }
 
     if(floorItems.length == 1) {
-      const item = bc.removeItemFromFloor(playerPos, floorItems[0])
+      const item = bc.removeSubjectFromLevel(
+        floorItems[0],
+        playerPos, 
+      )
       bc.addItemToInventory(item)
       fc.setStatusChanged(true)
       fc.addMessage('Picked up ' + getNameOf(item.count, item) + '.')
@@ -3087,7 +3091,7 @@ class TopController {
         player, levelPos,
       )
       let subject
-      if(visibility == 2) {
+      if(visibility >= 2) {
         if(cell.occupiedBy) {
           subject = cell.occupiedBy.base
           characterToDraw = subject.showAs
@@ -3605,6 +3609,21 @@ class BackController {
     this.initializePlayer()
   }
 
+  getCellGlow(pos) {
+    return this.backModel.glowGrid[pos.x]?.[pos.y] || 0
+  }
+
+  addCellGlow(pos, amount) {
+    const oldValue = this.getCellGlow(pos)
+    let newValue = oldValue + amount
+    if(newValue < 0) newValue = 0
+    this.setCellGlow(pos, newValue)
+  }
+
+  setCellGlow(pos, amount) {
+    set(this.backModel.glowGrid, [pos.x, pos.y], amount)
+  }
+
   updateCellVisionMemory(actor, pos, character) {
     set(actor.memory.vision, [pos.x, pos.y], character)
   }
@@ -3616,6 +3635,7 @@ class BackController {
   checkCellVisibility(actor, wrappedPos) {
 
     let visibility = 0
+    let cellGlow = this.getCellGlow(wrappedPos)
 
     if(actor.pos.equals(wrappedPos)) {
       visibility = 2
@@ -3626,30 +3646,28 @@ class BackController {
       const distance = actor.pos.distance(pos)
       const visionRadius = this.getVisionRadius(actor)
 
-      if(distance > visionRadius * 2) {
-        visibility = 0
+      const fullDelta = pos.subtract(actor.pos)
+      let blocked = false
+
+      if(fullDelta.x == 0 || fullDelta.y == 0) {
+        blocked = this.checkCellVisibilityToEdgeOrthagonal(
+          actor, pos, fullDelta
+        )
       } else {
+        blocked = this.checkCellVisibilityToEdgeDiagonal(
+          actor, pos, fullDelta
+        )
+      }
 
-        const fullDelta = pos.subtract(actor.pos)
-        let blocked = false
-
-        if(fullDelta.x == 0 || fullDelta.y == 0) {
-          blocked = this.checkCellVisibilityToEdgeOrthagonal(
-            actor, pos, fullDelta
-          )
-        } else {
-          blocked = this.checkCellVisibilityToEdgeDiagonal(
-            actor, pos, fullDelta
-          )
-        }
-
+      visibility = 0
+      if(!blocked) {
         visibility = 2
-        if(blocked) {
+        if(distance > visionRadius * 2) {
           visibility = 0
         } else if(distance > visionRadius) { 
           visibility = 1
         }
-
+        visibility += cellGlow
       }
 
     }
@@ -4368,53 +4386,10 @@ class BackController {
     this.backModel.creatorMode = true
   }
 
-  setFloorItemsAt(pos, floorItems) {
-    const cell = this.getCell(pos)
-    cell.onFloor = floorItems
-  }
-
   getFloorItemsAt(pos) {
     const cell = this.getCell(pos)
     const floorItems = cell.onFloor
     return floorItems
-  }
-
-  addItemToFloor(pos, item) {
-    const cell = this.getCell(pos)
-    let found = false
-    for(let floorItem of cell.onFloor) {
-      if(itemsEqual(floorItem, item)) {
-        floorItem.count += item.count
-        found = true
-        break
-      }
-    }
-    if(!found) {
-      cell.onFloor.push(item)
-    }
-  }
-
-  removeItemFromFloor(pos, itemToMatch, count) {
-
-    const cell = this.getCell(pos)
-    let index = cell.onFloor.findIndex(
-      item => itemsEqual(item, itemToMatch)
-    )
-    let itemOnFloor = cell.onFloor[index]
-    let itemToReturn = itemOnFloor
-
-    if(count == null) count = itemOnFloor.count
-    if(count > itemOnFloor.count) count = itemOnFloor.count
-
-    if(itemOnFloor.count == count) {
-      cell.onFloor.splice(index, 1)
-    } else {
-      itemToReturn = { ...itemOnFloor, count: count }
-      itemOnFloor.count -= count
-    }
-
-    return itemToReturn
-
   }
 
   handsUsed() {
@@ -4548,7 +4523,7 @@ class BackController {
     const cell = this.getCell(playerPos)
     const item = this.removeItemFromInventoryByIndex(type, index, count)
     this.unequipItem(item)
-    this.addItemToFloor(playerPos, item)
+    this.addSubjectToLevel(item, playerPos)
   }
 
   getEquipment() {
@@ -4649,23 +4624,6 @@ class BackController {
 
     bm.level[target.x][target.y].occupiedBy = bm.player
     bm.player.pos = target
-
-    const bacon = this.generateItem(1, ['food','bacon'])
-    const ham = this.generateItem(1, ['food','ham'])
-    const fish = this.generateItem(1, ['food','fish'])
-
-    bm.level[target.x+1][target.y].occupiedBy = null
-    bm.level[target.x+1][target.y].onFloor = [bacon, ham, fish]
-
-    const rock = this.generateItem(10, ['weapon','throwable','rock'])
-
-    bm.level[target.x][target.y-1].occupiedBy = null
-    bm.level[target.x][target.y-1].onFloor = [rock]
-
-    const gold = this.generateItem(20, ['gold','gold1'])
-    
-    bm.level[target.x][target.y+1].occupiedBy = null
-    bm.level[target.x][target.y+1].onFloor = [gold]
 
     const potion = this.generateItem(1, ['potion','experience'])
     this.addItemToInventory(potion)
@@ -4804,42 +4762,114 @@ class BackController {
   }
 
   addSubjectToLevel(subject, pos) {
-    const level = this.backModel.level
-    const cell = level[pos.x][pos.y]
+
+    const cell = this.getCell(pos)
     if(subject.base.act) {
       this.addActor(subject, pos)
     }
+
     if(subject.base.occupant) {
+
       cell.occupiedBy = subject
+
     } else {
+
       let found = false
-      for(let item of cell.onFloor) {
-        if(itemsEqual(subject, item)) {
-          item.count += subject.count
+
+      for(let floorItem of cell.onFloor) {
+        if(itemsEqual(floorItem, subject)) {
+          floorItem.count += subject.count
           found = true
           break
         }
       }
+
       if(!found) {
         cell.onFloor.push(subject)
       }
+
     }
+
     subject.pos = pos
+
+    const glow = subject.base.glow
+    if(glow) {
+      const levelSize = this.getLevelSize()
+      for(let x = pos.x - glow * 2; x < pos.x + glow * 2; x++) {
+        for(let y = pos.y - glow * 2; y < pos.y + glow * 2; y++) {
+          const target = new Pair(x, y)
+          const distance = pos.distance(target)
+          let amount = 0
+          if(distance < glow) {
+            amount = 2
+          } else if(distance < glow * 2) {
+            amount = 1
+          }
+          if(amount) {
+            const wrappedTarget = target.wrap(levelSize)
+            this.addCellGlow(wrappedTarget, amount)
+          }
+        }
+      }
+    }
+
   }
 
-  removeSubjectFromLevel(subject, pos) {
-    const level = this.backModel.level
+  removeSubjectFromLevel(subject, pos, count) {
+
+    const cell = this.getCell(pos)
     if(subject.base.act) {
       this.removeActor(subject)
     }
+
+    let itemToReturn
     if(subject.base.occupant) {
-      level[pos.x][pos.y].occupiedBy = null
+      cell.occupiedBy = null
     } else {
-      level[pos.x][pos.y].onFloor = 
-        level[pos.x][pos.y].onFloor
-        .filter(item => item.base != subject.base)
+
+      let index = cell.onFloor.findIndex(
+        subject => itemsEqual(item, itemToMatch)
+      )
+      let itemOnFloor = cell.onFloor[index]
+      itemToReturn = itemOnFloor
+
+      if(count == null) count = itemOnFloor.count
+      if(count > itemOnFloor.count) count = itemOnFloor.count
+
+      if(itemOnFloor.count == count) {
+        cell.onFloor.splice(index, 1)
+      } else {
+        itemToReturn = { ...itemOnFloor, count: count }
+        itemOnFloor.count -= count
+      }
+
     }
+
     subject.pos = null
+
+    const glow = subject.base.glow
+    if(glow) {
+      const levelSize = this.getLevelSize()
+      for(let x = pos.x - glow * 2; x < pos.x + glow * 2; x++) {
+        for(let y = pos.y - glow * 2; y < pos.y + glow * 2; y++) {
+          const target = new Pair(x, y)
+          const distance = pos.distance(target)
+          let amount = 0
+          if(distance < glow) {
+            amount = 2
+          } else if(distance < glow * 2) {
+            amount = 1
+          }
+          if(amount) {
+            const wrappedTarget = target.wrap(levelSize)
+            this.addCellGlow(wrappedTarget, -amount)
+          }
+        }
+      }
+    }
+
+    return itemToReturn
+
   }
 
   getLevel() {

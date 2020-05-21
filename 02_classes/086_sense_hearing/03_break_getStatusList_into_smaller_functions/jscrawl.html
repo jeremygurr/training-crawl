@@ -197,12 +197,13 @@ const fontStyle = {
 }
 
 // immutable
+// each value is initialized with name and class
 const senses = {
-  vision: {},
-  hearing: {},
-  smell: {},
-  feeling: {},
-  energy: {},
+  vision: { key: 'v', },
+  hearing: { key: 'h', },
+  smell: { key: 's', },
+  feeling: { key: 'f', },
+  energy: { key: 'e', },
 }
 
 // immutable
@@ -471,6 +472,7 @@ const pools = {
   // channels is added to these automatically
   //   which contains an array of channel indexes
   // index is added to these automatically
+  // class is added to these automatically
   criticalHealth: { 
     type: poolTypes.interna, 
     key: '1', 
@@ -968,17 +970,9 @@ const template = {
         chanceWeight: 1000,
         size: size.small,
         sub: {
-          gold1: { 
+          gold: { 
             chanceWeight: 1000, 
             count: 1,
-          },
-          gold10: { 
-            chanceWeight: 200, 
-            count: 10,
-          },
-          gold100: { 
-            chanceWeight: 50, 
-            count: 100,
           },
         },
       },
@@ -995,6 +989,11 @@ const template = {
             health: 2,  
             attack: { min: 0, max: 1 }, 
             act: 'simplePursuit',
+            sound: {
+              name: 'a squeak',
+              volume: 4,
+              chance: 0.2,
+            },
           },
           lion: { 
             chanceWeight: 300,
@@ -1437,8 +1436,10 @@ const template = {
     },
     levelSize: new Pair(50, 50),
     level: [],
+    glowGrid: [],
     gameClock: 0,
     creatorMode: false,
+    sounds: [],
     player: { 
       base: {
         showAs: '🙂', 
@@ -1449,7 +1450,7 @@ const template = {
       level: 0,
       awakenedPools: [],
       species: null,
-      wpFocus: null,
+      focus: null,
       medDepth: 0,
       memory: {
         vision: [],
@@ -1616,7 +1617,7 @@ const keyMap = {
     creatorModeCommand: [ '`' ],
     channelCommand: [ 'c' ],
     changeStatusMode: [ 's' ],
-    willpowerFocus: [ 'w' ],
+    willpowerFocus: [ 'f' ],
     helpMode: [ '?' ],
     editGrowthAllocation: [ 'g' ],
   },
@@ -2048,7 +2049,7 @@ class TopController {
     const fc = this.frontController
     const bc = this.backController
     const player = bc.getPlayer()
-    if(player.wpFocus) {
+    if(player.focus) {
       if(player.medDepth == 0) {
         player.medDepth = 0.2
       } else {
@@ -2099,10 +2100,11 @@ class TopController {
 
   willpowerFocus() {
     const fc = this.frontController
-    fc.willpowerFocusSelectPoolType()
+    fc.willpowerFocusSelectFocusType()
     const bc = this.backController
     const player = bc.getPlayer()
-    player.wpFocus = null
+    player.focus = null
+    player.medDepth = 0
     fc.setStatusChanged(true)
   }
 
@@ -2115,9 +2117,21 @@ class TopController {
     const bc = this.backController
     const player = bc.getPlayer()
     const selectedSubject = fc.getSelectedSubject()
-    player.wpFocus = selectedSubject
+    player.focus = selectedSubject
     fc.setStatusChanged(true)
     this.exitSimple()
+  }
+
+  afterWillpowerFocusSelectFocusType() {
+    const fc = this.frontController
+    const key = fc.getSelectedKeys()[0]
+    if(key === 'p') {
+      fc.willpowerFocusSelectPoolType()
+    } else if(key === 's') {
+      fc.willpowerFocusSelectSense()
+    } else {
+      err('Invalid key ' + key)
+    }
   }
 
   changeStatusMode() {
@@ -2652,9 +2666,9 @@ class TopController {
 
       let item = selectedFloorItems[i]
       let selectCount = selectedCounts[i]
-      item = bc.removeItemFromFloor(
-        playerPos,
+      item = bc.removeSubjectFromLevel(
         item,
+        playerPos,
         selectCount,
       )
       bc.addItemToInventory(item)
@@ -2683,7 +2697,10 @@ class TopController {
     }
 
     if(floorItems.length == 1) {
-      const item = bc.removeItemFromFloor(playerPos, floorItems[0])
+      const item = bc.removeSubjectFromLevel(
+        floorItems[0],
+        playerPos, 
+      )
       bc.addItemToInventory(item)
       fc.setStatusChanged(true)
       fc.addMessage('Picked up ' + getNameOf(item.count, item) + '.')
@@ -2804,7 +2821,7 @@ class TopController {
           name + ' is not equipped.'
         )
       } else {
-        let result = bc.unequipItem(type, item)
+        let result = bc.unequipItem(item)
         if(result) {
           fc.addMessage('Unequipped ' + name + '.')
         } else {
@@ -3087,7 +3104,7 @@ class TopController {
         player, levelPos,
       )
       let subject
-      if(visibility == 2) {
+      if(visibility >= 2) {
         if(cell.occupiedBy) {
           subject = cell.occupiedBy.base
           characterToDraw = subject.showAs
@@ -3138,27 +3155,32 @@ class TopController {
         }
       }
 
-      if(characterToDraw) {
-        
-        if(visibility < 2) {
-          characterToDraw = [{
-            text: characterToDraw,
-            style: '#00000080',
-          }]
-        }
-
-        fc.drawText({
-          screen: screen,
-          window: window,
-          windowPos: windowPos, 
-          textToDraw: characterToDraw, 
-          offset: offset,
-          center: true,
-          cellSizePixels: window.cellPixelDimensions,
-          maxColumns: 1,
-        })
-
+      if(visibility < 1) {
+        characterToDraw = [{
+          text: characterToDraw || ' ',
+          bgStyle: '#bbb',
+        }]
+      } else if(visibility < 2) {
+        characterToDraw = [{
+          text: characterToDraw,
+          style: '#00000080',
+          bgStyle: '#ddd',
+        }]
       }
+
+      fc.drawText({
+        screen: screen,
+        window: window,
+        windowPos: windowPos, 
+        textToDraw: characterToDraw, 
+        offset: offset,
+        centerX: true,
+        centerY: true,
+        textOffset: new Pair(0, 3),
+        cellSizePixels: window.cellPixelDimensions,
+        maxColumns: 1,
+      })
+
     }
 
   }
@@ -3197,23 +3219,39 @@ class TopController {
       list.push(colorize.rainbow('***** CREATOR MODE *****'))
     }
 
+    this.getStatusListAwakened(list, player)
+    this.getStatusListFocus(list, player)
+    this.getStatusListChannels(list, player)
+
+    return list
+
+  }
+
+  getStatusListAwakened(list, player) {
     if(player.awakenedPools.length) {
-
       let awakenedList = [ text('Awakened:') ]
-
       player.awakenedPools.forEach(pool => {
         awakenedList.push(text(' '))
         awakenedList.push(colorizePoolName(pool))
       })
-      
       list.push(awakenedList)
-
     }
+  }
 
-    if(player.wpFocus) {
+  getStatusListFocus(list, player) {
+    const focus = player.focus
+    if(focus) {
+      let output
+      if(focus.objectClass == 'pool') {
+        output = colorizePoolName(focus)
+      } else if(focus.objectClass == 'sense') {
+        output = text(focus.name)
+      } else {
+        err('Unknown focus class: ' + focus.objectClass)
+      }
       list.push([
-        text('Willpower Focus: '),
-        colorizePoolName(player.wpFocus),
+        text('Focus: '),
+        output,
       ])
       if(player.medDepth) {
         list.push(
@@ -3222,11 +3260,6 @@ class TopController {
         )
       }
     }
-
-    this.getStatusListChannels(list, player)
-
-    return list
-
   }
 
   getChangeString(prefix, change) {
@@ -3501,6 +3534,14 @@ class TopController {
         this.executeMove(actor, pos)
       }
     }
+
+    const sound = actor.base.sound
+    if(sound) {
+      if(random(1000) < sound.chance * 1000) {
+        bc.makeSound(sound.name, sound.volume, actor.pos)
+        this.frontController.setStatusChanged(true)
+      }
+    }
   }
 
   calculateDamageFrom(attacker) {
@@ -3510,7 +3551,6 @@ class TopController {
       minDamage = attacker.attack.min
       maxDamage = attacker.attack.max
     }
-
     return Math.floor(Math.random() * (1 + maxDamage - minDamage)) + minDamage
   }
 
@@ -3519,6 +3559,7 @@ class TopController {
   }
 
   adjustHealth(target, change) {
+
     target.health += change
     const player = this.backController.getPlayer()
 
@@ -3533,6 +3574,7 @@ class TopController {
     if(change != 0 && target == player) {
       this.frontController.setStatusChanged(true)
     }
+
   }
 
   executeAttack(source, target) {
@@ -3605,6 +3647,35 @@ class BackController {
     this.initializePlayer()
   }
 
+  getSounds() {
+    const sounds = this.backModel.sounds
+    return sounds
+  }
+
+  makeSound(name, volume, pos) {
+    const sounds = this.backModel.sounds
+    sounds.push({
+      name: name,
+      volume: volume * 2,
+      pos: pos,
+    })
+  }
+
+  getCellGlow(pos) {
+    return this.backModel.glowGrid[pos.x]?.[pos.y] || 0
+  }
+
+  addCellGlow(pos, amount) {
+    const oldValue = this.getCellGlow(pos)
+    let newValue = oldValue + amount
+    if(newValue < 0) newValue = 0
+    this.setCellGlow(pos, newValue)
+  }
+
+  setCellGlow(pos, amount) {
+    set(this.backModel.glowGrid, [pos.x, pos.y], amount)
+  }
+
   updateCellVisionMemory(actor, pos, character) {
     set(actor.memory.vision, [pos.x, pos.y], character)
   }
@@ -3616,6 +3687,7 @@ class BackController {
   checkCellVisibility(actor, wrappedPos) {
 
     let visibility = 0
+    let cellGlow = this.getCellGlow(wrappedPos)
 
     if(actor.pos.equals(wrappedPos)) {
       visibility = 2
@@ -3626,30 +3698,28 @@ class BackController {
       const distance = actor.pos.distance(pos)
       const visionRadius = this.getVisionRadius(actor)
 
-      if(distance > visionRadius * 2) {
-        visibility = 0
+      const fullDelta = pos.subtract(actor.pos)
+      let blocked = false
+
+      if(fullDelta.x == 0 || fullDelta.y == 0) {
+        blocked = this.checkCellVisibilityToEdgeOrthagonal(
+          actor, pos, fullDelta
+        )
       } else {
+        blocked = this.checkCellVisibilityToEdgeDiagonal(
+          actor, pos, fullDelta
+        )
+      }
 
-        const fullDelta = pos.subtract(actor.pos)
-        let blocked = false
-
-        if(fullDelta.x == 0 || fullDelta.y == 0) {
-          blocked = this.checkCellVisibilityToEdgeOrthagonal(
-            actor, pos, fullDelta
-          )
-        } else {
-          blocked = this.checkCellVisibilityToEdgeDiagonal(
-            actor, pos, fullDelta
-          )
-        }
-
+      visibility = 0
+      if(!blocked) {
         visibility = 2
-        if(blocked) {
+        if(distance > visionRadius * 2) {
           visibility = 0
         } else if(distance > visionRadius) { 
           visibility = 1
         }
-
+        visibility += cellGlow
       }
 
     }
@@ -3787,7 +3857,7 @@ class BackController {
       + this.getEquipBrightness(actor)
     const baseVision = actor.species.senses.vision / 10
     let focusEnhancement = 1
-    if(actor.wpFocus == senses.vision) {
+    if(actor.focus === senses.vision) {
       focusEnhancement += actor.medDepth * 0.1
     }
     const radius = floorBrightness * baseVision * focusEnhancement
@@ -4011,10 +4081,11 @@ class BackController {
   }
 
   advanceEnergyFlow(actor) {
-    if(actor.wpFocus) {
-      const remaining = this.subtractEnergy(actor, 'willpower', 1)
+    if(actor.focus) {
+      const remaining = this.subtractEnergy(actor, 'mana', 1)
       if(remaining != 0) {
-        actor.wpFocus = null
+        actor.focus = null
+        actor.medDepth = 0
       }
     }
     for(let pool of actor.awakenedPools) {
@@ -4230,6 +4301,12 @@ class BackController {
     player.species = species.human
     let i
 
+    for(i in senses) {
+      const sense = senses[i]
+      sense.name = i
+      sense.objectClass = 'sense'
+    }
+
     for(i in poolTypes) {
       const poolType = poolTypes[i]
       poolType.name = i
@@ -4243,6 +4320,7 @@ class BackController {
     for(i in skills) {
       const skill = skills[i]
       skill.name = i
+      skill.objectClass = 'skill'
     }
 
     for(i = 0; i < poolChannels.length; i++) {
@@ -4282,6 +4360,7 @@ class BackController {
 
       let maxPoolSize = player.species.maxPoolSizes[poolName]
       pool.name = poolName
+      pool.objectClass = 'pool'
       pool.index = i
       pool.channelIndexes = []
 
@@ -4368,53 +4447,10 @@ class BackController {
     this.backModel.creatorMode = true
   }
 
-  setFloorItemsAt(pos, floorItems) {
-    const cell = this.getCell(pos)
-    cell.onFloor = floorItems
-  }
-
   getFloorItemsAt(pos) {
     const cell = this.getCell(pos)
     const floorItems = cell.onFloor
     return floorItems
-  }
-
-  addItemToFloor(pos, item) {
-    const cell = this.getCell(pos)
-    let found = false
-    for(let floorItem of cell.onFloor) {
-      if(itemsEqual(floorItem, item)) {
-        floorItem.count += item.count
-        found = true
-        break
-      }
-    }
-    if(!found) {
-      cell.onFloor.push(item)
-    }
-  }
-
-  removeItemFromFloor(pos, itemToMatch, count) {
-
-    const cell = this.getCell(pos)
-    let index = cell.onFloor.findIndex(
-      item => itemsEqual(item, itemToMatch)
-    )
-    let itemOnFloor = cell.onFloor[index]
-    let itemToReturn = itemOnFloor
-
-    if(count == null) count = itemOnFloor.count
-    if(count > itemOnFloor.count) count = itemOnFloor.count
-
-    if(itemOnFloor.count == count) {
-      cell.onFloor.splice(index, 1)
-    } else {
-      itemToReturn = { ...itemOnFloor, count: count }
-      itemOnFloor.count -= count
-    }
-
-    return itemToReturn
-
   }
 
   handsUsed() {
@@ -4429,7 +4465,7 @@ class BackController {
   unequipItem(item) {
 
     const player = this.getPlayer()
-    const slot = item.equipSlot
+    const slot = item.base.equipSlot
     let result = false
 
     switch(slot) {
@@ -4487,7 +4523,7 @@ class BackController {
 
   isEquipped(item) {
     const player = this.getPlayer()
-    const slot = item.equipSlot
+    const slot = item.base.equipSlot
     let result = false
     if(slot == 'hand' || slot == 'ring') {
       let list = player.equip[slot]
@@ -4548,7 +4584,7 @@ class BackController {
     const cell = this.getCell(playerPos)
     const item = this.removeItemFromInventoryByIndex(type, index, count)
     this.unequipItem(item)
-    this.addItemToFloor(playerPos, item)
+    this.addSubjectToLevel(item, playerPos)
   }
 
   getEquipment() {
@@ -4649,23 +4685,6 @@ class BackController {
 
     bm.level[target.x][target.y].occupiedBy = bm.player
     bm.player.pos = target
-
-    const bacon = this.generateItem(1, ['food','bacon'])
-    const ham = this.generateItem(1, ['food','ham'])
-    const fish = this.generateItem(1, ['food','fish'])
-
-    bm.level[target.x+1][target.y].occupiedBy = null
-    bm.level[target.x+1][target.y].onFloor = [bacon, ham, fish]
-
-    const rock = this.generateItem(10, ['weapon','throwable','rock'])
-
-    bm.level[target.x][target.y-1].occupiedBy = null
-    bm.level[target.x][target.y-1].onFloor = [rock]
-
-    const gold = this.generateItem(20, ['gold','gold1'])
-    
-    bm.level[target.x][target.y+1].occupiedBy = null
-    bm.level[target.x][target.y+1].onFloor = [gold]
 
     const potion = this.generateItem(1, ['potion','experience'])
     this.addItemToInventory(potion)
@@ -4804,42 +4823,114 @@ class BackController {
   }
 
   addSubjectToLevel(subject, pos) {
-    const level = this.backModel.level
-    const cell = level[pos.x][pos.y]
+
+    const cell = this.getCell(pos)
     if(subject.base.act) {
       this.addActor(subject, pos)
     }
+
     if(subject.base.occupant) {
+
       cell.occupiedBy = subject
+
     } else {
+
       let found = false
-      for(let item of cell.onFloor) {
-        if(itemsEqual(subject, item)) {
-          item.count += subject.count
+
+      for(let floorItem of cell.onFloor) {
+        if(itemsEqual(floorItem, subject)) {
+          floorItem.count += subject.count
           found = true
           break
         }
       }
+
       if(!found) {
         cell.onFloor.push(subject)
       }
+
     }
+
     subject.pos = pos
+
+    const glow = subject.base.glow
+    if(glow) {
+      const levelSize = this.getLevelSize()
+      for(let x = pos.x - glow * 2; x < pos.x + glow * 2; x++) {
+        for(let y = pos.y - glow * 2; y < pos.y + glow * 2; y++) {
+          const target = new Pair(x, y)
+          const distance = pos.distance(target)
+          let amount = 0
+          if(distance < glow) {
+            amount = 2
+          } else if(distance < glow * 2) {
+            amount = 1
+          }
+          if(amount) {
+            const wrappedTarget = target.wrap(levelSize)
+            this.addCellGlow(wrappedTarget, amount)
+          }
+        }
+      }
+    }
+
   }
 
-  removeSubjectFromLevel(subject, pos) {
-    const level = this.backModel.level
+  removeSubjectFromLevel(subject, pos, count) {
+
+    const cell = this.getCell(pos)
     if(subject.base.act) {
       this.removeActor(subject)
     }
+
+    let itemToReturn
     if(subject.base.occupant) {
-      level[pos.x][pos.y].occupiedBy = null
+      cell.occupiedBy = null
     } else {
-      level[pos.x][pos.y].onFloor = 
-        level[pos.x][pos.y].onFloor
-        .filter(item => item.base != subject.base)
+
+      let index = cell.onFloor.findIndex(
+        item => itemsEqual(item, subject)
+      )
+      let itemOnFloor = cell.onFloor[index]
+      itemToReturn = itemOnFloor
+
+      if(count == null) count = itemOnFloor.count
+      if(count > itemOnFloor.count) count = itemOnFloor.count
+
+      if(itemOnFloor.count == count) {
+        cell.onFloor.splice(index, 1)
+      } else {
+        itemToReturn = { ...itemOnFloor, count: count }
+        itemOnFloor.count -= count
+      }
+
     }
+
     subject.pos = null
+
+    const glow = subject.base.glow
+    if(glow) {
+      const levelSize = this.getLevelSize()
+      for(let x = pos.x - glow * 2; x < pos.x + glow * 2; x++) {
+        for(let y = pos.y - glow * 2; y < pos.y + glow * 2; y++) {
+          const target = new Pair(x, y)
+          const distance = pos.distance(target)
+          let amount = 0
+          if(distance < glow) {
+            amount = 2
+          } else if(distance < glow * 2) {
+            amount = 1
+          }
+          if(amount) {
+            const wrappedTarget = target.wrap(levelSize)
+            this.addCellGlow(wrappedTarget, -amount)
+          }
+        }
+      }
+    }
+
+    return itemToReturn
+
   }
 
   getLevel() {
@@ -5052,11 +5143,52 @@ class FrontController {
     this.setStatusChanged(true)
   }
 
+  willpowerFocusSelectFocusType() {
+    const names = [ 'pool', 'sense' ]
+    const keys = [ 'p', 's' ]
+    this.resetSelect()
+    this.setSelectTitle(() => 'Choose focus type:')
+    this.setSelectNameList(names)
+    this.setSelectKeys(keys)
+    this.setSelectAllowMultiple(false)
+    this.setKeyMode('select')
+    this.setSelectAction(() => {
+      topController.afterWillpowerFocusSelectFocusType()
+    })
+    this.showSelectedItems()
+  }
+
   willpowerFocusSelectPoolType() {
     this.selectPoolType(
       () => { topController.willpowerFocusSelectPool() },
       false,
     )
+  }
+
+  willpowerFocusSelectSense() {
+
+    let names = []
+    let subjects = []
+    let keys = []
+
+    for(let sense of Object.values(senses)) {
+      names.push(sense.name)
+      keys.push(sense.key)
+      subjects.push(sense)
+    }
+
+    this.resetSelect()
+    this.setSelectTitle(() => 'Choose sense:')
+    this.setSelectNameList(names)
+    this.setSelectSubjectList(subjects)
+    this.setSelectKeys(keys)
+    this.setSelectAllowMultiple(false)
+    this.setKeyMode('select')
+    this.setSelectAction(() => {
+      topController.willpowerFocusExecute()
+    })
+    this.showSelectedItems()
+
   }
 
   channelCommandSelectPoolType() {
@@ -5311,7 +5443,10 @@ class FrontController {
         screen: screen, 
         window: window, 
         windowPos: new Pair(xOffset, effectiveRow), 
-        textToDraw: message
+        textToDraw: message,
+        centerX: false,
+        centerY: false,
+        textOffset: new Pair(0, -3),
       })
 
       if(row > header - 1) {
@@ -5342,6 +5477,9 @@ class FrontController {
         windowPos: new Pair(xOffset, effectiveRow), 
         textToDraw: statusRow,
         maxColumns: window.smallCellSize.x / 2,
+        centerX: false,
+        centerY: false,
+        textOffset: new Pair(0, -3),
       })
     }
   }
@@ -5574,6 +5712,15 @@ class FrontController {
       }
     }
     return found
+  }
+
+  getSelectedKeys() {
+    const fm = this.frontModel
+    let selectedKeys = []
+    for(let i of this.getSelectedIndexes()) {
+      selectedKeys.push(fm.selectKeys[i])
+    }
+    return selectedKeys
   }
 
   getSelectedSubjectsAndCounts() {
@@ -6134,7 +6281,9 @@ class FrontController {
   //  windowPos, 
   //  textToDraw = null, 
   //  offset = null, 
-  //  center = false,
+  //  textOffset = null,
+  //  centerX = false,
+  //  centerY = false,
   //  maxColumns = null,
   drawText(p) {
 
@@ -6155,9 +6304,11 @@ class FrontController {
       screenPixelPos: screenPixelPos, 
       textToDraw: p.textToDraw, 
       offset: p.offset, 
-      center: p.center, 
+      centerX: p.centerX, 
+      centerY: p.centerY, 
       cellSizePixels: cellSizePixels,
       maxColumns: p.maxColumns,
+      textOffset: p.textOffset,
     })
 
   }
@@ -6250,7 +6401,9 @@ class OutController {
   //  screenPixelPos, 
   //  textToDraw = null, 
   //  offset = null, 
-  //  center = false,
+  //  textOffset = null,
+  //  centerX = false,
+  //  centerY = false,
   //  cellSizePixels = null,
   //  maxColumns = null,
   drawText(p) {
@@ -6264,6 +6417,8 @@ class OutController {
         multipleColumnBlocks = true
       }
     }
+
+    let textOffset = p.textOffset || emptyPair
 
     for(let i = 0; i < p.textToDrawList.length; i++) {
 
@@ -6294,7 +6449,7 @@ class OutController {
         const x2 = x1 + maxSize
         const y2 = y1 + p.cellSizePixels.y
         this.drawFilledRect(
-          new Rect(x1 - 2, y1 + 1, x2 + 1, y2 + 1), 
+          new Rect(x1, y1 - 2, x2, y2 - 1), 
           bgStyle,
         )
       }
@@ -6312,16 +6467,17 @@ class OutController {
       const textSize = ctx.measureText(textToDraw);
       const textWidth = textSize.width
       if(
-        p.center
+        p.centerX
         && p.maxColumns > 0 
         && textWidth < maxSize
       ) {
         xOffset += Math.floor((maxSize - textWidth) / 2)
       }
+
       const textHeight = p.fontStyle.size
-      //const textHeight = textSize.actualBoundingBoxAscent + textSize.actualBoundingBoxDescent
       if(
-        p.center 
+        p.centerY
+        && false
         && p.cellSizePixels 
         && p.cellSizePixels.y > 0 && textHeight < p.cellSizePixels.y
       ) {
@@ -6330,16 +6486,20 @@ class OutController {
 
       yOffset += p.fontStyle.size 
 
-      if(p.center && p.cellSizePixels && p.cellSizePixels.y > 0) {
-        yOffset -= 
-          textSize.actualBoundingBoxDescent 
+      if(
+        p.centerY 
+        && p.cellSizePixels 
+        && p.cellSizePixels.y > 0
+      ) {
+        yOffset -= 0
+          + textSize.actualBoundingBoxDescent 
           + (textHeight - textSize.actualBoundingBoxAscent) / 2
       }
 
       ctx.fillText(
         textToDraw, 
-        p.screenPixelPos.x + xOffset, 
-        p.screenPixelPos.y + yOffset,
+        p.screenPixelPos.x + xOffset + textOffset.x, 
+        p.screenPixelPos.y + yOffset + textOffset.y,
       )
 
       p.screenPixelPos.x = p.screenPixelPos.x + maxSize
@@ -7124,8 +7284,8 @@ function poolNameToIndex(poolName) {
 function getBias(actor, fromPool, toPool) {
   let upBias = 0
   let downBias = fromPool.tier > toPool.tier ? 1 : 0
-  if(actor.wpFocus == fromPool) upBias += Math.floor(actor.medDepth + 1)
-  if(actor.wpFocus == toPool) downBias += Math.floor(actor.medDepth + 1)
+  if(actor.focus === fromPool) upBias += Math.floor(actor.medDepth + 1)
+  if(actor.focus === toPool) downBias += Math.floor(actor.medDepth + 1)
   return { upBias: upBias, downBias: downBias }
 }
 

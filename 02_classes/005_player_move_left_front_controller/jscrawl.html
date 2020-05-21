@@ -38,7 +38,7 @@ let screen = {
   main: 'main',
 }
 
-let window = {
+let mywindow = {
   level: 'level',
   status: 'status',
   message: 'message',
@@ -75,18 +75,18 @@ let viewStructure = {
   initialScreen: mainScreen,
   screen: {
     main: {
-      window: {
-        window.level,
-        window.status,
-        window.message,
+      mywindow: {
+        mywindow.level,
+        mywindow.status,
+        mywindow.message,
       },
-      initialWindow: window.level,
+      initialWindow: mywindow.level,
       cellWidth: 26,
       cellHeight: 30,
     },
   },
 
-  window: {
+  mywindow: {
     level: {
       initialKeyMode: keyMode.base,
     },
@@ -167,7 +167,7 @@ class TopController {
       currentScreen: screen.main,
       screen: {
         main: {
-          window: {
+          mywindow: {
             level: {
               changed: true,
               cellsChanged: [],
@@ -226,7 +226,7 @@ class FrontController {
   }
 
   levelChangedAt(pos) {
-    this.frontModel.screen.main.window.level.cellsChanged.push(pos);
+    this.frontModel.screen.main.mywindow.level.cellsChanged.push(pos);
   }
 
 }

@@ -155,7 +155,6 @@ class Pair {
         )
       }
     }
-
     return result
   }
 
@@ -287,14 +286,6 @@ const species = {
       stamina: -0.1,
       mana: -0.1,
       willpower: -0.1,
-    },
-
-    senses: {
-      vision: 10,
-      hearing: 10,
-      smell: 10,
-      feel: 10,
-      energy: 10,
     },
 
     poolAwakeningLevels: [ 10, 30, 90 ]
@@ -1480,7 +1471,8 @@ const template = {
     gameClock: 0,
     creatorMode: false,
     sounds: [],
-    smellIndexes: [] // of smell, index aligns with smells array
+    smellIndexes: [], // of smell, index aligns with smells array
+    smellCellCounts: [], // total number of cells which have this smell
     // populated when game is initialized
     smells: [],      // [smell index][x][y] = amount
     player: { 
@@ -3817,46 +3809,111 @@ class BackController {
   }
 
   addSmell(pos, smell) {
-    const bm = this.backModel
-    const smellCell = bm.smells[pos.x][pos.y]
-    let currentSmell = this.getOrCreateSmellFromCell(smell.name, smellCell)
-    currentSmell.amount += smell.amount
-  }
 
-  // returns null if it's not found
-  getSmellFromCell(name, cell) {
-    let result
-    for(let smell of cell) {
-      if(smell.name === name) {
-        result = smell
-        break
+    const bm = this.backModel
+    const smellIndexes = bm.smellIndexes
+    const minimumSmellLevel = 0.001
+
+    let smellIndex
+
+    for(let i in smellIndexes) {
+      if(smellIndexes[i] === smell) {
+        smellIndex = i
       }
     }
-    return result
-  }
 
-  getOrCreateSmellFromCell(name, cell) {
-    let smell = this.getSmellFromCell(name, cell)
-    if(!smell) {
-      smell = { name: name, amount: 0 }
-      cell.push(smell)
+    if(smellIndex == null) {
+      smellIndex = smellIndexes.length
+      smellIndexes.push(smell)
+      bm.smells[smellIndex] = []
+      const levelSize = bm.levelSize
+      for(let x = 0; x < bm.levelSize.x; x++) {
+        bm.smells[smellIndex][x] = []
+        for(let y = 0; y < bm.levelSize.y; y++) {
+          bm.smells[smellIndex][x][y] = 0
+        }
+      }
+      bm.smellCellCounts[smellIndex] = 0
     }
-    return smell
+
+    let currentSmell = bm.smells[smellIndex][pos.x][pos.y]
+
+    if(currentSmell == 0) {
+      bm.smellCellCounts[smellIndex]++
+    }
+
+    currentSmell += smell.amount
+    bm.smells[smellIndex][pos.x][pos.y] = currentSmell
+
+    if(currentSmell < minimumSmellLevel) {
+      bm.smellCellCounts[smellIndex]--
+      if(bm.smellCellCounts[smellCellCounts] <= 0) {
+        smellIndexes.splice(smellIndex, 1)
+        bm.smellCellCounts.splice(smellIndex, 1)
+        bm.smells.splice(smellIndex, 1)
+      }
+    }
+
   }
 
   spreadSmell() {
+
+    const middleWeight = 10
+    const decay = 0.01
+    const minimumSmellLevel = 0.001
+
     const bm = this.backModel
     const smells = bm.smells
     const newSmells = []
-    for(let x = 0; x < smells.length; x++) {
-      newSmells[x] = []
-      for(let y = 0; y < smells[x].length; y++) {
-        const newCell = []
-        newSmells[x][y] = newCell
-        const oldCell = smells[x][y]
+    const smellIndexesToRemove = []
+    
+    for(let p = 0; p < smells.length; p++) {
+      newSmells[p] = []
+      for(let x = 0; x < smells[p].length; x++) {
+        newSmells[p][x] = []
+
+        for(let y = 0; y < smells[p][x].length; y++) {
+
+          const pos = new Pair(x, y)
+          const adjacent = pos.adjacent(bm.levelSize)
+          const oldValue = smells[p][x][y]
+          let adjacentSum = 0 
+
+          for(let adjacentPos of adjacent) {
+            adjacentSum += smells[p][adjacentPos.x][adjacentPos.y]
+          }
+
+          const adjacentAvg = adjacentSum / 8
+          const newValue = 
+            (1 - decay) 
+            *
+            (oldValue * middleWeight + adjacentAvg) 
+            / 
+            (middleWeight + 1)
+
+          newSmells[p][x][y] = newValue
+          if(newValue > 0 && oldValue === 0) {
+            bm.smellCellCounts[p]++
+          } else if(newValue < minimumSmellLevel && oldValue > 0) {
+            bm.smellCellCounts[p]--
+            if(bm.smellCellCounts[p] <= 0) {
+              smellIndexesToRemove.push(p)
+            }
+          }
+
+        }
+
       }
     }
+
+    for(let p = 0; p < smellIndexesToRemove.length; p++) {
+      bm.smellIndexes.splice(p, 1)
+      bm.smellCellCounts.splice(p, 1)
+      newSmells.splice(p, 1)
+    }
+
     bm.smells = newSmells
+
   }
 
   getExperiencePotionInLevel() {
@@ -3895,7 +3952,6 @@ class BackController {
     const newSounds = []
     for(const sound of sounds) {
       const newVolume = sound.volume / 2
-      debug('decayed to ' + newVolume)
       if(newVolume >= 1) {
         const newSound = {
           ...sound,

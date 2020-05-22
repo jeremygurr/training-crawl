@@ -1,16 +1,5 @@
-spread needs to count new cells
-spread needs to remove zeroed cells
-spread needs to check for low threshold cells
-rename senses
-  vision
-  hearing
-  smell
-  touch
-  energy
 smell implementation
   smell can't pass through walls
-  rat makes smell
-  smell spreads
   simple smell view
 basic senses
   smell

@@ -1020,8 +1020,8 @@ const template = {
               chance: 0.2,
             },
             smell: {
-              name: 'a dry musky odor',
-              amount: 5,
+              name: 'dry musky',
+              amount: 10,
             },
           },
           lion: { 
@@ -3295,6 +3295,7 @@ class TopController {
     this.getStatusListFocus(list, player)
     this.getStatusListChannels(list, player)
     this.getStatusListSounds(list, player)
+    this.getStatusListSmells(list, player)
     this.getStatusListExperienceCompass(
       list, player, bc.getExperiencePotionInLevel()
     )
@@ -3327,6 +3328,50 @@ class TopController {
         + distanceString
         + ')'
       )
+    }
+  }
+
+  getStatusListSmells(list, player) {
+
+    const bc = this.backController
+    const smells = bc.getSmellsAt(player.pos)
+
+    if(smells.length) {
+
+      const sensitivity = bc.getSmellSensitivity(player)
+      const threshold = 1 / sensitivity
+      const detected = []
+      const levelSize = bc.getLevelSize()
+
+      for(const smell of smells) {
+
+        if(smell.amount > threshold) {
+          detected.push(smell)
+        }
+
+      }
+
+      if(detected.length) {
+        list.push('Smelled:')
+        detected.sort( (a, b) => b.amount - a.amount )
+        const smellDepth = Math.floor(bc.getSmellDepth(player))
+        detected.length = Math.min(detected.length, smellDepth)
+        detected.forEach((smell) => {
+          let directionString = ''
+          if(smell.direction) {
+            directionString = '/' + smell.direction
+          }
+          list.push(
+            '  ' 
+          + smell.base.name 
+          + ' (' 
+          + autoRound(smell.amount)
+          + directionString
+          + ')'
+          )
+        })
+      }
+
     }
   }
 
@@ -3808,114 +3853,6 @@ class BackController {
     this.initializePlayer()
   }
 
-  addSmell(pos, smell) {
-
-    const bm = this.backModel
-    const smellIndexes = bm.smellIndexes
-    const minimumSmellLevel = 0.001
-
-    let smellIndex
-
-    for(let i in smellIndexes) {
-      if(smellIndexes[i] === smell) {
-        smellIndex = i
-      }
-    }
-
-    if(smellIndex == null) {
-      smellIndex = smellIndexes.length
-      smellIndexes.push(smell)
-      bm.smells[smellIndex] = []
-      const levelSize = bm.levelSize
-      for(let x = 0; x < bm.levelSize.x; x++) {
-        bm.smells[smellIndex][x] = []
-        for(let y = 0; y < bm.levelSize.y; y++) {
-          bm.smells[smellIndex][x][y] = 0
-        }
-      }
-      bm.smellCellCounts[smellIndex] = 0
-    }
-
-    let currentSmell = bm.smells[smellIndex][pos.x][pos.y]
-
-    if(currentSmell == 0) {
-      bm.smellCellCounts[smellIndex]++
-    }
-
-    currentSmell += smell.amount
-    bm.smells[smellIndex][pos.x][pos.y] = currentSmell
-
-    if(currentSmell < minimumSmellLevel) {
-      bm.smellCellCounts[smellIndex]--
-      if(bm.smellCellCounts[smellCellCounts] <= 0) {
-        smellIndexes.splice(smellIndex, 1)
-        bm.smellCellCounts.splice(smellIndex, 1)
-        bm.smells.splice(smellIndex, 1)
-      }
-    }
-
-  }
-
-  spreadSmell() {
-
-    const middleWeight = 10
-    const decay = 0.01
-    const minimumSmellLevel = 0.001
-
-    const bm = this.backModel
-    const smells = bm.smells
-    const newSmells = []
-    const smellIndexesToRemove = []
-    
-    for(let p = 0; p < smells.length; p++) {
-      newSmells[p] = []
-      for(let x = 0; x < smells[p].length; x++) {
-        newSmells[p][x] = []
-
-        for(let y = 0; y < smells[p][x].length; y++) {
-
-          const pos = new Pair(x, y)
-          const adjacent = pos.adjacent(bm.levelSize)
-          const oldValue = smells[p][x][y]
-          let adjacentSum = 0 
-
-          for(let adjacentPos of adjacent) {
-            adjacentSum += smells[p][adjacentPos.x][adjacentPos.y]
-          }
-
-          const adjacentAvg = adjacentSum / 8
-          const newValue = 
-            (1 - decay) 
-            *
-            (oldValue * middleWeight + adjacentAvg) 
-            / 
-            (middleWeight + 1)
-
-          newSmells[p][x][y] = newValue
-          if(newValue > 0 && oldValue === 0) {
-            bm.smellCellCounts[p]++
-          } else if(newValue < minimumSmellLevel && oldValue > 0) {
-            bm.smellCellCounts[p]--
-            if(bm.smellCellCounts[p] <= 0) {
-              smellIndexesToRemove.push(p)
-            }
-          }
-
-        }
-
-      }
-    }
-
-    for(let p = 0; p < smellIndexesToRemove.length; p++) {
-      bm.smellIndexes.splice(p, 1)
-      bm.smellCellCounts.splice(p, 1)
-      newSmells.splice(p, 1)
-    }
-
-    bm.smells = newSmells
-
-  }
-
   getExperiencePotionInLevel() {
     return this.backModel.experiencePotionInLevel
   }
@@ -4153,31 +4090,6 @@ class BackController {
 
   }
 
-  getLevelBackgroundNoise() {
-    // fixed for now
-    return 0.5
-  }
-
-  getHearingSensitivity(actor) {
-    const baseHearing = actor.species.senses.sound / 10
-    let focusEnhancement = 1
-    if(actor.focus === senses.sound) {
-      focusEnhancement += actor.medDepth * 0.1
-    }
-    const sensitivity = baseHearing * focusEnhancement
-    return sensitivity
-  }
-
-  getHearingDepth(actor) {
-    const baseHearing = actor.species.senses.sound / 10
-    let focusEnhancement = 1
-    if(actor.focus === senses.sound) {
-      focusEnhancement += actor.medDepth * 0.1
-    }
-    const hearingDepth = baseHearing * focusEnhancement * 2
-    return hearingDepth
-  }
-
   getVisionRadius(actor) {
     const floorBrightness = 
       this.getCurrentFloorBrightness()
@@ -4302,6 +4214,193 @@ class BackController {
     }
 
     return result
+  }
+
+  getLevelBackgroundNoise() {
+    // fixed for now
+    return 0.5
+  }
+
+  getHearingSensitivity(actor) {
+    const baseHearing = actor.species.senses.sound / 10
+    let focusEnhancement = 1
+    if(actor.focus === senses.sound) {
+      focusEnhancement += actor.medDepth * 0.1
+    }
+    const sensitivity = baseHearing * focusEnhancement
+    return sensitivity
+  }
+
+  getHearingDepth(actor) {
+    const baseHearing = actor.species.senses.sound / 10
+    let focusEnhancement = 1
+    if(actor.focus === senses.sound) {
+      focusEnhancement += actor.medDepth * 0.1
+    }
+    const hearingDepth = baseHearing * focusEnhancement * 2
+    return hearingDepth
+  }
+
+  addSmell(pos, smell) {
+
+    const bm = this.backModel
+    const smellIndexes = bm.smellIndexes
+    const minimumSmellLevel = 0.001
+
+    let smellIndex
+
+    for(let i in smellIndexes) {
+      if(smellIndexes[i] === smell) {
+        smellIndex = i
+      }
+    }
+
+    if(smellIndex == null) {
+      smellIndex = smellIndexes.length
+      smellIndexes.push(smell)
+      bm.smells[smellIndex] = []
+      const levelSize = bm.levelSize
+      for(let x = 0; x < bm.levelSize.x; x++) {
+        bm.smells[smellIndex][x] = []
+        for(let y = 0; y < bm.levelSize.y; y++) {
+          bm.smells[smellIndex][x][y] = 0
+        }
+      }
+      bm.smellCellCounts[smellIndex] = 0
+    }
+
+    let currentSmell = bm.smells[smellIndex][pos.x][pos.y]
+
+    if(currentSmell == 0) {
+      bm.smellCellCounts[smellIndex]++
+    }
+
+    currentSmell += smell.amount
+    bm.smells[smellIndex][pos.x][pos.y] = currentSmell
+
+    if(currentSmell < minimumSmellLevel) {
+      bm.smellCellCounts[smellIndex]--
+      if(bm.smellCellCounts[smellCellCounts] <= 0) {
+        smellIndexes.splice(smellIndex, 1)
+        bm.smellCellCounts.splice(smellIndex, 1)
+        bm.smells.splice(smellIndex, 1)
+      }
+    }
+
+  }
+
+  spreadSmell() {
+
+    const middleWeight = 10
+    const decay = 0.01
+    const minimumSmellLevel = 0.001
+
+    const bm = this.backModel
+    const smells = bm.smells
+    const newSmells = []
+    const smellIndexesToRemove = []
+    
+    for(let p = 0; p < smells.length; p++) {
+      newSmells[p] = []
+      for(let x = 0; x < smells[p].length; x++) {
+        newSmells[p][x] = []
+
+        for(let y = 0; y < smells[p][x].length; y++) {
+
+          const pos = new Pair(x, y)
+          const adjacent = pos.adjacent(bm.levelSize)
+          const oldValue = smells[p][x][y]
+          let adjacentSum = 0 
+
+          for(let adjacentPos of adjacent) {
+            adjacentSum += smells[p][adjacentPos.x][adjacentPos.y]
+          }
+
+          const adjacentAvg = adjacentSum / 8
+          let newValue = 
+            (1 - decay) 
+            *
+            (oldValue * middleWeight + adjacentAvg) 
+            / 
+            (middleWeight + 1)
+
+          newSmells[p][x][y] = newValue
+          if(newValue > 0 && oldValue === 0) {
+            bm.smellCellCounts[p]++
+          } else if(
+            newValue < minimumSmellLevel 
+            && oldValue > newValue
+          ) {
+            bm.smellCellCounts[p]--
+            newValue = 0
+            if(bm.smellCellCounts[p] <= 0) {
+              smellIndexesToRemove.push(p)
+            }
+          }
+
+        }
+
+      }
+    }
+
+    for(let p = 0; p < smellIndexesToRemove.length; p++) {
+      bm.smellIndexes.splice(p, 1)
+      bm.smellCellCounts.splice(p, 1)
+      newSmells.splice(p, 1)
+    }
+
+    bm.smells = newSmells
+
+  }
+
+  getSmellsAt(pos) {
+    const bm = this.backModel
+    const smells = []
+    for(let p = 0; p < bm.smellIndexes.length; p++) {
+      const middleSmellAmount = bm.smells[p][pos.x][pos.y]
+      if(middleSmellAmount) {
+        const adjacent = pos.adjacent(bm.levelSize)
+        let strongestDirection = ''
+        let strongestAmount = middleSmellAmount
+        for(const adjacentPos of adjacent) {
+          const adjacentAmount = 
+            bm.smells[p][adjacentPos.x][adjacentPos.y] 
+          if(
+            adjacentAmount
+            > strongestAmount
+          ) {
+            strongestAmount = adjacentAmount
+            strongestDirection = pos.directionTo(adjacentPos)
+          }
+        }
+        smells.push({
+          base: bm.smellIndexes[p],
+          amount: middleSmellAmount,
+          direction: strongestDirection,
+        })
+      }
+    }
+    return smells
+  }
+
+  getSmellSensitivity(actor) {
+    const baseSmell = actor.species.senses.smell / 10
+    let focusEnhancement = 1
+    if(actor.focus === senses.smell) {
+      focusEnhancement += actor.medDepth * 0.1
+    }
+    const sensitivity = baseSmell * focusEnhancement * 10
+    return sensitivity
+  }
+
+  getSmellDepth(actor) {
+    const baseSmell = actor.species.senses.smell / 10
+    let focusEnhancement = 1
+    if(actor.focus === senses.smell) {
+      focusEnhancement += actor.medDepth * 0.1
+    }
+    const smellDepth = baseSmell * focusEnhancement * 2
+    return smellDepth
   }
 
   initRandomizers() {

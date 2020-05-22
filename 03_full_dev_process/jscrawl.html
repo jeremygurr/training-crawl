@@ -230,8 +230,8 @@ const fontStyle = {
 // immutable
 // each value is initialized with name and class
 const senses = {
-  vision: { key: 'v', },
-  hearing: { key: 'h', },
+  sight: { key: 'v', },
+  sound: { key: 'h', },
   smell: { key: 's', },
   feeling: { key: 'f', },
   energy: { key: 'e', },
@@ -251,8 +251,8 @@ const species = {
     },
 
     senses: {
-      vision: 10,
-      hearing: 10,
+      sight: 10,
+      sound: 10,
       smell: 10,
       feeling: 10,
       energy: 10,
@@ -1488,8 +1488,8 @@ const template = {
       focus: null,
       medDepth: 0,
       memory: {
-        vision: [],
-        hearing: [],
+        sight: [],
+        sound: [],
         smell: [],
         feel: [],
         energy: [],
@@ -3979,11 +3979,11 @@ class BackController {
   }
 
   updateCellVisionMemory(actor, pos, character) {
-    set(actor.memory.vision, [pos.x, pos.y], character)
+    set(actor.memory.sight, [pos.x, pos.y], character)
   }
 
   fetchCellFromVisionMemory(actor, pos) {
-    return actor.memory.vision[pos.x]?.[pos.y]
+    return actor.memory.sight[pos.x]?.[pos.y]
   }
 
   checkCellVisibility(actor, wrappedPos) {
@@ -4159,9 +4159,9 @@ class BackController {
   }
 
   getHearingSensitivity(actor) {
-    const baseHearing = actor.species.senses.hearing / 10
+    const baseHearing = actor.species.senses.sound / 10
     let focusEnhancement = 1
-    if(actor.focus === senses.hearing) {
+    if(actor.focus === senses.sound) {
       focusEnhancement += actor.medDepth * 0.1
     }
     const sensitivity = baseHearing * focusEnhancement
@@ -4169,9 +4169,9 @@ class BackController {
   }
 
   getHearingDepth(actor) {
-    const baseHearing = actor.species.senses.hearing / 10
+    const baseHearing = actor.species.senses.sound / 10
     let focusEnhancement = 1
-    if(actor.focus === senses.hearing) {
+    if(actor.focus === senses.sound) {
       focusEnhancement += actor.medDepth * 0.1
     }
     const hearingDepth = baseHearing * focusEnhancement * 2
@@ -4182,9 +4182,9 @@ class BackController {
     const floorBrightness = 
       this.getCurrentFloorBrightness()
       + this.getEquipBrightness(actor)
-    const baseVision = actor.species.senses.vision / 10
+    const baseVision = actor.species.senses.sight / 10
     let focusEnhancement = 1
-    if(actor.focus === senses.vision) {
+    if(actor.focus === senses.sight) {
       focusEnhancement += actor.medDepth * 0.1
     }
     const radius = floorBrightness * baseVision * focusEnhancement

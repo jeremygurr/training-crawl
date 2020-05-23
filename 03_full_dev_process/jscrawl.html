@@ -959,7 +959,8 @@ const template = {
       size: size.large,
       name: 'rock', 
       showAs: '🀆', 
-      offset: new Pair(0, 1) 
+      offset: new Pair(0, 1),
+      blocksSmell: true,
     },
     somethingBig: {
       showAs: 'X', 
@@ -4308,15 +4309,24 @@ class BackController {
         for(let y = 0; y < smells[p][x].length; y++) {
 
           const pos = new Pair(x, y)
+          if(this.getCell(pos)?.occupiedBy?.base?.blocksSmell) {
+            continue
+          }
+
           const adjacent = pos.adjacent(bm.levelSize)
           const oldValue = smells[p][x][y]
           let adjacentSum = 0 
+          let adjacentCount = 0
 
           for(let adjacentPos of adjacent) {
+            if(this.getCell(adjacentPos)?.occupiedBy?.base?.blocksSmell) {
+              continue
+            }
             adjacentSum += smells[p][adjacentPos.x][adjacentPos.y]
+            adjacentCount++
           }
 
-          const adjacentAvg = adjacentSum / 8
+          const adjacentAvg = adjacentSum / adjacentCount
           let newValue = 
             (1 - decay) 
             *
@@ -4389,7 +4399,7 @@ class BackController {
     if(actor.focus === senses.smell) {
       focusEnhancement += actor.medDepth * 0.1
     }
-    const sensitivity = baseSmell * focusEnhancement * 10
+    const sensitivity = baseSmell * focusEnhancement * 100
     return sensitivity
   }
 

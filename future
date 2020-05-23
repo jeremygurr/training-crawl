@@ -1,13 +1,4 @@
-smell implementation
-  smell can't pass through walls
-  simple smell view
 basic senses
-  smell
-    how to see
-    smells have an id, which is the key used to look up that smell in the smell grid
-    can only smell a small grid around the player 1x1 - 3x3
-    decaying average of adjacent squares for each smell
-    smells are saved in level
   feel 
     can only feel squares immediately around the player
     heat

@@ -158,6 +158,11 @@ class Pair {
     return result
   }
 
+  randomAdjacent(size) {
+    const a = this.adjacent(size)
+    return a[random(8)]
+  }
+
   // returns the unwrapped perimeter cells of a given radius
   // radius should be a whole number
   perimeter(radius) {
@@ -961,6 +966,7 @@ const template = {
       showAs: '🀆', 
       offset: new Pair(0, 1),
       blocksSmell: true,
+      heatCapacity: 1000,
     },
     somethingBig: {
       showAs: 'X', 
@@ -1023,6 +1029,10 @@ const template = {
             smell: {
               name: 'dry musky',
               amount: 10,
+            },
+            heatCapacity: 10,
+            heat: {
+              amount: 1,
             },
           },
           lion: { 
@@ -1474,8 +1484,9 @@ const template = {
     sounds: [],
     smellIndexes: [], // of smell, index aligns with smells array
     smellCellCounts: [], // total number of cells which have this smell
-    // populated when game is initialized
     smells: [],      // [smell index][x][y] = amount
+    // populated when game is initialized
+    heat: [],        // [x][y] = heat
     player: { 
       base: {
         showAs: '🙂', 
@@ -3297,6 +3308,7 @@ class TopController {
     this.getStatusListChannels(list, player)
     this.getStatusListSounds(list, player)
     this.getStatusListSmells(list, player)
+    this.getStatusListHeat(list, player)
     this.getStatusListExperienceCompass(
       list, player, bc.getExperiencePotionInLevel()
     )
@@ -3330,6 +3342,18 @@ class TopController {
         + ')'
       )
     }
+  }
+
+  getStatusListHeat(list, player) {
+
+    const bc = this.backController
+    const heat = bc.getHeatAt(player.pos)
+
+    list.push(
+      'Temp: ' 
+    + autoRound(heat)
+    )
+
   }
 
   getStatusListSmells(list, player) {
@@ -3714,6 +3738,7 @@ class TopController {
     if(playerActive) didSomething = true
     bc.decaySound()
     bc.spreadSmell()
+    bc.spreadHeat()
   }
   
   simplePursuit(actor) {
@@ -3749,6 +3774,12 @@ class TopController {
     if(smell) {
       bc.addSmell(actor.pos, smell)
     }
+
+    const heat = actor.base.heat.amount
+    if(heat) {
+      bc.addHeat(actor.pos, heat)
+    }
+
   }
 
   calculateDamageFrom(attacker) {
@@ -4319,7 +4350,8 @@ class BackController {
           let adjacentCount = 0
 
           for(let adjacentPos of adjacent) {
-            if(this.getCell(adjacentPos)?.occupiedBy?.base?.blocksSmell) {
+            if(this.getCell(adjacentPos)
+              ?.occupiedBy?.base?.blocksSmell) {
               continue
             }
             adjacentSum += smells[p][adjacentPos.x][adjacentPos.y]
@@ -4411,6 +4443,55 @@ class BackController {
     }
     const smellDepth = baseSmell * focusEnhancement * 2
     return smellDepth
+  }
+
+  getHeatAt(pos) {
+    const bm = this.backModel
+    return bm.heat[pos.x][pos.y]
+  }
+
+  addHeat(pos, amount) {
+    const bm = this.backModel
+    bm.heat[pos.x][pos.y] += amount
+  }
+
+  spreadHeat() {
+
+    const minHeatLevel = 0.0001
+
+    const bm = this.backModel
+    const levelSize = bm.levelSize
+    const heatGrid = bm.heat
+    const level = bm.level
+
+    for(let x = 0; x < heatGrid.length; x++) {
+      for(let y = 0; y < heatGrid[x].length; y++) {
+        const heat = heatGrid[x][y]
+        if(heat > 0) {
+          const pos = new Pair(x, y)
+          const pos2 = pos.randomAdjacent(levelSize)
+          const heat2 = heatGrid[pos2.x][pos2.y]
+          // don't do anything if it's not at least 10% difference
+          if(Math.abs(heat - heat2) / heat > 0.1) {
+            const subject = level[x][y].occupiedBy 
+            const cap = subject?.base?.heatCapacity || 10
+            const subject2 = level[pos2.x][pos2.y].occupiedBy 
+            const cap2 = subject2?.base?.heatCapacity || 10
+            const [from, to] = getEnergyCapacityFlow(
+              heat, cap,
+              heat2, cap2,
+            )
+            heatGrid[x][y] += from
+            heatGrid[pos2.x][pos2.y] += to
+            if(heatGrid[x][y] <= minHeatLevel) {
+              heatGrid[x][y] = 0
+              heatGrid[pos2.x][pos2.y] = 0
+            }
+          }
+        }
+      }
+    }
+
   }
 
   initRandomizers() {
@@ -4737,6 +4818,7 @@ class BackController {
   initializePlayer() {
 
     const player = this.getPlayer()
+    const levelSize = this.backModel.levelSize
 
     player.species = species.human
     let i
@@ -4792,6 +4874,14 @@ class BackController {
       }
 
       player.channelMax[i] = maxChannelSize
+
+      const heat = this.backModel.heat
+      for(let x = 0; x < levelSize.x; x++) {
+        heat[x] = []
+        for(let y = 0; y < levelSize.y; y++) {
+          heat[x][y] = 0
+        }
+      }
 
     }
 
@@ -8109,6 +8199,13 @@ class Segment {
     this.pos1 = pos1
     this.pos2 = pos2
   }
+}
+
+function getEnergyCapacityFlow(h1, c1, h2, c2) {
+  const d = (h2 - h1) / (c2 + c1)
+  const from = d / c1
+  const to =  -d / c2
+  return [from, to]
 }
 
 const topController = new TopController()

@@ -10,10 +10,10 @@
 </head>
 <body>
 
-<canvas id="mainCanvas" width="600" height="300"></canvas>
+<canvas id="mainCanvas" width="400" height="250"></canvas>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
+
 var boardWidth = 10;
 var boardHeight = 10;
 var cellWidth = 20;
@@ -48,7 +48,6 @@ var ctx = canvas.getContext("2d");
 ctx.font = fontSize + "px Courier";
 var textHeight = fontSize;
 
-document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
 function simplePursuit(actor) {
@@ -151,9 +150,9 @@ function executeAttack(source, target) {
     message = "The " + source.name + " hit you for " + damage + " damage.";
   } else {
     message = "The " + source.name + " missed you.";
-  }
-  setMessage(message, 1);
-}
+setCellOccupiedBy(playerC, playerR, player);
+setCellOccupiedBy(2, 2, Object.create(newt));
+setCellOccupiedBy(7, 7, Object.create(newt));
 
 function toX(c) {
   return c * cellWidth + boardXOffset;

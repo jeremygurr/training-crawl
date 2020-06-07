@@ -12,6 +12,7 @@
 
 <canvas id="mainCanvas" width="400" height="250"></canvas>
 
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
 <script>
 
 var boardWidth = 10;
@@ -98,7 +99,7 @@ function setCellOccupiedBy(c, r, occupant) {
 }
 
 function addActor(c, r, actor) {
-  actor = Object.create(actor);
+  actor = _.cloneDeep(actor);
   actors.push(actor);
   setCellOccupiedBy(c, r, actor);
 }

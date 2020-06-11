@@ -4,7 +4,7 @@ plugins {
   id 'com.github.johnrengelman.shadow' version '5.2.0'
 }
 
-group = 'com.epic-gamecraft.dungeon-crawl-epic'
+group = 'com.epicGamecraft.dungeonCrawlDepths'
 version = '1.0.0-SNAPSHOT'
 
 repositories {
@@ -20,7 +20,7 @@ application {
   mainClassName = 'io.vertx.core.Launcher'
 }
 
-def mainVerticleName = 'com.epic-gamecraft.MainVerticle'
+def mainVerticleName = 'com.epicGamecraft.MainVerticle'
 def watchForChange = 'src/**/*'
 def doOnChange = './gradlew classes'
 
@@ -37,8 +37,8 @@ dependencies {
 }
 
 java {
-  sourceCompatibility = JavaVersion.VERSION_1_8
-  targetCompatibility = JavaVersion.VERSION_1_8
+  sourceCompatibility = JavaVersion.VERSION_11
+  targetCompatibility = JavaVersion.VERSION_11
 }
 
 shadowJar {

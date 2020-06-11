@@ -1,4 +1,4 @@
-package com.epic-gamecraft.dungeon-crawl-epic;
+package com.epicGamecraft.dungeonCrawlDepths;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;

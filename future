@@ -1,8 +1,27 @@
+create api server
+  study vertx event bus
+  how will top controller feed data to front controller
+    level?
+      [ ] send whole data set back and forth
+      [*] allow back end to control more, pushing front model fully to back end
+  so javascript should be minimized, only updating screens / windows as api tell it
+  get simple vertx server up with example code
+  make first test
+  make login function
+  make connect to game / create game function
+  
+creatures / players have same energy pool flow, heat, smell and sound generation
+  line up model
+    split spirits from creatures
+  make actions handle it
+should creatures starve to death too?
+  maybe fed by the dungeon?
 baseline dungeon temp
 baseline rat temp
 player produces heat
 player reacts to heat
 make smell drop off whenever below threshold
+make creatures and players have the same energy flow / heat / sense 
 basic senses
   feel 
     can only feel squares immediately around the player
@@ -39,6 +58,22 @@ make target not reveal things not yet seen
 external channels
   all pools can vent except interna
   OO=SG OO=ED
+difference between body and spirit
+  body
+    interna
+    spectra
+  spirit
+    etherea
+    lumina
+    exotica
+      used to help spirit act
+    limits
+      can't drink potions or carry things or equip items
+      can eat an item on the floor, although unless it gives an energy that the spirit can hold, it does no good
+      can draw energy from gems
+      will be seen by other spirit creatures, and can be destroyed
+      naturally leaks all energy pools at 100x normal leak speed
+      can see and feel, but not smell or hear
 different times for actions
 game clock
   enemy actions don't execute until they have received enough time
@@ -1133,13 +1168,15 @@ energy management
       4 sp  stamina (from orange)
       5 mp  mana (from yellow)
       6 wp  willpower (from violet)
-    eXotica (3) (tier 1) (extremely rare to find these energies)
+    eXotica (4) (tier 1) (extremely rare to find these energies)
       raiNbow 
         connects to *all* spectra
       broWn 
         connects to *all* lumina
       Purple
         connects to red AND blue
+      Pink
+        connects to red AND white
 night vision
   two kinds:
     low light magnification

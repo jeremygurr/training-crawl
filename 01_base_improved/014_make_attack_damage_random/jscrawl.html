@@ -10,16 +10,18 @@
 </head>
 <body>
 
-<canvas id="mainCanvas" width="600" height="300"></canvas>
+<canvas id="mainCanvas" width="400" height="250"></canvas>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
+
 var boardWidth = 10;
 var boardHeight = 10;
 var cellWidth = 20;
 var cellHeight = 22;
 var fontSize = 18;
 
+var playerC = boardWidth / 2;
+var playerR = boardHeight / 2;
 var boardXOffset = 3;
 var boardYOffset = 0;
 var messageRow = boardHeight;
@@ -48,31 +50,10 @@ var ctx = canvas.getContext("2d");
 ctx.font = fontSize + "px Courier";
 var textHeight = fontSize;
 
-document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
-function simplePursuit(actor) {
-  var adjacent = adjacentCells(actor.pos);
-  for(var i = 0; i < adjacent.length; i++) {
-    var pos = adjacent[i];
-    var cell = getCell(pos);
-    if(cell.occupiedBy == player) {
-      executeAttack(actor, player);
-      return;
-    }
-  }
-
-  if(random(3) == 0) {
-    var pos = adjacent[random(adjacent.length)];
-    var cell = getCell(pos);
-    if(cell.occupiedBy == null) {
-      executeMove(actor, pos);
-    }
-  }
-}
-
-var player = { name: 'player', showAs: '@', health: 10, attack: { min: 0, max: 2 }, pos: { c: 0, r: 0 } };
-var newt = { name: 'newt', showAs: 'n', health: 2, attack: { min:0, max: 1 }, act: simplePursuit, pos: { c: 0, r: 0 } };
+var player = { name: 'player', showAs: '@', health: 10, attack: { min: 0, max: 2 } };
+var newt = { name: 'newt', showAs: 'n', health: 2, attack: { min:0, max: 1 } };
 var dirtFloor = { showAs: '.' };
 var rockWall = { showAs: '#' };
 
@@ -92,68 +73,9 @@ for(var c = 0; c < boardWidth; c++) {
   }
 }
 
-var actors = [];
-
-function setCellOccupiedBy(c, r, occupant) {
-  gameBoard[c][r].occupiedBy = occupant;
-  if(occupant != null) {
-    occupant.pos.c = c;
-    occupant.pos.r = r;
-  }
-}
-
-function addActor(c, r, actor) {
-  actor = Object.create(actor);
-  actors.push(actor);
-  setCellOccupiedBy(c, r, actor);
-}
-
-setCellOccupiedBy(boardWidth / 2, boardHeight / 2, player);
-addActor(2, 2, newt);
-addActor(7, 7, newt);
-
-function random(possibilities) {
-  return Math.floor(Math.random() * possibilities);
-}
-
-function getCell(pos) {
-  return gameBoard[pos.c][pos.r];
-}
-
-function adjacentCells(subjectPos) {
-  var result = [];
-  for(var c = subjectPos.c - 1; c <= subjectPos.c + 1; c++) {
-    if(c < 0 || c > boardWidth) continue;
-    for(var r = subjectPos.r - 1; r <= subjectPos.r + 1; r++) {
-      if(r < 0 || r > boardHeight) continue;
-      if(c == subjectPos.c && r == subjectPos.r) continue;
-      result.push({ c: c, r: r });
-    }
-  }
-
-  return result;
-}
-
-function executeMove(actor, pos) {
-  setCellOccupiedBy(actor.pos.c, actor.pos.r, null);
-  refreshCell(actor.pos.c, actor.pos.r);
-
-  setCellOccupiedBy(pos.c, pos.r, actor);
-  refreshCell(pos.c, pos.r);
-}
-
-function executeAttack(source, target) {
-  damage = calculateDamageFrom(source);
-  target.health -= damage;
-
-  var message;
-  if(damage > 0) {
-    message = "The " + source.name + " hit you for " + damage + " damage.";
-  } else {
-    message = "The " + source.name + " missed you.";
-  }
-  setMessage(message, 1);
-}
+setCellOccupiedBy(playerC, playerR, player);
+setCellOccupiedBy(2, 2, Object.create(newt));
+setCellOccupiedBy(7, 7, Object.create(newt));
 
 function toX(c) {
   return c * cellWidth + boardXOffset;
@@ -222,9 +144,7 @@ function setMessage(message, row = 0) {
 }
 
 function advanceTime() {
-  actors.forEach(function(actor) {
-    actor.act(actor);
-  });
+  clearMessages();
 }
 
 function playerAbsoluteMove(newPlayerC, newPlayerR) {
@@ -234,17 +154,20 @@ function playerAbsoluteMove(newPlayerC, newPlayerR) {
     return;
   }
 
-  setCellOccupiedBy(player.pos.c, player.pos.r, null);
-  refreshCell(player.pos.c, player.pos.r);
-
+  setCellOccupiedBy(playerC, playerR, null);
   setCellOccupiedBy(newPlayerC, newPlayerR, player);
+
+  refreshCell(playerC, playerR);
   refreshCell(newPlayerC, newPlayerR);
+
+  playerC = newPlayerC;
+  playerR = newPlayerR;
 
   advanceTime();
 }
 
 function playerRelativeMove(rx, ry) {
-  playerAbsoluteMove(player.pos.c + rx, player.pos.r + ry);
+  playerAbsoluteMove(playerC + rx, playerR + ry);
 }
 
 function calculateDamageFrom(attacker) {
@@ -287,6 +210,16 @@ function playerAbsoluteAttack(targetC, targetR) {
     if(damage > 0) {
       message += " New hp is " + target.health;
     }
+    damage = calculateDamageFrom(target);
+    player.health -= damage;
+
+    var message2;
+    if(damage > 0) {
+      message2 = "The " + target.name + " hit you for " + damage + " damage.";
+    } else {
+      message2 = "The " + target.name + " missed you.";
+    }
+    setMessage(message2, 1);
   }
   setMessage(message);
 
@@ -295,14 +228,14 @@ function playerAbsoluteAttack(targetC, targetR) {
 }
 
 function playerRelativeAttack(rx, ry) {
-  playerAbsoluteAttack(player.pos.c + rx, player.pos.r + ry);
+  playerAbsoluteAttack(playerC + rx, playerR + ry);
 }
 
 function keyDownHandler(e) {
 }
 
 function keyUpHandler(e) {
-  clearMessages();
+  advanceTime();
 
   if(e.key == "h" || e.key == "ArrowLeft") {
     currentAction.execute(-1, 0);

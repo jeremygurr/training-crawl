@@ -743,6 +743,13 @@ const poolChannels = [
     to: [pools.brown],
   },
   {
+    from: [
+      pools.copper,
+      pools.gold,
+    ],
+    to: [pools.brown],
+  },
+  {
     from: [pools.moon],
     to: [
       pools.red,
@@ -906,6 +913,22 @@ const poolChannels = [
   },
   {
     from: [
+      pools.diamond,
+      pools.gold,
+      pools.silver,
+      pools.copper,
+    ],
+    to: [pools.rainbow],
+  },
+  {
+    from: [
+      pools.diamond,
+      pools.silver,
+    ],
+    to: [pools.purple],
+  },
+  {
+    from: [
       pools.red,
       pools.blue,
     ],
@@ -1032,7 +1055,11 @@ const template = {
             },
             heatCapacity: 10,
             heat: {
-              amount: 1,
+              baseChange: -1,
+              move: 2,
+              internalGenerator: 2,
+              ideal: 100,
+              tolerance: 20,
             },
           },
           lion: { 
@@ -4879,7 +4906,7 @@ class BackController {
       for(let x = 0; x < levelSize.x; x++) {
         heat[x] = []
         for(let y = 0; y < levelSize.y; y++) {
-          heat[x][y] = 0
+          heat[x][y] = 100
         }
       }
 

@@ -1,4 +1,0 @@
-#!/bin/bash
-
-./generateTags jscrawl.html
-vi +vsp +vsp '+winc h' "jscrawl.html"

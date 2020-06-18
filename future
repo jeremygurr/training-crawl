@@ -1,13 +1,7 @@
 create api server
-  study vertx event bus
-  how will top controller feed data to front controller
-    level?
-      [ ] send whole data set back and forth
-      [*] allow back end to control more, pushing front model fully to back end
-  so javascript should be minimized, only updating screens / windows as api tell it
-  get simple vertx server up with example code
-  make first test
-  make login function
+  02: get simple vertx server up with example code
+      make first test
+  03: make login function
   make connect to game / create game function
   
 creatures / players have same energy pool flow, heat, smell and sound generation

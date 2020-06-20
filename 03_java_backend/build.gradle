@@ -25,15 +25,17 @@ def watchForChange = 'src/**/*'
 def doOnChange = './gradlew classes'
 
 dependencies {
+  implementation "io.vertx:vertx-micrometer-metrics:$vertxVersion"
+  implementation "io.vertx:vertx-mysql-client:$vertxVersion"
   implementation "io.vertx:vertx-rx-java2:$vertxVersion"
+  implementation "io.vertx:vertx-shell:$vertxVersion"
   implementation "io.vertx:vertx-unit:$vertxVersion"
   implementation "io.vertx:vertx-web:$vertxVersion"
-  implementation "io.vertx:vertx-mysql-client:$vertxVersion"
-  implementation "io.vertx:vertx-micrometer-metrics:$vertxVersion"
-  implementation "io.vertx:vertx-shell:$vertxVersion"
+  implementation 'io.vertx:vertx-service-proxy:$vertxVersion'
+  implementation 'io.vertx:vertx-sockjs-service-proxy:3.9.1'
   testImplementation "io.vertx:vertx-junit5:$vertxVersion"
-  testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitJupiterEngineVersion"
   testImplementation "org.junit.jupiter:junit-jupiter-api:$junitJupiterEngineVersion"
+  testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitJupiterEngineVersion"
 }
 
 java {

@@ -1,0 +1,55 @@
+plugins {
+  id 'java'
+  id 'application'
+  id 'com.github.johnrengelman.shadow' version '5.2.0'
+}
+
+group = 'com.epicGamecraft.dungeonCrawlDepths'
+version = '1.0.0-SNAPSHOT'
+
+repositories {
+  mavenCentral()
+}
+
+ext {
+  vertxVersion = '4.0.0-milestone4'
+  junitJupiterEngineVersion = '5.6.0'
+}
+
+application {
+  mainClassName = 'com.epicGamecraft.dungeonCrawlDepths.CrawlServer'
+}
+
+def watchForChange = 'src/**/*'
+def doOnChange = './gradlew classes'
+
+dependencies {
+  implementation "io.vertx:vertx-micrometer-metrics:$vertxVersion"
+  implementation "io.vertx:vertx-mysql-client:$vertxVersion"
+  implementation "io.vertx:vertx-rx-java2:$vertxVersion"
+  implementation "io.vertx:vertx-shell:$vertxVersion"
+  implementation "io.vertx:vertx-unit:$vertxVersion"
+  implementation "io.vertx:vertx-web:$vertxVersion"
+  implementation 'io.vertx:vertx-service-proxy:$vertxVersion'
+  implementation 'io.vertx:vertx-sockjs-service-proxy:3.9.1'
+  implementation 'ch.qos.logback:logback-classic:1.2.3'
+  testImplementation "io.vertx:vertx-junit5:$vertxVersion"
+  testImplementation "org.junit.jupiter:junit-jupiter-api:$junitJupiterEngineVersion"
+  testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitJupiterEngineVersion"
+}
+
+java {
+  sourceCompatibility = JavaVersion.VERSION_11
+  targetCompatibility = JavaVersion.VERSION_11
+}
+
+shadowJar {
+  classifier = 'fat'
+}
+
+test {
+  useJUnitPlatform()
+  testLogging {
+    events 'PASSED', 'FAILED', 'SKIPPED'
+  }
+}

@@ -36,6 +36,13 @@ public class HttpServerVerticle extends AbstractVerticle {
 		router.get("/status").handler(this::statusHandler);
 		router.get("/static/*").handler(this::staticHandler);
 
+		SockJSHandler sockJSHandler = SockJSHandler.create(vertx);
+		final PermittedOptions inbound = new PermittedOptions().setAddress(BusEvent.BrowserInput.name());
+		BridgeOptions bridgeOptions = new BridgeOptions()
+			.addInboundPermitted(inbound);
+		sockJSHandler.bridge(bridgeOptions);
+		router.route("/eventbus/*").handler(sockJSHandler);
+
 		final int port = 8080;
 		server.requestHandler(router).listen(port, ar -> {
 			if(ar.succeeded()) {

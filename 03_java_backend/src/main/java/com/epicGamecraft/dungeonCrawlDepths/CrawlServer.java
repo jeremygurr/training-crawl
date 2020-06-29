@@ -21,6 +21,7 @@ public class CrawlServer {
 
 		vertx = Vertx.vertx(options);
 		vertx.deployVerticle(new HttpServerVerticle());
+		vertx.deployVerticle(new BrowserInputVerticle());
 
 	}
 

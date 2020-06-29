@@ -12,6 +12,7 @@ public class OnPageLoadVerticle extends AbstractVerticle {
   
   public int checkSessionId() {
 	  
+	  //find cookie;
 	  id == null ? createSessionId() : return id; 
   }
   

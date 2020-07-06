@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Training: Crawl Game</title>
+    <style>
+      * { padding: 0; margin: 0; }
+      canvas { background: #eee; display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+<script>
+"use strict";
+
+const canvasProps = {
+  width: 600,
+  height: 305,
+  color: '#EEE',
+  xOffset: 150,
+  yOffset: 15,
+}
+
+document.write('<canvas id="mainCanvas" color="' + canvasProps.color + '" width="' + canvasProps.width + '" height="' + canvasProps.height + '"></canvas>');
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+<script>
+canvas = document.getElementById("mainCanvas");
+ctx = canvas.getContext("2d");
+
+
+const fontStyle = {
+  fixed: { name: 'Courier', size: 24 },
+  compact: { name: 'Ariel', size: 18 },
+}
+
+// immutable
+class Pair {
+
+  constructor(x, y) {
+    this.x = x
+    this.y = y
+  }
+
+  equals(pair) {
+    return this.x === pair.x && this.y === pair.y
+  }
+
+  add(pair) {
+    if(!pair) return this
+    return new Pair(this.x + pair.x, this.y + pair.y)
+  }
+
+  wrap(size) {
+    if(typeof size == 'number') {
+      size = new Pair(size, size)
+    }
+    let newX = wrap(this.x, size.x)
+    let newY = wrap(this.y, size.y)
+    return new Pair(newX, newY)
+  }
+
+  subtract(pair) {
+    if(typeof pair == 'number') {
+      pair = new Pair(pair, pair)
+    }
+    return new Pair(this.x - pair.x, this.y - pair.y)
+  }
+
+  multiply(pair) {
+    if(typeof pair == 'number') {
+      pair = new Pair(pair, pair)
+    }
+    return new Pair(this.x * pair.x, this.y * pair.y)
+  }
+
+  divide(pair) {
+    if(typeof pair == 'number') {
+      pair = new Pair(pair, pair)
+    }
+    return new Pair(this.x / pair.x, this.y / pair.y)
+  }
+
+  negate() {
+    return new Pair(-this.x, -this.y)
+  }
+
+  round(n) {
+    const newX = Math.round(this.x * 10 ** n) / 10 ** n
+    const newY = Math.round(this.y * 10 ** n) / 10 ** n
+    return new Pair(newX, newY)
+  }
+
+  floor() {
+    return new Pair(Math.floor(this.x), Math.floor(this.y))
+  }
+
+  lessThan(pair) {
+    return this.x < pair.x && this.y < pair.y
+  }
+
+  lessThanOrEqualTo(pair) {
+    return this.x <= pair.x && this.y <= pair.y
+  }
+
+  within(minPair, maxPairExclusive) {
+    return minPair.lessThanOrEqualTo(this) && this.lessThan(maxPairExclusive)
+  }
+
+}
+
+//These templates should never be altered. They are used to create other objects which may be altered.
+const template = {
+  
+  objects: {
+    rockWall: { showAs: '🧱' },
+	dirtFloor: { showAs: '.' },
+  },
+
+  creatures: {
+	player: { name: 'player', showAs: '🧍', health: 10, attack: { min: 0, max: 2 } },
+	newt: { name: 'newt', showAs: '🦎', health: 2, attack: { min: 0, max: 2 } },
+  },
+  
+  backModel: {
+	levelHeight: 20,
+	levelWidth: 15,
+	level: []
+  },
+
+  frontModel: {
+
+	fontStyle: fontStyle.fixed,
+
+	window: {
+	  level: {
+		initialKeyMode: 'base',
+		keymode: {
+		  base: {
+            command: [
+			  'moveLeft',
+			  'moveRight',
+			  'moveUp',
+			  'moveDown',
+			  'moveUpRight',
+			  'moveUpLeft',
+			  'moveDownRight',
+			  'moveDownLeft',
+			  ]
+		    },
+		  },
+		},
+
+	  status: {
+	   cellPos: new Pair(0, 3),
+	   size: new Pair(9, 10),
+	  },
+
+	  messages: {
+        cellPos: new Pair(20, 3),
+        size: new Pair(20, 4),
+		fontStyle: fontStyle.compact,
+		messages: [],
+	  },
+	  
+	},
+  },
+}
+
+const keyMap = {
+  base: {
+	moveLeft: ['h', 'ArrowLeft'],
+	moveRight: ['l', 'ArrowRight'],
+	moveUp: ['k', 'ArrowUp'],
+	moveDown: ['j', 'ArrowDown'],
+	moveUpRight: ['u'],
+	moveUpLeft: ['y'],
+	moveDownRight: ['n'],
+	moveDownLeft: ['b'],
+  },
+}
+
+//holds all the methods and fields to allow the FrontController and the BackController to communicate.
+class TopController {
+  constructor() {
+	this.backController = new BackController
+	this.frontController = new FrontController
+    this.frontController.drawLevel(template.backModel.level)
+  }
+
+}
+
+//holds all the methods and fields to do with real life object definitions and receives changes from TopController.
+class BackController {
+  constructor() {
+	this.backModel = _.cloneDeep(template.backModel)
+	this.buildLevel()
+    this.setCellOccupiedBy(template.creatures.player, 5, 5)
+	this.setCellOccupiedBy(template.creatures.newt, 2, 2)
+	this.setCellOccupiedBy(template.creatures.newt, 7, 7)
+  }
+
+  buildLevel() {
+	const bm = template.backModel
+	const ot = template.objects
+	for(let c = 0; c < bm.levelWidth; c++) {
+	  bm.level[c] = []
+	  for(let r = 0; r < bm.levelHeight; r++) {
+		if(c == 0 || r == 0 || c == bm.levelWidth - 1 || r == bm.levelHeight - 1) {
+		  bm.level[c][r] = { occupiedBy: ot.rockWall, onFloor: null, floorType: ot.dirtFloor }
+		} else {
+		  bm.level[c][r] = { occupiedBy: null, onFloor: null, floorType: ot.dirtFloor }
+		}
+	  }
+	}
+  }
+
+  setCellOccupiedBy(entity, c, r) {
+	const bm = template.backModel
+	const ct = template.creatures
+	bm.level[c][r].occupiedBy = entity
+  }
+
+
+}
+
+//holds all the methods and fields to do with interactions between user and interface. Sends output to TopController which updates BackController, which sends output back to TopController which then sends the updated info to FrontController to update the interface to reflect the changes on the backend.
+class FrontController {
+  constructor() {
+    this.frontModel = _.cloneDeep(template.frontModel)
+  }
+
+  drawLevel(level) {
+	ctx.font = '18px Ariel'
+	for(let c = 0; c < level.length; c++) {
+	  const column = level[c]
+	  for(let r = 0; r < column.length; r++) {
+		const cell = column[r]
+		if(cell.occupiedBy != null) {
+		  ctx.fillText(
+			cell.occupiedBy.showAs, 
+			c*20 + canvasProps.xOffset, 
+			r*15 + canvasProps.yOffset,
+		  )
+		} else {
+		  ctx.fillText(
+			cell.floorType.showAs, 
+			c*20 + canvasProps.xOffset, 
+			r*15 + canvasProps.yOffset,
+		  )
+		}
+	  }
+	}
+  }
+
+  drawStatus() {
+  }
+
+  drawMessage() {
+  }
+
+  update() {
+  }
+
+  refresh() {
+  }
+}
+const topController = new TopController()
+
+</script>

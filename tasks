@@ -1,0 +1,1 @@
+clone a github repo, then make a fork, and push the fork to your own repo. After that, see if you can make changes to your own, and still be able to pull updates made by original without erasing your own changes. Then push the result to your github repo and see if you can do a pull request.

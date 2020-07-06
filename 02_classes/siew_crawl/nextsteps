@@ -1,0 +1,4 @@
+Next Steps:
+Find out how wide the board is, and make it directly in the middle of the 600px wide canvas so that there is even space on both sides of the board.
+Change the showAs items to be centered in cells rather than at the top left of cells.
+Add character movement. 

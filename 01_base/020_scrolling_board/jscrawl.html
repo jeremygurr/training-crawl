@@ -38,6 +38,7 @@ var statusHeight = 2;
 var windowC = 0;
 var windowR = 0;
 
+var gamePause = false;
 var needsFullRefresh = false;
 
 const motionActions = {
@@ -164,6 +165,13 @@ function executeAttack(source, target) {
     message = "The " + source.name + " missed you.";
   }
   addMessage(message, 1);
+  if(target.health <= 0) {
+	addMessage("You were killed by the " + source.name, 2);
+	addMessage("Game Over", 3);
+	target.showAs = '☠️' ;
+	refreshCell(target.pos);
+	gamePaused();
+  }
 }
 
 function toX(c) {
@@ -388,6 +396,10 @@ function playerAttack(targetC, targetR) {
   updateStatus();
 }
 
+function gamePaused() {
+  gamePause = true;
+}
+
 function playerAttackOrMove(targetC, targetR) {
   var targetCell = gameBoard[targetC + player.pos.c][targetR + player.pos.r]
   if(targetCell.occupiedBy != null) {
@@ -401,43 +413,45 @@ function keyDownHandler(e) {
 }
 
 function keyUpHandler(e) {
-  clearMessages();
 
-  if(e.key == "h" || e.key == "ArrowLeft") {
-    currentAction.execute(-1, 0);
-  }
-  else if(e.key == "l" || e.key == "ArrowRight") {
-    currentAction.execute(1, 0);
-  }
-  else if(e.key == "j" || e.key == "ArrowDown") {
-    currentAction.execute(0, 1);
-  }
-  else if(e.key == "k" || e.key == "ArrowUp") {
-    currentAction.execute(0, -1);
-  }
-  else if(e.key == "y") {
-    currentAction.execute(-1, -1);
-  }
-  else if(e.key == "u") {
-    currentAction.execute(1, -1);
-  }
-  else if(e.key == "b") {
-    currentAction.execute(-1, 1);
-  }
-  else if(e.key == "n") {
-    currentAction.execute(1, 1);
-  }
-  else if(e.key == "A") {
-    currentAction = motionActions.attackOrMove;
-    updateStatus();
-  }
-  else if(e.key == "a") {
-    currentAction = motionActions.attack;
-    updateStatus();
-  }
-  else if(e.key == "m") {
-    currentAction = motionActions.move;
-    updateStatus();
+  if(gamePause == false) {
+	clearMessages();
+	if(e.key == "h" || e.key == "ArrowLeft") {
+	  currentAction.execute(-1, 0);
+	}
+	else if(e.key == "l" || e.key == "ArrowRight") {
+	  currentAction.execute(1, 0);
+	}
+	else if(e.key == "j" || e.key == "ArrowDown") {
+	  currentAction.execute(0, 1);
+	}
+	else if(e.key == "k" || e.key == "ArrowUp") {
+	  currentAction.execute(0, -1);
+	}
+	else if(e.key == "y") {
+	  currentAction.execute(-1, -1);
+	}
+	else if(e.key == "u") {
+	  currentAction.execute(1, -1);
+	}
+	else if(e.key == "b") {
+	  currentAction.execute(-1, 1);
+	}
+	else if(e.key == "n") {
+	  currentAction.execute(1, 1);
+	}
+	else if(e.key == "A") {
+	  currentAction = motionActions.attackOrMove;
+	  updateStatus();
+	}
+	else if(e.key == "a") {
+	  currentAction = motionActions.attack;
+	  updateStatus();
+	}
+	else if(e.key == "m") {
+	  currentAction = motionActions.move;
+	  updateStatus();
+	}
   }
 }
 

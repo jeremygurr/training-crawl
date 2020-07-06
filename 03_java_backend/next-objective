@@ -1,0 +1,1 @@
+Add an http server verticle to handle the http requests, and make a simple /status endpoint which responds with "All is well".

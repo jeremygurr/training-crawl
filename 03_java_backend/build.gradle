@@ -17,10 +17,9 @@ ext {
 }
 
 application {
-  mainClassName = 'io.vertx.core.Launcher'
+  mainClassName = 'com.epicGamecraft.dungeonCrawlDepths.CrawlServer'
 }
 
-def mainVerticleName = 'com.epicGamecraft.MainVerticle'
 def watchForChange = 'src/**/*'
 def doOnChange = './gradlew classes'
 
@@ -33,6 +32,7 @@ dependencies {
   implementation "io.vertx:vertx-web:$vertxVersion"
   implementation 'io.vertx:vertx-service-proxy:$vertxVersion'
   implementation 'io.vertx:vertx-sockjs-service-proxy:3.9.1'
+  implementation 'ch.qos.logback:logback-classic:1.2.3'
   testImplementation "io.vertx:vertx-junit5:$vertxVersion"
   testImplementation "org.junit.jupiter:junit-jupiter-api:$junitJupiterEngineVersion"
   testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitJupiterEngineVersion"
@@ -45,12 +45,6 @@ java {
 
 shadowJar {
   classifier = 'fat'
-  manifest {
-    attributes 'Main-Verticle': mainVerticleName
-  }
-  mergeServiceFiles {
-    include 'META-INF/services/io.vertx.core.spi.VerticleFactory'
-  }
 }
 
 test {
@@ -58,8 +52,4 @@ test {
   testLogging {
     events 'PASSED', 'FAILED', 'SKIPPED'
   }
-}
-
-run {
-  args = ['run', mainVerticleName, "--redeploy=$watchForChange", "--launcher-class=$mainClassName", "--on-redeploy=$doOnChange"]
 }

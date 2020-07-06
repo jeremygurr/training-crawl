@@ -5,19 +5,19 @@ import io.vertx.core.Promise;
 
 public class OnPageLoadVerticle extends AbstractVerticle {
 
-  @Override
-  public void start() throws Exception {
-	  checkSessionId();
-  }
+//  @Override
+//  public void start() throws Exception {
+//	  checkSessionId();
+//  }
   
-  public int checkSessionId() {
+//  public int checkSessionId() {
 	  
 	  //find cookie;
-	  id == null ? createSessionId() : return id; 
-  }
+//	  id == null ? createSessionId() : return id; 
+//  }
   
-  public static int createSessionId() {
-	  int id = n + 1;
-	  return id;
-  }
+//  public static int createSessionId() {
+//	  int id = n + 1;
+//	  return id;
+//  }
 }

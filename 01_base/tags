@@ -1,0 +1,678 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+addActor	013_allow_newt_to_move/jscrawl.html	/^function addActor(c, r, actor) {$/;"	f
+addActor	014_fix_newt_frozen_bug/jscrawl.html	/^function addActor(c, r, actor) {$/;"	f
+addActor	015_support_variable_messages/jscrawl.html	/^function addActor(c, r, actor) {$/;"	f
+addActor	016_fix_newt_resurrection_bug/jscrawl.html	/^function addActor(c, r, actor) {$/;"	f
+addActor	017_diagonal_movement/jscrawl.html	/^function addActor(c, r, actor) {$/;"	f
+addActor	018_attack_or_move/jscrawl.html	/^function addActor(c, r, actor) {$/;"	f
+addActor	019_fancy_characters/jscrawl.html	/^function addActor(c, r, actor) {$/;"	f
+addActor	020_scrolling_board/jscrawl.html	/^function addActor(c, r, actor) {$/;"	f
+addActor	021_support_player_death/jscrawl.html	/^function addActor(c, r, actor) {$/;"	f
+addActor	022_support_rest_command/jscrawl.html	/^function addActor(c, r, actor) {$/;"	f
+addActor	023_fix_restart_health_0_bug/jscrawl.html	/^function addActor(c, r, actor) {$/;"	f
+addActor	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function addActor(c, r, actor) {$/;"	f
+addActor	025_use_messages_for_restart/jscrawl.html	/^function addActor(c, r, actor) {$/;"	f
+addActor	026_help_page/jscrawl.html	/^function addActor(c, r, actor) {$/;"	f
+addMessage	015_support_variable_messages/jscrawl.html	/^function addMessage(message) {$/;"	f
+addMessage	016_fix_newt_resurrection_bug/jscrawl.html	/^function addMessage(message) {$/;"	f
+addMessage	017_diagonal_movement/jscrawl.html	/^function addMessage(message) {$/;"	f
+addMessage	018_attack_or_move/jscrawl.html	/^function addMessage(message) {$/;"	f
+addMessage	019_fancy_characters/jscrawl.html	/^function addMessage(message) {$/;"	f
+addMessage	020_scrolling_board/jscrawl.html	/^function addMessage(message) {$/;"	f
+addMessage	021_support_player_death/jscrawl.html	/^function addMessage(message) {$/;"	f
+addMessage	022_support_rest_command/jscrawl.html	/^function addMessage(message) {$/;"	f
+addMessage	023_fix_restart_health_0_bug/jscrawl.html	/^function addMessage(message) {$/;"	f
+addMessage	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function addMessage(message) {$/;"	f
+addMessage	025_use_messages_for_restart/jscrawl.html	/^function addMessage(message) {$/;"	f
+addMessage	026_help_page/jscrawl.html	/^function addMessage(message) {$/;"	f
+adjacentCells	013_allow_newt_to_move/jscrawl.html	/^function adjacentCells(subjectPos) {$/;"	f
+adjacentCells	014_fix_newt_frozen_bug/jscrawl.html	/^function adjacentCells(subjectPos) {$/;"	f
+adjacentCells	015_support_variable_messages/jscrawl.html	/^function adjacentCells(subjectPos) {$/;"	f
+adjacentCells	016_fix_newt_resurrection_bug/jscrawl.html	/^function adjacentCells(subjectPos) {$/;"	f
+adjacentCells	017_diagonal_movement/jscrawl.html	/^function adjacentCells(subjectPos) {$/;"	f
+adjacentCells	018_attack_or_move/jscrawl.html	/^function adjacentCells(subjectPos) {$/;"	f
+adjacentCells	019_fancy_characters/jscrawl.html	/^function adjacentCells(subjectPos) {$/;"	f
+adjacentCells	020_scrolling_board/jscrawl.html	/^function adjacentCells(subjectPos) {$/;"	f
+adjacentCells	021_support_player_death/jscrawl.html	/^function adjacentCells(subjectPos) {$/;"	f
+adjacentCells	022_support_rest_command/jscrawl.html	/^function adjacentCells(subjectPos) {$/;"	f
+adjacentCells	023_fix_restart_health_0_bug/jscrawl.html	/^function adjacentCells(subjectPos) {$/;"	f
+adjacentCells	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function adjacentCells(subjectPos) {$/;"	f
+adjacentCells	025_use_messages_for_restart/jscrawl.html	/^function adjacentCells(subjectPos) {$/;"	f
+adjacentCells	026_help_page/jscrawl.html	/^function adjacentCells(subjectPos) {$/;"	f
+advanceTime	006_give_error_message_when_running_into_walls/jscrawl.html	/^function advanceTime() {$/;"	f
+advanceTime	007_add_health/jscrawl.html	/^function advanceTime() {$/;"	f
+advanceTime	008_add_monster/jscrawl.html	/^function advanceTime() {$/;"	f
+advanceTime	009_add_attack_action/jscrawl.html	/^function advanceTime() {$/;"	f
+advanceTime	010_make_attack_reduce_hp/jscrawl.html	/^function advanceTime() {$/;"	f
+advanceTime	011_fix_both_newts_dying_bug/jscrawl.html	/^function advanceTime() {$/;"	f
+advanceTime	012_make_attack_damage_random/jscrawl.html	/^function advanceTime() {$/;"	f
+advanceTime	013_allow_newt_to_move/jscrawl.html	/^function advanceTime() {$/;"	f
+advanceTime	014_fix_newt_frozen_bug/jscrawl.html	/^function advanceTime() {$/;"	f
+advanceTime	015_support_variable_messages/jscrawl.html	/^function advanceTime() {$/;"	f
+advanceTime	016_fix_newt_resurrection_bug/jscrawl.html	/^function advanceTime() {$/;"	f
+advanceTime	017_diagonal_movement/jscrawl.html	/^function advanceTime() {$/;"	f
+advanceTime	018_attack_or_move/jscrawl.html	/^function advanceTime() {$/;"	f
+advanceTime	019_fancy_characters/jscrawl.html	/^function advanceTime() {$/;"	f
+advanceTime	020_scrolling_board/jscrawl.html	/^function advanceTime() {$/;"	f
+advanceTime	021_support_player_death/jscrawl.html	/^function advanceTime() {$/;"	f
+advanceTime	022_support_rest_command/jscrawl.html	/^function advanceTime() {$/;"	f
+advanceTime	023_fix_restart_health_0_bug/jscrawl.html	/^function advanceTime() {$/;"	f
+advanceTime	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function advanceTime() {$/;"	f
+advanceTime	025_use_messages_for_restart/jscrawl.html	/^function advanceTime() {$/;"	f
+advanceTime	026_help_page/jscrawl.html	/^function advanceTime() {$/;"	f
+anyKeyHandler	025_use_messages_for_restart/jscrawl.html	/^function anyKeyHandler(e) {$/;"	f
+anyKeyHandler	026_help_page/jscrawl.html	/^function anyKeyHandler(e) {$/;"	f
+backToNormal	025_use_messages_for_restart/jscrawl.html	/^function backToNormal() {$/;"	f
+boardToWindowPos	020_scrolling_board/jscrawl.html	/^function boardToWindowPos(boardPos) {$/;"	f
+boardToWindowPos	021_support_player_death/jscrawl.html	/^function boardToWindowPos(boardPos) {$/;"	f
+boardToWindowPos	022_support_rest_command/jscrawl.html	/^function boardToWindowPos(boardPos) {$/;"	f
+boardToWindowPos	023_fix_restart_health_0_bug/jscrawl.html	/^function boardToWindowPos(boardPos) {$/;"	f
+boardToWindowPos	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function boardToWindowPos(boardPos) {$/;"	f
+boardToWindowPos	025_use_messages_for_restart/jscrawl.html	/^function boardToWindowPos(boardPos) {$/;"	f
+boardToWindowPos	026_help_page/jscrawl.html	/^function boardToWindowPos(boardPos) {$/;"	f
+calculateDamageFrom	012_make_attack_damage_random/jscrawl.html	/^function calculateDamageFrom(attacker) {$/;"	f
+calculateDamageFrom	013_allow_newt_to_move/jscrawl.html	/^function calculateDamageFrom(attacker) {$/;"	f
+calculateDamageFrom	014_fix_newt_frozen_bug/jscrawl.html	/^function calculateDamageFrom(attacker) {$/;"	f
+calculateDamageFrom	015_support_variable_messages/jscrawl.html	/^function calculateDamageFrom(attacker) {$/;"	f
+calculateDamageFrom	016_fix_newt_resurrection_bug/jscrawl.html	/^function calculateDamageFrom(attacker) {$/;"	f
+calculateDamageFrom	017_diagonal_movement/jscrawl.html	/^function calculateDamageFrom(attacker) {$/;"	f
+calculateDamageFrom	018_attack_or_move/jscrawl.html	/^function calculateDamageFrom(attacker) {$/;"	f
+calculateDamageFrom	019_fancy_characters/jscrawl.html	/^function calculateDamageFrom(attacker) {$/;"	f
+calculateDamageFrom	020_scrolling_board/jscrawl.html	/^function calculateDamageFrom(attacker) {$/;"	f
+calculateDamageFrom	021_support_player_death/jscrawl.html	/^function calculateDamageFrom(attacker) {$/;"	f
+calculateDamageFrom	022_support_rest_command/jscrawl.html	/^function calculateDamageFrom(attacker) {$/;"	f
+calculateDamageFrom	023_fix_restart_health_0_bug/jscrawl.html	/^function calculateDamageFrom(attacker) {$/;"	f
+calculateDamageFrom	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function calculateDamageFrom(attacker) {$/;"	f
+calculateDamageFrom	025_use_messages_for_restart/jscrawl.html	/^function calculateDamageFrom(attacker) {$/;"	f
+calculateDamageFrom	026_help_page/jscrawl.html	/^function calculateDamageFrom(attacker) {$/;"	f
+clearAll	020_scrolling_board/jscrawl.html	/^function clearAll() {$/;"	f
+clearAll	021_support_player_death/jscrawl.html	/^function clearAll() {$/;"	f
+clearAll	022_support_rest_command/jscrawl.html	/^function clearAll() {$/;"	f
+clearAll	023_fix_restart_health_0_bug/jscrawl.html	/^function clearAll() {$/;"	f
+clearAll	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function clearAll() {$/;"	f
+clearAll	025_use_messages_for_restart/jscrawl.html	/^function clearAll() {$/;"	f
+clearAll	026_help_page/jscrawl.html	/^function clearAll() {$/;"	f
+clearBoard	001_board_setup/jscrawl.html	/^function clearBoard() {$/;"	f
+clearBoard	002_create_player/jscrawl.html	/^function clearBoard() {$/;"	f
+clearBoard	003_player_movement/jscrawl.html	/^function clearBoard() {$/;"	f
+clearBoard	004_fix_text_height_bug/jscrawl.html	/^function clearBoard() {$/;"	f
+clearBoard	005_dont_allow_moving_into_walls/jscrawl.html	/^function clearBoard() {$/;"	f
+clearBoard	006_give_error_message_when_running_into_walls/jscrawl.html	/^function clearBoard() {$/;"	f
+clearBoard	007_add_health/jscrawl.html	/^function clearBoard() {$/;"	f
+clearBoard	008_add_monster/jscrawl.html	/^function clearBoard() {$/;"	f
+clearBoard	009_add_attack_action/jscrawl.html	/^function clearBoard() {$/;"	f
+clearBoard	010_make_attack_reduce_hp/jscrawl.html	/^function clearBoard() {$/;"	f
+clearBoard	011_fix_both_newts_dying_bug/jscrawl.html	/^function clearBoard() {$/;"	f
+clearBoard	012_make_attack_damage_random/jscrawl.html	/^function clearBoard() {$/;"	f
+clearBoard	013_allow_newt_to_move/jscrawl.html	/^function clearBoard() {$/;"	f
+clearBoard	014_fix_newt_frozen_bug/jscrawl.html	/^function clearBoard() {$/;"	f
+clearBoard	015_support_variable_messages/jscrawl.html	/^function clearBoard() {$/;"	f
+clearBoard	016_fix_newt_resurrection_bug/jscrawl.html	/^function clearBoard() {$/;"	f
+clearBoard	017_diagonal_movement/jscrawl.html	/^function clearBoard() {$/;"	f
+clearBoard	018_attack_or_move/jscrawl.html	/^function clearBoard() {$/;"	f
+clearBoard	019_fancy_characters/jscrawl.html	/^function clearBoard() {$/;"	f
+clearBoard	020_scrolling_board/jscrawl.html	/^function clearBoard() {$/;"	f
+clearBoard	021_support_player_death/jscrawl.html	/^function clearBoard() {$/;"	f
+clearBoard	022_support_rest_command/jscrawl.html	/^function clearBoard() {$/;"	f
+clearBoard	023_fix_restart_health_0_bug/jscrawl.html	/^function clearBoard() {$/;"	f
+clearBoard	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function clearBoard() {$/;"	f
+clearBoard	025_use_messages_for_restart/jscrawl.html	/^function clearBoard() {$/;"	f
+clearBoard	026_help_page/jscrawl.html	/^function clearBoard() {$/;"	f
+clearCell	001_board_setup/jscrawl.html	/^function clearCell(c, r) {$/;"	f
+clearCell	002_create_player/jscrawl.html	/^function clearCell(c, r) {$/;"	f
+clearCell	003_player_movement/jscrawl.html	/^function clearCell(c, r) {$/;"	f
+clearCell	004_fix_text_height_bug/jscrawl.html	/^function clearCell(c, r) {$/;"	f
+clearCell	005_dont_allow_moving_into_walls/jscrawl.html	/^function clearCell(c, r) {$/;"	f
+clearCell	006_give_error_message_when_running_into_walls/jscrawl.html	/^function clearCell(c, r) {$/;"	f
+clearCell	007_add_health/jscrawl.html	/^function clearCell(c, r) {$/;"	f
+clearCell	008_add_monster/jscrawl.html	/^function clearCell(c, r) {$/;"	f
+clearCell	009_add_attack_action/jscrawl.html	/^function clearCell(c, r) {$/;"	f
+clearCell	010_make_attack_reduce_hp/jscrawl.html	/^function clearCell(c, r) {$/;"	f
+clearCell	011_fix_both_newts_dying_bug/jscrawl.html	/^function clearCell(c, r) {$/;"	f
+clearCell	012_make_attack_damage_random/jscrawl.html	/^function clearCell(c, r) {$/;"	f
+clearCell	013_allow_newt_to_move/jscrawl.html	/^function clearCell(c, r) {$/;"	f
+clearCell	014_fix_newt_frozen_bug/jscrawl.html	/^function clearCell(c, r) {$/;"	f
+clearCell	015_support_variable_messages/jscrawl.html	/^function clearCell(c, r) {$/;"	f
+clearCell	016_fix_newt_resurrection_bug/jscrawl.html	/^function clearCell(c, r) {$/;"	f
+clearCell	017_diagonal_movement/jscrawl.html	/^function clearCell(c, r) {$/;"	f
+clearCell	018_attack_or_move/jscrawl.html	/^function clearCell(c, r) {$/;"	f
+clearCell	019_fancy_characters/jscrawl.html	/^function clearCell(c, r) {$/;"	f
+clearCell	020_scrolling_board/jscrawl.html	/^function clearCell(windowPos) {$/;"	f
+clearCell	021_support_player_death/jscrawl.html	/^function clearCell(windowPos) {$/;"	f
+clearCell	022_support_rest_command/jscrawl.html	/^function clearCell(windowPos) {$/;"	f
+clearCell	023_fix_restart_health_0_bug/jscrawl.html	/^function clearCell(windowPos) {$/;"	f
+clearCell	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function clearCell(windowPos) {$/;"	f
+clearCell	025_use_messages_for_restart/jscrawl.html	/^function clearCell(windowPos) {$/;"	f
+clearCell	026_help_page/jscrawl.html	/^function clearCell(windowPos) {$/;"	f
+clearMessage	006_give_error_message_when_running_into_walls/jscrawl.html	/^function clearMessage() {$/;"	f
+clearMessage	007_add_health/jscrawl.html	/^function clearMessage() {$/;"	f
+clearMessage	008_add_monster/jscrawl.html	/^function clearMessage() {$/;"	f
+clearMessage	009_add_attack_action/jscrawl.html	/^function clearMessage() {$/;"	f
+clearMessage	010_make_attack_reduce_hp/jscrawl.html	/^function clearMessage(row = 0) {$/;"	f
+clearMessage	011_fix_both_newts_dying_bug/jscrawl.html	/^function clearMessage(row = 0) {$/;"	f
+clearMessage	012_make_attack_damage_random/jscrawl.html	/^function clearMessage(row = 0) {$/;"	f
+clearMessage	013_allow_newt_to_move/jscrawl.html	/^function clearMessage(row = 0) {$/;"	f
+clearMessage	014_fix_newt_frozen_bug/jscrawl.html	/^function clearMessage(row = 0) {$/;"	f
+clearMessages	010_make_attack_reduce_hp/jscrawl.html	/^function clearMessages() {$/;"	f
+clearMessages	011_fix_both_newts_dying_bug/jscrawl.html	/^function clearMessages() {$/;"	f
+clearMessages	012_make_attack_damage_random/jscrawl.html	/^function clearMessages() {$/;"	f
+clearMessages	013_allow_newt_to_move/jscrawl.html	/^function clearMessages() {$/;"	f
+clearMessages	014_fix_newt_frozen_bug/jscrawl.html	/^function clearMessages() {$/;"	f
+clearMessages	015_support_variable_messages/jscrawl.html	/^function clearMessages() {$/;"	f
+clearMessages	016_fix_newt_resurrection_bug/jscrawl.html	/^function clearMessages() {$/;"	f
+clearMessages	017_diagonal_movement/jscrawl.html	/^function clearMessages() {$/;"	f
+clearMessages	018_attack_or_move/jscrawl.html	/^function clearMessages() {$/;"	f
+clearMessages	019_fancy_characters/jscrawl.html	/^function clearMessages() {$/;"	f
+clearMessages	020_scrolling_board/jscrawl.html	/^function clearMessages() {$/;"	f
+clearMessages	021_support_player_death/jscrawl.html	/^function clearMessages() {$/;"	f
+clearMessages	022_support_rest_command/jscrawl.html	/^function clearMessages() {$/;"	f
+clearMessages	023_fix_restart_health_0_bug/jscrawl.html	/^function clearMessages() {$/;"	f
+clearMessages	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function clearMessages() {$/;"	f
+clearMessages	025_use_messages_for_restart/jscrawl.html	/^function clearMessages() {$/;"	f
+clearMessages	026_help_page/jscrawl.html	/^function clearMessages() {$/;"	f
+confirmHandler	025_use_messages_for_restart/jscrawl.html	/^function confirmHandler(e) {$/;"	f
+confirmHandler	026_help_page/jscrawl.html	/^function confirmHandler(e) {$/;"	f
+drawBoard	001_board_setup/jscrawl.html	/^function drawBoard() {$/;"	f
+drawBoard	002_create_player/jscrawl.html	/^function drawBoard() {$/;"	f
+drawBoard	003_player_movement/jscrawl.html	/^function drawBoard() {$/;"	f
+drawBoard	004_fix_text_height_bug/jscrawl.html	/^function drawBoard() {$/;"	f
+drawBoard	005_dont_allow_moving_into_walls/jscrawl.html	/^function drawBoard() {$/;"	f
+drawBoard	006_give_error_message_when_running_into_walls/jscrawl.html	/^function drawBoard() {$/;"	f
+drawBoard	007_add_health/jscrawl.html	/^function drawBoard() {$/;"	f
+drawBoard	008_add_monster/jscrawl.html	/^function drawBoard() {$/;"	f
+drawBoard	009_add_attack_action/jscrawl.html	/^function drawBoard() {$/;"	f
+drawBoard	010_make_attack_reduce_hp/jscrawl.html	/^function drawBoard() {$/;"	f
+drawBoard	011_fix_both_newts_dying_bug/jscrawl.html	/^function drawBoard() {$/;"	f
+drawBoard	012_make_attack_damage_random/jscrawl.html	/^function drawBoard() {$/;"	f
+drawBoard	013_allow_newt_to_move/jscrawl.html	/^function drawBoard() {$/;"	f
+drawBoard	014_fix_newt_frozen_bug/jscrawl.html	/^function drawBoard() {$/;"	f
+drawBoard	015_support_variable_messages/jscrawl.html	/^function drawBoard() {$/;"	f
+drawBoard	016_fix_newt_resurrection_bug/jscrawl.html	/^function drawBoard() {$/;"	f
+drawBoard	017_diagonal_movement/jscrawl.html	/^function drawBoard() {$/;"	f
+drawBoard	018_attack_or_move/jscrawl.html	/^function drawBoard() {$/;"	f
+drawBoard	019_fancy_characters/jscrawl.html	/^function drawBoard() {$/;"	f
+drawBoard	020_scrolling_board/jscrawl.html	/^function drawBoard() {$/;"	f
+drawBoard	021_support_player_death/jscrawl.html	/^function drawBoard() {$/;"	f
+drawBoard	022_support_rest_command/jscrawl.html	/^function drawBoard() {$/;"	f
+drawBoard	023_fix_restart_health_0_bug/jscrawl.html	/^function drawBoard() {$/;"	f
+drawBoard	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function drawBoard() {$/;"	f
+drawBoard	025_use_messages_for_restart/jscrawl.html	/^function drawBoard() {$/;"	f
+drawBoard	026_help_page/jscrawl.html	/^function drawBoard() {$/;"	f
+drawCell	001_board_setup/jscrawl.html	/^function drawCell(c, r) {$/;"	f
+drawCell	002_create_player/jscrawl.html	/^function drawCell(c, r) {$/;"	f
+drawCell	003_player_movement/jscrawl.html	/^function drawCell(c, r) {$/;"	f
+drawCell	004_fix_text_height_bug/jscrawl.html	/^function drawCell(c, r) {$/;"	f
+drawCell	005_dont_allow_moving_into_walls/jscrawl.html	/^function drawCell(c, r) {$/;"	f
+drawCell	006_give_error_message_when_running_into_walls/jscrawl.html	/^function drawCell(c, r) {$/;"	f
+drawCell	007_add_health/jscrawl.html	/^function drawCell(c, r) {$/;"	f
+drawCell	008_add_monster/jscrawl.html	/^function drawCell(c, r) {$/;"	f
+drawCell	009_add_attack_action/jscrawl.html	/^function drawCell(c, r) {$/;"	f
+drawCell	010_make_attack_reduce_hp/jscrawl.html	/^function drawCell(c, r) {$/;"	f
+drawCell	011_fix_both_newts_dying_bug/jscrawl.html	/^function drawCell(c, r) {$/;"	f
+drawCell	012_make_attack_damage_random/jscrawl.html	/^function drawCell(c, r) {$/;"	f
+drawCell	013_allow_newt_to_move/jscrawl.html	/^function drawCell(c, r) {$/;"	f
+drawCell	014_fix_newt_frozen_bug/jscrawl.html	/^function drawCell(c, r) {$/;"	f
+drawCell	015_support_variable_messages/jscrawl.html	/^function drawCell(c, r) {$/;"	f
+drawCell	016_fix_newt_resurrection_bug/jscrawl.html	/^function drawCell(c, r) {$/;"	f
+drawCell	017_diagonal_movement/jscrawl.html	/^function drawCell(c, r) {$/;"	f
+drawCell	018_attack_or_move/jscrawl.html	/^function drawCell(c, r) {$/;"	f
+drawCell	019_fancy_characters/jscrawl.html	/^function drawCell(c, r) {$/;"	f
+drawCell	020_scrolling_board/jscrawl.html	/^function drawCell(windowPos) {$/;"	f
+drawCell	021_support_player_death/jscrawl.html	/^function drawCell(windowPos) {$/;"	f
+drawCell	022_support_rest_command/jscrawl.html	/^function drawCell(windowPos) {$/;"	f
+drawCell	023_fix_restart_health_0_bug/jscrawl.html	/^function drawCell(windowPos) {$/;"	f
+drawCell	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function drawCell(windowPos) {$/;"	f
+drawCell	025_use_messages_for_restart/jscrawl.html	/^function drawCell(windowPos) {$/;"	f
+drawCell	026_help_page/jscrawl.html	/^function drawCell(windowPos) {$/;"	f
+drawCharacter	001_board_setup/jscrawl.html	/^function drawCharacter(c, r, characterToDraw) {$/;"	f
+drawCharacter	002_create_player/jscrawl.html	/^function drawCharacter(c, r, characterToDraw) {$/;"	f
+drawCharacter	003_player_movement/jscrawl.html	/^function drawCharacter(c, r, characterToDraw) {$/;"	f
+drawCharacter	004_fix_text_height_bug/jscrawl.html	/^function drawCharacter(c, r, characterToDraw) {$/;"	f
+drawCharacter	005_dont_allow_moving_into_walls/jscrawl.html	/^function drawCharacter(c, r, characterToDraw) {$/;"	f
+drawHelp	026_help_page/jscrawl.html	/^function drawHelp() {$/;"	f
+drawHelpDetail	026_help_page/jscrawl.html	/^function drawHelpDetail() {$/;"	f
+drawMessage	006_give_error_message_when_running_into_walls/jscrawl.html	/^function drawMessage(message) {$/;"	f
+drawMessage	007_add_health/jscrawl.html	/^function drawMessage(message) {$/;"	f
+drawMessage	008_add_monster/jscrawl.html	/^function drawMessage(message) {$/;"	f
+drawMessage	009_add_attack_action/jscrawl.html	/^function drawMessage(message) {$/;"	f
+drawMessage	010_make_attack_reduce_hp/jscrawl.html	/^function drawMessage(message, row = 0) {$/;"	f
+drawMessage	011_fix_both_newts_dying_bug/jscrawl.html	/^function drawMessage(message, row = 0) {$/;"	f
+drawMessage	012_make_attack_damage_random/jscrawl.html	/^function drawMessage(message, row = 0) {$/;"	f
+drawMessage	013_allow_newt_to_move/jscrawl.html	/^function drawMessage(message, row = 0) {$/;"	f
+drawMessage	014_fix_newt_frozen_bug/jscrawl.html	/^function drawMessage(message, row = 0) {$/;"	f
+drawMessage	015_support_variable_messages/jscrawl.html	/^function drawMessage(message, row) {$/;"	f
+drawMessage	016_fix_newt_resurrection_bug/jscrawl.html	/^function drawMessage(message, row) {$/;"	f
+drawMessage	017_diagonal_movement/jscrawl.html	/^function drawMessage(message, row) {$/;"	f
+drawMessage	018_attack_or_move/jscrawl.html	/^function drawMessage(message, row) {$/;"	f
+drawMessage	019_fancy_characters/jscrawl.html	/^function drawMessage(message, row) {$/;"	f
+drawMessage	020_scrolling_board/jscrawl.html	/^function drawMessage(message, row) {$/;"	f
+drawMessage	021_support_player_death/jscrawl.html	/^function drawMessage(message, row) {$/;"	f
+drawMessage	022_support_rest_command/jscrawl.html	/^function drawMessage(message, row) {$/;"	f
+drawMessage	023_fix_restart_health_0_bug/jscrawl.html	/^function drawMessage(message, row) {$/;"	f
+drawMessage	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function drawMessage(message, row) {$/;"	f
+drawMessage	025_use_messages_for_restart/jscrawl.html	/^function drawMessage(message, row) {$/;"	f
+drawMessage	026_help_page/jscrawl.html	/^function drawMessage(message, row) {$/;"	f
+drawText	006_give_error_message_when_running_into_walls/jscrawl.html	/^function drawText(c, r, characterToDraw) {$/;"	f
+drawText	007_add_health/jscrawl.html	/^function drawText(c, r, characterToDraw) {$/;"	f
+drawText	008_add_monster/jscrawl.html	/^function drawText(c, r, characterToDraw) {$/;"	f
+drawText	009_add_attack_action/jscrawl.html	/^function drawText(c, r, characterToDraw) {$/;"	f
+drawText	010_make_attack_reduce_hp/jscrawl.html	/^function drawText(c, r, characterToDraw) {$/;"	f
+drawText	011_fix_both_newts_dying_bug/jscrawl.html	/^function drawText(c, r, characterToDraw) {$/;"	f
+drawText	012_make_attack_damage_random/jscrawl.html	/^function drawText(c, r, characterToDraw) {$/;"	f
+drawText	013_allow_newt_to_move/jscrawl.html	/^function drawText(c, r, characterToDraw) {$/;"	f
+drawText	014_fix_newt_frozen_bug/jscrawl.html	/^function drawText(c, r, characterToDraw) {$/;"	f
+drawText	015_support_variable_messages/jscrawl.html	/^function drawText(c, r, characterToDraw) {$/;"	f
+drawText	016_fix_newt_resurrection_bug/jscrawl.html	/^function drawText(c, r, characterToDraw) {$/;"	f
+drawText	017_diagonal_movement/jscrawl.html	/^function drawText(c, r, characterToDraw) {$/;"	f
+drawText	018_attack_or_move/jscrawl.html	/^function drawText(c, r, characterToDraw) {$/;"	f
+drawText	019_fancy_characters/jscrawl.html	/^function drawText(c, r, characterToDraw, centerWithin = 0) {$/;"	f
+drawText	020_scrolling_board/jscrawl.html	/^function drawText(c, r, characterToDraw, centerWithin = 0) {$/;"	f
+drawText	021_support_player_death/jscrawl.html	/^function drawText(c, r, characterToDraw, centerWithin = 0) {$/;"	f
+drawText	022_support_rest_command/jscrawl.html	/^function drawText(c, r, characterToDraw, centerWithin = 0) {$/;"	f
+drawText	023_fix_restart_health_0_bug/jscrawl.html	/^function drawText(c, r, characterToDraw, centerWithin = 0) {$/;"	f
+drawText	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function drawText(c, r, characterToDraw, centerWithin = 0) {$/;"	f
+drawText	025_use_messages_for_restart/jscrawl.html	/^function drawText(c, r, characterToDraw, centerWithin = 0) {$/;"	f
+drawText	026_help_page/jscrawl.html	/^function drawText(c, r, characterToDraw, centerWithin = 0, fontStyle = fontStyles.fixed) {$/;"	f
+executeAttack	013_allow_newt_to_move/jscrawl.html	/^function executeAttack(source, target) {$/;"	f
+executeAttack	014_fix_newt_frozen_bug/jscrawl.html	/^function executeAttack(source, target) {$/;"	f
+executeAttack	015_support_variable_messages/jscrawl.html	/^function executeAttack(source, target) {$/;"	f
+executeAttack	016_fix_newt_resurrection_bug/jscrawl.html	/^function executeAttack(source, target) {$/;"	f
+executeAttack	017_diagonal_movement/jscrawl.html	/^function executeAttack(source, target) {$/;"	f
+executeAttack	018_attack_or_move/jscrawl.html	/^function executeAttack(source, target) {$/;"	f
+executeAttack	019_fancy_characters/jscrawl.html	/^function executeAttack(source, target) {$/;"	f
+executeAttack	020_scrolling_board/jscrawl.html	/^function executeAttack(source, target) {$/;"	f
+executeAttack	021_support_player_death/jscrawl.html	/^function executeAttack(source, target) {$/;"	f
+executeAttack	022_support_rest_command/jscrawl.html	/^function executeAttack(source, target) {$/;"	f
+executeAttack	023_fix_restart_health_0_bug/jscrawl.html	/^function executeAttack(source, target) {$/;"	f
+executeAttack	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function executeAttack(source, target) {$/;"	f
+executeAttack	025_use_messages_for_restart/jscrawl.html	/^function executeAttack(source, target) {$/;"	f
+executeAttack	026_help_page/jscrawl.html	/^function executeAttack(source, target) {$/;"	f
+executeMove	013_allow_newt_to_move/jscrawl.html	/^function executeMove(actor, pos) {$/;"	f
+executeMove	014_fix_newt_frozen_bug/jscrawl.html	/^function executeMove(actor, pos) {$/;"	f
+executeMove	015_support_variable_messages/jscrawl.html	/^function executeMove(actor, pos) {$/;"	f
+executeMove	016_fix_newt_resurrection_bug/jscrawl.html	/^function executeMove(actor, pos) {$/;"	f
+executeMove	017_diagonal_movement/jscrawl.html	/^function executeMove(actor, pos) {$/;"	f
+executeMove	018_attack_or_move/jscrawl.html	/^function executeMove(actor, pos) {$/;"	f
+executeMove	019_fancy_characters/jscrawl.html	/^function executeMove(actor, pos) {$/;"	f
+executeMove	020_scrolling_board/jscrawl.html	/^function executeMove(actor, pos) {$/;"	f
+executeMove	021_support_player_death/jscrawl.html	/^function executeMove(actor, pos) {$/;"	f
+executeMove	022_support_rest_command/jscrawl.html	/^function executeMove(actor, pos) {$/;"	f
+executeMove	023_fix_restart_health_0_bug/jscrawl.html	/^function executeMove(actor, pos) {$/;"	f
+executeMove	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function executeMove(actor, pos) {$/;"	f
+executeMove	025_use_messages_for_restart/jscrawl.html	/^function executeMove(actor, pos) {$/;"	f
+executeMove	026_help_page/jscrawl.html	/^function executeMove(actor, pos) {$/;"	f
+getCell	013_allow_newt_to_move/jscrawl.html	/^function getCell(pos) {$/;"	f
+getCell	014_fix_newt_frozen_bug/jscrawl.html	/^function getCell(pos) {$/;"	f
+getCell	015_support_variable_messages/jscrawl.html	/^function getCell(pos) {$/;"	f
+getCell	016_fix_newt_resurrection_bug/jscrawl.html	/^function getCell(pos) {$/;"	f
+getCell	017_diagonal_movement/jscrawl.html	/^function getCell(pos) {$/;"	f
+getCell	018_attack_or_move/jscrawl.html	/^function getCell(pos) {$/;"	f
+getCell	019_fancy_characters/jscrawl.html	/^function getCell(pos) {$/;"	f
+getCell	020_scrolling_board/jscrawl.html	/^function getCell(pos) {$/;"	f
+getCell	021_support_player_death/jscrawl.html	/^function getCell(pos) {$/;"	f
+getCell	022_support_rest_command/jscrawl.html	/^function getCell(pos) {$/;"	f
+getCell	023_fix_restart_health_0_bug/jscrawl.html	/^function getCell(pos) {$/;"	f
+getCell	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function getCell(pos) {$/;"	f
+getCell	025_use_messages_for_restart/jscrawl.html	/^function getCell(pos) {$/;"	f
+getCell	026_help_page/jscrawl.html	/^function getCell(pos) {$/;"	f
+helpHandler	026_help_page/jscrawl.html	/^function helpHandler(e) {$/;"	f
+isBoardPosValid	020_scrolling_board/jscrawl.html	/^function isBoardPosValid(boardPos) {$/;"	f
+isBoardPosValid	021_support_player_death/jscrawl.html	/^function isBoardPosValid(boardPos) {$/;"	f
+isBoardPosValid	022_support_rest_command/jscrawl.html	/^function isBoardPosValid(boardPos) {$/;"	f
+isBoardPosValid	023_fix_restart_health_0_bug/jscrawl.html	/^function isBoardPosValid(boardPos) {$/;"	f
+isBoardPosValid	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function isBoardPosValid(boardPos) {$/;"	f
+isBoardPosValid	025_use_messages_for_restart/jscrawl.html	/^function isBoardPosValid(boardPos) {$/;"	f
+isBoardPosValid	026_help_page/jscrawl.html	/^function isBoardPosValid(boardPos) {$/;"	f
+isWindowPosValid	020_scrolling_board/jscrawl.html	/^function isWindowPosValid(windowPos) {$/;"	f
+isWindowPosValid	021_support_player_death/jscrawl.html	/^function isWindowPosValid(windowPos) {$/;"	f
+isWindowPosValid	022_support_rest_command/jscrawl.html	/^function isWindowPosValid(windowPos) {$/;"	f
+isWindowPosValid	023_fix_restart_health_0_bug/jscrawl.html	/^function isWindowPosValid(windowPos) {$/;"	f
+isWindowPosValid	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function isWindowPosValid(windowPos) {$/;"	f
+isWindowPosValid	025_use_messages_for_restart/jscrawl.html	/^function isWindowPosValid(windowPos) {$/;"	f
+isWindowPosValid	026_help_page/jscrawl.html	/^function isWindowPosValid(windowPos) {$/;"	f
+keyDownHandler	001_board_setup/jscrawl.html	/^function keyDownHandler(e) {$/;"	f
+keyDownHandler	002_create_player/jscrawl.html	/^function keyDownHandler(e) {$/;"	f
+keyDownHandler	003_player_movement/jscrawl.html	/^function keyDownHandler(e) {$/;"	f
+keyDownHandler	004_fix_text_height_bug/jscrawl.html	/^function keyDownHandler(e) {$/;"	f
+keyDownHandler	005_dont_allow_moving_into_walls/jscrawl.html	/^function keyDownHandler(e) {$/;"	f
+keyDownHandler	006_give_error_message_when_running_into_walls/jscrawl.html	/^function keyDownHandler(e) {$/;"	f
+keyDownHandler	007_add_health/jscrawl.html	/^function keyDownHandler(e) {$/;"	f
+keyDownHandler	008_add_monster/jscrawl.html	/^function keyDownHandler(e) {$/;"	f
+keyDownHandler	009_add_attack_action/jscrawl.html	/^function keyDownHandler(e) {$/;"	f
+keyDownHandler	010_make_attack_reduce_hp/jscrawl.html	/^function keyDownHandler(e) {$/;"	f
+keyDownHandler	011_fix_both_newts_dying_bug/jscrawl.html	/^function keyDownHandler(e) {$/;"	f
+keyDownHandler	012_make_attack_damage_random/jscrawl.html	/^function keyDownHandler(e) {$/;"	f
+keyDownHandler	013_allow_newt_to_move/jscrawl.html	/^function keyDownHandler(e) {$/;"	f
+keyDownHandler	014_fix_newt_frozen_bug/jscrawl.html	/^function keyDownHandler(e) {$/;"	f
+keyDownHandler	015_support_variable_messages/jscrawl.html	/^function keyDownHandler(e) {$/;"	f
+keyDownHandler	016_fix_newt_resurrection_bug/jscrawl.html	/^function keyDownHandler(e) {$/;"	f
+keyDownHandler	017_diagonal_movement/jscrawl.html	/^function keyDownHandler(e) {$/;"	f
+keyDownHandler	018_attack_or_move/jscrawl.html	/^function keyDownHandler(e) {$/;"	f
+keyDownHandler	019_fancy_characters/jscrawl.html	/^function keyDownHandler(e) {$/;"	f
+keyDownHandler	020_scrolling_board/jscrawl.html	/^function keyDownHandler(e) {$/;"	f
+keyDownHandler	021_support_player_death/jscrawl.html	/^function keyDownHandler(e) {$/;"	f
+keyDownHandler	022_support_rest_command/jscrawl.html	/^function keyDownHandler(e) {$/;"	f
+keyDownHandler	023_fix_restart_health_0_bug/jscrawl.html	/^function keyDownHandler(e) {$/;"	f
+keyDownHandler	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function keyDownHandler(e) {$/;"	f
+keyDownHandler	025_use_messages_for_restart/jscrawl.html	/^function keyDownHandler(e) {$/;"	f
+keyDownHandler	026_help_page/jscrawl.html	/^function keyDownHandler(e) {$/;"	f
+keyUpHandler	001_board_setup/jscrawl.html	/^function keyUpHandler(e) {$/;"	f
+keyUpHandler	002_create_player/jscrawl.html	/^function keyUpHandler(e) {$/;"	f
+keyUpHandler	003_player_movement/jscrawl.html	/^function keyUpHandler(e) {$/;"	f
+keyUpHandler	004_fix_text_height_bug/jscrawl.html	/^function keyUpHandler(e) {$/;"	f
+keyUpHandler	005_dont_allow_moving_into_walls/jscrawl.html	/^function keyUpHandler(e) {$/;"	f
+keyUpHandler	006_give_error_message_when_running_into_walls/jscrawl.html	/^function keyUpHandler(e) {$/;"	f
+keyUpHandler	007_add_health/jscrawl.html	/^function keyUpHandler(e) {$/;"	f
+keyUpHandler	008_add_monster/jscrawl.html	/^function keyUpHandler(e) {$/;"	f
+keyUpHandler	009_add_attack_action/jscrawl.html	/^function keyUpHandler(e) {$/;"	f
+keyUpHandler	010_make_attack_reduce_hp/jscrawl.html	/^function keyUpHandler(e) {$/;"	f
+keyUpHandler	011_fix_both_newts_dying_bug/jscrawl.html	/^function keyUpHandler(e) {$/;"	f
+keyUpHandler	012_make_attack_damage_random/jscrawl.html	/^function keyUpHandler(e) {$/;"	f
+keyUpHandler	013_allow_newt_to_move/jscrawl.html	/^function keyUpHandler(e) {$/;"	f
+keyUpHandler	014_fix_newt_frozen_bug/jscrawl.html	/^function keyUpHandler(e) {$/;"	f
+keyUpHandler	015_support_variable_messages/jscrawl.html	/^function keyUpHandler(e) {$/;"	f
+keyUpHandler	016_fix_newt_resurrection_bug/jscrawl.html	/^function keyUpHandler(e) {$/;"	f
+keyUpHandler	017_diagonal_movement/jscrawl.html	/^function keyUpHandler(e) {$/;"	f
+keyUpHandler	018_attack_or_move/jscrawl.html	/^function keyUpHandler(e) {$/;"	f
+keyUpHandler	019_fancy_characters/jscrawl.html	/^function keyUpHandler(e) {$/;"	f
+keyUpHandler	020_scrolling_board/jscrawl.html	/^function keyUpHandler(e) {$/;"	f
+keyUpHandler	021_support_player_death/jscrawl.html	/^function keyUpHandler(e) {$/;"	f
+keyUpHandler	022_support_rest_command/jscrawl.html	/^function keyUpHandler(e) {$/;"	f
+keyUpHandler	023_fix_restart_health_0_bug/jscrawl.html	/^function keyUpHandler(e) {$/;"	f
+keyUpHandler	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function keyUpHandler(e) {$/;"	f
+log	020_scrolling_board/jscrawl.html	/^function log(message) {$/;"	f
+log	021_support_player_death/jscrawl.html	/^function log(message) {$/;"	f
+log	022_support_rest_command/jscrawl.html	/^function log(message) {$/;"	f
+log	023_fix_restart_health_0_bug/jscrawl.html	/^function log(message) {$/;"	f
+log	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function log(message) {$/;"	f
+log	025_use_messages_for_restart/jscrawl.html	/^function log(message) {$/;"	f
+log	026_help_page/jscrawl.html	/^function log(message) {$/;"	f
+mainHandler	025_use_messages_for_restart/jscrawl.html	/^function mainHandler(e) {$/;"	f
+mainHandler	026_help_page/jscrawl.html	/^function mainHandler(e) {$/;"	f
+newPlayerPosition	017_diagonal_movement/jscrawl.html	/^function newPlayerPosition(newPlayerC, newPlayerR) {$/;"	f
+playerAbsoluteAttack	010_make_attack_reduce_hp/jscrawl.html	/^function playerAbsoluteAttack(targetC, targetR) {$/;"	f
+playerAbsoluteAttack	011_fix_both_newts_dying_bug/jscrawl.html	/^function playerAbsoluteAttack(targetC, targetR) {$/;"	f
+playerAbsoluteAttack	012_make_attack_damage_random/jscrawl.html	/^function playerAbsoluteAttack(targetC, targetR) {$/;"	f
+playerAbsoluteAttack	013_allow_newt_to_move/jscrawl.html	/^function playerAbsoluteAttack(targetC, targetR) {$/;"	f
+playerAbsoluteAttack	014_fix_newt_frozen_bug/jscrawl.html	/^function playerAbsoluteAttack(targetC, targetR) {$/;"	f
+playerAbsoluteAttack	015_support_variable_messages/jscrawl.html	/^function playerAbsoluteAttack(targetC, targetR) {$/;"	f
+playerAbsoluteAttack	016_fix_newt_resurrection_bug/jscrawl.html	/^function playerAbsoluteAttack(targetC, targetR) {$/;"	f
+playerAbsoluteAttack	017_diagonal_movement/jscrawl.html	/^function playerAbsoluteAttack(targetC, targetR) {$/;"	f
+playerAbsoluteAttackOrMove	017_diagonal_movement/jscrawl.html	/^function playerAbsoluteAttackOrMove(newPlayerC, newPlayerR) {$/;"	f
+playerAbsoluteMove	003_player_movement/jscrawl.html	/^function playerAbsoluteMove(newPlayerC, newPlayerR) {$/;"	f
+playerAbsoluteMove	004_fix_text_height_bug/jscrawl.html	/^function playerAbsoluteMove(newPlayerC, newPlayerR) {$/;"	f
+playerAbsoluteMove	005_dont_allow_moving_into_walls/jscrawl.html	/^function playerAbsoluteMove(newPlayerC, newPlayerR) {$/;"	f
+playerAbsoluteMove	006_give_error_message_when_running_into_walls/jscrawl.html	/^function playerAbsoluteMove(newPlayerC, newPlayerR) {$/;"	f
+playerAbsoluteMove	007_add_health/jscrawl.html	/^function playerAbsoluteMove(newPlayerC, newPlayerR) {$/;"	f
+playerAbsoluteMove	008_add_monster/jscrawl.html	/^function playerAbsoluteMove(newPlayerC, newPlayerR) {$/;"	f
+playerAbsoluteMove	009_add_attack_action/jscrawl.html	/^function playerAbsoluteMove(newPlayerC, newPlayerR) {$/;"	f
+playerAbsoluteMove	010_make_attack_reduce_hp/jscrawl.html	/^function playerAbsoluteMove(newPlayerC, newPlayerR) {$/;"	f
+playerAbsoluteMove	011_fix_both_newts_dying_bug/jscrawl.html	/^function playerAbsoluteMove(newPlayerC, newPlayerR) {$/;"	f
+playerAbsoluteMove	012_make_attack_damage_random/jscrawl.html	/^function playerAbsoluteMove(newPlayerC, newPlayerR) {$/;"	f
+playerAbsoluteMove	013_allow_newt_to_move/jscrawl.html	/^function playerAbsoluteMove(newPlayerC, newPlayerR) {$/;"	f
+playerAbsoluteMove	014_fix_newt_frozen_bug/jscrawl.html	/^function playerAbsoluteMove(newPlayerC, newPlayerR) {$/;"	f
+playerAbsoluteMove	015_support_variable_messages/jscrawl.html	/^function playerAbsoluteMove(newPlayerC, newPlayerR) {$/;"	f
+playerAbsoluteMove	016_fix_newt_resurrection_bug/jscrawl.html	/^function playerAbsoluteMove(newPlayerC, newPlayerR) {$/;"	f
+playerAbsoluteMove	017_diagonal_movement/jscrawl.html	/^function playerAbsoluteMove(newPlayerC, newPlayerR) {$/;"	f
+playerAttack	018_attack_or_move/jscrawl.html	/^function playerAttack(targetC, targetR) {$/;"	f
+playerAttack	019_fancy_characters/jscrawl.html	/^function playerAttack(targetC, targetR) {$/;"	f
+playerAttack	020_scrolling_board/jscrawl.html	/^function playerAttack(targetC, targetR) {$/;"	f
+playerAttack	021_support_player_death/jscrawl.html	/^function playerAttack(targetC, targetR) {$/;"	f
+playerAttack	022_support_rest_command/jscrawl.html	/^function playerAttack(targetC, targetR) {$/;"	f
+playerAttack	023_fix_restart_health_0_bug/jscrawl.html	/^function playerAttack(targetC, targetR) {$/;"	f
+playerAttack	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function playerAttack(targetC, targetR) {$/;"	f
+playerAttack	025_use_messages_for_restart/jscrawl.html	/^function playerAttack(targetC, targetR) {$/;"	f
+playerAttack	026_help_page/jscrawl.html	/^function playerAttack(targetC, targetR) {$/;"	f
+playerAttackOrMove	018_attack_or_move/jscrawl.html	/^function playerAttackOrMove(targetC, targetR) {$/;"	f
+playerAttackOrMove	019_fancy_characters/jscrawl.html	/^function playerAttackOrMove(targetC, targetR) {$/;"	f
+playerAttackOrMove	020_scrolling_board/jscrawl.html	/^function playerAttackOrMove(targetC, targetR) {$/;"	f
+playerAttackOrMove	021_support_player_death/jscrawl.html	/^function playerAttackOrMove(targetC, targetR) {$/;"	f
+playerAttackOrMove	022_support_rest_command/jscrawl.html	/^function playerAttackOrMove(targetC, targetR) {$/;"	f
+playerAttackOrMove	023_fix_restart_health_0_bug/jscrawl.html	/^function playerAttackOrMove(targetC, targetR) {$/;"	f
+playerAttackOrMove	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function playerAttackOrMove(targetC, targetR) {$/;"	f
+playerAttackOrMove	025_use_messages_for_restart/jscrawl.html	/^function playerAttackOrMove(targetC, targetR) {$/;"	f
+playerAttackOrMove	026_help_page/jscrawl.html	/^function playerAttackOrMove(targetC, targetR) {$/;"	f
+playerMove	018_attack_or_move/jscrawl.html	/^function playerMove(targetC, targetR) {$/;"	f
+playerMove	019_fancy_characters/jscrawl.html	/^function playerMove(targetC, targetR) {$/;"	f
+playerMove	020_scrolling_board/jscrawl.html	/^function playerMove(targetC, targetR) {$/;"	f
+playerMove	021_support_player_death/jscrawl.html	/^function playerMove(targetC, targetR) {$/;"	f
+playerMove	022_support_rest_command/jscrawl.html	/^function playerMove(targetC, targetR) {$/;"	f
+playerMove	023_fix_restart_health_0_bug/jscrawl.html	/^function playerMove(targetC, targetR) {$/;"	f
+playerMove	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function playerMove(targetC, targetR) {$/;"	f
+playerMove	025_use_messages_for_restart/jscrawl.html	/^function playerMove(targetC, targetR) {$/;"	f
+playerMove	026_help_page/jscrawl.html	/^function playerMove(targetC, targetR) {$/;"	f
+playerRelativeAttack	010_make_attack_reduce_hp/jscrawl.html	/^function playerRelativeAttack(rx, ry) {$/;"	f
+playerRelativeAttack	011_fix_both_newts_dying_bug/jscrawl.html	/^function playerRelativeAttack(rx, ry) {$/;"	f
+playerRelativeAttack	012_make_attack_damage_random/jscrawl.html	/^function playerRelativeAttack(rx, ry) {$/;"	f
+playerRelativeAttack	013_allow_newt_to_move/jscrawl.html	/^function playerRelativeAttack(rx, ry) {$/;"	f
+playerRelativeAttack	014_fix_newt_frozen_bug/jscrawl.html	/^function playerRelativeAttack(rx, ry) {$/;"	f
+playerRelativeAttack	015_support_variable_messages/jscrawl.html	/^function playerRelativeAttack(rx, ry) {$/;"	f
+playerRelativeAttack	016_fix_newt_resurrection_bug/jscrawl.html	/^function playerRelativeAttack(rx, ry) {$/;"	f
+playerRelativeAttack	017_diagonal_movement/jscrawl.html	/^function playerRelativeAttack(rx, ry) {$/;"	f
+playerRelativeAttackOrMove	017_diagonal_movement/jscrawl.html	/^function playerRelativeAttackOrMove(rx, ry) {$/;"	f
+playerRelativeMove	003_player_movement/jscrawl.html	/^function playerRelativeMove(rx, ry) {$/;"	f
+playerRelativeMove	004_fix_text_height_bug/jscrawl.html	/^function playerRelativeMove(rx, ry) {$/;"	f
+playerRelativeMove	005_dont_allow_moving_into_walls/jscrawl.html	/^function playerRelativeMove(rx, ry) {$/;"	f
+playerRelativeMove	006_give_error_message_when_running_into_walls/jscrawl.html	/^function playerRelativeMove(rx, ry) {$/;"	f
+playerRelativeMove	007_add_health/jscrawl.html	/^function playerRelativeMove(rx, ry) {$/;"	f
+playerRelativeMove	008_add_monster/jscrawl.html	/^function playerRelativeMove(rx, ry) {$/;"	f
+playerRelativeMove	009_add_attack_action/jscrawl.html	/^function playerRelativeMove(rx, ry) {$/;"	f
+playerRelativeMove	010_make_attack_reduce_hp/jscrawl.html	/^function playerRelativeMove(rx, ry) {$/;"	f
+playerRelativeMove	011_fix_both_newts_dying_bug/jscrawl.html	/^function playerRelativeMove(rx, ry) {$/;"	f
+playerRelativeMove	012_make_attack_damage_random/jscrawl.html	/^function playerRelativeMove(rx, ry) {$/;"	f
+playerRelativeMove	013_allow_newt_to_move/jscrawl.html	/^function playerRelativeMove(rx, ry) {$/;"	f
+playerRelativeMove	014_fix_newt_frozen_bug/jscrawl.html	/^function playerRelativeMove(rx, ry) {$/;"	f
+playerRelativeMove	015_support_variable_messages/jscrawl.html	/^function playerRelativeMove(rx, ry) {$/;"	f
+playerRelativeMove	016_fix_newt_resurrection_bug/jscrawl.html	/^function playerRelativeMove(rx, ry) {$/;"	f
+playerRelativeMove	017_diagonal_movement/jscrawl.html	/^function playerRelativeMove(rx, ry) {$/;"	f
+rKeyHandler	025_use_messages_for_restart/jscrawl.html	/^function rKeyHandler(e) {$/;"	f
+rKeyHandler	026_help_page/jscrawl.html	/^function rKeyHandler(e) {$/;"	f
+random	013_allow_newt_to_move/jscrawl.html	/^function random(possibilities) {$/;"	f
+random	014_fix_newt_frozen_bug/jscrawl.html	/^function random(possibilities) {$/;"	f
+random	015_support_variable_messages/jscrawl.html	/^function random(possibilities) {$/;"	f
+random	016_fix_newt_resurrection_bug/jscrawl.html	/^function random(possibilities) {$/;"	f
+random	017_diagonal_movement/jscrawl.html	/^function random(possibilities) {$/;"	f
+random	018_attack_or_move/jscrawl.html	/^function random(possibilities) {$/;"	f
+random	019_fancy_characters/jscrawl.html	/^function random(possibilities) {$/;"	f
+random	020_scrolling_board/jscrawl.html	/^function random(possibilities) {$/;"	f
+random	021_support_player_death/jscrawl.html	/^function random(possibilities) {$/;"	f
+random	022_support_rest_command/jscrawl.html	/^function random(possibilities) {$/;"	f
+random	023_fix_restart_health_0_bug/jscrawl.html	/^function random(possibilities) {$/;"	f
+random	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function random(possibilities) {$/;"	f
+random	025_use_messages_for_restart/jscrawl.html	/^function random(possibilities) {$/;"	f
+random	026_help_page/jscrawl.html	/^function random(possibilities) {$/;"	f
+refresh	001_board_setup/jscrawl.html	/^function refresh() {$/;"	f
+refresh	002_create_player/jscrawl.html	/^function refresh() {$/;"	f
+refresh	003_player_movement/jscrawl.html	/^function refresh() {$/;"	f
+refresh	004_fix_text_height_bug/jscrawl.html	/^function refresh() {$/;"	f
+refresh	005_dont_allow_moving_into_walls/jscrawl.html	/^function refresh() {$/;"	f
+refresh	006_give_error_message_when_running_into_walls/jscrawl.html	/^function refresh() {$/;"	f
+refresh	007_add_health/jscrawl.html	/^function refresh() {$/;"	f
+refresh	008_add_monster/jscrawl.html	/^function refresh() {$/;"	f
+refresh	009_add_attack_action/jscrawl.html	/^function refresh() {$/;"	f
+refresh	010_make_attack_reduce_hp/jscrawl.html	/^function refresh() {$/;"	f
+refresh	011_fix_both_newts_dying_bug/jscrawl.html	/^function refresh() {$/;"	f
+refresh	012_make_attack_damage_random/jscrawl.html	/^function refresh() {$/;"	f
+refresh	013_allow_newt_to_move/jscrawl.html	/^function refresh() {$/;"	f
+refresh	014_fix_newt_frozen_bug/jscrawl.html	/^function refresh() {$/;"	f
+refresh	015_support_variable_messages/jscrawl.html	/^function refresh() {$/;"	f
+refresh	016_fix_newt_resurrection_bug/jscrawl.html	/^function refresh() {$/;"	f
+refresh	017_diagonal_movement/jscrawl.html	/^function refresh() {$/;"	f
+refresh	018_attack_or_move/jscrawl.html	/^function refresh() {$/;"	f
+refresh	019_fancy_characters/jscrawl.html	/^function refresh() {$/;"	f
+refresh	020_scrolling_board/jscrawl.html	/^function refresh() {$/;"	f
+refresh	021_support_player_death/jscrawl.html	/^function refresh() {$/;"	f
+refresh	022_support_rest_command/jscrawl.html	/^function refresh() {$/;"	f
+refresh	023_fix_restart_health_0_bug/jscrawl.html	/^function refresh() {$/;"	f
+refresh	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function refresh() {$/;"	f
+refresh	025_use_messages_for_restart/jscrawl.html	/^function refresh() {$/;"	f
+refresh	026_help_page/jscrawl.html	/^function refresh() {$/;"	f
+refreshBoard	019_fancy_characters/jscrawl.html	/^function refreshBoard(targetC, targetR) {  \/\/I added this.$/;"	f
+refreshCell	003_player_movement/jscrawl.html	/^function refreshCell(c, r) {$/;"	f
+refreshCell	004_fix_text_height_bug/jscrawl.html	/^function refreshCell(c, r) {$/;"	f
+refreshCell	005_dont_allow_moving_into_walls/jscrawl.html	/^function refreshCell(c, r) {$/;"	f
+refreshCell	006_give_error_message_when_running_into_walls/jscrawl.html	/^function refreshCell(c, r) {$/;"	f
+refreshCell	007_add_health/jscrawl.html	/^function refreshCell(c, r) {$/;"	f
+refreshCell	008_add_monster/jscrawl.html	/^function refreshCell(c, r) {$/;"	f
+refreshCell	009_add_attack_action/jscrawl.html	/^function refreshCell(c, r) {$/;"	f
+refreshCell	010_make_attack_reduce_hp/jscrawl.html	/^function refreshCell(c, r) {$/;"	f
+refreshCell	011_fix_both_newts_dying_bug/jscrawl.html	/^function refreshCell(c, r) {$/;"	f
+refreshCell	012_make_attack_damage_random/jscrawl.html	/^function refreshCell(c, r) {$/;"	f
+refreshCell	013_allow_newt_to_move/jscrawl.html	/^function refreshCell(c, r) {$/;"	f
+refreshCell	014_fix_newt_frozen_bug/jscrawl.html	/^function refreshCell(c, r) {$/;"	f
+refreshCell	015_support_variable_messages/jscrawl.html	/^function refreshCell(c, r) {$/;"	f
+refreshCell	016_fix_newt_resurrection_bug/jscrawl.html	/^function refreshCell(c, r) {$/;"	f
+refreshCell	017_diagonal_movement/jscrawl.html	/^function refreshCell(c, r) {$/;"	f
+refreshCell	018_attack_or_move/jscrawl.html	/^function refreshCell(c, r) {$/;"	f
+refreshCell	019_fancy_characters/jscrawl.html	/^function refreshCell(c, r) {$/;"	f
+refreshCell	020_scrolling_board/jscrawl.html	/^function refreshCell(boardPos) {$/;"	f
+refreshCell	021_support_player_death/jscrawl.html	/^function refreshCell(boardPos) {$/;"	f
+refreshCell	022_support_rest_command/jscrawl.html	/^function refreshCell(boardPos) {$/;"	f
+refreshCell	023_fix_restart_health_0_bug/jscrawl.html	/^function refreshCell(boardPos) {$/;"	f
+refreshCell	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function refreshCell(boardPos) {$/;"	f
+refreshCell	025_use_messages_for_restart/jscrawl.html	/^function refreshCell(boardPos) {$/;"	f
+refreshCell	026_help_page/jscrawl.html	/^function refreshCell(boardPos) {$/;"	f
+refreshHelp	026_help_page/jscrawl.html	/^function refreshHelp() {$/;"	f
+restart	021_support_player_death/jscrawl.html	/^function restart() {$/;"	f
+restart	022_support_rest_command/jscrawl.html	/^function restart() {$/;"	f
+restart	023_fix_restart_health_0_bug/jscrawl.html	/^function restart() {$/;"	f
+restart	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function restart() {$/;"	f
+restart	025_use_messages_for_restart/jscrawl.html	/^function restart() {$/;"	f
+restart	026_help_page/jscrawl.html	/^function restart() {$/;"	f
+setCellOccupiedBy	003_player_movement/jscrawl.html	/^function setCellOccupiedBy(c, r, occupant) {$/;"	f
+setCellOccupiedBy	004_fix_text_height_bug/jscrawl.html	/^function setCellOccupiedBy(c, r, occupant) {$/;"	f
+setCellOccupiedBy	005_dont_allow_moving_into_walls/jscrawl.html	/^function setCellOccupiedBy(c, r, occupant) {$/;"	f
+setCellOccupiedBy	006_give_error_message_when_running_into_walls/jscrawl.html	/^function setCellOccupiedBy(c, r, occupant) {$/;"	f
+setCellOccupiedBy	007_add_health/jscrawl.html	/^function setCellOccupiedBy(c, r, occupant) {$/;"	f
+setCellOccupiedBy	008_add_monster/jscrawl.html	/^function setCellOccupiedBy(c, r, occupant) {$/;"	f
+setCellOccupiedBy	009_add_attack_action/jscrawl.html	/^function setCellOccupiedBy(c, r, occupant) {$/;"	f
+setCellOccupiedBy	010_make_attack_reduce_hp/jscrawl.html	/^function setCellOccupiedBy(c, r, occupant) {$/;"	f
+setCellOccupiedBy	011_fix_both_newts_dying_bug/jscrawl.html	/^function setCellOccupiedBy(c, r, occupant) {$/;"	f
+setCellOccupiedBy	012_make_attack_damage_random/jscrawl.html	/^function setCellOccupiedBy(c, r, occupant) {$/;"	f
+setCellOccupiedBy	013_allow_newt_to_move/jscrawl.html	/^function setCellOccupiedBy(c, r, occupant) {$/;"	f
+setCellOccupiedBy	014_fix_newt_frozen_bug/jscrawl.html	/^function setCellOccupiedBy(c, r, occupant) {$/;"	f
+setCellOccupiedBy	015_support_variable_messages/jscrawl.html	/^function setCellOccupiedBy(c, r, occupant) {$/;"	f
+setCellOccupiedBy	016_fix_newt_resurrection_bug/jscrawl.html	/^function setCellOccupiedBy(c, r, occupant) {$/;"	f
+setCellOccupiedBy	017_diagonal_movement/jscrawl.html	/^function setCellOccupiedBy(c, r, occupant) {$/;"	f
+setCellOccupiedBy	018_attack_or_move/jscrawl.html	/^function setCellOccupiedBy(c, r, occupant) {$/;"	f
+setCellOccupiedBy	019_fancy_characters/jscrawl.html	/^function setCellOccupiedBy(c, r, occupant) {$/;"	f
+setCellOccupiedBy	020_scrolling_board/jscrawl.html	/^function setCellOccupiedBy(c, r, occupant) {$/;"	f
+setCellOccupiedBy	021_support_player_death/jscrawl.html	/^function setCellOccupiedBy(c, r, occupant) {$/;"	f
+setCellOccupiedBy	022_support_rest_command/jscrawl.html	/^function setCellOccupiedBy(c, r, occupant) {$/;"	f
+setCellOccupiedBy	023_fix_restart_health_0_bug/jscrawl.html	/^function setCellOccupiedBy(c, r, occupant) {$/;"	f
+setCellOccupiedBy	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function setCellOccupiedBy(c, r, occupant) {$/;"	f
+setCellOccupiedBy	025_use_messages_for_restart/jscrawl.html	/^function setCellOccupiedBy(c, r, occupant) {$/;"	f
+setCellOccupiedBy	026_help_page/jscrawl.html	/^function setCellOccupiedBy(c, r, occupant) {$/;"	f
+setKeyListener	025_use_messages_for_restart/jscrawl.html	/^function setKeyListener(handler, okResponse = null, cancelResponse = null) {$/;"	f
+setKeyListener	026_help_page/jscrawl.html	/^function setKeyListener(handler, okResponse = null, cancelResponse = null) {$/;"	f
+setMessage	006_give_error_message_when_running_into_walls/jscrawl.html	/^function setMessage(message) {$/;"	f
+setMessage	007_add_health/jscrawl.html	/^function setMessage(message) {$/;"	f
+setMessage	008_add_monster/jscrawl.html	/^function setMessage(message) {$/;"	f
+setMessage	009_add_attack_action/jscrawl.html	/^function setMessage(message) {$/;"	f
+setMessage	010_make_attack_reduce_hp/jscrawl.html	/^function setMessage(message, row = 0) {$/;"	f
+setMessage	011_fix_both_newts_dying_bug/jscrawl.html	/^function setMessage(message, row = 0) {$/;"	f
+setMessage	012_make_attack_damage_random/jscrawl.html	/^function setMessage(message, row = 0) {$/;"	f
+setMessage	013_allow_newt_to_move/jscrawl.html	/^function setMessage(message, row = 0) {$/;"	f
+setMessage	014_fix_newt_frozen_bug/jscrawl.html	/^function setMessage(message, row = 0) {$/;"	f
+simplePursuit	013_allow_newt_to_move/jscrawl.html	/^function simplePursuit(actor) {$/;"	f
+simplePursuit	014_fix_newt_frozen_bug/jscrawl.html	/^function simplePursuit(actor) {$/;"	f
+simplePursuit	015_support_variable_messages/jscrawl.html	/^function simplePursuit(actor) {$/;"	f
+simplePursuit	016_fix_newt_resurrection_bug/jscrawl.html	/^function simplePursuit(actor) {$/;"	f
+simplePursuit	017_diagonal_movement/jscrawl.html	/^function simplePursuit(actor) {$/;"	f
+simplePursuit	018_attack_or_move/jscrawl.html	/^function simplePursuit(actor) {$/;"	f
+simplePursuit	019_fancy_characters/jscrawl.html	/^function simplePursuit(actor) {$/;"	f
+simplePursuit	020_scrolling_board/jscrawl.html	/^function simplePursuit(actor) {$/;"	f
+simplePursuit	021_support_player_death/jscrawl.html	/^function simplePursuit(actor) {$/;"	f
+simplePursuit	022_support_rest_command/jscrawl.html	/^function simplePursuit(actor) {$/;"	f
+simplePursuit	023_fix_restart_health_0_bug/jscrawl.html	/^function simplePursuit(actor) {$/;"	f
+simplePursuit	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function simplePursuit(actor) {$/;"	f
+simplePursuit	025_use_messages_for_restart/jscrawl.html	/^function simplePursuit(actor) {$/;"	f
+simplePursuit	026_help_page/jscrawl.html	/^function simplePursuit(actor) {$/;"	f
+targetAttack	017_diagonal_movement/jscrawl.html	/^function targetAttack(targetCell) {$/;"	f
+toHelpDetailWindow	026_help_page/jscrawl.html	/^function toHelpDetailWindow() {$/;"	f
+toHelpWindow	026_help_page/jscrawl.html	/^function toHelpWindow() {$/;"	f
+toMainWindow	026_help_page/jscrawl.html	/^function toMainWindow() {$/;"	f
+toX	001_board_setup/jscrawl.html	/^function toX(c) {$/;"	f
+toX	002_create_player/jscrawl.html	/^function toX(c) {$/;"	f
+toX	003_player_movement/jscrawl.html	/^function toX(c) {$/;"	f
+toX	004_fix_text_height_bug/jscrawl.html	/^function toX(c) {$/;"	f
+toX	005_dont_allow_moving_into_walls/jscrawl.html	/^function toX(c) {$/;"	f
+toX	006_give_error_message_when_running_into_walls/jscrawl.html	/^function toX(c) {$/;"	f
+toX	007_add_health/jscrawl.html	/^function toX(c) {$/;"	f
+toX	008_add_monster/jscrawl.html	/^function toX(c) {$/;"	f
+toX	009_add_attack_action/jscrawl.html	/^function toX(c) {$/;"	f
+toX	010_make_attack_reduce_hp/jscrawl.html	/^function toX(c) {$/;"	f
+toX	011_fix_both_newts_dying_bug/jscrawl.html	/^function toX(c) {$/;"	f
+toX	012_make_attack_damage_random/jscrawl.html	/^function toX(c) {$/;"	f
+toX	013_allow_newt_to_move/jscrawl.html	/^function toX(c) {$/;"	f
+toX	014_fix_newt_frozen_bug/jscrawl.html	/^function toX(c) {$/;"	f
+toX	015_support_variable_messages/jscrawl.html	/^function toX(c) {$/;"	f
+toX	016_fix_newt_resurrection_bug/jscrawl.html	/^function toX(c) {$/;"	f
+toX	017_diagonal_movement/jscrawl.html	/^function toX(c) {$/;"	f
+toX	018_attack_or_move/jscrawl.html	/^function toX(c) {$/;"	f
+toX	019_fancy_characters/jscrawl.html	/^function toX(c) {$/;"	f
+toX	020_scrolling_board/jscrawl.html	/^function toX(c) {$/;"	f
+toX	021_support_player_death/jscrawl.html	/^function toX(c) {$/;"	f
+toX	022_support_rest_command/jscrawl.html	/^function toX(c) {$/;"	f
+toX	023_fix_restart_health_0_bug/jscrawl.html	/^function toX(c) {$/;"	f
+toX	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function toX(c) {$/;"	f
+toX	025_use_messages_for_restart/jscrawl.html	/^function toX(c) {$/;"	f
+toX	026_help_page/jscrawl.html	/^function toX(c) {$/;"	f
+toY	001_board_setup/jscrawl.html	/^function toY(r) {$/;"	f
+toY	002_create_player/jscrawl.html	/^function toY(r) {$/;"	f
+toY	003_player_movement/jscrawl.html	/^function toY(r) {$/;"	f
+toY	004_fix_text_height_bug/jscrawl.html	/^function toY(r) {$/;"	f
+toY	005_dont_allow_moving_into_walls/jscrawl.html	/^function toY(r) {$/;"	f
+toY	006_give_error_message_when_running_into_walls/jscrawl.html	/^function toY(r) {$/;"	f
+toY	007_add_health/jscrawl.html	/^function toY(r) {$/;"	f
+toY	008_add_monster/jscrawl.html	/^function toY(r) {$/;"	f
+toY	009_add_attack_action/jscrawl.html	/^function toY(r) {$/;"	f
+toY	010_make_attack_reduce_hp/jscrawl.html	/^function toY(r) {$/;"	f
+toY	011_fix_both_newts_dying_bug/jscrawl.html	/^function toY(r) {$/;"	f
+toY	012_make_attack_damage_random/jscrawl.html	/^function toY(r) {$/;"	f
+toY	013_allow_newt_to_move/jscrawl.html	/^function toY(r) {$/;"	f
+toY	014_fix_newt_frozen_bug/jscrawl.html	/^function toY(r) {$/;"	f
+toY	015_support_variable_messages/jscrawl.html	/^function toY(r) {$/;"	f
+toY	016_fix_newt_resurrection_bug/jscrawl.html	/^function toY(r) {$/;"	f
+toY	017_diagonal_movement/jscrawl.html	/^function toY(r) {$/;"	f
+toY	018_attack_or_move/jscrawl.html	/^function toY(r) {$/;"	f
+toY	019_fancy_characters/jscrawl.html	/^function toY(r) {$/;"	f
+toY	020_scrolling_board/jscrawl.html	/^function toY(r) {$/;"	f
+toY	021_support_player_death/jscrawl.html	/^function toY(r) {$/;"	f
+toY	022_support_rest_command/jscrawl.html	/^function toY(r) {$/;"	f
+toY	023_fix_restart_health_0_bug/jscrawl.html	/^function toY(r) {$/;"	f
+toY	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function toY(r) {$/;"	f
+toY	025_use_messages_for_restart/jscrawl.html	/^function toY(r) {$/;"	f
+toY	026_help_page/jscrawl.html	/^function toY(r) {$/;"	f
+updateStatus	007_add_health/jscrawl.html	/^function updateStatus() {$/;"	f
+updateStatus	008_add_monster/jscrawl.html	/^function updateStatus() {$/;"	f
+updateStatus	009_add_attack_action/jscrawl.html	/^function updateStatus() {$/;"	f
+updateStatus	010_make_attack_reduce_hp/jscrawl.html	/^function updateStatus() {$/;"	f
+updateStatus	011_fix_both_newts_dying_bug/jscrawl.html	/^function updateStatus() {$/;"	f
+updateStatus	012_make_attack_damage_random/jscrawl.html	/^function updateStatus() {$/;"	f
+updateStatus	013_allow_newt_to_move/jscrawl.html	/^function updateStatus() {$/;"	f
+updateStatus	014_fix_newt_frozen_bug/jscrawl.html	/^function updateStatus() {$/;"	f
+updateStatus	015_support_variable_messages/jscrawl.html	/^function updateStatus() {$/;"	f
+updateStatus	016_fix_newt_resurrection_bug/jscrawl.html	/^function updateStatus() {$/;"	f
+updateStatus	017_diagonal_movement/jscrawl.html	/^function updateStatus() {$/;"	f
+updateStatus	018_attack_or_move/jscrawl.html	/^function updateStatus() {$/;"	f
+updateStatus	019_fancy_characters/jscrawl.html	/^function updateStatus() {$/;"	f
+updateStatus	020_scrolling_board/jscrawl.html	/^function updateStatus() {$/;"	f
+updateStatus	021_support_player_death/jscrawl.html	/^function updateStatus() {$/;"	f
+updateStatus	022_support_rest_command/jscrawl.html	/^function updateStatus() {$/;"	f
+updateStatus	023_fix_restart_health_0_bug/jscrawl.html	/^function updateStatus() {$/;"	f
+updateStatus	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function updateStatus() {$/;"	f
+updateStatus	025_use_messages_for_restart/jscrawl.html	/^function updateStatus() {$/;"	f
+updateStatus	026_help_page/jscrawl.html	/^function updateStatus() {$/;"	f
+windowToBoardPos	020_scrolling_board/jscrawl.html	/^function windowToBoardPos(windowPos) {$/;"	f
+windowToBoardPos	021_support_player_death/jscrawl.html	/^function windowToBoardPos(windowPos) {$/;"	f
+windowToBoardPos	022_support_rest_command/jscrawl.html	/^function windowToBoardPos(windowPos) {$/;"	f
+windowToBoardPos	023_fix_restart_health_0_bug/jscrawl.html	/^function windowToBoardPos(windowPos) {$/;"	f
+windowToBoardPos	024_fix_diagonal_disappearing_bug/jscrawl.html	/^function windowToBoardPos(windowPos) {$/;"	f
+windowToBoardPos	025_use_messages_for_restart/jscrawl.html	/^function windowToBoardPos(windowPos) {$/;"	f
+windowToBoardPos	026_help_page/jscrawl.html	/^function windowToBoardPos(windowPos) {$/;"	f

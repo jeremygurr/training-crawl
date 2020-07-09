@@ -17,9 +17,11 @@ import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.bridge.PermittedOptions;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
+import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.sockjs.BridgeOptions;
 import io.vertx.ext.web.handler.sockjs.SockJSHandler;
 
@@ -35,6 +37,9 @@ public class HttpServerVerticle extends AbstractVerticle {
 		Router router = Router.router(vertx);
 		router.get("/status").handler(this::statusHandler);
 		router.get("/static/*").handler(this::staticHandler);
+		router.route().handler(BodyHandler.create());
+		router.post("/users").handler(this::userCreateHandler);
+//		router.get("/users/*").handler(this::userGetHandler);
 
 		SockJSHandler sockJSHandler = SockJSHandler.create(vertx);
 		final PermittedOptions inbound = new PermittedOptions().setAddress(BusEvent.BrowserInput.name());
@@ -80,7 +85,13 @@ public class HttpServerVerticle extends AbstractVerticle {
 				final String text = new BufferedReader(
 					new InputStreamReader(stream, StandardCharsets.UTF_8)).lines()
 						.collect(Collectors.joining("\n"));
+				if(path.endsWith(".html")) {
 				response.putHeader("Content-Type", "text/html");
+				} else if(path.endsWith(".css")) {
+					response.putHeader("Content-Type", "text/css");
+				} else {
+					response.end("<html><body>Error filetype unknown: " + path + "</body></html>");
+				}
 				response.setStatusCode(200);
 				response.end(text);
 			} else {
@@ -93,6 +104,15 @@ public class HttpServerVerticle extends AbstractVerticle {
 			response.setStatusCode(502);
 			response.end();
 		}
+
+	}
+
+	private void userCreateHandler(RoutingContext context) {
+
+		final String username = context.request().getParam("username");
+		final HttpServerResponse response = context.response();
+		response.putHeader("Content-Type", "text/html");
+		response.end("<html><body>Username = " + username + ".</body></html>");
 
 	}
 

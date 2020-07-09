@@ -90,6 +90,8 @@ public class HttpServerVerticle extends AbstractVerticle {
 			}
 		} catch (Exception e) {
 			LOGGER.error("Problem fetching static file: " + path, e);
+			response.setStatusCode(502);
+			response.end();
 		}
 
 	}

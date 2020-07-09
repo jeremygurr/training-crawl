@@ -33,6 +33,7 @@ dependencies {
   implementation 'io.vertx:vertx-service-proxy:$vertxVersion'
   implementation 'io.vertx:vertx-sockjs-service-proxy:3.9.1'
   implementation 'ch.qos.logback:logback-classic:1.2.3'
+  implementation "com.couchbase.client:java.client:2.7.9"
   testImplementation "io.vertx:vertx-junit5:$vertxVersion"
   testImplementation "org.junit.jupiter:junit-jupiter-api:$junitJupiterEngineVersion"
   testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitJupiterEngineVersion"

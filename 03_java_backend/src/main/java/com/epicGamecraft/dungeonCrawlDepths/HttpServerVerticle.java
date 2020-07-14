@@ -107,13 +107,57 @@ public class HttpServerVerticle extends AbstractVerticle {
 
 	}
 
-	private void userCreateHandler(RoutingContext context) {
+	public void userCreateHandler(RoutingContext context) {
 
 		final String username = context.request().getParam("username");
-		final HttpServerResponse response = context.response();
-		response.putHeader("Content-Type", "text/html");
-		response.end("<html><body>Username = " + username + ".</body></html>");
+		final String email = context.request().getParam("email");
+		final String password = context.request().getParam("password");
+		final int hashCode = password.hashCode();
+		final String usernameOrEmail = context.request().getParam("usernameOrEmail");
+		
+		final String queryUser = "select user from registration where user=" + username;
+		final String queryEmail = "select email from registration where user=" + username + "and email=" + email;
+		final String queryPassword = "select email from registration where user=" + username + "and password=" + hashCode;
+		final String queryUserAndEmail = "select user, email from registration where user=" + usernameOrEmail + "or email=" + usernameOrEmail;
+		
+		final JsonObject jsonQueryUser = jsonObjectCreator(queryUser);
+		final JsonObject jsonQueryEmail = jsonObjectCreator(queryEmail);
+		final JsonObject jsonQueryPassword = jsonObjectCreator(queryPassword);
+		final JsonObject jsonQueryUserAndEmail = jsonObjectCreator(queryUserAndEmail);
+
+		vertx.eventBus().request("couchbase.query", "" + jsonQueryUser + "", ar -> {
+			  if (ar.succeeded()) {
+				    System.out.println("Received reply: " + ar.result().body());
+				  }
+				});
+		vertx.eventBus().request("couchbase.query", "" + jsonQueryEmail + "", ar -> {
+			  if (ar.succeeded()) {
+				    System.out.println("Received reply: " + ar.result().body());
+				  }
+				});
+		vertx.eventBus().request("couchbase.query", "" + jsonQueryPassword + "", ar -> {
+			  if (ar.succeeded()) {
+				    System.out.println("Received reply: " + ar.result().body());
+				  }
+				});
+		vertx.eventBus().request("couchbase.query", "" + jsonQueryUserAndEmail + "", ar -> {
+			  if (ar.succeeded()) {
+				    System.out.println("Received reply: " + ar.result().body());
+				  }
+				});
+	}
+		
+	public JsonObject jsonObjectCreator(String value) {
+
+		String jsonString = "{\"query\":\"" + value + "\"}";
+		JsonObject object = new JsonObject(jsonString);
+		return object;
 
 	}
+		
+//		final HttpServerResponse response = context.response();
+//		response.putHeader("Content-Type", "text/html");
+//		response.end("<html><body>Username = " + username + " email = " + email + " Password = " 
+//		+ password + " usernameOrEmail = " + usernameOrEmail + "</body></html>");
 
 }

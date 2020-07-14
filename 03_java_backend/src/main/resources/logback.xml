@@ -12,7 +12,7 @@
   <logger name="io.vertx" level="debug"/>
   <logger name="io.vertx.guides.wiki" level="debug"/>
 
-  <root level="debug">
+  <root level="info">
     <appender-ref ref="STDOUT"/>
   </root>
 

@@ -1,6 +1,6 @@
 package com.epicGamecraft.dungeonCrawlDepths;
 
-import static com.epicGamecraft.dungeonCrawlDepths.BusEvent.BrowserInput;
+import static com.epicGamecraft.dungeonCrawlDepths.BusEvent.*;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -33,7 +33,7 @@ public class BrowserInputVerticle extends AbstractVerticle {
 
 	@Override
 	public void start(Promise<Void> promise) throws Exception {
-		vertx.eventBus().consumer(BrowserInput.name(), this::handleKey);
+		vertx.eventBus().consumer(browserInput.name(), this::handleKey);
 	}
 
 	private void handleKey(Message<String> message) {

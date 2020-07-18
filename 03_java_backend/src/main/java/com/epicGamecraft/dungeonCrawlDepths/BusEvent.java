@@ -1,5 +1,7 @@
 package com.epicGamecraft.dungeonCrawlDepths;
 
 public enum BusEvent {
-  BrowserInput,
+  browserInput,
+  couchbaseQuery,
+  userLogin,
 }

@@ -1,11 +1,14 @@
 package com.epicGamecraft.dungeonCrawlDepths;
 
+import static com.epicGamecraft.dungeonCrawlDepths.BusEvent.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.eventbus.Message;
 import reactor.core.publisher.Mono;
 
 import com.couchbase.client.java.*;
@@ -15,26 +18,30 @@ public class CouchbaseVerticle extends AbstractVerticle {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CouchbaseVerticle.class);
 
-	
 //	private AsyncCluster cluster;
-	
+
 //	AsyncCluster cluster = AsyncCluster.create();
-	
-    @Override
-    public void start(Promise<Void> promise) throws Exception {
-	    final EventBus eb = vertx.eventBus();
-    	final ReactiveCluster connection = ReactiveCluster.connect("localhost:11210", "Administrator", "password");
+
+	@Override
+	public void start(Promise<Void> promise) throws Exception {
+		final EventBus eb = vertx.eventBus();
+		final ReactiveCluster connection = ReactiveCluster.connect("localhost:11210", "Administrator", "password");
+		eb.consumer(couchbaseQuery.name(), this::handleQuery);
 //    	final ReactiveBucket bucket = connection.bucket("registration");
 //    	final ReactiveCollection collection = bucket.defaultCollection();
 //      final Mono<ReactiveQueryResult> query = connection.query("select \"Hello World\" as greeting");
 //      final ReactiveQueryResult result = query.block();
 //      final com.couchbase.client.java.json.JsonObject firstResult = result.rowsAsObject().blockFirst();
 //      System.out.println(firstResult.toString());
-        eb.consumer("couchbase.query", message -> { message.reply(connection.query((String) message.body()));        	
-        }); 
-  
-    }
-    
+//      eb.consumer("couchbase.query", message -> { message.reply(connection.query((String) message.body()));        	
+//      }); 
+
+	}
+
+	private void handleQuery(Message<String> message) {
+		LOGGER.debug("Couchbase Verticle received message: " + message.body());
+	}
+
 //	@Override
 //	public void init(Vertx vertx, Context context) {
 //		super.init(vertx, context);
@@ -61,7 +68,7 @@ public class CouchbaseVerticle extends AbstractVerticle {
 //						stopFuture::fail,
 //						Schedulers::shutdown);
 //	}
-	
+
 //	@Override
 //	public void start(Promise<Void> promise) throws Exception {
 //		vertx.eventBus().consumer(BrowserInput.name(), this::handleKey);

@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -12,8 +13,10 @@ import org.slf4j.LoggerFactory;
 
 import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.MultiMap;
 import io.vertx.core.Promise;
 import io.vertx.core.eventbus.DeliveryOptions;
+import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
@@ -27,6 +30,7 @@ import io.vertx.ext.web.handler.sockjs.SockJSHandler;
 
 public class HttpServerVerticle extends AbstractVerticle {
 
+	private final EventBus eb = vertx.eventBus();
 	private static final Logger LOGGER = LoggerFactory.getLogger(HttpServerVerticle.class);
 
 	@Override
@@ -38,19 +42,18 @@ public class HttpServerVerticle extends AbstractVerticle {
 		router.get("/status").handler(this::statusHandler);
 		router.get("/static/*").handler(this::staticHandler);
 		router.route().handler(BodyHandler.create());
-		router.post("/users").handler(this::userCreateHandler);
+		router.post("/bus/*").handler(this::busHandler);
 //		router.get("/users/*").handler(this::userGetHandler);
 
 		SockJSHandler sockJSHandler = SockJSHandler.create(vertx);
-		final PermittedOptions inbound = new PermittedOptions().setAddress(BusEvent.BrowserInput.name());
-		BridgeOptions bridgeOptions = new BridgeOptions()
-			.addInboundPermitted(inbound);
+		final PermittedOptions inbound = new PermittedOptions().setAddress(BusEvent.browserInput.name());
+		BridgeOptions bridgeOptions = new BridgeOptions().addInboundPermitted(inbound);
 		sockJSHandler.bridge(bridgeOptions);
 		router.route("/eventbus/*").handler(sockJSHandler);
 
 		final int port = 8080;
 		server.requestHandler(router).listen(port, ar -> {
-			if(ar.succeeded()) {
+			if (ar.succeeded()) {
 				LOGGER.info("HTTP server running on port " + port);
 				promise.complete();
 			} else {
@@ -58,6 +61,45 @@ public class HttpServerVerticle extends AbstractVerticle {
 				promise.fail(ar.cause());
 			}
 		});
+
+	}
+
+	private void busHandler(RoutingContext context) {
+
+//		final HttpServerResponse response = context.response();
+
+		final HttpServerRequest request = context.request();
+		final MultiMap params = request.params();
+
+		JsonObject object = new JsonObject();
+		for (Map.Entry<String, String> entry : params.entries()) {
+			object.put(entry.getKey(), entry.getValue());
+		}
+		if (object.containsKey("usernameOrEmail")) {
+			eb.request("userLogin", object, ar -> {
+				if (ar.succeeded()) {
+					LOGGER.info("Received reply: " + ar.result().body());
+				}
+			});
+		} else if (object.containsKey("email")) {
+			eb.request("resetPassword", object, ar -> {
+				if (ar.succeeded()) {
+					LOGGER.info("Received reply: " + ar.result().body());
+				}
+			});
+		} else if (object.containsKey("username") && object.containsKey("password") && object.containsKey("email")) {
+			eb.request("createUser", object, ar -> {
+				if (ar.succeeded()) {
+					LOGGER.info("Received reply: " + ar.result().body());
+				}
+			});
+		} else {
+			LOGGER.info("Object contains zero matching keys.");
+		}
+		// address will be whatever last part of action="bus/" is for example userLogin
+		// see each login form
+		// HTML page to see what they are listed as.
+		// message should be the JSON object with all the parameters.
 
 	}
 
@@ -79,15 +121,13 @@ public class HttpServerVerticle extends AbstractVerticle {
 		try {
 			LOGGER.debug("GET " + path);
 			path = path.substring(1);
-			final InputStream stream = Thread.currentThread().getContextClassLoader()
-				.getResourceAsStream(path);
-			if(stream != null) {
-				final String text = new BufferedReader(
-					new InputStreamReader(stream, StandardCharsets.UTF_8)).lines()
+			final InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
+			if (stream != null) {
+				final String text = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8)).lines()
 						.collect(Collectors.joining("\n"));
-				if(path.endsWith(".html")) {
-				response.putHeader("Content-Type", "text/html");
-				} else if(path.endsWith(".css")) {
+				if (path.endsWith(".html")) {
+					response.putHeader("Content-Type", "text/html");
+				} else if (path.endsWith(".css")) {
 					response.putHeader("Content-Type", "text/css");
 				} else {
 					response.end("<html><body>Error filetype unknown: " + path + "</body></html>");
@@ -104,60 +144,6 @@ public class HttpServerVerticle extends AbstractVerticle {
 			response.setStatusCode(502);
 			response.end();
 		}
-
 	}
-
-	public void userCreateHandler(RoutingContext context) {
-
-		final String username = context.request().getParam("username");
-		final String email = context.request().getParam("email");
-		final String password = context.request().getParam("password");
-		final int hashCode = password.hashCode();
-		final String usernameOrEmail = context.request().getParam("usernameOrEmail");
-		
-		final String queryUser = "select user from registration where user=" + username;
-		final String queryEmail = "select email from registration where user=" + username + "and email=" + email;
-		final String queryPassword = "select email from registration where user=" + username + "and password=" + hashCode;
-		final String queryUserAndEmail = "select user, email from registration where user=" + usernameOrEmail + "or email=" + usernameOrEmail;
-		
-		final JsonObject jsonQueryUser = jsonObjectCreator(queryUser);
-		final JsonObject jsonQueryEmail = jsonObjectCreator(queryEmail);
-		final JsonObject jsonQueryPassword = jsonObjectCreator(queryPassword);
-		final JsonObject jsonQueryUserAndEmail = jsonObjectCreator(queryUserAndEmail);
-
-		vertx.eventBus().request("couchbase.query", "" + jsonQueryUser + "", ar -> {
-			  if (ar.succeeded()) {
-				    System.out.println("Received reply: " + ar.result().body());
-				  }
-				});
-		vertx.eventBus().request("couchbase.query", "" + jsonQueryEmail + "", ar -> {
-			  if (ar.succeeded()) {
-				    System.out.println("Received reply: " + ar.result().body());
-				  }
-				});
-		vertx.eventBus().request("couchbase.query", "" + jsonQueryPassword + "", ar -> {
-			  if (ar.succeeded()) {
-				    System.out.println("Received reply: " + ar.result().body());
-				  }
-				});
-		vertx.eventBus().request("couchbase.query", "" + jsonQueryUserAndEmail + "", ar -> {
-			  if (ar.succeeded()) {
-				    System.out.println("Received reply: " + ar.result().body());
-				  }
-				});
-	}
-		
-	public JsonObject jsonObjectCreator(String value) {
-
-		String jsonString = "{\"query\":\"" + value + "\"}";
-		JsonObject object = new JsonObject(jsonString);
-		return object;
-
-	}
-		
-//		final HttpServerResponse response = context.response();
-//		response.putHeader("Content-Type", "text/html");
-//		response.end("<html><body>Username = " + username + " email = " + email + " Password = " 
-//		+ password + " usernameOrEmail = " + usernameOrEmail + "</body></html>");
 
 }

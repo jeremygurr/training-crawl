@@ -11,6 +11,7 @@
   <logger name="io.netty" level="warn"/>
   <logger name="io.vertx" level="debug"/>
   <logger name="io.vertx.guides.wiki" level="debug"/>
+  <logger name="com.epicGamecraft.dungeonCrawlDepths" level="debug"/>
 
   <root level="info">
     <appender-ref ref="STDOUT"/>

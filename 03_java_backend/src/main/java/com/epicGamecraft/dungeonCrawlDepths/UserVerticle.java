@@ -1,7 +1,6 @@
 package com.epicGamecraft.dungeonCrawlDepths;
 
-import static com.epicGamecraft.dungeonCrawlDepths.BusEvent.BrowserInput;
-
+import static com.epicGamecraft.dungeonCrawlDepths.BusEvent.*;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -15,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
+import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.http.HttpServer;
@@ -27,19 +27,84 @@ import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.sockjs.BridgeOptions;
 import io.vertx.ext.web.handler.sockjs.SockJSHandler;
 
-
 public class UserVerticle extends AbstractVerticle {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserVerticle.class);
 
 	@Override
 	public void start(Promise<Void> promise) throws Exception {
-		vertx.eventBus().consumer(BrowserInput.name(), this::handleKey);
+		vertx.eventBus().consumer(userLogin.name(), this::handleUser);
+	}
+
+	private void handleUser(Message<String> message) {
+		LOGGER.debug("User Verticle received message: " + message.body());
+	}
+
+	public void userLookupHandler(RoutingContext context) {
 
 	}
 
-	private void handleKey(Message<String> message) {
-		LOGGER.debug("Received message: " + message.body());
+	public void userNewPasswordHandler(RoutingContext context) {
+
 	}
+
+	public void userCreateHandler(RoutingContext context) {
+
+		final HttpServerRequest request = context.request();
+
+		final String username = request.getParam("username");
+		final String email = request.getParam("email");
+		final String password = request.getParam("password");
+		final int hashCode = password.hashCode();
+		final String usernameOrEmail = request.getParam("usernameOrEmail");
+		LOGGER.debug("Received login request: " + usernameOrEmail);
+
+		final String queryUser = "select user from registration where user=" + username;
+		final String queryEmail = "select email from registration where user=" + username + "and email=" + email;
+		final String queryPassword = "select email from registration where user=" + username + "and password="
+				+ hashCode;
+		final String queryUserAndEmail = "select user, email from registration where user=" + usernameOrEmail
+				+ "or email=" + usernameOrEmail;
+
+		final JsonObject jsonQueryUser = jsonObjectCreator(queryUser);
+		final JsonObject jsonQueryEmail = jsonObjectCreator(queryEmail);
+		final JsonObject jsonQueryPassword = jsonObjectCreator(queryPassword);
+		final JsonObject jsonQueryUserAndEmail = jsonObjectCreator(queryUserAndEmail);
+
+		vertx.eventBus().request("couchbase.query", "" + jsonQueryUser + "", ar -> {
+			if (ar.succeeded()) {
+				LOGGER.info("Received reply: " + ar.result().body());
+			}
+		});
+		vertx.eventBus().request("couchbase.query", "" + jsonQueryEmail + "", ar -> {
+			if (ar.succeeded()) {
+				LOGGER.info("Received reply: " + ar.result().body());
+			}
+		});
+		vertx.eventBus().request("couchbase.query", "" + jsonQueryPassword + "", ar -> {
+			if (ar.succeeded()) {
+				LOGGER.info("Received reply: " + ar.result().body());
+			}
+		});
+		vertx.eventBus().request("couchbase.query", "" + jsonQueryUserAndEmail + "", ar -> {
+			if (ar.succeeded()) {
+				LOGGER.info("Received reply: " + ar.result().body());
+			}
+		});
+	}
+
+	public JsonObject jsonObjectCreator(String value) {
+
+		String jsonString = "{\"query\":\"" + value + "\"}";
+		JsonObject object = new JsonObject(jsonString);
+		return object;
+
+	}
+	
+
+//		final HttpServerResponse response = context.response();
+//		response.putHeader("Content-Type", "text/html");
+//		response.end("<html><body>Username = " + username + " email = " + email + " Password = " 
+//		+ password + " usernameOrEmail = " + usernameOrEmail + "</body></html>");
 
 }

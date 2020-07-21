@@ -30,7 +30,6 @@ import io.vertx.ext.web.handler.sockjs.SockJSHandler;
 
 public class HttpServerVerticle extends AbstractVerticle {
 
-	private final EventBus eb = vertx.eventBus();
 	private static final Logger LOGGER = LoggerFactory.getLogger(HttpServerVerticle.class);
 
 	@Override
@@ -66,6 +65,7 @@ public class HttpServerVerticle extends AbstractVerticle {
 
 	private void busHandler(RoutingContext context) {
 
+     	final EventBus eb = vertx.eventBus();
 //		final HttpServerResponse response = context.response();
 
 		final HttpServerRequest request = context.request();
@@ -75,27 +75,13 @@ public class HttpServerVerticle extends AbstractVerticle {
 		for (Map.Entry<String, String> entry : params.entries()) {
 			object.put(entry.getKey(), entry.getValue());
 		}
-		if (object.containsKey("usernameOrEmail")) {
-			eb.request("userLogin", object, ar -> {
-				if (ar.succeeded()) {
-					LOGGER.info("Received reply: " + ar.result().body());
-				}
-			});
-		} else if (object.containsKey("email")) {
-			eb.request("resetPassword", object, ar -> {
-				if (ar.succeeded()) {
-					LOGGER.info("Received reply: " + ar.result().body());
-				}
-			});
-		} else if (object.containsKey("username") && object.containsKey("password") && object.containsKey("email")) {
-			eb.request("createUser", object, ar -> {
-				if (ar.succeeded()) {
-					LOGGER.info("Received reply: " + ar.result().body());
-				}
-			});
-		} else {
-			LOGGER.info("Object contains zero matching keys.");
-		}
+		
+		final String absoluteURI = request.absoluteURI();
+		LOGGER.debug("absoluteURI=" + absoluteURI);
+		final String busAddress = absoluteURI.replaceAll("^.*/bus/", "");
+		LOGGER.debug("busAddress=" + busAddress);
+		eb.request(busAddress, object.encode());
+		
 		// address will be whatever last part of action="bus/" is for example userLogin
 		// see each login form
 		// HTML page to see what they are listed as.

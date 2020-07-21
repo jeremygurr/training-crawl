@@ -33,6 +33,7 @@ public class UserVerticle extends AbstractVerticle {
 
 	@Override
 	public void start(Promise<Void> promise) throws Exception {
+		LOGGER.debug("User Verticle is listening to: " + userLogin.name());
 		vertx.eventBus().consumer(userLogin.name(), this::handleUser);
 	}
 
@@ -101,6 +102,27 @@ public class UserVerticle extends AbstractVerticle {
 
 	}
 	
+//		if (object.containsKey("usernameOrEmail")) {
+//			eb.request("userLogin", object, ar -> {
+//				if (ar.succeeded()) {
+//					LOGGER.info("Received reply: " + ar.result().body());
+//				}
+//			});
+//		} else if (object.containsKey("email")) {
+//			eb.request("resetPassword", object, ar -> {
+//				if (ar.succeeded()) {
+//					LOGGER.info("Received reply: " + ar.result().body());
+//				}
+//			});
+//		} else if (object.containsKey("username") && object.containsKey("password") && object.containsKey("email")) {
+//			eb.request("createUser", object, ar -> {
+//				if (ar.succeeded()) {
+//					LOGGER.info("Received reply: " + ar.result().body());
+//				}
+//			});
+//		} else {
+//			LOGGER.info("Object contains zero matching keys.");
+//		}
 
 //		final HttpServerResponse response = context.response();
 //		response.putHeader("Content-Type", "text/html");

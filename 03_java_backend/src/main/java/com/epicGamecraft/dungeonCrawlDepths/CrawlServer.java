@@ -23,6 +23,7 @@ public class CrawlServer {
 		vertx.deployVerticle(new HttpServerVerticle());
 		vertx.deployVerticle(new BrowserInputVerticle());
 		vertx.deployVerticle(new CouchbaseVerticle());
+		vertx.deployVerticle(new UserVerticle());
 
 	}
 

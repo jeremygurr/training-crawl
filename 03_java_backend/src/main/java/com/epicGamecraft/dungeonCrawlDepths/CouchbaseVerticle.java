@@ -12,6 +12,7 @@ import io.vertx.core.eventbus.Message;
 import reactor.core.publisher.Mono;
 
 import com.couchbase.client.java.*;
+import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.query.ReactiveQueryResult;
 
 public class CouchbaseVerticle extends AbstractVerticle {
@@ -25,8 +26,9 @@ public class CouchbaseVerticle extends AbstractVerticle {
 	@Override
 	public void start(Promise<Void> promise) throws Exception {
 		final EventBus eb = vertx.eventBus();
-		final ReactiveCluster connection = ReactiveCluster.connect("localhost:11210", "Administrator", "password");
 		eb.consumer(couchbaseQuery.name(), this::handleQuery);
+		
+
 //    	final ReactiveBucket bucket = connection.bucket("registration");
 //    	final ReactiveCollection collection = bucket.defaultCollection();
 //      final Mono<ReactiveQueryResult> query = connection.query("select \"Hello World\" as greeting");
@@ -40,6 +42,19 @@ public class CouchbaseVerticle extends AbstractVerticle {
 
 	private void handleQuery(Message<String> message) {
 		LOGGER.debug("Couchbase Verticle received message: " + message.body());
+		final ReactiveCluster connection = ReactiveCluster.connect("localhost:11210", "Administrator", "password");
+        final Mono<ReactiveQueryResult> query = connection.query(message.body());
+        final ReactiveQueryResult result = query.block();
+        final com.couchbase.client.java.json.JsonObject firstResult = result.rowsAsObject().blockFirst();
+        message.reply(firstResult);
+		
+//		message.reply(connection.query(message.body()));
+//		MessageConsumer<String> consumer = eventBus.consumer("news.uk.sport");
+//		consumer.handler(message -> {
+//		  System.out.println("I have received a message: " + message.body());
+//		  message.reply("how interesting!");
+//		});
+
 	}
 
 //	@Override

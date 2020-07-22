@@ -38,9 +38,19 @@ public class UserVerticle extends AbstractVerticle {
 	}
 
 	private void handleUser(Message<String> message) {
-		LOGGER.debug("User Verticle received message: " + message.body());
+		LOGGER.debug("User Verticle received message: " + message.body()); 
+		JsonObject json = new JsonObject(message.body());
+		String user = "'" + json.getString("usernameOrEmail") + "'";
+		String pass = "'" + json.getString("password") + "'";
+        vertx.eventBus().request(couchbaseQuery.name(), "select user from registration where user=" + user + " and password=" + pass, ar -> {
+        	if (ar.succeeded()) {
+        	    LOGGER.debug("Received reply: " + ar.result().body());
+        	  }
+        });
+        
 	}
-
+//  receives { "usernameOrEmail": "Jared", "password": "Gurr" }
+	
 	public void userLookupHandler(RoutingContext context) {
 
 	}

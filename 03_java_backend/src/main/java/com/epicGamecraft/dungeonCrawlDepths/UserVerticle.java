@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,19 +39,30 @@ public class UserVerticle extends AbstractVerticle {
 	}
 
 	private void handleUser(Message<String> message) {
-		LOGGER.debug("User Verticle received message: " + message.body()); 
+		LOGGER.debug("User Verticle received message: " + message.body());
 		JsonObject json = new JsonObject(message.body());
 		String user = "'" + json.getString("usernameOrEmail") + "'";
 		String pass = "'" + json.getString("password") + "'";
-        vertx.eventBus().request(couchbaseQuery.name(), "select user from registration where user=" + user + " and password=" + pass, ar -> {
-        	if (ar.succeeded()) {
-        	    LOGGER.debug("Received reply: " + ar.result().body());
-        	  }
-        });
-        
+		vertx.eventBus().request(couchbaseQuery.name(),
+				"select name from registration where name=" + user + " and hashword=" + pass, ar -> {
+					if (ar.succeeded()) {
+						if (ar.result().body() == null) {
+							LOGGER.debug("Invalid Login");
+						} else if (ar.result().body() != null) {
+							LOGGER.debug("Received reply: " + ar.result().body());
+							final UUID sessionId = UUID.randomUUID();
+							message.reply(sessionId.toString());
+//							context.put(ContextKey.sessionMap.name(), sessionId);  //Go this route if you decide to put 
+//session/cookie handling inside UserVerticle instead of HttpVerticle.
+						} else {
+							LOGGER.debug("An error occured retrieving data from Couchbase.");
+						}
+					}
+				});
+
 	}
 //  receives { "usernameOrEmail": "Jared", "password": "Gurr" }
-	
+
 	public void userLookupHandler(RoutingContext context) {
 
 	}
@@ -111,7 +123,7 @@ public class UserVerticle extends AbstractVerticle {
 		return object;
 
 	}
-	
+
 //		if (object.containsKey("usernameOrEmail")) {
 //			eb.request("userLogin", object, ar -> {
 //				if (ar.succeeded()) {

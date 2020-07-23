@@ -6,9 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Context;
 import io.vertx.core.Promise;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.Message;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import com.couchbase.client.java.*;
@@ -27,7 +29,9 @@ public class CouchbaseVerticle extends AbstractVerticle {
 	public void start(Promise<Void> promise) throws Exception {
 		final EventBus eb = vertx.eventBus();
 		eb.consumer(couchbaseQuery.name(), this::handleQuery);
-		
+		final ReactiveCluster connection = ReactiveCluster.connect("localhost:11210", "Administrator", "password");
+//		final Context context = vertx.getOrCreateContext();
+		context.put(ContextKey.couchbaseConnection.name(), connection);
 
 //    	final ReactiveBucket bucket = connection.bucket("registration");
 //    	final ReactiveCollection collection = bucket.defaultCollection();
@@ -41,12 +45,18 @@ public class CouchbaseVerticle extends AbstractVerticle {
 	}
 
 	private void handleQuery(Message<String> message) {
+		final ReactiveCluster connection = context.get(ContextKey.couchbaseConnection.name());
 		LOGGER.debug("Couchbase Verticle received message: " + message.body());
-		final ReactiveCluster connection = ReactiveCluster.connect("localhost:11210", "Administrator", "password");
         final Mono<ReactiveQueryResult> query = connection.query(message.body());
-        final ReactiveQueryResult result = query.block();
-        final com.couchbase.client.java.json.JsonObject firstResult = result.rowsAsObject().blockFirst();
-        message.reply(firstResult);
+        query.subscribe(queryResult -> {
+        	final Flux<JsonObject> rowsAsObject = queryResult.rowsAsObject();
+        	rowsAsObject.subscribe(jsonObject -> {
+        		message.reply(jsonObject.toString());
+        	});
+        });
+	}
+//        final com.couchbase.client.java.json.JsonObject firstResult = result.rowsAsObject().blockFirst();
+//        message.reply(firstResult.toString());
 		
 //		message.reply(connection.query(message.body()));
 //		MessageConsumer<String> consumer = eventBus.consumer("news.uk.sport");
@@ -55,7 +65,6 @@ public class CouchbaseVerticle extends AbstractVerticle {
 //		  message.reply("how interesting!");
 //		});
 
-	}
 
 //	@Override
 //	public void init(Vertx vertx, Context context) {

@@ -80,7 +80,11 @@ public class HttpServerVerticle extends AbstractVerticle {
 		LOGGER.debug("absoluteURI=" + absoluteURI);
 		final String busAddress = absoluteURI.replaceAll("^.*/bus/", "");
 		LOGGER.debug("busAddress=" + busAddress);
-		eb.request(busAddress, object.encode());
+		eb.request(busAddress, object.encode(), ar -> {
+			if(ar.succeeded()) {
+				LOGGER.debug("Received UUID: " + ar.result().body());
+			}
+		});
 		
 		// address will be whatever last part of action="bus/" is for example userLogin
 		// see each login form

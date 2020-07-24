@@ -66,7 +66,7 @@ public class HttpServerVerticle extends AbstractVerticle {
 	private void busHandler(RoutingContext context) {
 
      	final EventBus eb = vertx.eventBus();
-//		final HttpServerResponse response = context.response();
+		final HttpServerResponse response = context.response();
 
 		final HttpServerRequest request = context.request();
 		final MultiMap params = request.params();
@@ -82,7 +82,12 @@ public class HttpServerVerticle extends AbstractVerticle {
 		LOGGER.debug("busAddress=" + busAddress);
 		eb.request(busAddress, object.encode(), ar -> {
 			if(ar.succeeded()) {
-				LOGGER.debug("Received UUID: " + ar.result().body());
+				LOGGER.debug("HttpServer Verticle Received UUID: " + ar.result().body());
+				context.put(ContextKey.sessionMap.name(), ar.result().body());
+			} else {
+				//put some method to notify browser that the login was unsuccessful, and try again.
+			    eb.send("loginForm", "That username or password is invalid."); 
+			    //make sure to uncomment login.html script when time to test this.
 			}
 		});
 		

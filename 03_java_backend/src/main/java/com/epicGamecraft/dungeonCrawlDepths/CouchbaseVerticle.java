@@ -21,9 +21,6 @@ public class CouchbaseVerticle extends AbstractVerticle {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CouchbaseVerticle.class);
 
-//	private AsyncCluster cluster;
-
-//	AsyncCluster cluster = AsyncCluster.create();
 
 	@Override
 	public void start(Promise<Void> promise) throws Exception {
@@ -32,15 +29,6 @@ public class CouchbaseVerticle extends AbstractVerticle {
 		final ReactiveCluster connection = ReactiveCluster.connect("localhost:11210", "Administrator", "password");
 //		final Context context = vertx.getOrCreateContext();
 		context.put(ContextKey.couchbaseConnection.name(), connection);
-
-//    	final ReactiveBucket bucket = connection.bucket("registration");
-//    	final ReactiveCollection collection = bucket.defaultCollection();
-//      final Mono<ReactiveQueryResult> query = connection.query("select \"Hello World\" as greeting");
-//      final ReactiveQueryResult result = query.block();
-//      final com.couchbase.client.java.json.JsonObject firstResult = result.rowsAsObject().blockFirst();
-//      System.out.println(firstResult.toString());
-//      eb.consumer("couchbase.query", message -> { message.reply(connection.query((String) message.body()));        	
-//      }); 
 
 	}
 
@@ -55,51 +43,11 @@ public class CouchbaseVerticle extends AbstractVerticle {
         	});
         });
 	}
-//        final com.couchbase.client.java.json.JsonObject firstResult = result.rowsAsObject().blockFirst();
-//        message.reply(firstResult.toString());
-		
-//		message.reply(connection.query(message.body()));
-//		MessageConsumer<String> consumer = eventBus.consumer("news.uk.sport");
-//		consumer.handler(message -> {
-//		  System.out.println("I have received a message: " + message.body());
-//		  message.reply("how interesting!");
-//		});
-
-
-//	@Override
-//	public void init(Vertx vertx, Context context) {
-//		super.init(vertx, context);
-//		//getting the configuration JSON
-//		JsonObject config = context.config();
-//	 
-//		//getting the bootstrap node, as a JSON array (default to localhost)
-//		JsonArray seedNodeArray = config.getJsonArray("couchbase.seedNodes", new JsonArray().add("localhost"));
-//		//convert to a List
-//		List seedNodes = new ArrayList&lt;&gt;(seedNodeArray.size());
-//		for (Object seedNode : seedNodeArray) {
-//			seedNodes.add((String) seedNode);
-//		}
-//		//use that to bootstrap the Cluster
-//		this.cluster = CouchbaseAsyncCluster.create(seedNodes);
-//	}
-//
-//	@Override
-//	public void stop(Future stopFuture) throws Exception {
-//		cluster.disconnect()
-//				.doOnNext(isDisconnectedCleanly -&gt; LOGGER.info("Disconnected Cluster (cleaned threads: " + isDisconnectedCleanly + ")"))
-//				.subscribe(
-//						isDisconnectedCleanly -&gt; stopFuture.complete(),
-//						stopFuture::fail,
-//						Schedulers::shutdown);
-//	}
-
-//	@Override
-//	public void start(Promise<Void> promise) throws Exception {
-//		vertx.eventBus().consumer(BrowserInput.name(), this::handleKey);
-//	}
-
-//	private void handleKey(Message<String> message) {
-//		LOGGER.debug("Received message: " + message.body());
-//	}
-
+	//right now there is an error where .subscribe will not action the message.reply if the input
+	//doesn't match exactly what is found inside the database. What I want it to do is, even if the
+	//input is not matching, it should still reply with something like "null" or "doesn't match" etc...
+    //It probably does this because jsonObject parameters is empty/null, but actually, if that were the case
+	//then message.reply should still at least attempt to send a message, even if empty. But it doesn't, 
+	//If you set breakpoint on message.reply line, it never gets hit at all which means the process stops 
+	//before it.
 }

@@ -36,119 +36,71 @@ public class UserVerticle extends AbstractVerticle {
 	public void start(Promise<Void> promise) throws Exception {
 		LOGGER.debug("User Verticle is listening to: " + userLogin.name());
 		vertx.eventBus().consumer(userLogin.name(), this::handleUser);
+		vertx.eventBus().consumer(createUser.name(), this::userCreateHandler);
+		vertx.eventBus().consumer(forgotPassword.name(), this::userPasswordResetHandler);
 	}
 
 	private void handleUser(Message<String> message) {
 		LOGGER.debug("User Verticle received message: " + message.body());
 		JsonObject json = new JsonObject(message.body());
-		String user = "'" + json.getString("usernameOrEmail") + "'";
-		String pass = "'" + json.getString("password") + "'";
-		vertx.eventBus().request(couchbaseQuery.name(),
-				"select name from registration where name=" + user + " and hashword=" + pass, ar -> {
-					if (ar.succeeded()) {
-						if (ar.result().body() == null) {
-							LOGGER.debug("Invalid Login");
-						} else if (ar.result().body() != null) {
-							LOGGER.debug("Received reply: " + ar.result().body());
-							final UUID sessionId = UUID.randomUUID();
-							message.reply(sessionId.toString());
-//							context.put(ContextKey.sessionMap.name(), sessionId);  //Go this route if you decide to put 
-//session/cookie handling inside UserVerticle instead of HttpVerticle.
-						} else {
-							LOGGER.debug("An error occured retrieving data from Couchbase.");
-						}
-					}
-				});
-
-	}
-//  receives { "usernameOrEmail": "Jared", "password": "Gurr" }
-
-	public void userLookupHandler(RoutingContext context) {
+		final String user = "'" + json.getString("usernameOrEmail") + "'";
+		final String hash = "'" + json.getString("password").hashCode() + "'";
+		vertx.eventBus().request(couchbaseQuery.name(), "select name from registration where name=" 
+		+ user + " and hashword=" + hash, ar -> {
+			if (ar.succeeded()) {
+				if (ar.result().body() == null) {
+					LOGGER.debug("Invalid Login");
+				} else if (ar.result().body() != null) {
+					LOGGER.debug("User Verticle received reply: " + ar.result().body());
+					final UUID sessionId = UUID.randomUUID();
+					message.reply(sessionId.toString());
+					//context.put(ContextKey.sessionMap.name(), sessionId);  
+					// Go this route if you decide to put
+					// session and cookie handling inside UserVerticle instead of HttpVerticle.
+				} else {
+					LOGGER.debug("An error occured retrieving data from Couchbase.");
+				}
+			}
+		});
 
 	}
 
-	public void userNewPasswordHandler(RoutingContext context) {
-
-	}
-
-	public void userCreateHandler(RoutingContext context) {
-
-		final HttpServerRequest request = context.request();
-
-		final String username = request.getParam("username");
-		final String email = request.getParam("email");
-		final String password = request.getParam("password");
-		final int hashCode = password.hashCode();
-		final String usernameOrEmail = request.getParam("usernameOrEmail");
-		LOGGER.debug("Received login request: " + usernameOrEmail);
-
-		final String queryUser = "select user from registration where user=" + username;
-		final String queryEmail = "select email from registration where user=" + username + "and email=" + email;
-		final String queryPassword = "select email from registration where user=" + username + "and password="
-				+ hashCode;
-		final String queryUserAndEmail = "select user, email from registration where user=" + usernameOrEmail
-				+ "or email=" + usernameOrEmail;
-
-		final JsonObject jsonQueryUser = jsonObjectCreator(queryUser);
-		final JsonObject jsonQueryEmail = jsonObjectCreator(queryEmail);
-		final JsonObject jsonQueryPassword = jsonObjectCreator(queryPassword);
-		final JsonObject jsonQueryUserAndEmail = jsonObjectCreator(queryUserAndEmail);
-
-		vertx.eventBus().request("couchbase.query", "" + jsonQueryUser + "", ar -> {
+	private void userCreateHandler(Message<String> message) {
+		LOGGER.debug("User Verticle received message: " + message.body());
+		JsonObject json = new JsonObject(message.body());
+		final String user = "'" + json.getString("username") + "'";
+		final String email = "'" + json.getString("email") + "'";
+		final String hash = "'" + json.getString("password") + "'";
+		vertx.eventBus().request(couchbaseQuery.name(), "select name, email, hashword from registration where name="
+		+ user + " or hashword=" + hash + " or email=" + email, ar -> {
 			if (ar.succeeded()) {
-				LOGGER.info("Received reply: " + ar.result().body());
-			}
-		});
-		vertx.eventBus().request("couchbase.query", "" + jsonQueryEmail + "", ar -> {
-			if (ar.succeeded()) {
-				LOGGER.info("Received reply: " + ar.result().body());
-			}
-		});
-		vertx.eventBus().request("couchbase.query", "" + jsonQueryPassword + "", ar -> {
-			if (ar.succeeded()) {
-				LOGGER.info("Received reply: " + ar.result().body());
-			}
-		});
-		vertx.eventBus().request("couchbase.query", "" + jsonQueryUserAndEmail + "", ar -> {
-			if (ar.succeeded()) {
-				LOGGER.info("Received reply: " + ar.result().body());
+				if (ar.result().body() == null) {
+					LOGGER.debug("User Verticle has found no record of that user, so user can now be created.");
+				} else if (ar.result().body() != null) {
+					LOGGER.debug(
+							"User Verticle has found record of already existing user: " + ar.result().body());
+				} else {
+					LOGGER.debug("An error occured retrieving data from Couchbase.");
+				}
 			}
 		});
 	}
 
-	public JsonObject jsonObjectCreator(String value) {
-
-		String jsonString = "{\"query\":\"" + value + "\"}";
-		JsonObject object = new JsonObject(jsonString);
-		return object;
-
+	private void userPasswordResetHandler(Message<String> message) {
+		LOGGER.debug("User Verticle received message: " + message.body());
+		JsonObject json = new JsonObject(message.body());
+		final String email = "'" + json.getString("email") + "'";
+		vertx.eventBus().request(couchbaseQuery.name(), "select name, email from registration where email=" + email, ar -> {
+			if (ar.succeeded()) {
+				if (ar.result().body() == null) {
+					LOGGER.debug("User Verticle has found no record containing that email, so user should create account.");
+				} else if (ar.result().body() != null) {
+					LOGGER.debug("User Verticle has found a record containing that email: " + ar.result().body());
+				} else {
+					LOGGER.debug("An error occured retrieving data from Couchbase.");
+				}
+			}
+		});
 	}
-
-//		if (object.containsKey("usernameOrEmail")) {
-//			eb.request("userLogin", object, ar -> {
-//				if (ar.succeeded()) {
-//					LOGGER.info("Received reply: " + ar.result().body());
-//				}
-//			});
-//		} else if (object.containsKey("email")) {
-//			eb.request("resetPassword", object, ar -> {
-//				if (ar.succeeded()) {
-//					LOGGER.info("Received reply: " + ar.result().body());
-//				}
-//			});
-//		} else if (object.containsKey("username") && object.containsKey("password") && object.containsKey("email")) {
-//			eb.request("createUser", object, ar -> {
-//				if (ar.succeeded()) {
-//					LOGGER.info("Received reply: " + ar.result().body());
-//				}
-//			});
-//		} else {
-//			LOGGER.info("Object contains zero matching keys.");
-//		}
-
-//		final HttpServerResponse response = context.response();
-//		response.putHeader("Content-Type", "text/html");
-//		response.end("<html><body>Username = " + username + " email = " + email + " Password = " 
-//		+ password + " usernameOrEmail = " + usernameOrEmail + "</body></html>");
 
 }

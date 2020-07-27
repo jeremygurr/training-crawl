@@ -32,14 +32,24 @@ public class CouchbaseVerticle extends AbstractVerticle {
 
 	}
 
+   	final JsonObject empty = JsonObject.create();
+
 	private void handleQuery(Message<String> message) {
 		final ReactiveCluster connection = context.get(ContextKey.couchbaseConnection.name());
 		LOGGER.debug("Couchbase Verticle received message: " + message.body());
         final Mono<ReactiveQueryResult> query = connection.query(message.body());
         query.subscribe(queryResult -> {
         	final Flux<JsonObject> rowsAsObject = queryResult.rowsAsObject();
-        	rowsAsObject.subscribe(jsonObject -> {
-        		message.reply(jsonObject.toString());
+			rowsAsObject.defaultIfEmpty(empty)
+        	.subscribe(jsonObject -> {
+        		if(jsonObject.equals(empty)) {
+        			message.reply(null);
+        		} else {
+        			message.reply(jsonObject.toString());
+        		}
+        	}
+        	, error -> {
+        		message.fail(1, "failed to query Couchbase.");
         	});
         });
 	}

@@ -9,7 +9,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.concurrent.TimeUnit;
 
+import static com.epicGamecraft.dungeonCrawlDepths.BusEvent.couchbaseQuery;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static com.epicGamecraft.dungeonCrawlDepths.BusEvent.*;
 
 @ExtendWith(VertxExtension.class)
 public class TestCrawlInit {
@@ -22,5 +24,19 @@ public class TestCrawlInit {
   @Test
   void verticle_deployed(Vertx vertx, VertxTestContext testContext) throws Throwable {
     testContext.completeNow();
+  }
+  
+  
+  @Test
+  void login(Vertx vertx, VertxTestContext testContext) throws Throwable {
+	//add code here to create a document with usernameOrEmail and assign it Jared Gurr, and also do password.
+    vertx.eventBus().request(userLogin.name(), "{ 'usernameOrEmail' : 'Jared Gurr', 'password' "
+    		+ ": 'hashpassword' }");
+  }
+
+  @Test
+  void failedLoginAttempt(Vertx vertx, VertxTestContext testContext) throws Throwable {
+    vertx.eventBus().request(couchbaseQuery.name(), "select name from registration where name='jared' "
+    		+ "and ");
   }
 }

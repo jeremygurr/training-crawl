@@ -36,6 +36,18 @@ public class CouchbaseVerticle extends AbstractVerticle {
 
 	private void handleQuery(Message<String> message) {
 		final ReactiveCluster connection = context.get(ContextKey.couchbaseConnection.name());
+		
+		//example of accessing couchbase the proper way:
+		String username = "something";
+		String hashword = "hash";
+		connection.bucket("depths").defaultCollection().get("user::" + username);
+		final JsonObject user = JsonObject.create();
+		user.put("username", "jgurr");
+		user.put("email", "jared@yahoo.com");
+		user.put("hashword", hashword);
+		connection.bucket("depths").defaultCollection().insert("user::" + username, user);
+
+		
 		LOGGER.debug("Couchbase Verticle received message: " + message.body());
         final Mono<ReactiveQueryResult> query = connection.query(message.body());
         query.subscribe(queryResult -> {
@@ -53,11 +65,4 @@ public class CouchbaseVerticle extends AbstractVerticle {
         	});
         });
 	}
-	//right now there is an error where .subscribe will not action the message.reply if the input
-	//doesn't match exactly what is found inside the database. What I want it to do is, even if the
-	//input is not matching, it should still reply with something like "null" or "doesn't match" etc...
-    //It probably does this because jsonObject parameters is empty/null, but actually, if that were the case
-	//then message.reply should still at least attempt to send a message, even if empty. But it doesn't, 
-	//If you set breakpoint on message.reply line, it never gets hit at all which means the process stops 
-	//before it.
 }

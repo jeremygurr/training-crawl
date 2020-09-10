@@ -12,21 +12,17 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Context;
 import io.vertx.core.Promise;
 import io.vertx.core.eventbus.EventBus;
-import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.Message;
-import io.vertx.core.http.HttpServer;
-import io.vertx.core.http.HttpServerRequest;
-import io.vertx.core.http.HttpServerResponse;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.bridge.PermittedOptions;
-import io.vertx.ext.web.Router;
-import io.vertx.ext.web.RoutingContext;
-import io.vertx.ext.web.handler.sockjs.BridgeOptions;
-import io.vertx.ext.web.handler.sockjs.SockJSHandler;
+
+import com.couchbase.client.java.*;
+import com.couchbase.client.java.query.ReactiveQueryResult;
 
 public class UserVerticle extends AbstractVerticle {
 

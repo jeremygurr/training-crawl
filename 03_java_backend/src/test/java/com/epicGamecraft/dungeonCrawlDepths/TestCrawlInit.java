@@ -1,6 +1,6 @@
 package com.epicGamecraft.dungeonCrawlDepths;
 
-import io.vertx.core.Vertx;
+import io.vertx.reactivex.core.*;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,19 +30,23 @@ public class TestCrawlInit {
   
   @Test
   void login(Vertx vertx, VertxTestContext testContext) throws Throwable {
-    vertx.deployVerticle(new UserVerticle(), Handler<AsyncResult<String>>() {
-    	
-    });
-    vertx.deployVerticle(new CouchbaseVerticle(), testContext.succeeding(id -> testContext.completeNow()));
-	//add code here to create a document with usernameOrEmail and assign it Jared Gurr, and also do password.
-    vertx.eventBus().request(userLogin.name(), "{ 'usernameOrEmail' : 'Jared Gurr', 'password' "
-    		+ ": 'hashpassword' }", ar -> {
-    			if (ar.succeeded()) {
-    				LOGGER.debug("Test Verticle received reply: " + ar.result().body());
-    			}
-    		});
-    testContext.completeNow();
+	  vertx.deployVerticle(new FakeCouchbaseVerticle(), Handler<AsyncResult<String>>() {
+		vertx.eventBus().request(userLogin.name(), message)
+	  }
   }
+//    vertx.deployVerticle(new CouchbaseVerticle(), Handler<AsyncResult<String>>() {
+//		vertx.deployVerticle(new UserVerticle(), Handler<AsyncResult<String>>() {
+//		vertx.eventBus().request(userLogin.name(), "{ 'usernameOrEmail' : 'Jared Gurr', 'password' "
+//				+ ": 'hashpassword' }", ar -> {
+//					if (ar.succeeded()) {
+//						LOGGER.debug("Test Verticle received reply: " + ar.result().body());
+//					}
+//				});
+//		testContext.completeNow();
+//		  });
+//		
+//	}
+}
 
 //  @Test
 //  void failedLoginAttempt(Vertx vertx, VertxTestContext testContext) throws Throwable {
@@ -50,4 +54,3 @@ public class TestCrawlInit {
 //    		+ "and ");
 //    testContext.completeNow();
 //  }
-}

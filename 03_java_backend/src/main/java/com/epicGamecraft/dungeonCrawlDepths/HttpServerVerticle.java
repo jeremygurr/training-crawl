@@ -18,14 +18,17 @@ import io.reactivex.annotations.Nullable;
 import io.reactivex.disposables.*;
 import io.reactivex.observers.*;
 import io.reactivex.schedulers.*;
+import io.vertx.core.json.JsonObject;
 import io.vertx.reactivex.*;
 import io.vertx.reactivex.core.*;
 import io.vertx.reactivex.core.http.*;
 import io.vertx.reactivex.ext.web.*;
+import io.vertx.reactivex.ext.web.handler.BodyHandler;
 import io.vertx.reactivex.ext.web.handler.SessionHandler;
 import io.vertx.reactivex.ext.web.sstore.LocalSessionStore;
 import io.vertx.reactivex.ext.web.sstore.SessionStore;
 import io.vertx.reactivex.core.buffer.*;
+import io.vertx.reactivex.core.eventbus.EventBus;
 
 public class HttpServerVerticle extends AbstractVerticle {
 
@@ -39,8 +42,8 @@ public class HttpServerVerticle extends AbstractVerticle {
 
     router.get("/status").handler(this::statusHandler);
     router.get("/static/*").handler(this::staticHandler);
-    //		router.route().handler(BodyHandler.create());
-    //		router.post("/bus/*").handler(this::busHandler);
+    router.route().handler(BodyHandler.create());
+    router.post("/bus/*").handler(this::busHandler);
     final int port = 8080;
     final Single<HttpServer> rxListen = server
         .requestHandler(router)
@@ -63,18 +66,12 @@ public class HttpServerVerticle extends AbstractVerticle {
 
   }
 
-  private void staticHandler(RoutingContext context) {
+  private void staticHandler(RoutingContext context) {  //needs to be tested
 
     final HttpServerResponse response = context.response();
     final HttpServerRequest request = context.request();
     @Nullable
     String path = request.path();
-    LOGGER.debug("Get " + path);
-    response.end();
-  }
-}
-
-/*
     try {
       LOGGER.debug("GET " + path);
       path = path.substring(1);
@@ -103,8 +100,44 @@ public class HttpServerVerticle extends AbstractVerticle {
     }
   }
 
-@Nullable
-String path = request.path();
+  private void busHandler(RoutingContext context) {  //needs to be tested
+
+    final EventBus eb = vertx.eventBus();
+    final HttpServerResponse response = context.response();
+
+    final HttpServerRequest request = context.request();
+    final MultiMap params = request.params();
+
+    JsonObject object = new JsonObject();
+    for (Map.Entry<String, String> entry : params.entries()) {
+      object.put(entry.getKey(), entry.getValue());
+    }
+
+    final String absoluteURI = request.absoluteURI();
+    LOGGER.debug("absoluteURI=" + absoluteURI);
+    final String busAddress = absoluteURI.replaceAll("^.*/bus/", "");
+    LOGGER.debug("busAddress=" + busAddress);
+    eb.rxRequest(busAddress, object.encode())
+    .doOnSuccess(e -> {
+      LOGGER.debug("HttpServer Verticle Received UUID: " +  e.body());
+      context.put(ContextKey.sessionMap.name(), e.body());
+    })
+    .doOnError(e -> {
+      //put some method to notify browser that the login was unsuccessful, and try again.
+      eb.send("loginForm", "That username or password is invalid.");
+      //make sure to uncomment login.html script when time to test this.
+      
+    });
+  }
+}
+// address will be whatever last part of action="bus/" is for example userLogin
+// see each login form
+// HTML page to see what they are listed as.
+// message should be the JSON object with all the parameters.
+
+/*
+
+After I get everything else working, add this code and try to get cookies/sessions working.
 
 Cookie userCookie = context.getCookie("myCookie");
 String cookieValue = userCookie.getValue();

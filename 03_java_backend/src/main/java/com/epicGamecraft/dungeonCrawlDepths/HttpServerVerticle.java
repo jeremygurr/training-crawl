@@ -66,7 +66,7 @@ public class HttpServerVerticle extends AbstractVerticle {
 
   }
 
-  private void staticHandler(RoutingContext context) {  //needs to be tested
+  private void staticHandler(RoutingContext context) {
 
     final HttpServerResponse response = context.response();
     final HttpServerRequest request = context.request();
@@ -103,7 +103,6 @@ public class HttpServerVerticle extends AbstractVerticle {
   private void busHandler(RoutingContext context) {  //needs to be tested
 
     final EventBus eb = vertx.eventBus();
-    final HttpServerResponse response = context.response();
 
     final HttpServerRequest request = context.request();
     final MultiMap params = request.params();
@@ -117,16 +116,15 @@ public class HttpServerVerticle extends AbstractVerticle {
     LOGGER.debug("absoluteURI=" + absoluteURI);
     final String busAddress = absoluteURI.replaceAll("^.*/bus/", "");
     LOGGER.debug("busAddress=" + busAddress);
-    eb.rxRequest(busAddress, object.encode())
+    eb.rxRequest(busAddress, object.encode())                   //sends the json object with request params to UserVerticle to whichever consumer specified by busAddress.
     .doOnSuccess(e -> {
       LOGGER.debug("HttpServer Verticle Received UUID: " +  e.body());
       context.put(ContextKey.sessionMap.name(), e.body());
     })
     .doOnError(e -> {
+      LOGGER.debug("Error with busAddress " + busAddress + " " + e.getMessage());
       //put some method to notify browser that the login was unsuccessful, and try again.
       eb.send("loginForm", "That username or password is invalid.");
-      //make sure to uncomment login.html script when time to test this.
-      
     });
   }
 }

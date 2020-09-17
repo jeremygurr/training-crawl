@@ -12,28 +12,40 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.vertx.core.AbstractVerticle;
-import io.vertx.core.Context;
-import io.vertx.core.Promise;
-import io.vertx.core.eventbus.EventBus;
-import io.vertx.core.eventbus.Message;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import io.vertx.reactivex.core.Vertx.*;
+import io.reactivex.*;
+import io.reactivex.annotations.Nullable;
+import io.reactivex.disposables.*;
+import io.reactivex.observers.*;
+import io.reactivex.schedulers.*;
 import io.vertx.core.json.JsonObject;
+import io.vertx.reactivex.*;
+import io.vertx.reactivex.core.*;
+import io.vertx.reactivex.core.http.*;
+import io.vertx.reactivex.ext.web.*;
+import io.vertx.reactivex.ext.web.handler.BodyHandler;
+import io.vertx.reactivex.ext.web.handler.SessionHandler;
+import io.vertx.reactivex.ext.web.sstore.LocalSessionStore;
+import io.vertx.reactivex.ext.web.sstore.SessionStore;
+import io.vertx.reactivex.core.buffer.*;
+import io.vertx.reactivex.core.eventbus.EventBus;
+import io.vertx.reactivex.core.eventbus.Message;
+import io.vertx.reactivex.core.eventbus.MessageConsumer;
 
-import com.couchbase.client.java.*;
-import com.couchbase.client.java.query.ReactiveQueryResult;
+//import com.couchbase.client.java.*;
+//import com.couchbase.client.java.query.ReactiveQueryResult;
 
 public class UserVerticle extends AbstractVerticle {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserVerticle.class);
 
 	@Override
-	public void start(Promise<Void> promise) throws Exception {
+	public Completable rxStart() {
 		LOGGER.debug("User Verticle is listening to: " + userLogin.name());
 		vertx.eventBus().consumer(userLogin.name(), this::handleUser);
 		vertx.eventBus().consumer(createUser.name(), this::userCreateHandler);
 		vertx.eventBus().consumer(forgotPassword.name(), this::userPasswordResetHandler);
+		return rxStop();
 	}
 
 	private void handleUser(Message<String> message) {
@@ -41,7 +53,7 @@ public class UserVerticle extends AbstractVerticle {
 		JsonObject json = new JsonObject(message.body());
 		final String user = "'" + json.getString("usernameOrEmail") + "'";
 		final String hash = "'" + json.getString("password").hashCode() + "'";
-		vertx.eventBus().request(couchbaseQuery.name(), "select name from registration where name=" 
+		vertx.eventBus().request(couchbaseQuery.name(), "select name from registration where name="
 		+ user + " and hashword=" + hash, ar -> {
 			if (ar.succeeded()) {
 				if (ar.result().body() == null) {
@@ -50,7 +62,7 @@ public class UserVerticle extends AbstractVerticle {
 					LOGGER.debug("User Verticle received reply: " + ar.result().body());
 					final UUID sessionId = UUID.randomUUID();
 					message.reply(sessionId.toString());
-					//context.put(ContextKey.sessionMap.name(), sessionId);  
+					//context.put(ContextKey.sessionMap.name(), sessionId);
 					// Go this route if you decide to put
 					// session and cookie handling inside UserVerticle instead of HttpVerticle.
 				} else {

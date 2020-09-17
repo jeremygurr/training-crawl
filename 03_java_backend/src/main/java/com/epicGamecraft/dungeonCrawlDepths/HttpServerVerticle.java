@@ -100,7 +100,7 @@ public class HttpServerVerticle extends AbstractVerticle {
     }
   }
 
-  private void busHandler(RoutingContext context) {  //needs to be tested
+  private void busHandler(RoutingContext context) {
 
     final EventBus eb = vertx.eventBus();
 

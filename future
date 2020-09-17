@@ -1233,3 +1233,41 @@ environmental effects
         snow
           cyan (4.0)
        
+improved energy system
+  tier 6:
+    vitality(I6) -> hp1(I5), sp1(I5), mp1(I5), sun(L5)
+  tier 5:
+    hp1(I5) -> hp2(I4), moon(L4)
+    sp1(I5) -> sp2(I4), moon(L4)
+    mp1(I5) -> yellow(S2), moon(L4)
+    sun(L5) -> moon(L4)
+  tier 4:
+    hp2(I4)     -> hp3(I3), star(L3)
+    sp2(I4)     -> orange(S2), star(L3)
+    rainbow(X4) -> red..violet(S2), star(L3)
+    pink(X4)    -> hp3(I3), silver(E3), star(L3)
+    purple(X4)  -> hp3(I3), diamond(E3), star(L3)
+    bronze(X4)  -> copper(E3), gold(E3), star(L3)
+    clear(X4)   -> diamond(E3), silver(E3), star(L3)
+    moon(L4)    -> star(L3)
+  tier 3:
+    hp3(I3)     -> red(S2), brown(L2)
+    copper(E3)  -> red(S2), orange(S2), brown(L2)
+    silver(E3)  -> orange(S2), yellow(S2), green(S2), brown(L2)
+    gold(E3)    -> yellow(S2), green(S2), cyan(S2), blue(S2), brown(L2)
+    diamond(E3) -> cyan(S2), blue(S2), indigo(S2), violet(S2), red(S2), brown(L2)
+    star(L3)    -> brown(L2)
+  tier 2:
+    red(S2)    -> gray(L1)
+    orange(S2) -> gray(L1)
+    yellow(S2) -> gray(L1)
+    green(S2)  -> gray(L1)
+    cyan(S2)   -> gray(L1)
+    blue(S2)   -> gray(L1)
+    indigo(S2) -> gray(L1)
+    violet(S2) -> gray(L1)
+    brown(L2)  -> gray(L1)
+    black(L2)  -> gray(L1)
+  tier 1:
+    gray(L1)
+

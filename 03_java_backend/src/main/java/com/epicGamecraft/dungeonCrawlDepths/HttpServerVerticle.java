@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import io.vertx.reactivex.ext.web.Cookie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,10 +40,14 @@ public class HttpServerVerticle extends AbstractVerticle {
     HttpServer server = vertx.createHttpServer();
 
     Router router = Router.router(vertx);
+    SessionStore store = LocalSessionStore.create(vertx);
+    SessionHandler mySesh = SessionHandler.create(store);
+    mySesh.setSessionTimeout(86400000); //24 hours in milliseconds.
 
     router.get("/status").handler(this::statusHandler);
     router.get("/static/*").handler(this::staticHandler);
     router.route().handler(BodyHandler.create());
+    router.route().handler(mySesh); //FIXME: Ask if this is right place, because it only happens for post requests with html login forms. And not when user finds website.
     router.post("/bus/*").handler(this::busHandler);
     final int port = 8080;
     final Single<HttpServer> rxListen = server
@@ -102,6 +107,15 @@ public class HttpServerVerticle extends AbstractVerticle {
 
   private void busHandler(RoutingContext context) {
 
+    Session session = context.session();
+    session.get(SessionKey.username.name());  //If username is null force user to login on login page.
+    session.put(SessionKey.username.name(), "username");
+    //These will be variables. the values will come from database.
+    // The key will never change it will just be user.
+      //TODO: ask if I even need to use cookie specific code like below.
+
+
+
     final EventBus eb = vertx.eventBus();
 
     final HttpServerRequest request = context.request();
@@ -116,41 +130,27 @@ public class HttpServerVerticle extends AbstractVerticle {
     LOGGER.debug("absoluteURI=" + absoluteURI);
     final String busAddress = absoluteURI.replaceAll("^.*/bus/", "");
     LOGGER.debug("busAddress=" + busAddress);
+ //   eb.request(busAddress, object.encode(), ar -> {
+ //     if(ar.succeeded()) {
+ //       LOGGER.debug("Received UUID: " + ar.result().body());
+ //     }
+ //   });
+
     eb.rxRequest(busAddress, object.encode())                   //sends the json object with request params to UserVerticle to whichever consumer specified by busAddress.
     .doOnSuccess(e -> {
-      LOGGER.debug("HttpServer Verticle Received UUID: " +  e.body());
-      context.put(ContextKey.sessionMap.name(), e.body());
+      LOGGER.debug("HttpServer Verticle Received username: " +  e.body());
     })
     .doOnError(e -> {
       LOGGER.debug("Error with busAddress " + busAddress + " " + e.getMessage());
       //put some method to notify browser that the login was unsuccessful, and try again.
       eb.send("loginForm", "That username or password is invalid.");
+    })
+    .subscribe(ar -> {
+        LOGGER.debug("Received username: " + ar.body());
     });
   }
 }
 // address will be whatever last part of action="bus/" is for example userLogin
-// see each login form
-// HTML page to see what they are listed as.
+// see each login form  HTML page to see what they are listed as.
 // message should be the JSON object with all the parameters.
 
-/*
-
-After I get everything else working, add this code and try to get cookies/sessions working.
-
-Cookie userCookie = context.getCookie("myCookie");
-String cookieValue = userCookie.getValue();
-context.addCookie(Cookie.cookie("othercookie", "somevalue"));
-Session session = context.session();
-SessionStore store = LocalSessionStore.create(vertx);  //Creates session store. Required to create sessionHandler.
-SessionHandler sessionHandler = SessionHandler.create(store);   //Used to configure and set cookies for the session.
-sessionHandler.setSessionCookieName("User123");
-sessionHandler.setSessionCookiePath("/something");
-sessionHandler.setSessionTimeout(5000000); //5 minutes. Not needed since default is 30 min.
-
-String username = session.get("name");
-String webpage = session.get("path");
-
-
-
-
-*/

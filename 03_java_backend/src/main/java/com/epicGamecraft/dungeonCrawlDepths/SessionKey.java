@@ -1,5 +1,5 @@
 package com.epicGamecraft.dungeonCrawlDepths;
 
-public enum ContextKey {
-	couchbaseConnection,
+public enum SessionKey {
+  username,
 }

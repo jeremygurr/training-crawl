@@ -108,13 +108,10 @@ public class HttpServerVerticle extends AbstractVerticle {
   private void busHandler(RoutingContext context) {
 
     Session session = context.session();
-    session.get(SessionKey.username.name());  //If username is null force user to login on login page.
+    session.get(SessionKey.username.name());  //TODO: If username is null force user to login on login page.
     session.put(SessionKey.username.name(), "username");
     //These will be variables. the values will come from database.
     // The key will never change it will just be user.
-      //TODO: ask if I even need to use cookie specific code like below.
-
-
 
     final EventBus eb = vertx.eventBus();
 

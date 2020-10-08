@@ -162,6 +162,9 @@ public class HttpServerVerticle extends AbstractVerticle {
       })
       .subscribe(ar -> {
         LOGGER.debug("Received username: " + ar.body());
+        if (ar.body() == null) {
+          //TODO: redirect user to an error page.
+        }
       });
   }
 }

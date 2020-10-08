@@ -46,7 +46,7 @@ public class UserVerticle extends AbstractVerticle {
     return Completable.complete();
   }
 
-     //Here is old code. keep it in case new code doesn't work.
+  //Here is old code. keep it in case new code doesn't work.
 //  private void handleUser(Message<String> message) {
 //    LOGGER.debug("User Verticle received message: " + message.body());
 //    JsonObject json = new JsonObject(message.body());
@@ -78,24 +78,26 @@ public class UserVerticle extends AbstractVerticle {
   private void handleUser(Message<String> message) {
     LOGGER.debug("User Verticle received message: " + message.body());
     vertx.eventBus().rxRequest(couchbaseQuery.name(), message.body())
-      .doOnSuccess(e -> {
-        if (e.body() == null) {
-          LOGGER.debug("Invalid Login");
-          //TODO: make javascript do an alert that says "invalid login" to user.
-        } else if (e.body() != null) {
-          LOGGER.debug("User Verticle received reply: " + e.body());
-          //TODO: Use a method to direct to main crawl page.
-        } else {
-          LOGGER.debug("An error occurred retrieving data from Couchbase.");
-          //TODO: Respond with a error page that says "Sorry, site is having problems retrieving server data. Please come back later"
-          // Or maybe remove this else code and do this for the .doOnError line.
+      .subscribe(e -> {
+          LOGGER.debug("Received object: " + e.body());
+          if (e.body() == null) {
+            LOGGER.debug("Invalid Login");
+            //TODO: make javascript do an alert that says "invalid login" to user.
+          } else if (e.body() != null) {
+            LOGGER.debug("User Verticle received reply: " + e.body());
+            //TODO: Use a method to direct to main crawl page.
+          } else {
+            LOGGER.debug("An error occurred retrieving data from Couchbase.");
+            //TODO: Respond with a error page that says "Sorry, site is having problems retrieving server data. Please come back later"
+            // Or maybe remove this else code and do this for the .doOnError line.
+          }
+        },
+        err -> {
+          LOGGER.debug("User Verticle Error retrieving Couchbase response. " + err.getMessage());
+          //TODO: add failure code here.
+          message.reply(null);
         }
-      }).doOnError(e -> {
-        LOGGER.debug("User Verticle Error retrieving Couchbase response. " + e.getMessage());
-    })
-    .subscribe(ar -> {
-      LOGGER.debug("Received object: " + ar.body());
-    });
+      );
   }
 
   private void userCreateHandler(Message<String> message) {
@@ -151,9 +153,9 @@ public class UserVerticle extends AbstractVerticle {
         }
       })
       .doOnError(e -> {
-      LOGGER.debug("User Verticle Error retrieving Couchbase response." + e.getMessage());
-      //Decide if you need to notify user that this happened to have them try again or not.
-    })
+        LOGGER.debug("User Verticle Error retrieving Couchbase response." + e.getMessage());
+        //Decide if you need to notify user that this happened to have them try again or not.
+      })
       .subscribe(ar -> {
         LOGGER.debug("Received object: " + ar.body());
       });

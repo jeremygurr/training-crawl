@@ -2,6 +2,7 @@ package com.epicGamecraft.dungeonCrawlDepths;
 
 import static com.epicGamecraft.dungeonCrawlDepths.BusEvent.*;
 
+import com.couchbase.client.java.kv.GetResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,30 +40,77 @@ public class CouchbaseVerticle extends AbstractVerticle {
     final ReactiveCluster connection = context.get(ContextKey.couchbaseConnection.name());
 
     //example of accessing couchbase the proper way:
-    String username = "something";
-    String hashword = "hash";
-    connection.bucket("depths").defaultCollection().get("user::" + username);
-    final JsonObject user = JsonObject.create();
-    user.put("username", "jgurr");
-    user.put("email", "jared@yahoo.com");
-    user.put("hashword", hashword);
-    connection.bucket("depths").defaultCollection().insert("user::" + username, user);
-
-    final Mono<ReactiveQueryResult> query = connection.query(message.body());
-    query.subscribe(queryResult -> {
-      final Flux<JsonObject> rowsAsObject = queryResult.rowsAsObject();
-      rowsAsObject.defaultIfEmpty(empty)
-        .subscribe(jsonObject -> {
-            if (jsonObject.equals(empty)) {
-              message.reply(null);
-            } else {
-              message.reply(jsonObject.toString());
-            }
+    final JsonObject json = JsonObject.fromJson(message.body());
+    LOGGER.debug("json is: " + json);
+    final String username = json.getString("usernameOrEmail");
+    LOGGER.debug("username is: " + username);
+    final String hashword = json.getString("password").hashCode() + "";
+    LOGGER.debug("hashword is: " + hashword);
+    connection.bucket("depths")
+      .defaultCollection()
+      .get("user::" + username)
+      .log()
+      .map(result -> {
+        JsonObject row = result.contentAs(JsonObject.class);
+        return row;
+      })
+      .subscribe(row -> {
+          if (row.equals(empty)) {
+            message.reply(null);
+          } else {
+            message.reply(row.toString());
           }
-          , error -> {
-            message.fail(1, "failed to query Couchbase.");
-          });
-    });
+        }
+        , error -> {
+          message.reply(null);
+        });
   }
+  //retrieves the document with "user::username" id.
+  //TODO: Figure out how to continue the process from here to check if the document that was retrieved
+  // has the correct username and password. And then have it reply to UserVerticle with result.
 }
+
+
+
+/*      .subscribe(jsonObject -> {
+        if (jsonObject.equals(empty)) {
+          message.reply(null);
+        } else {
+          message.reply(jsonObject.toString());
+        }
+      }
+      , error -> {
+        message.fail(1, "failed to query Couchbase.");
+      });
+  }
+ */
+
+//TODO: Make this work for userCreateHandler() to create new records in couchbase.
+
+//    final JsonObject user = JsonObject.create();
+//    user.put("name", username);
+//    user.put("email", email);
+//    user.put("hashword", hashword);
+//    connection.bucket("depths").defaultCollection().insert("user::" + username, user);  //inserts data to couchbase.
+
+
+//Here is old code that 100% works but we will replace it with easier methods:
+//There is also old code in UserVerticle when we forced it to create query strings but that is
+// bad practice.
+//    final JsonObject empty = JsonObject.create();
+//    final Mono<ReactiveQueryResult> query = connection.query(message.body());
+//    query.subscribe(queryResult -> {
+//      final Flux<JsonObject> rowsAsObject = queryResult.rowsAsObject();
+//      rowsAsObject.defaultIfEmpty(empty)
+//        .subscribe(jsonObject -> {
+//            if (jsonObject.equals(empty)) {
+//              message.reply(null);
+//            } else {
+//              message.reply(jsonObject.toString());
+//            }
+//          }
+//          , error -> {
+//            message.fail(1, "failed to query Couchbase.");
+//          });
+//    });
 

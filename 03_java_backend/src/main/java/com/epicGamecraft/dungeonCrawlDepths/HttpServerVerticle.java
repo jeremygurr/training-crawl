@@ -1,5 +1,7 @@
 package com.epicGamecraft.dungeonCrawlDepths;
 
+import static com.epicGamecraft.dungeonCrawlDepths.BusEvent.*;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -10,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import io.vertx.reactivex.ext.web.Cookie;
+import io.vertx.reactivex.ext.web.handler.CookieHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,14 +54,14 @@ public class HttpServerVerticle extends AbstractVerticle {
     router.post("/bus/*").handler(this::busHandler);
     final int port = 8080;
     final Single<HttpServer> rxListen = server
-        .requestHandler(router)
-        .rxListen(port)
-        .doOnSuccess(e -> {
-          LOGGER.info("HTTP server running on port " + port);
-        })
-        .doOnError(e -> {
-          LOGGER.error("Could not start a HTTP server", e.getMessage());
-        });
+      .requestHandler(router)
+      .rxListen(port)
+      .doOnSuccess(e -> {
+        LOGGER.info("HTTP server running on port " + port);
+      })
+      .doOnError(e -> {
+        LOGGER.error("Could not start a HTTP server", e.getMessage());
+      });
 
     return rxListen.ignoreElement();
   }
@@ -83,7 +86,7 @@ public class HttpServerVerticle extends AbstractVerticle {
       final InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
       if (stream != null) {
         final String text = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8)).lines()
-            .collect(Collectors.joining("\n"));
+          .collect(Collectors.joining("\n"));
         if (path.endsWith(".html")) {
           response.putHeader("Content-Type", "text/html");
         } else if (path.endsWith(".css")) {
@@ -107,9 +110,29 @@ public class HttpServerVerticle extends AbstractVerticle {
 
   private void busHandler(RoutingContext context) {
 
-    Session session = context.session();
-    session.get(SessionKey.username.name());  //TODO: If username is null force user to login on login page.
-    session.put(SessionKey.username.name(), "username");
+    //uncomment when ready to work on sessions/coookies.
+//    Session session = context.session();
+//    String sessionToken = session.get(SessionKey.username.name());  //TODO: If username is null force user to login on login page.
+//    // get the token from the session
+//    if (sessionToken != null) {
+//      // attempt to parse the value
+//      int idx = sessionToken.indexOf('/');
+//      if (idx != -1 && session.id() != null && session.id().equals(sessionToken.substring(0, idx))) {
+//        String parsedToken = sessionToken.substring(idx + 1);
+//        vertx.eventBus().rxRequest(couchbaseQuery.name(), parsedToken) //TODO: Find out why this works in other vertciles but not this one.
+//          .doOnSuccess(e -> {
+//            //TODO: Put method here that logs into account of user that has that SessionToken.
+//          })
+//          .doOnError(e -> {
+//            //TODO: Respond with a error page that says "Sorry, site is having problems retrieving server data.
+//          })
+//          .subscribe();
+//      }
+//      // If sessionToken is null they need to login or create an account.
+//      //TODO: Place method here that sends user to login page.
+//    }
+//
+//    session.put(SessionKey.username.name(), "username");
     //These will be variables. the values will come from database.
     // The key will never change it will just be user.
 
@@ -127,24 +150,19 @@ public class HttpServerVerticle extends AbstractVerticle {
     LOGGER.debug("absoluteURI=" + absoluteURI);
     final String busAddress = absoluteURI.replaceAll("^.*/bus/", "");
     LOGGER.debug("busAddress=" + busAddress);
- //   eb.request(busAddress, object.encode(), ar -> {
- //     if(ar.succeeded()) {
- //       LOGGER.debug("Received UUID: " + ar.result().body());
- //     }
- //   });
 
     eb.rxRequest(busAddress, object.encode())                   //sends the json object with request params to UserVerticle to whichever consumer specified by busAddress.
-    .doOnSuccess(e -> {
-      LOGGER.debug("HttpServer Verticle Received username: " +  e.body());
-    })
-    .doOnError(e -> {
-      LOGGER.debug("Error with busAddress " + busAddress + " " + e.getMessage());
-      //put some method to notify browser that the login was unsuccessful, and try again.
-      eb.send("loginForm", "That username or password is invalid.");
-    })
-    .subscribe(ar -> {
+      .doOnSuccess(e -> {
+        LOGGER.debug("HttpServer Verticle Received username: " + e.body());
+      })
+      .doOnError(e -> {
+        LOGGER.debug("Error with busAddress " + busAddress + " " + e.getMessage());
+        //put some method to notify browser that the login was unsuccessful, and try again.
+        eb.send("loginForm", "That username or password is invalid.");
+      })
+      .subscribe(ar -> {
         LOGGER.debug("Received username: " + ar.body());
-    });
+      });
   }
 }
 // address will be whatever last part of action="bus/" is for example userLogin

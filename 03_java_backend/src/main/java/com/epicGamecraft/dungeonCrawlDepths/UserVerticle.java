@@ -46,13 +46,38 @@ public class UserVerticle extends AbstractVerticle {
     return Completable.complete();
   }
 
+     //Here is old code. keep it in case new code doesn't work.
+//  private void handleUser(Message<String> message) {
+//    LOGGER.debug("User Verticle received message: " + message.body());
+//    JsonObject json = new JsonObject(message.body());
+//    final String user = "'" + json.getString("usernameOrEmail") + "'";
+//    final String hash = "'" + json.getString("password").hashCode() + "'";
+//    vertx.eventBus().rxRequest(couchbaseQuery.name(), "select name from depths where name="
+//      + user + " and hashword=" + hash)
+//      .doOnSuccess(e -> {
+//        if (e.body() == null) {
+//          LOGGER.debug("Invalid Login");
+//          //TODO: make javascript do an alert that says "invalid login" to user.
+//        } else if (e.body() != null) {
+//          LOGGER.debug("User Verticle received reply: " + e.body());
+//          //TODO: Use a method to direct to main crawl page.
+//        } else {
+//          LOGGER.debug("An error occurred retrieving data from Couchbase.");
+//          //TODO: Respond with a error page that says "Sorry, site is having problems retrieving server data. Please come back later"
+//          // Or maybe remove this else code and do this for the .doOnError line.
+//        }
+//      }).doOnError(e -> {
+//      LOGGER.debug("User Verticle Error retrieving Couchbase response. " + e.getMessage());
+//    })
+//      .subscribe(ar -> {
+//        LOGGER.debug("Received object: " + ar.body());
+//      });
+//  }
+
+  //here is new code:
   private void handleUser(Message<String> message) {
     LOGGER.debug("User Verticle received message: " + message.body());
-    JsonObject json = new JsonObject(message.body());
-    final String user = "'" + json.getString("usernameOrEmail") + "'";
-    final String hash = "'" + json.getString("password").hashCode() + "'";
-    vertx.eventBus().rxRequest(couchbaseQuery.name(), "select name from depths where name="
-      + user + " and hashword=" + hash)
+    vertx.eventBus().rxRequest(couchbaseQuery.name(), message.body())
       .doOnSuccess(e -> {
         if (e.body() == null) {
           LOGGER.debug("Invalid Login");

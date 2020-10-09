@@ -40,7 +40,7 @@ public class CouchbaseVerticle extends AbstractVerticle {
     final ReactiveCluster connection = context.get(ContextKey.couchbaseConnection.name());
 
     //example of accessing couchbase the proper way:
-    final JsonObject json = JsonObject.fromJson(message.body()); //TODO: Use codecs to make this just pass json object from user verticle in future.
+    final JsonObject json = JsonObject.fromJson(message.body());
     LOGGER.debug("json is: " + json);
     final String username = json.getString("usernameOrEmail");
     LOGGER.debug("username is: " + username);

@@ -66,6 +66,7 @@ public class TestCrawlInit {
           context.failNow(err);
         });
   }
+
   //TODO: Figure out what this actually tests for? I am confused...
   // shouldn't it test for making sure the verticle handles incorrect syntax correctly or something?
   @Test
@@ -82,12 +83,49 @@ public class TestCrawlInit {
                 LOGGER.debug("User Verticle received reply: " + ar.body());
               },
               err -> {
-                LOGGER.debug("An error occurred retrieving data from Couchbase.");
+                LOGGER.debug("An error occurred retrieving data from Couchbase." + err.getMessage());
               });
           context.failNow(new Exception("User Verticle failed to handle login correctly."));
         },
         err -> {
           context.completeNow();
+        });
+  }
+
+  @Test
+  void queryCouchbase(Vertx vertx, VertxTestContext context) throws Throwable {
+    vertx.rxDeployVerticle(new CouchbaseVerticle())
+      .subscribe(e -> {
+          vertx.eventBus().rxRequest(couchbaseQuery.name(), "{\"usernameOrEmail\":\"jgurr\",\"password\":\"password\"}")
+            .subscribe(ar -> {
+                LOGGER.debug("Test.queryCouchbase received reply : " + ar.body());
+              },
+              err -> {
+                LOGGER.debug("Communication between Test.queryCouchbase error : " + err.getMessage());
+              });
+          context.completeNow();
+        },
+        err -> {
+          context.failNow(new Exception("Couchbase failed to handle query correctly."));
+        });
+  }
+
+
+  @Test
+  void insertCouchbase(Vertx vertx, VertxTestContext context) throws Throwable {
+    vertx.rxDeployVerticle(new CouchbaseVerticle())
+      .subscribe(e -> {
+          vertx.eventBus().rxRequest(couchbaseQuery.name(), "{\"usernameOrEmail\":\"jgurr\",\"password\":\"password\"}")
+            .subscribe(ar -> {
+                LOGGER.debug("Test.queryCouchbase received reply : " + ar.body());
+              },
+              err -> {
+                LOGGER.debug("Communication between Test.queryCouchbase error : " + err.getMessage());
+              });
+          context.completeNow();
+        },
+        err -> {
+          context.failNow(new Exception("Couchbase failed to handle query correctly."));
         });
   }
 }

@@ -142,6 +142,7 @@ public class HttpServerVerticle extends AbstractVerticle {
     final HttpServerRequest request = context.request();
     final MultiMap params = request.params();
 
+
     JsonObject object = new JsonObject();
     for (Map.Entry<String, String> entry : params.entries()) {
       object.put(entry.getKey(), entry.getValue());

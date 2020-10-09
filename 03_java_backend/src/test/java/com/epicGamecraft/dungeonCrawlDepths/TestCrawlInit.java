@@ -66,7 +66,8 @@ public class TestCrawlInit {
           context.failNow(err);
         });
   }
-
+  //TODO: Figure out what this actually tests for? I am confused...
+  // shouldn't it test for making sure the verticle handles incorrect syntax correctly or something?
   @Test
   void loginFailure(Vertx vertx, VertxTestContext context) throws Throwable {
     FakeCouchbaseVerticle couchbaseVerticle = new FakeCouchbaseVerticle();
@@ -90,30 +91,3 @@ public class TestCrawlInit {
         });
   }
 }
-//  {
-//		vertx.eventBus().request(userLogin.name(), message)
-//	  }
-//  }
-//
-//
-//    vertx.deployVerticle(new CouchbaseVerticle(), Handler<AsyncResult<String>>() {
-//		vertx.deployVerticle(new UserVerticle(), Handler<AsyncResult<String>>() {
-//		vertx.eventBus().request(userLogin.name(), "{ 'usernameOrEmail' : 'Jared Gurr', 'password' "
-//				+ ": 'hashpassword' }", ar -> {
-//					if (ar.succeeded()) {
-//						LOGGER.debug("Test Verticle received reply: " + ar.result().body());
-//					}
-//				});
-//		testContext.completeNow();
-//		  });
-//
-//	}
-//
-//
-//
-//  @Test
-//  void failedLoginAttempt(Vertx vertx, VertxTestContext testContext) throws Throwable {
-//    vertx.eventBus().request(couchbaseQuery.name(), "select name from registration where name='jared' "
-//    		+ "and ");
-//    testContext.completeNow();
-//  }

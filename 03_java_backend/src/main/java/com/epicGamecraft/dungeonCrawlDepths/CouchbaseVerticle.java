@@ -56,12 +56,12 @@ public class CouchbaseVerticle extends AbstractVerticle {
       })
       .subscribe(row -> {
           if (row.equals(empty)) {
-            message.reply(null);
+            message.reply("empty");
           } else {
             message.reply(row.toString());
           }
         }
-        , error -> {
+        , err -> {
           message.reply(null);
         });
   }
@@ -80,25 +80,4 @@ public class CouchbaseVerticle extends AbstractVerticle {
 //    user.put("email", email);
 //    user.put("hashword", hashword);
 //    connection.bucket("depths").defaultCollection().insert("user::" + username, user);  //inserts data to couchbase.
-
-
-//Here is old code that 100% works but we will replace it with easier methods:
-//There is also old code in UserVerticle when we forced it to create query strings but that is
-// bad practice.
-//    final JsonObject empty = JsonObject.create();
-//    final Mono<ReactiveQueryResult> query = connection.query(message.body());
-//    query.subscribe(queryResult -> {
-//      final Flux<JsonObject> rowsAsObject = queryResult.rowsAsObject();
-//      rowsAsObject.defaultIfEmpty(empty)
-//        .subscribe(jsonObject -> {
-//            if (jsonObject.equals(empty)) {
-//              message.reply(null);
-//            } else {
-//              message.reply(jsonObject.toString());
-//            }
-//          }
-//          , error -> {
-//            message.fail(1, "failed to query Couchbase.");
-//          });
-//    });
 

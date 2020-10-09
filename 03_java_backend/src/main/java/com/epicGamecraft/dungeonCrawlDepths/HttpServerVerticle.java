@@ -119,17 +119,18 @@ public class HttpServerVerticle extends AbstractVerticle {
 //      int idx = sessionToken.indexOf('/');
 //      if (idx != -1 && session.id() != null && session.id().equals(sessionToken.substring(0, idx))) {
 //        String parsedToken = sessionToken.substring(idx + 1);
-//        vertx.eventBus().rxRequest(couchbaseQuery.name(), parsedToken) //TODO: Find out why this works in other vertciles but not this one.
-//          .doOnSuccess(e -> {
-//            //TODO: Put method here that logs into account of user that has that SessionToken.
-//          })
-//          .doOnError(e -> {
-//            //TODO: Respond with a error page that says "Sorry, site is having problems retrieving server data.
-//          })
-//          .subscribe();
+//        vertx.eventBus().rxRequest(couchbaseQuery.name(), parsedToken)
+//          .subscribe(e -> {
+//              if (e.body() != null) {
+//                //TODO: Put method here that logs into account of user that was returned with SessionToken.
+//              } else {
+//                //TODO: Place method here that sends user to login page.
+//              }
+//            },
+//            err -> {
+//              //TODO: Default to sending user to login page. If no method is needed for that, leave this space blank.
+//            });
 //      }
-//      // If sessionToken is null they need to login or create an account.
-//      //TODO: Place method here that sends user to login page.
 //    }
 //
 //    session.put(SessionKey.username.name(), "username");
@@ -151,24 +152,24 @@ public class HttpServerVerticle extends AbstractVerticle {
     final String busAddress = absoluteURI.replaceAll("^.*/bus/", "");
     LOGGER.debug("busAddress=" + busAddress);
 
-    eb.rxRequest(busAddress, object.encode())                   //sends the json object with request params to UserVerticle to whichever consumer specified by busAddress.
-      .doOnSuccess(e -> {
-        LOGGER.debug("HttpServer Verticle Received username: " + e.body());
-      })
-      .doOnError(e -> {
-        LOGGER.debug("Error with busAddress " + busAddress + " " + e.getMessage());
+    eb.rxRequest(busAddress, object.encode())  //sends the json object with request params to UserVerticle to whichever consumer specified by busAddress.
+      .subscribe(e -> {
+          LOGGER.debug("HttpServer Verticle Received reply: " + e.body());
+          if(e.body() == "1") {
+
+          }
+      },
+        err -> {
         //put some method to notify browser that the login was unsuccessful, and try again.
-        eb.send("loginForm", "That username or password is invalid.");
-      })
-      .subscribe(ar -> {
-        LOGGER.debug("Received username: " + ar.body());
-        if (ar.body() == null) {
+        LOGGER.debug("Received username: " + err.getMessage());
+        if (err.getMessage() == null) {
+          LOGGER.debug("Error with busAddress " + busAddress + " " + err.getMessage());
           //TODO: redirect user to an error page.
         }
       });
   }
 }
 // address will be whatever last part of action="bus/" is for example userLogin
-// see each login form  HTML page to see what they are listed as.
+// see each login form HTML page or UserVerticle to see what they are listed as.
 // message should be the JSON object with all the parameters.
 

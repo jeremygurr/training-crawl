@@ -100,7 +100,7 @@ public class TestCrawlInit {
   void queryCouchbase(Vertx vertx, VertxTestContext context) throws Throwable {
     vertx.rxDeployVerticle(new CouchbaseVerticle())
       .subscribe(e -> {
-          vertx.eventBus().rxRequest(couchbaseQuery.name(), "{\"usernameOrEmail\":\"jgurr\",\"password\":\"password\"}")
+          vertx.eventBus().rxRequest(couchbaseQuery.name(), "{\"username\":\"jgurr\",\"password\":\"password\"}")
             .subscribe(ar -> {
                 LOGGER.debug("Test.queryCouchbase received reply : " + ar.body());
               },
@@ -139,4 +139,26 @@ public class TestCrawlInit {
             "couchbase verticle. : " + err.getCause());
         });
   }
+
+  @Test
+  void passwordCouchbase(Vertx vertx, VertxTestContext context) throws Throwable {
+    vertx.rxDeployVerticle(new CouchbaseVerticle())
+      .subscribe(e -> {
+          vertx.eventBus().rxRequest(couchbasePass.name(), "{\"username\":\"jgurr\",\"email\":\"som@gmail.com\"}")
+            .subscribe(ar -> {
+                LOGGER.debug("Test.passwordCouchbase received reply : " + ar.body());
+              },
+              err -> {
+                LOGGER.debug("Communication between Test.passwordCouchbase error : " + err.getMessage());
+              });
+          context.completed();
+        },
+        err -> {
+          context.failed();
+          LOGGER.debug("TestCrawlInit.queryCouchbase issue deploying verticle : " + err.getMessage());
+        });
+  }
+
+  // TODO: Make a Forgot username html page and test unit and couchbase handler.
+
 }

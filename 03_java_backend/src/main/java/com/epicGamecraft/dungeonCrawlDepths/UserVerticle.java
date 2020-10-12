@@ -20,7 +20,7 @@ public class UserVerticle extends AbstractVerticle {
     LOGGER.debug("User Verticle is listening to: " + userLogin.name());
     vertx.eventBus().consumer(userLogin.name(), this::handleUser);
     vertx.eventBus().consumer(createUser.name(), this::userCreateHandler);
-//    vertx.eventBus().consumer(forgotPassword.name(), this::userPasswordResetHandler);
+    vertx.eventBus().consumer(forgotPassword.name(), this::userPassResHandler);
     return Completable.complete();
   }
 
@@ -65,6 +65,7 @@ public class UserVerticle extends AbstractVerticle {
             // This means that the couchbase query failed either from syntax error or user already exists.
             LOGGER.debug("Couchbase Verticle failed to create new user : " + e.body());
             //TODO: Make user try a different username/email/password combo.
+            message.reply("2");
           }
         },
         err -> {
@@ -74,13 +75,23 @@ public class UserVerticle extends AbstractVerticle {
         });
   }
 
-  //uncomment this code after I have set up a couchbase verticle to handle password reset.
-//  private void userPasswordResetHandler(Message<String> message) {
-//    LOGGER.debug("UserVerticle.userPasswordResetHandler received message: " + message.body());
-//    vertx.eventBus().rxRequest(couchbaseQuery.name(), message.body())
-//      .subscribe(e -> {
-//          LOGGER.debug("Received object: " + e.body());
-//        });
-//  }
+  private void userPassResHandler(Message<String> message) {
+    LOGGER.debug("UserVerticle.userPassResHandler received message: " + message.body());
+    vertx.eventBus().rxRequest(couchbasePass.name(), message.body())
+      .subscribe(e -> {
+          if (e.body() == null) {
+            LOGGER.debug("username or email was incorrect.");
+            message.reply("2");
+          } else {
+            LOGGER.debug("Received object: " + e.body());
+            message.reply("5");
+            // TODO: put method here that sends reset password email to user.
+          }
+        },
+        err -> {
+          LOGGER.debug("User Verticle Error communicating with CouchbaseVerticle : " + err.getMessage());
+          message.reply("3");
+        });
+  }
 
 }

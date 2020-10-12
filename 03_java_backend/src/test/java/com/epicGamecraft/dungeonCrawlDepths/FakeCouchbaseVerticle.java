@@ -32,7 +32,7 @@ public class FakeCouchbaseVerticle extends AbstractVerticle {
     //example of accessing couchbase the proper way:
     final JsonObject json = JsonObject.fromJson(message.body());
     LOGGER.debug("json is: " + json);
-    final String username = json.getString("usernameOrEmail");
+    final String username = json.getString("username");
     LOGGER.debug("username is: " + username);
     final String hashword = json.getString("password").hashCode() + "";
     LOGGER.debug("hashword is: " + hashword);

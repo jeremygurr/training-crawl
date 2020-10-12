@@ -28,6 +28,7 @@ public class CouchbaseVerticle extends AbstractVerticle {
     final EventBus eb = vertx.eventBus();
     eb.consumer(couchbaseQuery.name(), this::handleQuery);
     eb.consumer(couchbaseInsert.name(), this::handleInsert);
+    eb.consumer(couchbasePass.name(), this::handlePassReset);
     final ReactiveCluster connection = ReactiveCluster.connect
       ("localhost:11210", "Administrator", "password");
     context.put(ContextKey.couchbaseConnection.name(), connection);
@@ -40,7 +41,7 @@ public class CouchbaseVerticle extends AbstractVerticle {
     LOGGER.debug("couchbaseVerticle.handleQuery received message: " + message.body());
     final ReactiveCluster connection = context.get(ContextKey.couchbaseConnection.name());
     final JsonObject json = JsonObject.fromJson(message.body());
-    final String username = json.getString("usernameOrEmail");
+    final String username = json.getString("username");
     LOGGER.debug("username is: " + username);
     final String hashword = json.getString("password").hashCode() + "";
     LOGGER.debug("hashword is: " + hashword);
@@ -126,5 +127,39 @@ public class CouchbaseVerticle extends AbstractVerticle {
           //Means the insert was a failure.
         });
   }
-}
 
+  private void handlePassReset(Message<String> message) {
+    LOGGER.debug("couchbaseVerticle.handleQuery received message: " + message.body());
+    final ReactiveCluster connection = context.get(ContextKey.couchbaseConnection.name());
+    final JsonObject json = JsonObject.fromJson(message.body());
+    final String username = json.getString("username");
+    LOGGER.debug("username is: " + username);
+    final String email = json.getString("email");
+    LOGGER.debug("email is: " + email);
+    connection.bucket("depths")
+      .defaultCollection()
+      .get("user::" + username)
+      .log()
+      .map(result -> {
+        JsonObject row = result.contentAs(JsonObject.class);
+        return row;
+      })
+      .subscribe(row -> {
+          if (row.containsValue(email)) {
+            LOGGER.debug("" + row.toString());
+            message.reply(row.toString());
+            //means the username and email given are correct.
+          } else {
+            LOGGER.debug("email was incorrect.");
+            message.reply(null);
+            //means the username is correct, but email was incorrect so cannot retrieve user.
+          }
+        }
+        , err -> {
+          LOGGER.debug("error : " + err.getMessage());
+          message.reply(err.getCause());
+          //returns null to indicate no document was found with the information given. Use err.getMessage() to see more details.
+        });
+  }
+
+}

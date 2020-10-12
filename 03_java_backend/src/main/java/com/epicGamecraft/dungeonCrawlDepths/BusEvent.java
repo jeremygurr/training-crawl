@@ -4,6 +4,7 @@ public enum BusEvent {
   browserInput,
   couchbaseQuery,
   couchbaseInsert,
+  couchbasePass,
   userLogin,
   createUser,
   forgotPassword,

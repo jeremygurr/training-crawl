@@ -85,7 +85,8 @@ public class HttpServerVerticle extends AbstractVerticle {
       path = path.substring(1);
       final InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
       if (stream != null) {
-        final String text = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8)).lines()
+        final String text = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))
+          .lines()
           .collect(Collectors.joining("\n"));
         if (path.endsWith(".html")) {
           response.putHeader("Content-Type", "text/html");
@@ -111,29 +112,31 @@ public class HttpServerVerticle extends AbstractVerticle {
   private void busHandler(RoutingContext context) {
 
     //uncomment when ready to work on sessions/coookies.
-//    Session session = context.session();
-//    String sessionToken = session.get(SessionKey.username.name());  //TODO: If username is null force user to login on login page.
-//    // get the token from the session
-//    if (sessionToken != null) {
-//      // attempt to parse the value
-//      int idx = sessionToken.indexOf('/');
-//      if (idx != -1 && session.id() != null && session.id().equals(sessionToken.substring(0, idx))) {
-//        String parsedToken = sessionToken.substring(idx + 1);
-//        vertx.eventBus().rxRequest(couchbaseQuery.name(), parsedToken)
-//          .subscribe(e -> {
-//              if (e.body() != null) {
-//                //TODO: Put method here that logs into account of user that was returned with SessionToken.
-//              } else {
-//                //TODO: Place method here that sends user to login page.
-//              }
-//            },
-//            err -> {
-//              //TODO: Default to sending user to login page. If no method is needed for that, leave this space blank.
-//            });
-//      }
-//    }
-//
-//    session.put(SessionKey.username.name(), "username");
+    Session session = context.session();
+    String sessionToken = session.get(SessionKey.username.name());  //TODO: If username is null force user to login on login page.
+    // get the token from the session
+    if (sessionToken != null) {
+      // attempt to parse the value
+      int idx = sessionToken.indexOf('/');
+      if (idx != -1 && session.id() != null && session.id().equals(sessionToken.substring(0, idx))) {
+        String parsedToken = sessionToken.substring(idx + 1);
+        vertx.eventBus().rxRequest(couchbaseQuery.name(), parsedToken)
+          .subscribe(e -> {
+              if (e.body() != null) {
+                //TODO: Put method here that logs into account of user that was returned with SessionToken.
+              } else {
+                //TODO: Place method here that sends user to login page.
+              }
+            },
+            err -> {
+              //TODO: Default to sending user to login page. If no method is needed for that, leave this space blank.
+            });
+      }
+    } else {
+      //TODO: Put method here that sends user to login page.
+    }
+
+    session.put(SessionKey.username.name(), "username");
     //These will be variables. the values will come from database.
     // The key will never change it will just be user.
 

@@ -2,6 +2,7 @@ package com.epicGamecraft.dungeonCrawlDepths;
 
 import static com.epicGamecraft.dungeonCrawlDepths.BusEvent.*;
 
+import io.vertx.junit5.Checkpoint;
 import io.vertx.reactivex.core.*;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
@@ -92,6 +93,9 @@ public class TestCrawlInit {
         });
   }
 
+  //TODO: Both the below tests have a problem where they return this error:
+  // "The test execution timed out. Make sure your asynchronous code includes calls to either
+  // VertxTestContext#completeNow(), VertxTestContext#failNow() or Checkpoint#flag()"
   @Test
   void queryCouchbase(Vertx vertx, VertxTestContext context) throws Throwable {
     vertx.rxDeployVerticle(new CouchbaseVerticle())
@@ -103,10 +107,11 @@ public class TestCrawlInit {
               err -> {
                 LOGGER.debug("Communication between Test.queryCouchbase error : " + err.getMessage());
               });
-          context.completeNow();
+          context.completed();
         },
         err -> {
-          context.failNow(new Exception("Couchbase failed to handle query correctly."));
+          context.failed();
+          LOGGER.debug("TestCrawlInit.queryCouchbase issue deploying verticle : " + err.getMessage());
         });
   }
 
@@ -115,17 +120,23 @@ public class TestCrawlInit {
   void insertCouchbase(Vertx vertx, VertxTestContext context) throws Throwable {
     vertx.rxDeployVerticle(new CouchbaseVerticle())
       .subscribe(e -> {
-          vertx.eventBus().rxRequest(couchbaseQuery.name(), "{\"usernameOrEmail\":\"jgurr\",\"password\":\"password\"}")
+          vertx.eventBus().rxRequest(couchbaseInsert.name(), "{\"username\":\"jgurr\",\"password\":\"password\",\"email\":\"som@gmail.com\"}")
             .subscribe(ar -> {
-                LOGGER.debug("Test.queryCouchbase received reply : " + ar.body());
+                if (ar.body() == null) {
+                  LOGGER.debug("Couchbase successfully inserted document.");
+                } else {
+                  LOGGER.debug("Couchbase failed to insert document : " + ar.body());
+                }
               },
               err -> {
                 LOGGER.debug("Communication between Test.queryCouchbase error : " + err.getMessage());
               });
-          context.completeNow();
+          context.completed();
         },
         err -> {
-          context.failNow(new Exception("Couchbase failed to handle query correctly."));
+          context.failed();
+          LOGGER.debug("TestCrawlInit.insertCouchbase issue communicating with " +
+            "couchbase verticle. : " + err.getCause());
         });
   }
 }

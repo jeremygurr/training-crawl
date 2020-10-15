@@ -1,6 +1,7 @@
 package com.epicGamecraft.dungeonCrawlDepths;
 
 import static com.epicGamecraft.dungeonCrawlDepths.BusEvent.*;
+import static com.epicGamecraft.dungeonCrawlDepths.UserResult.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,20 +34,17 @@ public class UserVerticle extends AbstractVerticle {
           if (e.body() != null) {
             //This means user did correct username and password.
             LOGGER.debug("User Verticle received reply: " + e.body());
-            message.reply("1");
-            //TODO: Use a method to direct to main crawl page.
+            message.reply(successLog.name());
           } else {
             //This means user input wrong username or password.
             LOGGER.debug("Invalid Login");
-            message.reply("2");
-            //TODO: make javascript do an alert that says "invalid login" to user.
+            message.reply(invalid.name());
           }
         },
         err -> {
           //This means the eventbus failed to communicate properly with the CouchbaseVerticle or vice versa.
           LOGGER.debug("UserVerticle Error communicating with CouchbaseVerticle : " + err.getMessage());
-          //TODO: add failure code here.
-          message.reply("3");
+          message.reply(messageErr.name());
         }
       );
   }
@@ -58,20 +56,17 @@ public class UserVerticle extends AbstractVerticle {
           LOGGER.debug("Received object: " + e.body());
           if (e.body() == null) {
             LOGGER.debug("User Verticle has found no record of that user, so user has been created.");
-            message.reply("4");
-            //TODO: Here use a method to add user to database through couchbaseVerticle, and redirect
-            // the user to the login page through httpServerVerticle.
+            message.reply(registerUser.name());
           } else {
             // This means that the couchbase query failed either from syntax error or user already exists.
             LOGGER.debug("Couchbase Verticle failed to create new user : " + e.body());
-            //TODO: Make user try a different username/email/password combo.
-            message.reply("2");
+            message.reply(invalid.name());
           }
         },
         err -> {
           //This means the eventbus failed to communicate properly with the CouchbaseVerticle or vice versa.
           LOGGER.debug("User Verticle Error communicating with CouchbaseVerticle : " + err.getMessage());
-          message.reply("3");
+          message.reply(messageErr.name());
         });
   }
 
@@ -81,16 +76,15 @@ public class UserVerticle extends AbstractVerticle {
       .subscribe(e -> {
           if (e.body() == null) {
             LOGGER.debug("username or email was incorrect.");
-            message.reply("2");
+            message.reply(invalid.name());
           } else {
             LOGGER.debug("Received object: " + e.body());
-            message.reply("5");
-            // TODO: put method here that sends reset password email to user.
+            message.reply(resetPass.name());
           }
         },
         err -> {
           LOGGER.debug("User Verticle Error communicating with CouchbaseVerticle : " + err.getMessage());
-          message.reply("3");
+          message.reply(messageErr.name());
         });
   }
 

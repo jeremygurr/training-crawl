@@ -1,6 +1,6 @@
 package com.epicGamecraft.dungeonCrawlDepths;
 
-import static com.epicGamecraft.dungeonCrawlDepths.BusEvent.*;
+import static com.epicGamecraft.dungeonCrawlDepths.UserResult.*;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -48,9 +48,9 @@ public class HttpServerVerticle extends AbstractVerticle {
     mySesh.setSessionTimeout(86400000); //24 hours in milliseconds.
 
     router.get("/status").handler(this::statusHandler);
+    router.route().handler(mySesh);
     router.get("/static/*").handler(this::staticHandler);
     router.route().handler(BodyHandler.create());
-    router.route().handler(mySesh); //FIXME: Ask if this is right place, because it only happens for post requests with html login forms. And not when user finds website.
     router.post("/bus/*").handler(this::busHandler);
     final int port = 8080;
     final Single<HttpServer> rxListen = server
@@ -111,40 +111,27 @@ public class HttpServerVerticle extends AbstractVerticle {
 
   private void busHandler(RoutingContext context) {
 
-    //uncomment when ready to work on sessions/coookies.
-    Session session = context.session();
-    String sessionToken = session.get(SessionKey.username.name());  //TODO: If username is null force user to login on login page.
-    // get the token from the session
-    if (sessionToken != null) {
-      // attempt to parse the value
-      int idx = sessionToken.indexOf('/');
-      if (idx != -1 && session.id() != null && session.id().equals(sessionToken.substring(0, idx))) {
-        String parsedToken = sessionToken.substring(idx + 1);
-        vertx.eventBus().rxRequest(couchbaseQuery.name(), parsedToken)
-          .subscribe(e -> {
-              if (e.body() != null) {
-                //TODO: Put method here that logs into account of user that was returned with SessionToken.
-              } else {
-                //TODO: Place method here that sends user to login page.
-              }
-            },
-            err -> {
-              //TODO: Default to sending user to login page. If no method is needed for that, leave this space blank.
-            });
-      }
-    } else {
-      //TODO: Put method here that sends user to login page.
-    }
-
-    session.put(SessionKey.username.name(), "username");
-    //These will be variables. the values will come from database.
-    // The key will never change it will just be user.
-
     final EventBus eb = vertx.eventBus();
 
     final HttpServerRequest request = context.request();
+    final HttpServerResponse response = context.response();
     final MultiMap params = request.params();
 
+//    Session session = context.session();
+//    String username = session.get(SessionKey.username.name());
+//    if (username == null) {
+//      WebUtils.redirect(response, "/static/login.html");
+//      return;
+//      //If username is null it forces user to login on login page.
+//      //This means user is new to website:
+//    }
+//    session.put(SessionKey.username.name(), "username");
+    //These will be variables. the values will come from database.
+    // The key will never change it will just be user.
+    //session id stuff you plug into session cookie. cookie is session id.
+    //the id pulls up session that goes with the id and use all its variables.
+    //if it doesn't find the session that goes with the id it will create a new
+    //session if they login.
 
     JsonObject object = new JsonObject();
     for (Map.Entry<String, String> entry : params.entries()) {
@@ -159,18 +146,36 @@ public class HttpServerVerticle extends AbstractVerticle {
     eb.rxRequest(busAddress, object.encode())  //sends the json object with request params to UserVerticle to whichever consumer specified by busAddress.
       .subscribe(e -> {
           LOGGER.debug("HttpServer Verticle Received reply: " + e.body());
-          if(e.body() == "1") {
-
+          if (e.body() == successLog.name()) {
+            WebUtils.redirect(response, "/static/jscrawl.html");
+            //This means login was successful. Redirects user to main crawl page.
+          } else if (e.body() == invalid.name()) {
+            if (busAddress == "userLogin") {
+              //Make JavaScript do an alert that says "username or password was incorrect." -for login page
+            } else if (busAddress == "createUser") {
+              //Make JavaScript do an alert that says "username already in use" -for Create Account page
+            } else {
+              //Make JavaScript do an alert that says "username or email was incorrect." -for PassReset page
+              //TODO: add another else if so you can add the reset username code.
+            }
+          } else if (e.body() == messageErr.name()) {
+            //This means User and couchbase verticles had communication errors.
+            //Redirect user to our error page.
+          } else if (e.body() == registerUser.name()) {
+            //This means that user successfully registered a new account.
+            //redirect user to the login page so they can login with new account.
+          } else if (e.body() == resetPass.name()) {
+            // This means the account was located with email and username user provided.
+            // reset password email will be sent to the email the user specified.
           }
-      },
+        },
         err -> {
-        //put some method to notify browser that the login was unsuccessful, and try again.
-        LOGGER.debug("Received username: " + err.getMessage());
-        if (err.getMessage() == null) {
-          LOGGER.debug("Error with busAddress " + busAddress + " " + err.getMessage());
-          //TODO: redirect user to an error page.
-        }
-      });
+          LOGGER.debug("Failed login : " + err.getMessage());
+          if (err.getMessage() == null) {
+            LOGGER.debug("Error with busAddress " + busAddress + " " + err.getMessage());
+            //TODO: redirect user to an error page.
+          }
+        });
   }
 }
 // address will be whatever last part of action="bus/" is for example userLogin

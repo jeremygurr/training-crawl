@@ -42,9 +42,7 @@ public class CouchbaseVerticle extends AbstractVerticle {
     final ReactiveCluster connection = context.get(ContextKey.couchbaseConnection.name());
     final JsonObject json = JsonObject.fromJson(message.body());
     final String username = json.getString("username");
-    LOGGER.debug("username is: " + username);
     final String hashword = json.getString("password").hashCode() + "";
-    LOGGER.debug("hashword is: " + hashword);
     connection.bucket("depths")
       .defaultCollection()
       .get("user::" + username)
@@ -77,11 +75,8 @@ public class CouchbaseVerticle extends AbstractVerticle {
     final ReactiveCluster connection = context.get(ContextKey.couchbaseConnection.name());
     final JsonObject json = JsonObject.fromJson(message.body());
     final String username = json.getString("username");
-    LOGGER.debug("username is: " + username);
     final String email = json.getString("email");
-    LOGGER.debug("email is: " + email);
     final String hashword = json.getString("password").hashCode() + "";
-    LOGGER.debug("hashword is: " + hashword);
 
     //This doesn't seem to be needed after all. Since couchbase automatically checks userId first, and if
     //that matches, then it won't create a new user at all. It doesn't need to check password or email.
@@ -129,13 +124,11 @@ public class CouchbaseVerticle extends AbstractVerticle {
   }
 
   private void handlePassReset(Message<String> message) {
-    LOGGER.debug("couchbaseVerticle.handleQuery received message: " + message.body());
+    LOGGER.debug("couchbaseVerticle.handlePassReset received message: " + message.body());
     final ReactiveCluster connection = context.get(ContextKey.couchbaseConnection.name());
     final JsonObject json = JsonObject.fromJson(message.body());
     final String username = json.getString("username");
-    LOGGER.debug("username is: " + username);
     final String email = json.getString("email");
-    LOGGER.debug("email is: " + email);
     connection.bucket("depths")
       .defaultCollection()
       .get("user::" + username)

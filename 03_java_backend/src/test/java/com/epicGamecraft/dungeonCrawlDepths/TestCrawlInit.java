@@ -56,7 +56,7 @@ public class TestCrawlInit {
       .subscribe(e -> {
           vertx.eventBus().rxRequest(userLogin.name(), "{\"usernameOrEmail\":\"jgurr\",\"password\":\"password\"}")
             .subscribe(ar -> {
-                LOGGER.debug("User Verticle received reply: " + ar.body());
+                LOGGER.debug("Test Verticle received reply: " + ar.body());
               },
               err -> {
                 LOGGER.debug("An error occurred retrieving data from Couchbase.");
@@ -81,21 +81,18 @@ public class TestCrawlInit {
       .subscribe(e -> {
           vertx.eventBus().rxRequest(userLogin.name(), "{\"usernameOrEmail\":\"jgurr\",\"password\":\"password\"}")
             .subscribe(ar -> {
-                LOGGER.debug("User Verticle received reply: " + ar.body());
+                LOGGER.debug("Test Verticle received reply: " + ar.body());
               },
               err -> {
                 LOGGER.debug("An error occurred retrieving data from Couchbase." + err.getMessage());
               });
-          context.failNow(new Exception("User Verticle failed to handle login correctly."));
+          context.failNow(new Exception("Test Verticle failed to handle login correctly."));
         },
         err -> {
           context.completeNow();
         });
   }
 
-  //TODO: Both the below tests have a problem where they return this error:
-  // "The test execution timed out. Make sure your asynchronous code includes calls to either
-  // VertxTestContext#completeNow(), VertxTestContext#failNow() or Checkpoint#flag()"
   @Test
   void queryCouchbase(Vertx vertx, VertxTestContext context) throws Throwable {
     vertx.rxDeployVerticle(new CouchbaseVerticle())
@@ -103,15 +100,16 @@ public class TestCrawlInit {
           vertx.eventBus().rxRequest(couchbaseQuery.name(), "{\"username\":\"jgurr\",\"password\":\"password\"}")
             .subscribe(ar -> {
                 LOGGER.debug("Test.queryCouchbase received reply : " + ar.body());
+                context.completeNow();
               },
               err -> {
                 LOGGER.debug("Communication between Test.queryCouchbase error : " + err.getMessage());
+                context.failNow(err);
               });
-          context.completed();
         },
         err -> {
-          context.failed();
           LOGGER.debug("TestCrawlInit.queryCouchbase issue deploying verticle : " + err.getMessage());
+          context.failNow(err);
         });
   }
 
@@ -127,16 +125,17 @@ public class TestCrawlInit {
                 } else {
                   LOGGER.debug("Couchbase failed to insert document : " + ar.body());
                 }
+                context.completeNow();
               },
               err -> {
                 LOGGER.debug("Communication between Test.queryCouchbase error : " + err.getMessage());
+                context.failNow(err);
               });
-          context.completed();
         },
         err -> {
-          context.failed();
           LOGGER.debug("TestCrawlInit.insertCouchbase issue communicating with " +
             "couchbase verticle. : " + err.getCause());
+          context.failNow(err);
         });
   }
 
@@ -147,15 +146,16 @@ public class TestCrawlInit {
           vertx.eventBus().rxRequest(couchbasePass.name(), "{\"username\":\"jgurr\",\"email\":\"som@gmail.com\"}")
             .subscribe(ar -> {
                 LOGGER.debug("Test.passwordCouchbase received reply : " + ar.body());
+                context.completeNow();
               },
               err -> {
                 LOGGER.debug("Communication between Test.passwordCouchbase error : " + err.getMessage());
+                context.failNow(err);
               });
-          context.completed();
         },
         err -> {
-          context.failed();
           LOGGER.debug("TestCrawlInit.queryCouchbase issue deploying verticle : " + err.getMessage());
+          context.failNow(err);
         });
   }
 

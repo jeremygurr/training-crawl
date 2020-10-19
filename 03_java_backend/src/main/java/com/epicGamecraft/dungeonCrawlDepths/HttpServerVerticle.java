@@ -1,6 +1,7 @@
 package com.epicGamecraft.dungeonCrawlDepths;
 
 import static com.epicGamecraft.dungeonCrawlDepths.UserResult.*;
+import static com.epicGamecraft.dungeonCrawlDepths.BusEvent.*;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -117,31 +118,32 @@ public class HttpServerVerticle extends AbstractVerticle {
     final HttpServerResponse response = context.response();
     final MultiMap params = request.params();
 
-//    Session session = context.session();
-//    String username = session.get(SessionKey.username.name());
-//    if (username == null) {
-//      WebUtils.redirect(response, "/static/login.html");
-//      return;
-//      //If username is null it forces user to login on login page.
-//      //This means user is new to website:
-//    }
-//    session.put(SessionKey.username.name(), "username");
-    //These will be variables. the values will come from database.
-    // The key will never change it will just be user.
-    //session id stuff you plug into session cookie. cookie is session id.
-    //the id pulls up session that goes with the id and use all its variables.
-    //if it doesn't find the session that goes with the id it will create a new
-    //session if they login.
+    final String absoluteURI = request.absoluteURI();
+    LOGGER.debug("absoluteURI=" + absoluteURI);
+    final String busAddress = absoluteURI.replaceAll("^.*/bus/", "");
+    LOGGER.debug("busAddress=" + busAddress);
 
+
+    Session session = context.session();
+    String username = session.get(SessionKey.username.name());
+    Context vertxContext = vertx.getOrCreateContext();
+    vertxContext.put("session", session);
+    if (busAddress.equals(userLogin.name())) {
+      if (username != null) {
+        WebUtils.redirect(response, "/static/jscrawl.html");
+        return;
+      }
+    } else {
+      if (username == null) {
+        WebUtils.redirect(response, "/static/login.html");
+        return;
+      }
+    }
     JsonObject object = new JsonObject();
     for (Map.Entry<String, String> entry : params.entries()) {
       object.put(entry.getKey(), entry.getValue());
     }
 
-    final String absoluteURI = request.absoluteURI();
-    LOGGER.debug("absoluteURI=" + absoluteURI);
-    final String busAddress = absoluteURI.replaceAll("^.*/bus/", "");
-    LOGGER.debug("busAddress=" + busAddress);
 
     eb.rxRequest(busAddress, object.encode())  //sends the json object with request params to UserVerticle to whichever consumer specified by busAddress.
       .subscribe(e -> {
@@ -151,20 +153,28 @@ public class HttpServerVerticle extends AbstractVerticle {
             //This means login was successful. Redirects user to main crawl page.
           } else if (e.body() == invalid.name()) {
             if (busAddress == "userLogin") {
+              WebUtils.redirect(response, "/static/login.html");
               //Make JavaScript do an alert that says "username or password was incorrect." -for login page
             } else if (busAddress == "createUser") {
+              WebUtils.redirect(response, "/static/createLogin.html");
               //Make JavaScript do an alert that says "username already in use" -for Create Account page
             } else {
+              WebUtils.redirect(response, "/forgotPassword.html");
               //Make JavaScript do an alert that says "username or email was incorrect." -for PassReset page
               //TODO: add another else if so you can add the reset username code.
             }
-          } else if (e.body() == messageErr.name()) {
+          } else if (e.body().equals(messageErr.name())) {
+            WebUtils.redirect(response, "/static/serverError.html");
             //This means User and couchbase verticles had communication errors.
             //Redirect user to our error page.
-          } else if (e.body() == registerUser.name()) {
+          } else if (e.body().equals(registerUser.name())) {
+            WebUtils.redirect(response, "/static/login.html");
             //This means that user successfully registered a new account.
             //redirect user to the login page so they can login with new account.
-          } else if (e.body() == resetPass.name()) {
+          } else if (e.body().equals(resetPass.name())) {
+            response.rxEnd("<html><body><p>An email has been sent with instructions for resetting " +
+              "your password. Once you find the email and finish the instructions click " +
+              "<a href='/static/login.html'>here</a> to be redirected to login page.</p></body></html>");
             // This means the account was located with email and username user provided.
             // reset password email will be sent to the email the user specified.
           }
@@ -173,7 +183,7 @@ public class HttpServerVerticle extends AbstractVerticle {
           LOGGER.debug("Failed login : " + err.getMessage());
           if (err.getMessage() == null) {
             LOGGER.debug("Error with busAddress " + busAddress + " " + err.getMessage());
-            //TODO: redirect user to an error page.
+            WebUtils.redirect(response, "/static/serverError.html");
           }
         });
   }

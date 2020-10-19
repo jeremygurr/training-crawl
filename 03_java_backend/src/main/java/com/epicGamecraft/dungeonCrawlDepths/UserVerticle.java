@@ -3,6 +3,7 @@ package com.epicGamecraft.dungeonCrawlDepths;
 import static com.epicGamecraft.dungeonCrawlDepths.BusEvent.*;
 import static com.epicGamecraft.dungeonCrawlDepths.UserResult.*;
 
+import io.vertx.reactivex.ext.web.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +36,14 @@ public class UserVerticle extends AbstractVerticle {
             //This means user did correct username and password.
             LOGGER.debug("User Verticle received reply: " + e.body());
             message.reply(successLog.name());
+            Context vertxContext = vertx.getOrCreateContext();
+            Session session = vertxContext.get("session");
+            if(session == null) {  //FIXME: This always returns true currently, which means we are not getting the context correctly.
+              message.fail(500, "Session is null"); //FIXME: This doesn't seem to do anything.
+              return;
+            }
+            session.put(SessionKey.username.name(), "username"); //TODO: Find a way to add a cookie to session here.
+            LOGGER.debug("session equals : " + session.get(SessionKey.username.name()));
           } else {
             //This means user input wrong username or password.
             LOGGER.debug("Invalid Login");

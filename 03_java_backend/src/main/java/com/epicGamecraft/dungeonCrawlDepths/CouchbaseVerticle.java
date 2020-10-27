@@ -124,7 +124,6 @@ public class CouchbaseVerticle extends AbstractVerticle {
   }
 
   private void handlePassReset(Message<String> message) {
-    LOGGER.debug("couchbaseVerticle.handlePassReset received message: " + message.body());
     final ReactiveCluster connection = context.get(ContextKey.couchbaseConnection.name());
     final JsonObject json = JsonObject.fromJson(message.body());
     final String username = json.getString("username");

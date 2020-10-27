@@ -41,6 +41,7 @@ public class HttpServerVerticle extends AbstractVerticle {
 
   @Override
   public Completable rxStart() {
+    LOGGER.info("Http Verticle is starting. Make sure Couchbase container is running.");
     HttpServer server = vertx.createHttpServer();
 
     Router router = Router.router(vertx);
@@ -112,80 +113,54 @@ public class HttpServerVerticle extends AbstractVerticle {
 
   private void busHandler(RoutingContext context) {
 
-    final EventBus eb = vertx.eventBus();
+    try {
+      final EventBus eb = vertx.eventBus();
 
-    final HttpServerRequest request = context.request();
-    final HttpServerResponse response = context.response();
-    final MultiMap params = request.params();
+      final HttpServerRequest request = context.request();
+      final HttpServerResponse response = context.response();
+      final MultiMap params = request.params();
 
-    final String absoluteURI = request.absoluteURI();
-    LOGGER.debug("absoluteURI=" + absoluteURI);
-    final String busAddress = absoluteURI.replaceAll("^.*/bus/", "");
-    LOGGER.debug("busAddress=" + busAddress);
+      final String absoluteURI = request.absoluteURI();
+      LOGGER.debug("absoluteURI=" + absoluteURI);
+      final String busAddress = absoluteURI.replaceAll("^.*/bus/", "");
+      LOGGER.debug("busAddress=" + busAddress);
 
-
-    Session session = context.session();
-    String username = session.get(SessionKey.username.name());
-    Context vertxContext = vertx.getOrCreateContext();
-    vertxContext.put("session", session);
-    if (busAddress.equals(userLogin.name())) {
-      if (username != null) {
-        WebUtils.redirect(response, "/static/jscrawl.html");
-        return;
+      Session session = context.session();
+      String username = session.get(SessionKey.username.name());
+      if (busAddress.equals(userLogin.name())) {
+        if (username != null) {
+          WebUtils.redirect(response, "/static/jscrawl.html");
+          return;
+        }
       }
-    } else {
-      if (username == null) {
-        WebUtils.redirect(response, "/static/login.html");
-        return;
+
+      JsonObject object = new JsonObject();
+      for (Map.Entry<String, String> entry : params.entries()) {
+        object.put(entry.getKey(), entry.getValue());
       }
-    }
-    JsonObject object = new JsonObject();
-    for (Map.Entry<String, String> entry : params.entries()) {
-      object.put(entry.getKey(), entry.getValue());
-    }
+      //This puts the params from http headers into json object.
 
+      for (Map.Entry<String, Object> entry : session.data().entrySet()) {
+        object.put(entry.getKey(), entry.getValue());
+      }
+      //This adds the session variables(if there are any) to the same Json object so they all will be sent in a
+      //message below to user verticle.
 
-    eb.rxRequest(busAddress, object.encode())  //sends the json object with request params to UserVerticle to whichever consumer specified by busAddress.
-      .subscribe(e -> {
-          LOGGER.debug("HttpServer Verticle Received reply: " + e.body());
-          if (e.body() == successLog.name()) {
-            WebUtils.redirect(response, "/static/jscrawl.html");
-            //This means login was successful. Redirects user to main crawl page.
-          } else if (e.body() == invalid.name()) {
-            if (busAddress == "userLogin") {
-              WebUtils.redirect(response, "/static/login.html");
-              //Make JavaScript do an alert that says "username or password was incorrect." -for login page
-            } else if (busAddress == "createUser") {
-              WebUtils.redirect(response, "/static/createLogin.html");
-              //Make JavaScript do an alert that says "username already in use" -for Create Account page
-            } else {
-              WebUtils.redirect(response, "/forgotPassword.html");
-              //Make JavaScript do an alert that says "username or email was incorrect." -for PassReset page
-              //TODO: add another else if so you can add the reset username code.
+      eb.rxRequest(busAddress, object.encode())
+        .subscribe(e -> {
+            LOGGER.debug("HttpServer Verticle Received reply: " + e.body());
+              WebUtils.redirect(response, "/static/" + e.body());
+          },
+          err -> {
+            LOGGER.debug("Failed login : " + err.getMessage());
+            if (err.getMessage() == null) {
+              LOGGER.debug("Error with busAddress " + busAddress + " " + err.getMessage());
+              WebUtils.redirect(response, "/static/serverError.html");
             }
-          } else if (e.body().equals(messageErr.name())) {
-            WebUtils.redirect(response, "/static/serverError.html");
-            //This means User and couchbase verticles had communication errors.
-            //Redirect user to our error page.
-          } else if (e.body().equals(registerUser.name())) {
-            WebUtils.redirect(response, "/static/login.html");
-            //This means that user successfully registered a new account.
-            //redirect user to the login page so they can login with new account.
-          } else if (e.body().equals(resetPass.name())) {
-            response.rxEnd("<html><body><p>An email has been sent with instructions for resetting " +
-              "your password. Once you find the email and finish the instructions click " +
-              "<a href='/static/login.html'>here</a> to be redirected to login page.</p></body></html>");
-            // This means the account was located with email and username user provided.
-            // reset password email will be sent to the email the user specified.
-          }
-        },
-        err -> {
-          LOGGER.debug("Failed login : " + err.getMessage());
-          if (err.getMessage() == null) {
-            LOGGER.debug("Error with busAddress " + busAddress + " " + err.getMessage());
-            WebUtils.redirect(response, "/static/serverError.html");
-          }
-        });
+          });
+    } catch (Exception e) {
+      LOGGER.error(e.getMessage(), e);
+    }
   }
 }
 // address will be whatever last part of action="bus/" is for example userLogin

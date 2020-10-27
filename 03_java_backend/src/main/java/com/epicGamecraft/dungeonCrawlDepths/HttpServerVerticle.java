@@ -83,6 +83,14 @@ public class HttpServerVerticle extends AbstractVerticle {
     @Nullable
     String path = request.path();
     try {
+      Session session = context.session();
+      String username = session.get(SessionKey.username.name());
+      if (path.equals("/static/login.html")) {
+        if (username != null) {
+          WebUtils.redirect(response, "/static/jscrawl.html");
+          return;
+        }
+      }
       LOGGER.debug("GET " + path);
       path = path.substring(1);
       final InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
@@ -124,37 +132,35 @@ public class HttpServerVerticle extends AbstractVerticle {
       LOGGER.debug("absoluteURI=" + absoluteURI);
       final String busAddress = absoluteURI.replaceAll("^.*/bus/", "");
       LOGGER.debug("busAddress=" + busAddress);
-
       Session session = context.session();
-      String username = session.get(SessionKey.username.name());
-      if (busAddress.equals(userLogin.name())) {
-        if (username != null) {
-          WebUtils.redirect(response, "/static/jscrawl.html");
-          return;
-        }
-      }
 
+
+      //This puts the params from http headers into json object.
       JsonObject object = new JsonObject();
       for (Map.Entry<String, String> entry : params.entries()) {
         object.put(entry.getKey(), entry.getValue());
       }
-      //This puts the params from http headers into json object.
 
+/*
+      //This adds the session variables(if there are any) to the same Json object so they all will be
+      // sent in a message below to user verticle.
       for (Map.Entry<String, Object> entry : session.data().entrySet()) {
         object.put(entry.getKey(), entry.getValue());
       }
-      //This adds the session variables(if there are any) to the same Json object so they all will be sent in a
-      //message below to user verticle.
+*/
 
       eb.rxRequest(busAddress, object.encode())
         .subscribe(e -> {
             final JsonObject json = JsonObject.mapFrom(e.body());
-            final String message = json.getString("message");
+            //final String message = json.getString("message");
+            //TODO: add some method here to have javascript alert with message if message is not null.
             final String redirect = json.getString("redirect");
             LOGGER.debug("HttpServer Verticle Received reply: " + e.body());
 
-            //TODO: add some method here to reply with message if message is not null.
-
+            if(redirect.equals("jscrawl.html")) {
+              session.put(SessionKey.username.name(), object.getString("username"));
+              LOGGER.debug("session equals: " + session.data());
+            }
             WebUtils.redirect(response, "/static/" + redirect);
           },
           err -> {
@@ -169,7 +175,3 @@ public class HttpServerVerticle extends AbstractVerticle {
     }
   }
 }
-// address will be whatever last part of action="bus/" is for example userLogin
-// see each login form HTML page or UserVerticle to see what they are listed as.
-// message should be the JSON object with all the parameters.
-

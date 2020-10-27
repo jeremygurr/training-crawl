@@ -36,7 +36,6 @@ public class UserVerticle extends AbstractVerticle {
             //This means user did correct username and password.
             LOGGER.debug("User Verticle received reply: " + e.body());
             jsonReply.put(redirect.name(), "jscrawl.html");
-
           } else {
             //This means user input wrong username or password.
             LOGGER.debug("Invalid Login");

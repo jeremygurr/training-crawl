@@ -78,31 +78,6 @@ public class CouchbaseVerticle extends AbstractVerticle {
     final String email = json.getString("email");
     final String hashword = json.getString("password").hashCode() + "";
 
-    //This doesn't seem to be needed after all. Since couchbase automatically checks userId first, and if
-    //that matches, then it won't create a new user at all. It doesn't need to check password or email.
-    //If password and email are the same but username is different that doesn't hurt anything because you
-    //have to have username and password to access someone's account, not just password and email.
-    //checks if a user account already exists with the information provided:
-//    connection.bucket("depths")
-//      .defaultCollection()
-//      .get("user::" + username)
-//      .log()
-//      .map(result -> {
-//        JsonObject row = result.contentAs(JsonObject.class);
-//        return row;
-//      })
-//      .subscribe(row -> {
-//          LOGGER.debug("Username already in use with an existing account : " + row.toString());
-//          //means the username is already in use with an existing account. Sends code back to user verticle
-//          //So user verticle will not attempt to insert a new user to database.
-//          message.reply("Already exists");
-//        },
-//        err -> {
-//          LOGGER.debug("no record found matching username : " + err.getMessage() + "User will now be created.");
-//          //means the username does not exist in the database, so one can be created.
-//        }
-//      );
-
     final JsonObject user = JsonObject.create();
     user.put("name", username);
     user.put("email", email);

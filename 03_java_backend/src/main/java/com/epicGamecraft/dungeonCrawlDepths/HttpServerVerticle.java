@@ -148,8 +148,14 @@ public class HttpServerVerticle extends AbstractVerticle {
 
       eb.rxRequest(busAddress, object.encode())
         .subscribe(e -> {
+            final JsonObject json = JsonObject.mapFrom(e.body());
+            final String message = json.getString("message");
+            final String redirect = json.getString("redirect");
             LOGGER.debug("HttpServer Verticle Received reply: " + e.body());
-              WebUtils.redirect(response, "/static/" + e.body());
+
+            //TODO: add some method here to reply with message if message is not null.
+
+            WebUtils.redirect(response, "/static/" + redirect);
           },
           err -> {
             LOGGER.debug("Failed login : " + err.getMessage());

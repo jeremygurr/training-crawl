@@ -85,11 +85,10 @@ public class HttpServerVerticle extends AbstractVerticle {
     try {
       Session session = context.session();
       String username = session.get(SessionKey.username.name());
-      if (path.equals("/static/login.html")) {
-        if (username != null) {
+      if (username != null && path.equals("/static/login.html")) {
+          // TODO: Figure out how to make || path.equals("/static/jscrawl.html") work here.
           WebUtils.redirect(response, "/static/jscrawl.html");
           return;
-        }
       }
       LOGGER.debug("GET " + path);
       path = path.substring(1);
@@ -134,34 +133,35 @@ public class HttpServerVerticle extends AbstractVerticle {
       LOGGER.debug("busAddress=" + busAddress);
       Session session = context.session();
 
-
       //This puts the params from http headers into json object.
       JsonObject object = new JsonObject();
       for (Map.Entry<String, String> entry : params.entries()) {
         object.put(entry.getKey(), entry.getValue());
       }
 
-/*
-      //This adds the session variables(if there are any) to the same Json object so they all will be
+/*    //This adds the session variables(if there are any) to the same Json object so they all will be
       // sent in a message below to user verticle.
       for (Map.Entry<String, Object> entry : session.data().entrySet()) {
         object.put(entry.getKey(), entry.getValue());
-      }
-*/
+      } */
 
       eb.rxRequest(busAddress, object.encode())
         .subscribe(e -> {
             final JsonObject json = JsonObject.mapFrom(e.body());
-            //final String message = json.getString("message");
-            //TODO: add some method here to have javascript alert with message if message is not null.
+            final String message = json.getString("response");
             final String redirect = json.getString("redirect");
             LOGGER.debug("HttpServer Verticle Received reply: " + e.body());
 
-            if(redirect.equals("jscrawl.html")) {
+            if (message != null) {
+              WebUtils.failMessage(response, message);
+              LOGGER.debug("message =" + message);
+            } else if (redirect.equals("jscrawl.html")) {
               session.put(SessionKey.username.name(), object.getString("username"));
               LOGGER.debug("session equals: " + session.data());
+              WebUtils.redirect(response, "/static/" + redirect);
+            } else {
+              WebUtils.redirect(response, "/static/" + redirect);
             }
-            WebUtils.redirect(response, "/static/" + redirect);
           },
           err -> {
             LOGGER.debug("Failed login : " + err.getMessage());

@@ -68,8 +68,6 @@ public class CouchbaseVerticle extends AbstractVerticle {
   }
 
 
-  //TODO: Add code before insert statement which checks to see if user with that username and password
-  // already exists. If so, do a reply that tells userVerticle to tell user to login on login page.
   private void handleInsert(Message<String> message) {
     LOGGER.debug("CouchbaseVerticle.handleInsert received message : " + message.body());
     final ReactiveCluster connection = context.get(ContextKey.couchbaseConnection.name());

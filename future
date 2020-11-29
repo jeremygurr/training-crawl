@@ -1441,3 +1441,41 @@ new energy pools
   5 etherea
   3 exotica
 
+replace hp with health status
+  levels
+    fortified
+    undamaged
+    minor wound
+      easy to heal, can heal by time
+    major wound
+      can't heal over time, must assist
+    critical
+      degrades over time
+    dead
+  to go from 
+    undamaged to minor (1 level): 0 challenge
+    undamaged to major (2 levels): 3+constitution (min 1) challenge
+    undamaged to critical (3 levels): 2*(3+constitution) (min 2) challenge
+    undamaged to dead (4 levels): 3*(3+constitution) (min 3) challenge
+      example con=0, one-shot difficulty=9
+
+success rate calculator:
+  (1 + diff) / (2 + diff) is chance of success, where diff >= 0
+  0 = 50%
+  1 = 66%
+  2 = 75%
+  3 = 80%
+  4 = 83%
+  5 = 85%
+  10 = 91%
+  15 = 94%
+  20 = 95%
+  50 = 98%
+  100 = 99%
+
+attack calculation
+  dodge attempt
+  block attempt
+  deflect attempt
+  damage calculation
+

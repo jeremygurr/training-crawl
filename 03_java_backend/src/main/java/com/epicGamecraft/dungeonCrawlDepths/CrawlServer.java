@@ -6,7 +6,7 @@ import io.vertx.core.VertxOptions;
 public class CrawlServer {
 
 	public static void main(final String[] args) {
-		final CrawlServer crawlServer = new CrawlServer();
+	  final CrawlServer crawlServer = new CrawlServer();
 	}
 
 	private final Vertx vertx;

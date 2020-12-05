@@ -45,13 +45,14 @@ public class TestCrawlInit {
   }
 
 
+  //Below is a test for the UserVerticle using a fake couchbase verticle.
   @Test
   void loginSuccess(Vertx vertx, VertxTestContext context) throws Throwable {
     FakeCouchbaseVerticle couchbaseVerticle = new FakeCouchbaseVerticle();
     couchbaseVerticle.response = "{\"email\":\"jared.gurr@yahoo.com\",\"hashword\":\"1216985755\",\"name\":\"Jared Gurr\"}";
     vertx.rxDeployVerticle(couchbaseVerticle)
       .flatMap(e -> {
-        return vertx.rxDeployVerticle(new UserVerticle());   //This is how you set multiple deploy verticles. Use more .flatmaps().
+        return vertx.rxDeployVerticle(new UserVerticle());   //This is how you deploy more than one verticle. Just use more .flatmaps().
       })
       .subscribe(e -> {
           vertx.eventBus().rxRequest(userLogin.name(), "{\"usernameOrEmail\":\"jgurr\",\"password\":\"password\"}")
@@ -68,8 +69,6 @@ public class TestCrawlInit {
         });
   }
 
-  //TODO: Figure out what this actually tests for? I am confused...
-  // shouldn't it test for making sure the verticle handles incorrect syntax correctly or something?
   @Test
   void loginFailure(Vertx vertx, VertxTestContext context) throws Throwable {
     FakeCouchbaseVerticle couchbaseVerticle = new FakeCouchbaseVerticle();
@@ -79,7 +78,7 @@ public class TestCrawlInit {
         return vertx.rxDeployVerticle(new UserVerticle());   //This is how you set multiple deploy verticles. Use more .flatmaps().
       })
       .subscribe(e -> {
-          vertx.eventBus().rxRequest(userLogin.name(), "{\"usernameOrEmail\":\"jgurr\",\"password\":\"password\"}")
+          vertx.eventBus().rxRequest(userLogin.name(), "{\"usernameOrEmail\":\"jgr\",\"password\":\"pass\"}")
             .subscribe(ar -> {
                 LOGGER.debug("Test Verticle received reply: " + ar.body());
               },

@@ -68,6 +68,30 @@ public class HttpServerVerticle extends AbstractVerticle {
     return rxListen.ignoreElement();
   }
 
+  public static void writeStaticHtml(HttpServerResponse response, String path) {
+    LOGGER.debug("GET " + path);
+    path = path.substring(1);
+    final InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
+    if (stream != null) {
+      final String text = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))
+        .lines()
+        .collect(Collectors.joining("\n"));
+      if (path.endsWith(".html")) {
+        response.putHeader("Content-Type", "text/html");
+      } else if (path.endsWith(".css")) {
+        response.putHeader("Content-Type", "text/css");
+      } else {
+        response.end("<html><body>Error filetype unknown: " + path + "</body></html>");
+      }
+      response.setStatusCode(200);
+      response.end(text);
+    } else {
+      LOGGER.warn("Resource not found: " + path);
+      response.setStatusCode(404);
+      response.end();
+    }
+  }
+
   private void statusHandler(RoutingContext context) {
 
     final HttpServerResponse response = context.response();
@@ -80,6 +104,7 @@ public class HttpServerVerticle extends AbstractVerticle {
 
     final HttpServerResponse response = context.response();
     final HttpServerRequest request = context.request();
+    response.setChunked(true);
     @Nullable
     String path = request.path();
     try {
@@ -90,33 +115,14 @@ public class HttpServerVerticle extends AbstractVerticle {
           WebUtils.redirect(response, "/static/jscrawl.html");
           return;
       }
-      LOGGER.debug("GET " + path);
-      path = path.substring(1);
-      final InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
-      if (stream != null) {
-        final String text = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))
-          .lines()
-          .collect(Collectors.joining("\n"));
-        if (path.endsWith(".html")) {
-          response.putHeader("Content-Type", "text/html");
-        } else if (path.endsWith(".css")) {
-          response.putHeader("Content-Type", "text/css");
-        } else {
-          response.end("<html><body>Error filetype unknown: " + path + "</body></html>");
-        }
-        response.setStatusCode(200);
-        response.end(text);
-      } else {
-        LOGGER.warn("Resource not found: " + path);
-        response.setStatusCode(404);
-        response.end();
-      }
+      writeStaticHtml(response, path);
     } catch (Exception e) {
       LOGGER.error("Problem fetching static file: " + path, e);
       response.setStatusCode(502);
       response.end();
     }
   }
+
 
   private void busHandler(RoutingContext context) {
 
@@ -126,6 +132,7 @@ public class HttpServerVerticle extends AbstractVerticle {
       final HttpServerRequest request = context.request();
       final HttpServerResponse response = context.response();
       final MultiMap params = request.params();
+      response.setChunked(true);
 
       final String absoluteURI = request.absoluteURI();
       LOGGER.debug("absoluteURI=" + absoluteURI);
@@ -153,8 +160,11 @@ public class HttpServerVerticle extends AbstractVerticle {
             LOGGER.debug("HttpServer Verticle Received reply: " + e.body());
 
             if (message != null) {
-              WebUtils.failMessage(response, message);
+              String html = WebUtils.generateHtml("/home/jaredgurr/training-crawl/03_java_backend/src/main/resources/static/login.html", message);
+              response.write(html);
+              // writeStaticHtml(response, "/static/login.html");
               LOGGER.debug("message =" + message);
+              LOGGER.debug("html = " + html);
             } else if (redirect.equals("jscrawl.html")) {
               session.put(SessionKey.username.name(), object.getString("username"));
               LOGGER.debug("session equals: " + session.data());

@@ -17,7 +17,7 @@ public class FakeCouchbaseVerticle extends AbstractVerticle {
 
 
   @Override
-  public Completable rxStart() {   //this line had "throws exception" in it before, ask if I need to implement that in some rx form.
+  public Completable rxStart() {   //TODO: this line had "throws exception" in it before, ask if I need to implement that in some rx form.
     LOGGER.debug("FakeCouchbase Verticle listening to: " + couchbaseQuery.name());
     final EventBus eb = vertx.eventBus();
     eb.consumer(couchbaseQuery.name(), this::handleQuery);

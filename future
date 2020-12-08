@@ -1478,4 +1478,19 @@ attack calculation
   block attempt
   deflect attempt
   damage calculation
+start as spirit
+  can sense physical state of adjacent spaces
+
+attributes
+  astral
+    will
+    intelligence
+    focus
+    mp, wp
+  corporeal
+    constitution
+    strength
+    dexterity
+    hp, sp
+
 

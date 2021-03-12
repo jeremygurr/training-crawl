@@ -11,11 +11,34 @@ To start Couchbase:
 ```
 ./start_couchbase
 ```
-Configure Couchbase:
+
+Configure Couchbase (run only once):
 ```
-go to localhost:8091
-create new cluster and username and password based on what is listed in CouchbaseVerticle.java so that it matches everyone code.
-Next add bucket called 'depths'
+./setup_couchbase
+```
+
+To stop Couchbase container:
+```
+docker stop couchbase
+```
+
+== MySQL config
+
+To start MySQL:
+```
+./start_mysql
+```
+
+To configure MySQL:
+```
+docker exec -it mysql /bin/bash
+mysql -u root -p                   ##password is listed in start_mysql file
+```
+
+To stop MySQL container:
+```
+docker stop mysql
+```
 
 == Building
 
@@ -32,6 +55,11 @@ To package your application:
 To run your application:
 ```
 ./gradlew clean run
+```
+
+To view/use app inside browser:
+```
+http://localhost:8080/static/login.html
 ```
 
 == Help

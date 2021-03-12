@@ -1,0 +1,1 @@
+docker run --rm --net=host -v ~/crawl-training-extra/mysqldata:/var/lib/mysql --name mysql -e MYSQL_ROOT_PASSWORD=password -d mysql:8.0.0

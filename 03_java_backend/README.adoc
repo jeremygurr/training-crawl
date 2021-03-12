@@ -4,6 +4,19 @@ image:https://img.shields.io/badge/vert.x-4.0.0-milestone4-purple.svg[link="http
 
 This application was generated using http://start.vertx.io
 
+
+== Couchbase config
+
+To start Couchbase:
+```
+./start_couchbase
+```
+Configure Couchbase:
+```
+go to localhost:8091
+create new cluster and username and password based on what is listed in CouchbaseVerticle.java so that it matches everyone code.
+Next add bucket called 'depths'
+
 == Building
 
 To launch your tests:

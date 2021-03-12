@@ -30,7 +30,7 @@ public class CouchbaseVerticle extends AbstractVerticle {
     eb.consumer(couchbaseInsert.name(), this::handleInsert);
     eb.consumer(couchbasePass.name(), this::handlePassReset);
     final ReactiveCluster connection = ReactiveCluster.connect
-      ("localhost:11210", "Administrator", "password");
+      ("localhost:11210", "Administrator", "password");  //TODO: use properties.config method to conceal these.
     context.put(ContextKey.couchbaseConnection.name(), connection);
     return Completable.complete();
   }

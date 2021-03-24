@@ -44,13 +44,11 @@ public class TestCrawlInit {
     context.completeNow();
   }
 
-
-  //Below is a test for the UserVerticle using a fake couchbase verticle.
   @Test
-  void loginSuccess(Vertx vertx, VertxTestContext context) throws Throwable {
-    FakeCouchbaseVerticle couchbaseVerticle = new FakeCouchbaseVerticle();
-    couchbaseVerticle.response = "{\"email\":\"jared.gurr@yahoo.com\",\"hashword\":\"1216985755\",\"name\":\"Jared Gurr\"}";
-    vertx.rxDeployVerticle(couchbaseVerticle)
+  void loginSuccessMysql(Vertx vertx, VertxTestContext context) throws Throwable {
+    FakeMysqlVerticle mysqlVerticle = new FakeMysqlVerticle();
+    mysqlVerticle.response = "{\"email\":\"jared.gurr@yahoo.com\",\"hashword\":\"1216985755\",\"name\":\"Jared Gurr\"}";
+    vertx.rxDeployVerticle(mysqlVerticle)
       .flatMap(e -> {
         return vertx.rxDeployVerticle(new UserVerticle());   //This is how you deploy more than one verticle. Just use more .flatmaps().
       })
@@ -69,14 +67,13 @@ public class TestCrawlInit {
         });
   }
 
+
   @Test
-  void loginFailure(Vertx vertx, VertxTestContext context) throws Throwable {
-    FakeCouchbaseVerticle couchbaseVerticle = new FakeCouchbaseVerticle();
-    couchbaseVerticle.response = null;
-    vertx.rxDeployVerticle(couchbaseVerticle)
-      .flatMap(e -> {
-        return vertx.rxDeployVerticle(new UserVerticle());   //This is how you set multiple deploy verticles. Use more .flatmaps().
-      })
+  void loginFailureMysql(Vertx vertx, VertxTestContext context) throws Throwable {
+    FakeMysqlVerticle mysqlVerticle = new FakeMysqlVerticle();
+    mysqlVerticle.response = null;
+    vertx.rxDeployVerticle(mysqlVerticle)
+      .flatMap(e -> vertx.rxDeployVerticle(new UserVerticle()))
       .subscribe(e -> {
           vertx.eventBus().rxRequest(userLogin.name(), "{\"usernameOrEmail\":\"jgr\",\"password\":\"pass\"}")
             .subscribe(ar -> {
@@ -85,10 +82,10 @@ public class TestCrawlInit {
               err -> {
                 LOGGER.debug("An error occurred retrieving data from Couchbase." + err.getMessage());
               });
-          context.failNow(new Exception("Test Verticle failed to handle login correctly."));
+          context.completeNow();
         },
         err -> {
-          context.completeNow();
+          context.failNow(new Exception("Test Verticle failed to handle login correctly."));
         });
   }
 
@@ -158,6 +155,54 @@ public class TestCrawlInit {
         });
   }
 
-  // TODO: Make a Forgot username html page and test unit and couchbase handler.
+
+  //Below is a test for the UserVerticle using a fake couchbase verticle.
+  /*
+  @Test
+  void loginSuccess(Vertx vertx, VertxTestContext context) throws Throwable {
+    FakeCouchbaseVerticle couchbaseVerticle = new FakeCouchbaseVerticle();
+    couchbaseVerticle.response = "{\"email\":\"jared.gurr@yahoo.com\",\"hashword\":\"1216985755\",\"name\":\"Jared Gurr\"}";
+    vertx.rxDeployVerticle(couchbaseVerticle)
+      .flatMap(e -> {
+        return vertx.rxDeployVerticle(new UserVerticle());   //This is how you deploy more than one verticle. Just use more .flatmaps().
+      })
+      .subscribe(e -> {
+          vertx.eventBus().rxRequest(userLogin.name(), "{\"usernameOrEmail\":\"jgurr\",\"password\":\"password\"}")
+            .subscribe(ar -> {
+                LOGGER.debug("Test Verticle received reply: " + ar.body());
+              },
+              err -> {
+                LOGGER.debug("An error occurred retrieving data from Couchbase.");
+              });
+          context.completeNow();
+        },
+        err -> {
+          context.failNow(err);
+        });
+  }
+
+  @Test
+  void loginFailure(Vertx vertx, VertxTestContext context) throws Throwable {
+    FakeCouchbaseVerticle couchbaseVerticle = new FakeCouchbaseVerticle();
+    couchbaseVerticle.response = null;
+    vertx.rxDeployVerticle(couchbaseVerticle)
+      .flatMap(e -> {
+        return vertx.rxDeployVerticle(new UserVerticle());
+      })
+      .subscribe(e -> {
+          vertx.eventBus().rxRequest(userLogin.name(), "{\"usernameOrEmail\":\"jgr\",\"password\":\"pass\"}")
+            .subscribe(ar -> {
+                LOGGER.debug("Test Verticle received reply: " + ar.body());
+              },
+              err -> {
+                LOGGER.debug("An error occurred retrieving data from Couchbase." + err.getMessage());
+              });
+          context.failNow(new Exception("Test Verticle failed to handle login correctly."));
+        },
+        err -> {
+          context.completeNow();
+        });
+  }
+   */
 
 }

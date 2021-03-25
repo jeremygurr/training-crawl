@@ -67,7 +67,6 @@ public class TestCrawlInit {
         });
   }
 
-
   @Test
   void loginFailureMysql(Vertx vertx, VertxTestContext context) throws Throwable {
     FakeMysqlVerticle mysqlVerticle = new FakeMysqlVerticle();
@@ -89,6 +88,32 @@ public class TestCrawlInit {
         });
   }
 
+  /*todo: Improve this unit test, by making it do conditional for the possible MysqlVerticle reply message.
+    You can also improve it by making this unit test work without mysql container required to be running if possible.
+  */
+  @Test
+  void queryMysql(Vertx vertx, VertxTestContext context) throws Throwable {
+    vertx.rxDeployVerticle(new MysqlVerticle())
+      .subscribe(e -> {
+          vertx.eventBus().rxRequest(mysqlQuery.name(), "{\"username\":\"billybob\",\"password\":\"password\"}")
+            .subscribe(ar -> {
+                LOGGER.debug("Test.queryMysql received reply : " + ar.body());
+                context.completeNow();
+              },
+              err -> {
+                LOGGER.debug("Communication between Test.queryMysql error : " + err.getMessage());
+                context.failNow(err);
+              });
+        },
+        err -> {
+          LOGGER.debug("TestCrawlInit.queryMysql issue deploying verticle : " + err.getMessage());
+          context.failNow(err);
+        });
+  }
+
+}
+
+  /*
   @Test
   void queryCouchbase(Vertx vertx, VertxTestContext context) throws Throwable {
     vertx.rxDeployVerticle(new CouchbaseVerticle())
@@ -155,9 +180,7 @@ public class TestCrawlInit {
         });
   }
 
-
   //Below is a test for the UserVerticle using a fake couchbase verticle.
-  /*
   @Test
   void loginSuccess(Vertx vertx, VertxTestContext context) throws Throwable {
     FakeCouchbaseVerticle couchbaseVerticle = new FakeCouchbaseVerticle();
@@ -205,4 +228,3 @@ public class TestCrawlInit {
   }
    */
 
-}

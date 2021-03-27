@@ -29,16 +29,25 @@ To start MySQL:
 ./start_mysql
 ```
 
-To configure MySQL:
+To setup MySQL with database and tables:
 ```
 docker exec -it mysql /bin/bash
 mysql -u root -p                   ##password is listed in start_mysql file
+source /setup_mysql.sql
+CTRL+D exits the cli and the container.
 ```
 
 To stop MySQL container:
 ```
 docker stop mysql
 ```
+
+To fix container if a version change occurs:
+```
+cd ~/crawl-training-extra/
+sudo rm -rf mysqldata
+```
+After that, you need to restart mysql container, and setup database and tables again.
 
 == Building
 

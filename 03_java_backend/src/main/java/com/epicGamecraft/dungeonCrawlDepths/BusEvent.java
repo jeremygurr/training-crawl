@@ -11,5 +11,6 @@ public enum BusEvent {
   mysqlQuery,
   mysqlInsert,
   mysqlPass,
+  mysqlDelete,
 }
 

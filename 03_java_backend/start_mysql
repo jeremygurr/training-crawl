@@ -1,1 +1,1 @@
-docker run --rm --net=host -v ~/crawl-training-extra/mysqldata:/var/lib/mysql --name mysql -e MYSQL_ROOT_PASSWORD=password -d mariadb:10.5.9
+docker run --rm --net=host -v ~/crawl-training-extra/mysqldata:/var/lib/mysql -v ~/training-crawl/03_java_backend/setup_mysql.sql:/setup_mysql.sql --name mysql -e MYSQL_ROOT_PASSWORD=password -d mariadb:10.5.4

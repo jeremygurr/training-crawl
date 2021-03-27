@@ -1,12 +1,19 @@
 package com.epicGamecraft.dungeonCrawlDepths;
 
 import io.reactivex.Completable;
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import io.vertx.core.AsyncResult;
+import io.vertx.core.Handler;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import io.vertx.reactivex.core.AbstractVerticle;
 import io.vertx.reactivex.core.Vertx;
+import io.vertx.reactivex.core.buffer.Buffer;
 import io.vertx.reactivex.core.eventbus.EventBus;
 import io.vertx.reactivex.core.eventbus.Message;
+import io.vertx.reactivex.core.file.FileSystem;
+import io.vertx.reactivex.core.file.FileSystem.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,20 +42,28 @@ public class MysqlVerticle extends AbstractVerticle {
     eb.consumer(mysqlQuery.name(), this::handleQuery);
     eb.consumer(mysqlInsert.name(), this::handleInsert);
     eb.consumer(mysqlPass.name(), this::handlePassReset);
-    return Completable.complete();
-  }
+    eb.consumer(mysqlDelete.name(), this::handleDelete);
+    final Disposable fs = vertx.fileSystem().rxReadFile("config.json")
+      .subscribe(buffer -> {
+        JsonObject json = buffer.toJsonObject();
+        final String url = json.getString("mysqlUrl");
+        final String user = json.getString("mysqlUser");
+        final String pass = json.getString("mysqlPass");
+      }, err -> {
+        LOGGER.debug("failure: " + err.getMessage());
+      });
 
-  private void handleQuery(Message<String> message) {
-    LOGGER.debug("MysqlVerticle received message: " + message.body());
     final Properties config = new Properties();
     try {
       config.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("config.properties"));
-    } catch (IOException e) {
+    } catch (
+      IOException e) {
       e.printStackTrace();
     }
     final String url = config.getProperty("mysqlurl");
     final String user = config.getProperty("mysqluser");
     final String pass = config.getProperty("mysqlpass");
+
     MySQLConnectOptions connectOptions = new MySQLConnectOptions()
       .setPort(3306)
       .setHost(url)
@@ -56,39 +71,112 @@ public class MysqlVerticle extends AbstractVerticle {
       .setUser(user)
       .setPassword(pass);
 
-    // Pool options
     PoolOptions poolOptions = new PoolOptions()
       .setMaxSize(5);
+    final MySQLPool client = MySQLPool.pool(vertx, connectOptions, poolOptions);
+    context.put(ContextKey.mysqlConnection.name(), client);
+    return Completable.complete();
+  }
 
-    // Create the client pool
-    MySQLPool client = MySQLPool.pool(vertx, connectOptions, poolOptions);
-
-    /*Now here I need to use retrieve the username, and password from the messsage.body object and
-    put that into a prepared statement and in message.reply() return the results.
-     */
-
+  private void handleQuery(Message<String> message) {
+    LOGGER.debug("MysqlVerticle.handleQuery received message: " + message.body());
+    final MySQLPool client = context.get(ContextKey.mysqlConnection.name());
     final JsonObject json = new JsonObject(message.body());
     final String username = json.getString("username");
     final String password = json.getString("password").hashCode() + "";
-    //todo: If hashcode is always numbers then make this into an int and change the column inside mysql user table.
-
     client
-      .preparedQuery("SELECT * FROM user WHERE username=? AND password=?")
+      .preparedQuery("SELECT * FROM player WHERE username=? AND hashword=?")
       .execute(Tuple.of(username, password), ar -> {
         if (ar.succeeded()) {
           RowSet<Row> rows = ar.result();
           LOGGER.debug("Got " + rows.size() + " rows ");
-          for (Row row : rows) {
-            message.reply(row.getInteger(0) + " " + row.getString(1) + " " + row.getString(2) + " " + row.getInteger(3));
-            //Alternatively you can use row.getValue() instead.
+          if (rows.size() != 0) {
+            for (Row row : rows) {
+              message.reply(row.getInteger(0) + " " + row.getString(1) + " " + row.getInteger(2) + " " + row.getString(3));
+              //Alternatively you can use row.getValue() instead.
+            }
+          }
+          else {
+            message.reply("zero results for that username and password.");
           }
         } else {
           LOGGER.debug("Failure: " + ar.cause().getMessage());
           message.reply("invalid query");
         }
       });
-
   }
+
+  private void handleInsert(Message<String> message) {
+    LOGGER.debug("MysqlVerticle.handleInsert received message: " + message.body());
+    final MySQLPool client = context.get(ContextKey.mysqlConnection.name());
+    final JsonObject json = new JsonObject(message.body());
+    final int id = json.getInteger("id");
+    final String username = json.getString("username");
+    final String password = json.getString("password").hashCode() + "";
+    final String email = json.getString("email");
+    client
+      .preparedQuery("INSERT INTO player VALUES (?,?,?,?)")
+      .execute(Tuple.of(id, username, password, email), ar -> {
+        if (ar.succeeded()) {
+          RowSet<Row> rows = ar.result();
+          System.out.println(rows.rowCount());
+          message.reply(null);
+        } else {
+          LOGGER.debug("Failure: " + ar.cause().getMessage());
+          message.reply("invalid query");
+        }
+      });
+  }
+
+  private void handlePassReset(Message<String> message) {
+    LOGGER.debug("MysqlVerticle.handlePassReset received message: " + message.body());
+    final MySQLPool client = context.get(ContextKey.mysqlConnection.name());
+    final JsonObject json = new JsonObject(message.body());
+    final String username = json.getString("username");
+    final String email = json.getString("email");
+    client
+      .preparedQuery("SELECT * FROM player WHERE username=? AND email=?")
+      .execute(Tuple.of(username, email), ar -> {
+        if (ar.succeeded()) {
+          RowSet<Row> rows = ar.result();
+          LOGGER.debug("Got " + rows.size() + " rows ");
+          if (rows.size() != 0) {
+            for (Row row : rows) {
+              message.reply(row.getInteger(0) + " " + row.getString(1) + " " + row.getInteger(2) + " " + row.getString(3));
+              //Alternatively you can use row.getValue() instead.
+            }
+          }
+          else {
+            message.reply("zero results for that username and email.");
+          }
+        } else {
+          LOGGER.debug("Failure: " + ar.cause().getMessage());
+          message.reply("invalid query");
+        }
+      });
+  }
+
+  private void handleDelete(Message<String> message) {
+    LOGGER.debug("MysqlVerticle.handleDelete received message: " + message.body());
+    final MySQLPool client = context.get(ContextKey.mysqlConnection.name());
+    final JsonObject json = new JsonObject(message.body());
+    final String username = json.getString("username");
+    final String password = json.getString("password").hashCode() + "";
+    client
+      .preparedQuery("DELETE FROM player WHERE username=? AND hashword=?")
+      .execute(Tuple.of(username, password), ar -> {
+        if (ar.succeeded()) {
+          RowSet<Row> rows = ar.result();
+          System.out.println("rows returned: " + rows.rowCount());
+          message.reply(rows.next());
+        } else {
+          LOGGER.debug("Failure: " + ar.cause().getMessage());
+          message.reply("invalid query");
+        }
+      });
+  }
+
+}
 
     /* example of pure sql statement.
     client
@@ -109,11 +197,21 @@ public class MysqlVerticle extends AbstractVerticle {
 */
 
 
-  private void handleInsert(Message<String> message) {
-    //see CouchbaseVerticle to see how we handled this with couchbase.
-  }
+/*
+  //  Old way with config.properties file:
+*/
 
-  private void handlePassReset(Message<String> message) {
-    //see CouchbaseVerticle to see how we handled this with couchbase.
-  }
-}
+/*
+// New way to obtain credentials with config.json:
+
+    final Disposable fs = vertx.fileSystem().rxReadFile("config.json")
+      .subscribe(buffer -> {
+        LOGGER.debug("result is: " + buffer.toString());
+        JsonObject json = buffer.toJsonObject();
+        final String url = json.getString("mysqlUrl");
+        final String user = json.getString("mysqlUser");
+        final String pass = json.getString("mysqlPass");
+      }, err -> {
+        LOGGER.debug("failure: " + err.getMessage());
+      });
+ */

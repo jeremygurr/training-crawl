@@ -1,7 +1,8 @@
-package com.epicGamecraft.dungeonCrawlDepths;
+package com.epicGamecraft.dungeonCrawlDepths.test.unit;
 
 
 
+import com.epicGamecraft.dungeonCrawlDepths.MysqlVerticle;
 import io.reactivex.Completable;
 import io.vertx.reactivex.core.AbstractVerticle;
 import io.vertx.reactivex.core.eventbus.EventBus;

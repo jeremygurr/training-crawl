@@ -1,5 +1,6 @@
 package com.epicGamecraft.dungeonCrawlDepths.test.integration;
 
+import com.epicGamecraft.dungeonCrawlDepths.CouchbaseVerticle;
 import com.epicGamecraft.dungeonCrawlDepths.MysqlVerticle;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
@@ -9,11 +10,34 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import static com.epicGamecraft.dungeonCrawlDepths.BusEvent.*;
 
 @ExtendWith(VertxExtension.class)
 public class TestMysql {
   private static final Logger LOGGER = LoggerFactory.getLogger(TestMysql.class);
+
+  @Test
+  void runMysql(Vertx vertx, VertxTestContext context) throws Throwable {
+    Process proc = null;
+    try {
+      proc = Runtime.getRuntime().exec("./start_mysql");
+      proc.waitFor();
+      BufferedReader reader = new BufferedReader(new InputStreamReader(
+        proc.getInputStream()));
+      String line;
+      while ((line = reader.readLine()) != null) {
+        System.out.println(line);
+      }
+      context.completeNow();
+    } catch (IOException e) {
+      e.printStackTrace();
+      context.failNow(e);
+    }
+  }
 
   //These mysql tests require the mysql container to be running.
   @Test
@@ -27,7 +51,7 @@ public class TestMysql {
                   LOGGER.debug("Mysql successfully deleted record.");
                 } else {
                   //fixme: This code never runs even if the user/password combo doesn't exist in database.
-                  LOGGER.debug("Mysql failed to delete record : that username/password combo doesn't exist." );
+                  LOGGER.debug("Mysql failed to delete record : that username/password combo doesn't exist.");
                 }
                 context.completeNow();
               },
@@ -106,4 +130,74 @@ public class TestMysql {
           context.failNow(err);
         });
   }
+
+  @Test
+  void stopMysql(Vertx vertx, VertxTestContext context) throws Throwable {
+    Process proc = null;
+    try {
+      proc = Runtime.getRuntime().exec("docker stop mysql");
+      proc.waitFor();
+      BufferedReader reader = new BufferedReader(new InputStreamReader(
+        proc.getInputStream()));
+      String line;
+      while ((line = reader.readLine()) != null) {
+        System.out.println(line);
+      }
+      context.completeNow();
+    } catch (IOException e) {
+      e.printStackTrace();
+      context.failNow(e);
+    }
+  }
 }
+  /*
+  //Below are two for the CouchbaseVerticle. Requires couchbase container running.
+  //TODO: Make this auto-run couchbase container.
+  //FIXME: Make it query and insert for something besides login.
+  @Test
+  void queryCouchbase(Vertx vertx, VertxTestContext context) throws Throwable {
+    vertx.rxDeployVerticle(new CouchbaseVerticle())
+      .subscribe(e -> {
+          vertx.eventBus().rxRequest(couchbaseQuery.name(), "{\"username\":\"jgurr\",\"password\":\"password\"}")
+            .subscribe(ar -> {
+                LOGGER.debug("Test.queryCouchbase received reply : " + ar.body());
+                context.completeNow();
+              },
+              err -> {
+                LOGGER.debug("Communication between Test.queryCouchbase error : " + err.getMessage());
+                context.failNow(err);
+              });
+        },
+        err -> {
+          LOGGER.debug("TestCrawlInit.queryCouchbase issue deploying verticle : " + err.getMessage());
+          context.failNow(err);
+        });
+  }
+
+
+  @Test
+  void insertCouchbase(Vertx vertx, VertxTestContext context) throws Throwable {
+    vertx.rxDeployVerticle(new CouchbaseVerticle())
+      .subscribe(e -> {
+          vertx.eventBus().rxRequest(couchbaseInsert.name(), "{\"username\":\"jgurr\",\"password\":\"password\",\"email\":\"som@gmail.com\"}")
+            .subscribe(ar -> {
+                if (ar.body() == null) {
+                  LOGGER.debug("Couchbase successfully inserted document.");
+                } else {
+                  LOGGER.debug("Couchbase failed to insert document : " + ar.body());
+                }
+                context.completeNow();
+              },
+              err -> {
+                LOGGER.debug("Communication between Test.queryCouchbase error : " + err.getMessage());
+                context.failNow(err);
+              });
+        },
+        err -> {
+          LOGGER.debug("TestCrawlInit.insertCouchbase issue communicating with " +
+            "couchbase verticle. : " + err.getCause());
+          context.failNow(err);
+        });
+  }
+*/
+

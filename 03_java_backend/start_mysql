@@ -1,8 +1,10 @@
-set -ux
-
-training_crawl_repo=${training_crawl_repo:-~/training-crawl/03_java_backend}
-training_crawl_data=${training_crawl_data:-~/crawl-training-extra/mysqldata}
-
+set -u
+if [ -z "${training_crawl_data:-}" -o -z "${training_crawl_repo:-}" ]; then
+  echo 'error: missing training_crawl_data and training_crawl_repo variables.' >&2
+  echo 'Export these variables in your bash profile or ~/.bashrc' >&2
+  exit 1
+fi
+set -x
 docker run --rm --net=host \
   -v $training_crawl_data:/var/lib/mysql \
   -v $training_crawl_repo/setup_mysql.sql:/setup_mysql.sql \

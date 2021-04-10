@@ -1,17 +1,15 @@
 package com.epicGamecraft.dungeonCrawlDepths;
 
-import static com.epicGamecraft.dungeonCrawlDepths.BusEvent.*;
-import static com.epicGamecraft.dungeonCrawlDepths.UserResult.*;
-import static com.epicGamecraft.dungeonCrawlDepths.MessageKey.*;
-
+import io.reactivex.Completable;
 import io.vertx.core.json.JsonObject;
-import io.vertx.reactivex.ext.web.Session;
+import io.vertx.reactivex.core.AbstractVerticle;
+import io.vertx.reactivex.core.eventbus.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.reactivex.*;
-import io.vertx.reactivex.core.*;
-import io.vertx.reactivex.core.eventbus.Message;
+import static com.epicGamecraft.dungeonCrawlDepths.BusEvent.*;
+import static com.epicGamecraft.dungeonCrawlDepths.MessageKey.redirect;
+import static com.epicGamecraft.dungeonCrawlDepths.MessageKey.response;
 
 public class UserVerticle extends AbstractVerticle {
 

@@ -1,29 +1,19 @@
 package com.epicGamecraft.dungeonCrawlDepths;
 
 import io.reactivex.Completable;
-import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Handler;
-import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
+import io.vertx.mysqlclient.MySQLConnectOptions;
 import io.vertx.reactivex.core.AbstractVerticle;
-import io.vertx.reactivex.core.Vertx;
-import io.vertx.reactivex.core.buffer.Buffer;
 import io.vertx.reactivex.core.eventbus.EventBus;
 import io.vertx.reactivex.core.eventbus.Message;
-import io.vertx.reactivex.core.file.FileSystem;
-import io.vertx.reactivex.core.file.FileSystem.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import io.vertx.mysqlclient.MySQLConnectOptions;
 import io.vertx.reactivex.mysqlclient.MySQLPool;
 import io.vertx.reactivex.sqlclient.Row;
 import io.vertx.reactivex.sqlclient.RowSet;
 import io.vertx.reactivex.sqlclient.Tuple;
 import io.vertx.sqlclient.PoolOptions;
-import io.vertx.sqlclient.SqlResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -196,13 +186,8 @@ public class MysqlVerticle extends AbstractVerticle {
       });
 */
 
-
 /*
-  //  Old way with config.properties file:
-*/
-
-/*
-// New way to obtain credentials with config.json:
+// another way to obtain credentials with config.json:
 
     final Disposable fs = vertx.fileSystem().rxReadFile("config.json")
       .subscribe(buffer -> {

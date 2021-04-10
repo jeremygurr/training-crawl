@@ -21,23 +21,23 @@ public class GameListVerticle extends AbstractVerticle {
 
   private void handleList(Message<String> message) {
     LOGGER.debug("GameListVerticle.handleList received message: " + message.body());
-    vertx.eventBus().rxRequest(mysqlQuery.name(), message.body())
+    vertx.eventBus().rxRequest(mysqlGameList.name(), message.body())
       .subscribe(e -> {
+          LOGGER.debug("GameListVerticle.handleList received reply: " + e.body());
           if (e.body() != null) {
             //This means user did correct username and password.
-            LOGGER.debug("User Verticle received reply: " + e.body());
+            LOGGER.debug("Successfully retrieved lobby data: " + e.body());
+            message.reply("success");
           } else {
-            //This means user input wrong username or password.
-            LOGGER.debug("Invalid Login");
-            //add a message to http verticle to notify user login information was incorrect.
-            // (Perhaps add that as part of a json object message reply.)
+            //This means mysql did not have any lobby info to give.
+            LOGGER.debug("Error: no data available for lobby.");
+            message.reply("failure");
           }
-          message.reply("");
         },
         err -> {
           //This means the eventbus failed to communicate properly with the CouchbaseVerticle or vice versa.
-          LOGGER.debug("UserVerticle Error communicating with CouchbaseVerticle: " + err.getMessage());
-          message.reply("");
+          LOGGER.debug("UserVerticle Error communicating with MysqlVerticle: " + err.getMessage());
+          message.reply("communication fail");
         }
       );
   }

@@ -33,7 +33,7 @@ To setup MySQL with database and tables:
 ```
 docker exec -it mysql /bin/bash
 mysql -u root -p                   ##password is listed in start_mysql file
-source /setup_mysql.sql
+source mysqlScripts/updates/0.0.0
 CTRL+D exits the cli and the container.
 ```
 

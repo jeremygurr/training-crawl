@@ -25,7 +25,7 @@ CREATE TABLE `game` (
     `status` enum('active','paused','ended','broken'),
     `howItEnded` enum('died','quit','won', '') default '',
     `creationDate` datetime default CURRENT_TIMESTAMP,
-    `playtime` time,
+    `playtime` time default '00:00:00',
     `scenario` enum('normal','treasure seeker','artifact') default 'normal',
     `lastEvent` varchar(100),
     `floorNumber` int not null,
@@ -34,14 +34,14 @@ CREATE TABLE `game` (
 
 CREATE VIEW `lobby` AS
 SELECT game.id AS game_id,
-       name,
-       username AS user,
+       name AS character_Name,
        status,
+       floorNumber,
+       playtime,
        howItEnded AS howGameEnded,
        creationDate AS creation_time,
-       playtime,
-       scenario,
-       floorNumber
+       username AS user,
+       scenario
 FROM `player`
          INNER JOIN `character` ON (player.id = character.player_id)
          INNER JOIN `game` ON (character.id = game.character_id);

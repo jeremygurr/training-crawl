@@ -22,7 +22,7 @@ public class FakeMysqlVerticle extends AbstractVerticle {
     LOGGER.debug("FakeMysqlVerticle is listening to: " + mysqlQuery.name() + " and " + gameList.name());
     final EventBus eb = vertx.eventBus();
     eb.consumer(mysqlQuery.name(), this::handleQuery);
-    eb.consumer(gameList.name(), this::handleList);
+    eb.consumer(mysqlGameList.name(), this::handleList);
     return Completable.complete();
   }
   private void handleQuery(Message<String> message) {

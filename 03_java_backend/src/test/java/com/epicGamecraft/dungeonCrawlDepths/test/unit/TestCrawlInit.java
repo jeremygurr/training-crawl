@@ -29,13 +29,13 @@ public class TestCrawlInit {
   @Test
   void loginSuccessMysql(Vertx vertx, VertxTestContext context) throws Throwable {
     FakeMysqlVerticle mysqlVerticle = new FakeMysqlVerticle();
-    mysqlVerticle.response = "{\"email\":\"jared.gurr@yahoo.com\",\"hashword\":\"1216985755\",\"name\":\"Jared Gurr\"}";
+    mysqlVerticle.response = "{\"email\":\"bob@yahoo.com\",\"hashword\":\"1216985755\",\"name\":\"Bob John\"}";
     vertx.rxDeployVerticle(mysqlVerticle)
       .flatMap(e -> {
         return vertx.rxDeployVerticle(new UserVerticle());   //This is how you deploy more than one verticle. Just use more .flatmaps().
       })
       .subscribe(e -> {
-          vertx.eventBus().rxRequest(userLogin.name(), "{\"usernameOrEmail\":\"jgurr\",\"password\":\"password\"}")
+          vertx.eventBus().rxRequest(userLogin.name(), "{\"usernameOrEmail\":\"billybob\",\"password\":\"password\"}")
             .subscribe(ar -> {
                 LOGGER.debug("Test Verticle received reply: " + ar.body());
                 JsonObject json = new JsonObject(ar.body().toString());
@@ -61,15 +61,15 @@ public class TestCrawlInit {
     vertx.rxDeployVerticle(mysqlVerticle)
       .flatMap(e -> vertx.rxDeployVerticle(new UserVerticle()))
       .subscribe(e -> {
-          vertx.eventBus().rxRequest(userLogin.name(), "{\"usernameOrEmail\":\"jgr\",\"password\":\"pass\"}")
+          vertx.eventBus().rxRequest(userLogin.name(), "{\"usernameOrEmail\":\"b\",\"password\":\"pass\"}")
             .subscribe(ar -> {
                 LOGGER.debug("Test Verticle received reply: " + ar.body());
                 JsonObject json = new JsonObject(ar.body().toString());
                 if (json.getString("redirect").equals("serverError.html")) {
                   context.failNow(new Exception("User Verticle failed to retrieve data from FakeMysqlVerticle."));
                 } else {
-                    context.completeNow();
-                  }
+                  context.completeNow();
+                }
               },
               err -> {
                 LOGGER.debug("An error occurred retrieving data from Mysql." + err.getMessage());
@@ -81,24 +81,53 @@ public class TestCrawlInit {
   }
 
   @Test
-  void gameList(Vertx vertx, VertxTestContext context) throws Throwable {
+  void gameListSuccess(Vertx vertx, VertxTestContext context) throws Throwable {
+    FakeMysqlVerticle mysqlVerticle = new FakeMysqlVerticle();
+    mysqlVerticle.response = "{\"game_id\":1,\"character_Name\":\"Ross the cold Enchanter\",\"status\":\"paused\",\"floorNumber\":\"1\",\"playtime\":\"00:00:00\",\"howGameEnded\":\"\",\"creation_time\":\"2021-04-10 18:28:57\",\"user\":\"billybob\",\"scenario\":\"normal\"}";
+    vertx.rxDeployVerticle(mysqlVerticle)
+      .flatMap(e -> vertx.rxDeployVerticle(new GameListVerticle()))
+      .subscribe(e -> {
+          vertx.eventBus().rxRequest(gameList.name(), "basic")
+            .subscribe(ar -> {
+              LOGGER.debug("Test Verticle received reply: " + ar.body());
+                if (ar.body().toString().equals("failed")) {
+                  context.failNow(new Exception("User Verticle failed to retrieve data from FakeMysqlVerticle."));
+                } else {
+                  context.completeNow();
+                }
+              },
+              err -> {
+                LOGGER.debug("An error occurred retrieving game list." + err.getMessage());
+              });
+        },
+        err -> {
+          context.failNow(err);
+        });
+  }
+
+  @Test
+  void gameListFailure(Vertx vertx, VertxTestContext context) throws Throwable {
     FakeMysqlVerticle mysqlVerticle = new FakeMysqlVerticle();
     mysqlVerticle.response = null;
     vertx.rxDeployVerticle(mysqlVerticle)
       .flatMap(e -> vertx.rxDeployVerticle(new GameListVerticle()))
       .subscribe(e -> {
-        vertx.eventBus().rxRequest(gameList.name(), "basic")
-          .subscribe(ar -> {
-              LOGGER.debug("TestCrawlInit.gameList received reply: " + ar.body());
-            },
-            err -> {
-              LOGGER.debug("An error occurred retrieving game list." + err.getMessage());
-            });
-        context.completeNow();
-      },
+          vertx.eventBus().rxRequest(gameList.name(), "basic")
+            .subscribe(ar -> {
+                LOGGER.debug("Test Verticle received reply: " + ar.body());
+                if (ar.body().toString().equals("success")) {
+                  context.failNow(new Exception("User Verticle failed to retrieve data from FakeMysqlVerticle."));
+                } else {
+                  context.completeNow();
+                }
+              },
+              err -> {
+                LOGGER.debug("An error occurred retrieving game list." + err.getMessage());
+              });
+        },
         err -> {
-        context.failNow(new Exception("TestCrawlInit.gameList failed to handle game list correctly."));
-      });
+          context.failNow(err);
+        });
   }
 
 }

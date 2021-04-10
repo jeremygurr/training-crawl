@@ -13,5 +13,6 @@ public enum BusEvent {
   mysqlPass,
   mysqlDelete,
   gameList,
+  mysqlGameList,
 }
 

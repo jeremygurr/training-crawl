@@ -4,6 +4,51 @@ image:https://img.shields.io/badge/vert.x-4.0.0-milestone4-purple.svg[link="http
 
 This application was generated using http://start.vertx.io
 
+
+== Couchbase config
+
+To start Couchbase:
+```
+./start_couchbase
+```
+
+Configure Couchbase (run only once):
+```
+./setup_couchbase
+```
+
+To stop Couchbase container:
+```
+docker stop couchbase
+```
+
+== MySQL config
+
+To start MySQL:
+```
+./start_mysql
+```
+
+To setup MySQL with database and tables:
+```
+docker exec -it mysql /bin/bash
+mysql -u root -p                   ##password is listed in start_mysql file
+source mysqlScripts/updates/0.0.0
+CTRL+D exits the cli and the container.
+```
+
+To stop MySQL container:
+```
+docker stop mysql
+```
+
+To fix container if a version change occurs:
+```
+cd ~/crawl-training-extra/
+sudo rm -rf mysqldata
+```
+After that, you need to restart mysql container, and setup database and tables again.
+
 == Building
 
 To launch your tests:
@@ -19,6 +64,11 @@ To package your application:
 To run your application:
 ```
 ./gradlew clean run
+```
+
+To view/use app inside browser:
+```
+http://localhost:8080/static/login.html
 ```
 
 == Help

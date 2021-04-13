@@ -8,5 +8,11 @@ public enum BusEvent {
   userLogin,
   createUser,
   forgotPassword,
+  mysqlQuery,
+  mysqlInsert,
+  mysqlPass,
+  mysqlDelete,
+  gameList,
+  mysqlGameList,
 }
 

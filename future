@@ -1218,7 +1218,7 @@ environmental effects
       increases air boost
     wind
       boosts air effectiveness
-      alters smell flow
+      altars smell flow
       special:
         blizzard
           cyan (4.0)
@@ -1270,4 +1270,227 @@ improved energy system
     black(L2)  -> gray(L1)
   tier 1:
     gray(L1)
+
+alchemy
+  each ingredient has multiple effects
+  only dominant 2 effects will happen, lower ones will be ignored
+  combining ingredients can cancel out dominant effects to allow weaker effect to come out
+  amplification process works by combining the same ingredients
+  gathering ingredients:
+    not dropped from monsters
+    automatically picked up as you discover new empty floor spaces
+    higher chance of finding quality ingredients based on alchemy skill
+
+crafting
+  describe what can be crafted from given materials
+    two groups: 
+      directly craftable
+      indirectly craftable
+  materials are gathered in the same way as alchemy ingredients
+  higher chance of finding quality ingredients based on crafting skill
+
+magic foundation
+  templates maintain physical existence
+  physical properties randomly decay, and templates resist that (but then decay themselves)
+  can create templates to stabilize templates, as many levels as needed
+  a template won't change anything unless there is the right kind of energy available
+
+bodies
+  spirit is foundation, and fundamentally different than other bodies
+    can only store 5 points of each energy type (making energy refinement impossible)
+    energy generation is the same
+    can't eat
+    but can quickly absorb energy from surroundings
+    can use spells
+    can't use weapons or armor
+    not damaged by physical attacks
+    can pass through walls
+    much more sensitive to energy
+    can influence corporeal bodies
+    moves by spreading out spirit and gathering it back up
+      one space is designated as spirit core, and spirit will either gather to or spread away from it
+      distance is controllable also
+        0, 1, 2, 3, 4, 6, 9, 15
+      spread may be radial or directional
+        360 degrees, 180, 90, 45, 22, 11, 5, 2, 1 (depending on focus ability)
+      concentration ratio
+        two modes: spread / gather
+        spread
+          9:1
+          6:1
+          4:1 more concentrated around root, less spread
+          3:1 
+          2:1 means spirit will only transfer from A to B if B contains less than half of A
+          1:1 evenly spreads out spirit everywhere
+          1:2 will reduce root concentration to below spread
+    senses also through spirit
+      higher concentration provides higher vision distance
+      generally weaker than physical body though, except for energy sensitivity
+      spirits can't automatically identify other spirits in the same space, but can potentially
+        recognize through energy signatures
+    if physical material is bound to a spirit, foreign spirits can't pass through
+      neutral matter allows multiple spirits to pass through at once
+    spreading out spirit matter also spreads out energy contained by that spirit
+  corporeal
+  undead
+  synthetic
+
+do we need complex surfaces?
+  strictly 2d is simpler
+  support clouds which combine with character if character moves onto space, then cloud is gone
+  can spaces generate clouds? No, better to have a cloud generator
+  even items can work this way
+  each space can only hold one type of item (although there can be a multiplier with it)
+  moving onto an item space can either swap spaces with the item or merge with it
+    swap by default, pickup is a special command
+  but having water, fire, lava on the floor is meaningful
+    can't have swimming, oil, lava, ice otherwise
+    so each cell can hold a single object / character type, and has a single surface type
+    surface type can be seen as background color of cell
+  swimming requires more than just a surface mechanic
+    do we support ground mechanic and surface mechanic?
+      greatly complicates
+      hard to know what is covered up
+      can make it exclusive: either a shallow surface over stone, or a deep surface
+  best to have under, surface, and over slots
+
+  surfaces
+    shallow water - light blue
+    deep water - dark blue
+    ice - cyan
+    stone - dark grey
+    dirt - brown
+    poison - green
+    lava - red
+    fire - orange
+    oil - black
+
+  still too complicated
+  go to only under and over, no surface:
+
+  under
+    hot rock - orange ,
+    rock - black ,
+    cold rock - dark blue ,
+    dirt - brown .
+    grass - green . 
+    burning grass - red .
+    forest - green !
+    burning forest - red !
+    shallow water - light blue ~
+    deep water - dark blue ~
+    lava - red ~
+    tar pit - black ~
+    elevated rock - yellow ^
+
+matter
+  level 1 matter can only move through unoccupied level 0 space
+  level 2 matter can only move through unoccupied level 1 space
+  level 1 matter creates level 1 space
+  spirit matter must have physical matter to pass through, lower densities means slower movement
+    1 point of spacial mass holds 1 points of physical 
+    1 point of physical mass can hold 1 points of astral mass
+    1 point of astral mass can support 1 points of spirit mass
+    1 point of spirit mass can support 1 points of etheric mass
+    each level cell typically has 1000 spacial mass
+      maybe this can be altered by various circumstances?
+  mass of below vs above?
+    does spirit pass through ground?
+    [ ] support multiple levels (z dimension)
+    [ ] flat only
+    [*] above and below only, but travel only through above
+  physical matter must have spacial matter to pass through
+  each type of matter is grouped into pairs
+  levels 
+    0 spacial matter
+    1 physical matter
+    2 astral matter
+    3 spirit matter
+    4 etheric matter
+  no just allow matter to pass through independent of other levels of matter
+    spirit matter can exist independently of physical
+    but doesn't spirit matter need to move with physical?
+    spirit matter can be inside or outside
+    outside matter steadily dissipates
+    inside moves with body
+
+new energy pools
+  can't convert from one spectral energy color to another, but can convert between different brightness levels
+  black <-  navy      <-> blue        <-> azure       -> white
+  black <-  crimson   <-> red         <-> pink        -> white
+  black <-  brown     <-> yellow      <-> blonde      -> white
+  black <-> dark gray <-> medium gray <-> light gray <-> white
+
+  many basic functions can be performed with pure lumina, but specialized magic requires spectra
+
+  multiple spectra can be combined to form etherea
+  etherea has 3 brightness levels like spectra, but can't convert to lumina
+  (red orange) <-> copper
+  (orange yellow green) <-> silver
+  (yellow green cyan blue) <-> gold
+  (cyan blue indigo violet red) <-> diamond
+  (all spectra) <-> rainbow
+
+  exotica doesn't have multiple brightness levels
+  translucent
+  opal
+  sparkle
+
+  24 spectra
+  5 lumina
+  5 etherea
+  3 exotica
+
+replace hp with health status
+  levels
+    fortified
+    undamaged
+    minor wound
+      easy to heal, can heal by time
+    major wound
+      can't heal over time, must assist
+    critical
+      degrades over time
+    dead
+  to go from 
+    undamaged to minor (1 level): 0 challenge
+    undamaged to major (2 levels): 3+constitution (min 1) challenge
+    undamaged to critical (3 levels): 2*(3+constitution) (min 2) challenge
+    undamaged to dead (4 levels): 3*(3+constitution) (min 3) challenge
+      example con=0, one-shot difficulty=9
+
+success rate calculator:
+  (1 + diff) / (2 + diff) is chance of success, where diff >= 0
+  0 = 50%
+  1 = 66%
+  2 = 75%
+  3 = 80%
+  4 = 83%
+  5 = 85%
+  10 = 91%
+  15 = 94%
+  20 = 95%
+  50 = 98%
+  100 = 99%
+
+attack calculation
+  dodge attempt
+  block attempt
+  deflect attempt
+  damage calculation
+start as spirit
+  can sense physical state of adjacent spaces
+
+attributes
+  astral
+    will
+    intelligence
+    focus
+    mp, wp
+  corporeal
+    constitution
+    strength
+    dexterity
+    hp, sp
+
 

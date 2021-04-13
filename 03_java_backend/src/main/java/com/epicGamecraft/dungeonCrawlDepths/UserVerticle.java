@@ -1,17 +1,15 @@
 package com.epicGamecraft.dungeonCrawlDepths;
 
-import static com.epicGamecraft.dungeonCrawlDepths.BusEvent.*;
-import static com.epicGamecraft.dungeonCrawlDepths.UserResult.*;
-import static com.epicGamecraft.dungeonCrawlDepths.MessageKey.*;
-
+import io.reactivex.Completable;
 import io.vertx.core.json.JsonObject;
-import io.vertx.reactivex.ext.web.Session;
+import io.vertx.reactivex.core.AbstractVerticle;
+import io.vertx.reactivex.core.eventbus.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.reactivex.*;
-import io.vertx.reactivex.core.*;
-import io.vertx.reactivex.core.eventbus.Message;
+import static com.epicGamecraft.dungeonCrawlDepths.BusEvent.*;
+import static com.epicGamecraft.dungeonCrawlDepths.MessageKey.redirect;
+import static com.epicGamecraft.dungeonCrawlDepths.MessageKey.response;
 
 public class UserVerticle extends AbstractVerticle {
 
@@ -26,7 +24,36 @@ public class UserVerticle extends AbstractVerticle {
     return Completable.complete();
   }
 
-  //here is new code:
+  //new code for mysql:
+  private void handleUserLogin(Message<String> message) {
+    LOGGER.debug("UserVerticle.handleUserLogin received message: " + message.body());
+    final JsonObject jsonReply = new JsonObject();
+    vertx.eventBus().rxRequest(mysqlQuery.name(), message.body())
+      .subscribe(e -> {
+          if (e.body() != null) {
+            //This means user did correct username and password.
+            LOGGER.debug("User Verticle received reply: " + e.body());
+            jsonReply.put(redirect.name(), "jscrawl.html");
+          } else {
+            //This means user input wrong username or password.
+            LOGGER.debug("Invalid Login");
+            jsonReply.put(redirect.name(), "login.html");
+            jsonReply.put(response.name(), "Invalid Login");
+            //add a message to http verticle to notify user login information was incorrect.
+            // (Perhaps add that as part of a json object message reply.)
+          }
+          message.reply(jsonReply);
+        },
+        err -> {
+          //This means the eventbus failed to communicate properly with the CouchbaseVerticle or vice versa.
+          LOGGER.debug("UserVerticle Error communicating with CouchbaseVerticle: " + err.getMessage());
+          jsonReply.put(redirect.name(), "serverError.html");
+          message.reply(jsonReply);
+        }
+      );
+  }
+
+  /*
   private void handleUserLogin(Message<String> message) {
     LOGGER.debug("UserVerticle.handleUserLogin received message: " + message.body());
     final JsonObject jsonReply = new JsonObject();
@@ -54,6 +81,7 @@ public class UserVerticle extends AbstractVerticle {
         }
       );
   }
+   */
 
   private void userCreateHandler(Message<String> message) {
     LOGGER.debug("UserVerticle.userCreateHandler received message: " + message.body());

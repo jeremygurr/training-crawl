@@ -24,6 +24,8 @@ public class CrawlServer {
 		vertx.deployVerticle(new BrowserInputVerticle());
 		vertx.deployVerticle(new UserVerticle());
 		vertx.deployVerticle(new CouchbaseVerticle());
+		vertx.deployVerticle(new MysqlVerticle());
+		vertx.deployVerticle(new GameListVerticle());
 
 	}
 

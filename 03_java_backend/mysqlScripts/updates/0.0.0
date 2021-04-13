@@ -1,0 +1,49 @@
+CREATE DATABASE crawl;
+USE crawl;
+
+CREATE TABLE `player` (
+    `id` int unsigned AUTO_INCREMENT,
+    `username` varchar(50) UNIQUE not null,
+    `hashword` int unsigned not null,
+    `email` varchar(65) not null,
+    PRIMARY KEY (`id`)
+) ENGINE=Aria;
+
+CREATE TABLE `character` (
+    `id` int unsigned AUTO_INCREMENT,
+    `player_id` int unsigned,
+    `name` varchar(100) not null,
+    `dateCreated` datetime default CURRENT_TIMESTAMP,
+    `lastSession` datetime default null ON UPDATE CURRENT_TIMESTAMP,
+    `dateOfDeath` datetime default null ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+) ENGINE=Aria;
+
+CREATE TABLE `game` (
+    `id` int unsigned AUTO_INCREMENT,
+    `character_id` int unsigned,
+    `status` enum('active','paused','ended','broken'),
+    `howItEnded` enum('died','quit','won', '') default '',
+    `creationDate` datetime default CURRENT_TIMESTAMP,
+    `playtime` time default '00:00:00',
+    `scenario` enum('normal','treasure seeker','artifact') default 'normal',
+    `lastEvent` varchar(100),
+    `floorNumber` int not null,
+    PRIMARY KEY (`id`)
+) ENGINE=Aria;
+
+CREATE VIEW `lobby` AS
+SELECT game.id AS game_id,
+       name AS character_Name,
+       status,
+       floorNumber,
+       playtime,
+       howItEnded AS howGameEnded,
+       creationDate AS creation_time,
+       username AS user,
+       scenario
+FROM `player`
+         INNER JOIN `character` ON (player.id = character.player_id)
+         INNER JOIN `game` ON (character.id = game.character_id);
+
+

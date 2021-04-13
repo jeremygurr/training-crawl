@@ -17,6 +17,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import com.couchbase.client.java.json.JsonObject;
 
+import java.io.IOException;
+import java.util.Properties;
+
 public class CouchbaseVerticle extends AbstractVerticle {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CouchbaseVerticle.class);
@@ -29,8 +32,16 @@ public class CouchbaseVerticle extends AbstractVerticle {
     eb.consumer(couchbaseQuery.name(), this::handleQuery);
     eb.consumer(couchbaseInsert.name(), this::handleInsert);
     eb.consumer(couchbasePass.name(), this::handlePassReset);
-    final ReactiveCluster connection = ReactiveCluster.connect
-      ("localhost:11210", "Administrator", "password");
+    final Properties config = new Properties();
+    try {
+      config.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("config.properties"));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    final String url = config.getProperty("url");
+    final String username = config.getProperty("username");
+    final String password = config.getProperty("password");
+    final ReactiveCluster connection = ReactiveCluster.connect(url, username, password);
     context.put(ContextKey.couchbaseConnection.name(), connection);
     return Completable.complete();
   }

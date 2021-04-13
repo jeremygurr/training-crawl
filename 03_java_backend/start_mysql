@@ -1,0 +1,16 @@
+set -u
+if [ -z "${training_crawl_data:-}" -o -z "${training_crawl_repo:-}" ]; then
+  echo 'error: missing training_crawl_data and training_crawl_repo variables.' >&2
+  echo 'training_crawl_data creates a mysqldata folder wherever you want it on your computer. Example: ~/training-crawl-extra/mysqldata' >&2
+  echo 'training_crawl_repo should lead to the directory containing mysqlScripts folder inside this project. Example: ~/training-crawl/03_java_backend' >&2
+  echo 'Export these variables in your bash profile or ~/.bashrc' >&2
+  exit 1
+fi
+set -x
+docker run --rm --net=host \
+  -v $training_crawl_data:/var/lib/mysql \
+  -v $training_crawl_repo/mysqlScripts:/mysqlScripts \
+  --name mysql \
+  -e MYSQL_ROOT_PASSWORD=password \
+  -d mariadb:10.5.4
+

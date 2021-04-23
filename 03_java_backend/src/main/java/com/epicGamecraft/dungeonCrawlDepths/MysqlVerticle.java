@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Properties;
 
 import static com.epicGamecraft.dungeonCrawlDepths.BusEvent.*;
@@ -33,16 +34,7 @@ public class MysqlVerticle extends AbstractVerticle {
     eb.consumer(mysqlInsert.name(), this::handleInsert);
     eb.consumer(mysqlPass.name(), this::handlePassReset);
     eb.consumer(mysqlDelete.name(), this::handleDelete);
-    final Disposable fs = vertx.fileSystem().rxReadFile("config.json")
-      .subscribe(buffer -> {
-        JsonObject json = buffer.toJsonObject();
-        final String url = json.getString("mysqlUrl");
-        final String user = json.getString("mysqlUser");
-        final String pass = json.getString("mysqlPass");
-      }, err -> {
-        LOGGER.debug("failure: " + err.getMessage());
-      });
-
+    eb.consumer(mysqlGameList.name(), this::handleGameList);
     final Properties config = new Properties();
     try {
       config.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("config.properties"));
@@ -85,8 +77,7 @@ public class MysqlVerticle extends AbstractVerticle {
               message.reply(row.getInteger(0) + " " + row.getString(1) + " " + row.getInteger(2) + " " + row.getString(3));
               //Alternatively you can use row.getValue() instead.
             }
-          }
-          else {
+          } else {
             message.reply("zero results for that username and password.");
           }
         } else {
@@ -135,8 +126,7 @@ public class MysqlVerticle extends AbstractVerticle {
               message.reply(row.getInteger(0) + " " + row.getString(1) + " " + row.getInteger(2) + " " + row.getString(3));
               //Alternatively you can use row.getValue() instead.
             }
-          }
-          else {
+          } else {
             message.reply("zero results for that username and email.");
           }
         } else {
@@ -157,7 +147,6 @@ public class MysqlVerticle extends AbstractVerticle {
       .execute(Tuple.of(username, password), ar -> {
         if (ar.succeeded()) {
           RowSet<Row> rows = ar.result();
-          System.out.println("rows returned: " + rows.rowCount());
           message.reply(rows.next());
         } else {
           LOGGER.debug("Failure: " + ar.cause().getMessage());
@@ -166,37 +155,25 @@ public class MysqlVerticle extends AbstractVerticle {
       });
   }
 
-}
-
-    /* example of pure sql statement.
+  private void handleGameList(Message<String> message) {
+    LOGGER.debug("MysqlVerticle.handleGameList received message: " + message.body());
+    final MySQLPool client = context.get(ContextKey.mysqlConnection.name());
+    String sql = "SELECT * FROM lobby";
+    if (message.body().equals("highest score")) {
+      sql = "SELECT * FROM lobby ORDER BY score";
+    }
     client
-      .query("SELECT * FROM user")
+      .query(sql)
       .execute(ar -> {
         if (ar.succeeded()) {
-          RowSet<Row> result = ar.result();
-          System.out.println("Got " + result.size() + " rows ");
-          message.reply("success message");
+          RowSet<Row> rows = ar.result();
+          System.out.println("rows returned: " + rows.size());
+          message.reply(rows.next());
         } else {
-          System.out.println("Failure: " + ar.cause().getMessage());
-          message.reply("failed message");
+          LOGGER.debug("Failure: " + ar.cause().getMessage());
+          message.reply(null);
         }
-
-        // Now close the pool
-        client.close();
       });
-*/
+  }
 
-/*
-// another way to obtain credentials with config.json:
-
-    final Disposable fs = vertx.fileSystem().rxReadFile("config.json")
-      .subscribe(buffer -> {
-        LOGGER.debug("result is: " + buffer.toString());
-        JsonObject json = buffer.toJsonObject();
-        final String url = json.getString("mysqlUrl");
-        final String user = json.getString("mysqlUser");
-        final String pass = json.getString("mysqlPass");
-      }, err -> {
-        LOGGER.debug("failure: " + err.getMessage());
-      });
- */
+}

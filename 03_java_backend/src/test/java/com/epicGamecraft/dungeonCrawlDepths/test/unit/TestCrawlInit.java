@@ -83,7 +83,7 @@ public class TestCrawlInit {
   @Test
   void gameListSuccess(Vertx vertx, VertxTestContext context) throws Throwable {
     FakeMysqlVerticle mysqlVerticle = new FakeMysqlVerticle();
-    mysqlVerticle.response = "{\"game_id\":1,\"character_Name\":\"Ross the cold Enchanter\",\"status\":\"paused\",\"floorNumber\":\"1\",\"playtime\":\"00:00:00\",\"howGameEnded\":\"\",\"creation_time\":\"2021-04-10 18:28:57\",\"user\":\"billybob\",\"scenario\":\"normal\"}";
+    mysqlVerticle.response = "{\"game_id\":1,\"character_Name\":\"Ross the cold Enchanter\",\"status\":\"paused\",\"floorNumber\":\"1\",\"playtime\":\"00:00:00\",\"creation_time\":\"2021-04-10 18:28:57\",\"user\":\"billybob\",\"scenario\":\"normal\"}";
     vertx.rxDeployVerticle(mysqlVerticle)
       .flatMap(e -> vertx.rxDeployVerticle(new GameListVerticle()))
       .subscribe(e -> {

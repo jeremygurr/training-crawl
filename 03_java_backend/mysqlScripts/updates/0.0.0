@@ -22,13 +22,13 @@ CREATE TABLE `character` (
 CREATE TABLE `game` (
     `id` int unsigned AUTO_INCREMENT,
     `character_id` int unsigned,
-    `status` enum('active','paused','ended','broken'),
-    `howItEnded` enum('died','quit','won', '') default '',
+    `status` enum('active','paused','broken','died','quit','won'),
     `creationDate` datetime default CURRENT_TIMESTAMP,
     `playtime` time default '00:00:00',
     `scenario` enum('normal','treasure seeker','artifact') default 'normal',
     `lastEvent` varchar(100),
     `floorNumber` int not null,
+    `score` bigint unsigned not null default 0,
     PRIMARY KEY (`id`)
 ) ENGINE=Aria;
 
@@ -38,10 +38,10 @@ SELECT game.id AS game_id,
        status,
        floorNumber,
        playtime,
-       howItEnded AS howGameEnded,
        creationDate AS creation_time,
        username AS user,
-       scenario
+       scenario,
+       score
 FROM `player`
          INNER JOIN `character` ON (player.id = character.player_id)
          INNER JOIN `game` ON (character.id = game.character_id);

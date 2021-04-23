@@ -39,7 +39,7 @@ public class TestMysql {
               });
           vertx.eventBus().rxRequest(mysqlQuery.name(), "{\"username\":\"billybob\",\"password\":\"password\"}")
             .subscribe(ar -> {
-                LOGGER.debug("Test.crudMysql received reply : " + ar.body());
+                LOGGER.debug("Test.mysqlQuery received reply : " + ar.body());
                 context.completeNow();
               },
               err -> {
@@ -48,7 +48,7 @@ public class TestMysql {
               });
           vertx.eventBus().rxRequest(mysqlDelete.name(), "{\"username\":\"billybob\",\"password\":\"password\"}")
             .subscribe(ar -> {
-                LOGGER.debug("Test.crudMysql received reply : " + ar.body());
+                LOGGER.debug("Test.mysqlDelete received reply : " + ar.body());
                 if (ar.body() == null) {
                   LOGGER.debug("Mysql successfully deleted user: 'billybob'");
                 } else {
@@ -84,6 +84,30 @@ public class TestMysql {
         },
         err -> {
           LOGGER.debug("TestMysql.forgotPassword issue deploying verticle : " + err.getMessage());
+          context.failNow(err);
+        });
+  }
+
+  @Test
+  void retrieveGameList(Vertx vertx, VertxTestContext context) throws Throwable {
+    vertx.rxDeployVerticle(new MysqlVerticle())
+      .subscribe(e -> {
+          vertx.eventBus().rxRequest(mysqlGameList.name(), "basic")
+            .subscribe(ar -> {
+                if(ar.body() != null) {
+                  LOGGER.debug("TestMysql.retrieveGameList received reply : " + ar.body());
+                  context.completeNow();
+                } else {
+                  context.failNow(new Exception("Failed to retrieve lobby data."));
+                }
+              },
+              err -> {
+                LOGGER.debug("Communication between Test.retrieveGameList error : " + err.getMessage());
+                context.failNow(err);
+              });
+        },
+        err -> {
+          LOGGER.debug("TestMysql.retrieveGameList issue deploying verticle : " + err.getMessage());
           context.failNow(err);
         });
   }

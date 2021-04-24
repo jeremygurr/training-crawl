@@ -168,7 +168,9 @@ public class MysqlVerticle extends AbstractVerticle {
         if (ar.succeeded()) {
           RowSet<Row> rows = ar.result();
           System.out.println("rows returned: " + rows.size());
-          message.reply(rows.next());
+          for (Row row : rows) {
+            message.reply(row.getValue(0) + " " + row.getValue(1) + " " + row.getValue(2) + " " + row.getValue(3) + " " + row.getLocalTime(4) + " " + row.getValue(5) + " " + row.getLocalDateTime(6) + " " + row.getValue(7) + " " + row.getValue(8));
+          }
         } else {
           LOGGER.debug("Failure: " + ar.cause().getMessage());
           message.reply(null);

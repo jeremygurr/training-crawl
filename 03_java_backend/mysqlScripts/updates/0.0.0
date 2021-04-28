@@ -46,4 +46,10 @@ FROM `player`
          INNER JOIN `character` ON (player.id = character.player_id)
          INNER JOIN `game` ON (character.id = game.character_id);
 
+DELIMITER //
+CREATE PROCEDURE getLobby()
+BEGIN
+   SELECT * FROM lobby;
+end //
+DELIMITER ;
 

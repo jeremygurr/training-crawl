@@ -23,20 +23,33 @@ public class TestMysql {
   @Test
   void crudMysql(Vertx vertx, VertxTestContext context) throws Throwable {
     vertx.rxDeployVerticle(new MysqlVerticle())
-      .subscribe(e -> {
-          vertx.eventBus().rxRequest(mysqlInsert.name(), "{\"id\":0,\"username\":\"billybob\",\"password\":\"password\",\"email\":\"som@gmail.com\"}")
-            .subscribe(ar -> {
-                if (ar.body() == null) {
-                  LOGGER.debug("Mysql successfully inserted record.");
-                } else {
-                  LOGGER.debug("Mysql failed to insert record : " + ar.body());
-                }
-                context.completeNow();
-              },
-              err -> {
-                LOGGER.debug("Communication between TestMysql.crudMysql error : " + err.getMessage());
-                context.failNow(err);
-              });
+      .map(a -> {
+        LOGGER.debug("After deployment");
+      return a;
+      })
+      .compose(e ->
+        vertx.eventBus().rxRequest(mysqlInsert.name(), "{\"id\":0,\"username\":\"billybob\",\"password\":\"password\",\"email\":\"som@gmail.com\"}")
+          .doAfterSuccess(ar -> {
+            if (ar.body() == null) {
+              LOGGER.debug("Mysql successfully inserted record.");
+            } else {
+              LOGGER.debug("Mysql failed to insert record : " + ar.body());
+            }
+            context.completeNow();
+          })
+          .doOnError(
+            err -> {
+              LOGGER.debug("Communication between TestMysql.crudMysql error : " + err.getMessage());
+              context.failNow(err);
+            })
+      ).subscribe(f -> {
+        LOGGER.debug("done");
+      },
+      err -> {
+        LOGGER.debug("Error: " + err.getMessage());
+      });
+/*
+      .compose(e -> {
           vertx.eventBus().rxRequest(mysqlQuery.name(), "{\"username\":\"billybob\",\"password\":\"password\"}")
             .subscribe(ar -> {
                 LOGGER.debug("Test.mysqlQuery received reply : " + ar.body());
@@ -45,7 +58,9 @@ public class TestMysql {
               err -> {
                 LOGGER.debug("Communication between Test.crudMysql error : " + err.getMessage());
                 context.failNow(err);
-              });
+              })
+        })
+      .compose(e -> {
           vertx.eventBus().rxRequest(mysqlDelete.name(), "{\"username\":\"billybob\",\"password\":\"password\"}")
             .subscribe(ar -> {
                 LOGGER.debug("Test.mysqlDelete received reply : " + ar.body());
@@ -66,6 +81,7 @@ public class TestMysql {
           LOGGER.debug("TestMysql.crudMysql issue deploying verticle : " + err.getMessage());
           context.failNow(err);
         });
+*/
   }
 
   @Test
@@ -94,7 +110,7 @@ public class TestMysql {
       .subscribe(e -> {
           vertx.eventBus().rxRequest(mysqlGameList.name(), "basic")
             .subscribe(ar -> {
-                if(ar.body() != null) {
+                if (ar.body() != null) {
                   LOGGER.debug("TestMysql.retrieveGameList received reply : " + ar.body());
                   context.completeNow();
                 } else {

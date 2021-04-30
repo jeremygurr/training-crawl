@@ -12,10 +12,18 @@ import io.vertx.reactivex.sqlclient.Row;
 import io.vertx.reactivex.sqlclient.RowSet;
 import io.vertx.reactivex.sqlclient.Tuple;
 import io.vertx.sqlclient.PoolOptions;
+import org.jooq.*;
+import org.jooq.*;
+import org.jooq.*;
+import org.jooq.*;
+import org.jooq.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.jooq.impl.DSL.*;
+
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.Arrays;
 import java.util.Properties;
 
@@ -32,7 +40,8 @@ public class MysqlVerticle extends AbstractVerticle {
     final EventBus eb = vertx.eventBus();
     eb.consumer(mysqlQuery.name(), this::handleQuery);
     eb.consumer(mysqlInsert.name(), this::handleInsert);
-    eb.consumer(mysqlPass.name(), this::handlePassReset);
+    eb.consumer(mysqlPass.name(), this::handleForgotPass);
+    eb.consumer(mysqlResetPass.name(), this::handleResetPass);
     eb.consumer(mysqlDelete.name(), this::handleDelete);
     eb.consumer(mysqlGameList.name(), this::handleGameList);
     final Properties config = new Properties();
@@ -66,6 +75,11 @@ public class MysqlVerticle extends AbstractVerticle {
     final JsonObject json = new JsonObject(message.body());
     final String username = json.getString("username");
     final String password = json.getString("password").hashCode() + "";
+/*
+    DSLContext create = DSL.using((Connection) client, SQLDialect.MYSQL);
+    Result<Record> result = create.select().from("user").fetch();
+*/
+
     client
       .preparedQuery("SELECT * FROM player WHERE username=? AND hashword=?")
       .execute(Tuple.of(username, password), ar -> {
@@ -109,8 +123,8 @@ public class MysqlVerticle extends AbstractVerticle {
       });
   }
 
-  private void handlePassReset(Message<String> message) {
-    LOGGER.debug("MysqlVerticle.handlePassReset received message: " + message.body());
+  private void handleForgotPass(Message<String> message) {
+    LOGGER.debug("MysqlVerticle.handleForgotPass received message: " + message.body());
     final MySQLPool client = context.get(ContextKey.mysqlConnection.name());
     final JsonObject json = new JsonObject(message.body());
     final String username = json.getString("username");
@@ -119,17 +133,39 @@ public class MysqlVerticle extends AbstractVerticle {
       .preparedQuery("SELECT * FROM player WHERE username=? AND email=?")
       .execute(Tuple.of(username, email), ar -> {
         if (ar.succeeded()) {
+          //send email to user account with password reset option.
           RowSet<Row> rows = ar.result();
           LOGGER.debug("Got " + rows.size() + " rows ");
           if (rows.size() != 0) {
             for (Row row : rows) {
               message.reply(row.getInteger(0) + " " + row.getString(1) + " " + row.getInteger(2) + " " + row.getString(3));
-              //Alternatively you can use row.getValue() instead.
             }
           } else {
             message.reply("zero results for that username and email.");
           }
         } else {
+          LOGGER.debug("Failure: " + ar.cause().getMessage());
+          message.reply("invalid query");
+        }
+      });
+  }
+
+  private void handleResetPass(Message<String> message) {
+    LOGGER.debug("MysqlVerticle.handleResetPass received message: " + message.body());
+    final MySQLPool client = context.get(ContextKey.mysqlConnection.name());
+    final JsonObject json = new JsonObject(message.body());
+    final String username = json.getString("username");
+    final String email = json.getString("email");
+    final int hashword = json.getString("password").hashCode();
+    client
+      .preparedQuery("UPDATE player SET hashword=? WHERE username=? AND email=?")
+      .execute(Tuple.of(hashword, username, email), ar -> {
+        if (ar.succeeded()) {
+          //Send result to javascript to output text to the page with AJAX, and also to give link to
+          // login page so user can attempt to login with their new password.
+          message.reply("success");
+        } else {
+          // This only happens as a result of failure to connect to mysql container.
           LOGGER.debug("Failure: " + ar.cause().getMessage());
           message.reply("invalid query");
         }

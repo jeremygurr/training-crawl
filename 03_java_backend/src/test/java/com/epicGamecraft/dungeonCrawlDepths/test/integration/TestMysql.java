@@ -91,12 +91,32 @@ public class TestMysql {
                 context.completeNow();
               },
               err -> {
-                LOGGER.debug("Communication between Test.forgotPassword error : " + err.getMessage());
+                LOGGER.debug("Communication error between Test.forgotPassword and MysqlVerticle : " + err.getMessage());
                 context.failNow(err);
               });
         },
         err -> {
           LOGGER.debug("TestMysql.forgotPassword issue deploying verticle : " + err.getMessage());
+          context.failNow(err);
+        });
+  }
+
+  @Test
+  void resetPassword(Vertx vertx, VertxTestContext context) throws Throwable {
+    vertx.rxDeployVerticle(new MysqlVerticle())
+      .subscribe(e -> {
+          vertx.eventBus().rxRequest(mysqlResetPass.name(), "{\"username\":\"billybob\",\"email\":\"bob@gmail.com\",\"password\":\"newPassword\"}")
+            .subscribe(ar -> {
+                LOGGER.debug("TestMysql.resetPassword received reply: " + ar.body());
+                context.completeNow();
+              },
+              err -> {
+                LOGGER.debug("Communication error between Test.resetPassword and MysqlVerticle : " + err.getMessage());
+                context.failNow(err);
+              });
+        },
+        err -> {
+          LOGGER.debug("TestMysql.forgotPassword issue deploying MysqlVerticle : " + err.getMessage());
           context.failNow(err);
         });
   }

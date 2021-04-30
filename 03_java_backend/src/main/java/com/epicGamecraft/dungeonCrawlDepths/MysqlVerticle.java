@@ -104,7 +104,7 @@ public class MysqlVerticle extends AbstractVerticle {
           message.reply(null);
         } else {
           LOGGER.debug("Failure: " + ar.cause().getMessage());
-          message.reply("invalid query");
+          message.fail(500, "invalid query");
         }
       });
   }

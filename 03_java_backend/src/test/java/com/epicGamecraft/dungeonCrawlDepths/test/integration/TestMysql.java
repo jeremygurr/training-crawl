@@ -39,12 +39,22 @@ public class TestMysql {
       .flatMap(ar -> {
         return vertx.eventBus().rxRequest(mysqlQuery.name(), "{\"username\":\"billybob\",\"password\":\"password\"}");
       })
-      .doOnError(err -> {
-        LOGGER.debug("Communication between Test.crudMysql error : " + err.getMessage());
-        context.failNow(err);
+      .map(ar -> {
+        LOGGER.debug("Test.mysqlQuery received reply: " + ar.body());
+        return ar;
+      })
+      .flatMap(deployId -> {
+        return vertx.eventBus().rxRequest(mysqlResetPass.name(), "{\"username\":\"billybob\",\"email\":\"bob@gmail.com\",\"password\":\"newPassword\"}");
       })
       .map(ar -> {
-        LOGGER.debug("Test.mysqlQuery received reply : " + ar.body());
+        LOGGER.debug("Test.mysqlResetPass received reply: " + ar.body());
+        return ar;
+      })
+      .flatMap(deployId -> {
+        return vertx.eventBus().rxRequest(mysqlDelete.name(), "{\"username\":\"billybob\",\"password\":\"password\"}");
+      })
+      .map(ar -> {
+        LOGGER.debug("Test.mysqlDelete received reply: " + ar.body());
         return ar;
       })
       .subscribe(f -> {
@@ -55,30 +65,6 @@ public class TestMysql {
           LOGGER.debug("Error: " + err.getMessage());
           context.failNow(err);
         });
-/*
-
-      .compose(e -> {
-          vertx.eventBus().rxRequest(mysqlDelete.name(), "{\"username\":\"billybob\",\"password\":\"password\"}")
-            .subscribe(ar -> {
-                LOGGER.debug("Test.mysqlDelete received reply : " + ar.body());
-                if (ar.body() == null) {
-                  LOGGER.debug("Mysql successfully deleted user: 'billybob'");
-                } else {
-                  //fixme: This code never runs even if the user/password combo doesn't exist in database.
-                  LOGGER.debug("Mysql failed to delete record : that username/password combination doesn't exist.");
-                }
-                context.completeNow();
-              },
-              err -> {
-                LOGGER.debug("Communication between Test.crudMysql error : " + err.getMessage());
-                context.failNow(err);
-              });
-        },
-        err -> {
-          LOGGER.debug("TestMysql.crudMysql issue deploying verticle : " + err.getMessage());
-          context.failNow(err);
-        });
-*/
   }
 
   @Test
@@ -97,26 +83,6 @@ public class TestMysql {
         },
         err -> {
           LOGGER.debug("TestMysql.forgotPassword issue deploying verticle : " + err.getMessage());
-          context.failNow(err);
-        });
-  }
-
-  @Test
-  void resetPassword(Vertx vertx, VertxTestContext context) throws Throwable {
-    vertx.rxDeployVerticle(new MysqlVerticle())
-      .subscribe(e -> {
-          vertx.eventBus().rxRequest(mysqlResetPass.name(), "{\"username\":\"billybob\",\"email\":\"bob@gmail.com\",\"password\":\"newPassword\"}")
-            .subscribe(ar -> {
-                LOGGER.debug("TestMysql.resetPassword received reply: " + ar.body());
-                context.completeNow();
-              },
-              err -> {
-                LOGGER.debug("Communication error between Test.resetPassword and MysqlVerticle : " + err.getMessage());
-                context.failNow(err);
-              });
-        },
-        err -> {
-          LOGGER.debug("TestMysql.forgotPassword issue deploying MysqlVerticle : " + err.getMessage());
           context.failNow(err);
         });
   }

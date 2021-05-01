@@ -89,10 +89,10 @@ public class MysqlVerticle extends AbstractVerticle {
           if (rows.size() != 0) {
             for (Row row : rows) {
               message.reply(row.getInteger(0) + " " + row.getString(1) + " " + row.getInteger(2) + " " + row.getString(3));
-              //Alternatively you can use row.getValue() instead.
             }
           } else {
             message.reply("zero results for that username and password.");
+            //Need to make sure if this happens, the code must let user retry login.
           }
         } else {
           LOGGER.debug("Failure: " + ar.cause().getMessage());
@@ -113,9 +113,7 @@ public class MysqlVerticle extends AbstractVerticle {
       .preparedQuery("INSERT INTO player VALUES (?,?,?,?)")
       .execute(Tuple.of(id, username, password, email), ar -> {
         if (ar.succeeded()) {
-          RowSet<Row> rows = ar.result();
-          System.out.println(rows.rowCount());
-          message.reply(null);
+          message.reply("Successfully inserted record for: " + username);
         } else {
           LOGGER.debug("Failure: " + ar.cause().getMessage());
           message.fail(500, "invalid query");
@@ -163,7 +161,7 @@ public class MysqlVerticle extends AbstractVerticle {
         if (ar.succeeded()) {
           //Send result to javascript to output text to the page with AJAX, and also to give link to
           // login page so user can attempt to login with their new password.
-          message.reply("success");
+          message.reply("successfully updated password to: " + hashword + " for " + username);
         } else {
           // This only happens as a result of failure to connect to mysql container.
           LOGGER.debug("Failure: " + ar.cause().getMessage());
@@ -182,8 +180,7 @@ public class MysqlVerticle extends AbstractVerticle {
       .preparedQuery("DELETE FROM player WHERE username=? AND hashword=?")
       .execute(Tuple.of(username, password), ar -> {
         if (ar.succeeded()) {
-          RowSet<Row> rows = ar.result();
-          message.reply(rows.next());
+          message.reply("Successfully deleted record for: " + username);
         } else {
           LOGGER.debug("Failure: " + ar.cause().getMessage());
           message.reply("invalid query");
@@ -204,12 +201,16 @@ public class MysqlVerticle extends AbstractVerticle {
         if (ar.succeeded()) {
           RowSet<Row> rows = ar.result();
           System.out.println("rows returned: " + rows.size());
-          for (Row row : rows) {
-            message.reply(row.getValue(0) + " " + row.getValue(1) + " " + row.getValue(2) + " " + row.getValue(3) + " " + row.getLocalTime(4) + " " + row.getValue(5) + " " + row.getLocalDateTime(6) + " " + row.getValue(7) + " " + row.getValue(8));
+          if (rows.size() != 0) {
+            for (Row row : rows) {
+              message.reply(row.getInteger(0) + " " + row.getString(1) + " " + row.getString(2) + " " + row.getInteger(3) + " " + row.getLocalTime(4) + " " + row.getLocalDateTime(5) + " " + row.getString(6) + " " + row.getString(7) + " " + row.getInteger(8));
+            }
+          } else {
+            message.reply("No results to show.");
           }
         } else {
           LOGGER.debug("Failure: " + ar.cause().getMessage());
-          message.reply(null);
+          message.reply("invalid query");
         }
       });
   }

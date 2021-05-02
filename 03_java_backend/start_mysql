@@ -7,7 +7,7 @@ if [ -z "${training_crawl_data:-}" -o -z "${training_crawl_repo:-}" ]; then
   exit 1
 fi
 set -x
-docker run --rm --net=host \
+docker run --rm -p 127.0.0.1:3306:3306/tcp \
   -v $training_crawl_data:/var/lib/mysql \
   -v $training_crawl_repo/mysqlScripts:/mysqlScripts \
   --name mysql \

@@ -5,49 +5,96 @@ image:https://img.shields.io/badge/vert.x-4.0.0-milestone4-purple.svg[link="http
 This application was generated using http://start.vertx.io
 
 
-== Couchbase config
+== Quick Run
+NOTE: If you haven't gone through Development Environment Setup steps already, these steps won't work. Go follow those steps first.
 
-To start Couchbase:
-```
-./start_couchbase
-```
+All these commands work best when you are in the /training-crawl/03_java_backend/ directory.
 
-Configure Couchbase (run only once):
+Pull teammates latest commits:
 ```
-./setup_couchbase
+git pull teammateName main
 ```
 
-To stop Couchbase container:
-```
-docker stop couchbase
-```
-
-== MySQL config
-
-To start MySQL:
+Start MySQL:
 ```
 ./start_mysql
 ```
 
-To setup MySQL with database and tables:
+Run all Unit and integration tests:
 ```
-docker exec -it mysql /bin/bash
-mysql -u root -p                   ##password is listed in start_mysql file
-source mysqlScripts/updates/0.0.0
-CTRL+D exits the cli and the container.
+./gradlew clean test
 ```
 
-To stop MySQL container:
+Run app and view inside browser:
+```
+./gradlew clean run
+In your browser go to: http://localhost:8080/static/login.html
+```
+
+Stop MySQL container:
 ```
 docker stop mysql
 ```
 
-To fix container if a version change occurs:
+== Development Environment Setup
+
+Before you start development each day, you'll always want to do git pull from the various remotes of other teammates to make sure
+you don't develop a branch separate from everyone else making things in different directions. In order for git pull to work, you need to add each
+teammates remote repos:
 ```
-cd ~/crawl-training-extra/
-sudo rm -rf mysqldata
+git remote add jared https://github.com/jgurr4/training-crawl.git
+git remote add jeremy https://github.com/jeremygurr/training-crawl.git
+etc...
 ```
-After that, you need to restart mysql container, and setup database and tables again.
+
+List all remotes you currently have:
+```
+git remote -v
+```
+
+Pull from teammates remotes:
+```
+git pull teammateName main
+```
+
+Next you will want to make sure all tests run correctly before you begin developing so that you know which tests work. However,
+some of these tests rely on a mysql container to already be running and have specific tables
+and databases setup in the correct structure for the tests to work. So always startup mysql container before you run the tests.
+Follow these steps below to get the environment for mysql setup correctly:
+
+For first-time setup only: Set up start_mysql variables in ~/.bashrc or bash profile.
+```
+export training_crawl_data=/path/to/crawl-training-extra/mysqldata   ##make the crawl-training-extra directory anywhere you want. Don't make the mysqldata folder, it creates itself.
+export training_crawl_repo=/path/to/training-crawl/03_java_backend
+```
+NOTE: Close bash tab and open a new tab in order for the new tab to be using these new variables you added.
+
+Start MySQL:
+```
+./start_mysql
+```
+
+For first-time setup only: Configure MySQL with correct database and tables structure:
+```
+docker exec -it mysql /bin/bash
+mysql -u root -p                   ##password is whatever you set inside start_mysql, default is 'password'.
+source mysqlScripts/updates/0.0.0
+source mysqlScripts/sampleData.sql
+CTRL+D exits the cli and the container.
+```
+
+Now you can run the tests without a problem since mysql is setup correctly:
+```
+./gradlew test
+```
+
+Finally, after following all these steps you can begin to develop using the app.
+
+One last piece of advice:
+Always run the unit and integration tests once more before you make a commit of any kind. This ensures
+that the things you changed didn't affect or break the tests in any way. If no test was broken, then you can
+go ahead and make your commit. However, if you notice a test is failing that was not failing before, then you
+should spend time re-evaluating your code and see where you might have caused it to break.
 
 == Building
 
@@ -66,10 +113,20 @@ To run your application:
 ./gradlew clean run
 ```
 
-To view/use app inside browser:
+
+== Mysql Version Change Fix
+In rare occasions we may change the mariadb version. If we do this, we'll make it known in the git commit message.
+If you see that message use the following commands to update your container.
+
+To fix container if a MariaDB/MySQL version change occurs:
 ```
-http://localhost:8080/static/login.html
+cd ~/crawl-training-extra/
+sudo rm -rf mysqldata
 ```
+After that, you need to restart mysql container, using the updated start_mysql script and source the
+setup database and tables scripts inside mysql again.
+
+
 
 == Help
 

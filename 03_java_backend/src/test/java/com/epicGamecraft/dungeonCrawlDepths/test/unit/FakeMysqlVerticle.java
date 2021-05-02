@@ -2,7 +2,6 @@ package com.epicGamecraft.dungeonCrawlDepths.test.unit;
 
 
 
-import com.epicGamecraft.dungeonCrawlDepths.MysqlVerticle;
 import io.reactivex.Completable;
 import io.vertx.reactivex.core.AbstractVerticle;
 import io.vertx.reactivex.core.eventbus.EventBus;
@@ -14,7 +13,7 @@ import static com.epicGamecraft.dungeonCrawlDepths.BusEvent.*;
 
 public class FakeMysqlVerticle extends AbstractVerticle {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(MysqlVerticle.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FakeMysqlVerticle.class);
   public String response = null;
 
   @Override

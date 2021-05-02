@@ -1,5 +1,6 @@
 package com.epicGamecraft.dungeonCrawlDepths.test.unit;
 
+import com.epicGamecraft.dungeonCrawlDepths.GameCreationVerticle;
 import com.epicGamecraft.dungeonCrawlDepths.GameListVerticle;
 import com.epicGamecraft.dungeonCrawlDepths.HttpServerVerticle;
 import com.epicGamecraft.dungeonCrawlDepths.UserVerticle;
@@ -16,9 +17,7 @@ import static com.epicGamecraft.dungeonCrawlDepths.BusEvent.*;
 
 @ExtendWith(VertxExtension.class)
 public class TestCrawlInit {
-
   private static final Logger LOGGER = LoggerFactory.getLogger(TestCrawlInit.class);
-
 
   @Test
   void verticle_deployed(Vertx vertx, VertxTestContext context) throws Throwable {
@@ -123,10 +122,36 @@ public class TestCrawlInit {
               },
               err -> {
                 LOGGER.debug("An error occurred retrieving game list." + err.getMessage());
+                context.failNow(err);
               });
         },
         err -> {
           context.failNow(err);
+        });
+  }
+
+  @Test
+  void GameCreateSuccess(Vertx vertx, VertxTestContext context) throws Throwable {
+    FakePlayerVerticle playerVerticle = new FakePlayerVerticle();
+    playerVerticle.response = "success";
+    FakeRuneVerticle runeVerticle = new FakeRuneVerticle();
+    runeVerticle.response = "success";
+    vertx.rxDeployVerticle(playerVerticle)
+      .flatMap(e -> vertx.rxDeployVerticle(runeVerticle))
+      .flatMap(e -> vertx.rxDeployVerticle(new GameCreationVerticle()))
+      .subscribe(e -> {
+        vertx.eventBus().rxRequest(gameCreation.name(), "normal")
+          .subscribe(ar -> {
+            LOGGER.debug("Test.GameCreate received reply: " + ar.body());
+            context.completeNow();
+          },
+            err -> {
+            LOGGER.debug("An error occurred creating the Game.");
+            context.failNow(err);
+            });
+      },
+        err -> {
+        context.failNow(err);
         });
   }
 

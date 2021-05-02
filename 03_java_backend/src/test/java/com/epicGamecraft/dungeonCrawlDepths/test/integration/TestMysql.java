@@ -23,10 +23,6 @@ public class TestMysql {
   @Test
   void crudMysql(Vertx vertx, VertxTestContext context) throws Throwable {
     vertx.rxDeployVerticle(new MysqlVerticle())
-      .map(deployId -> {
-        LOGGER.debug("Deployed MysqlVerticle. Deployment Id = " + deployId);
-        return deployId;
-      })
       .flatMap(deployId -> {
           LOGGER.debug("Making request to mysqlInsert");
           return vertx.eventBus().rxRequest(mysqlInsert.name(), "{\"id\":0,\"username\":\"billybob\",\"password\":\"password\",\"email\":\"som@gmail.com\"}");
@@ -67,6 +63,51 @@ public class TestMysql {
         });
   }
 
+/*
+  @Test   //This is currently broken. Need to find a way to allow the program to continue running even after the failure.
+  void crudMysqlFail(Vertx vertx, VertxTestContext context) throws Throwable {
+    vertx.rxDeployVerticle(new MysqlVerticle())
+      .flatMap(deployId -> {
+          LOGGER.debug("Making request to mysqlInsert");
+          return vertx.eventBus().rxRequest(mysqlInsert.name(), "");
+        }
+      )
+      .map(ar -> {
+        LOGGER.debug("Test.mysqlInsert received reply: " + ar.body());
+        return ar;
+      })
+      .flatMap(ar -> {
+        return vertx.eventBus().rxRequest(mysqlQuery.name(), "{\"username\":\"billybob\",\"password\":\"password\"}");
+      })
+      .map(ar -> {
+        LOGGER.debug("Test.mysqlQuery received reply: " + ar.body());
+        return ar;
+      })
+      .flatMap(deployId -> {
+        return vertx.eventBus().rxRequest(mysqlResetPass.name(), "{\"username\":\"billybob\",\"email\":\"bob@gmail.com\",\"password\":\"newPassword\"}");
+      })
+      .map(ar -> {
+        LOGGER.debug("Test.mysqlResetPass received reply: " + ar.body());
+        return ar;
+      })
+      .flatMap(deployId -> {
+        return vertx.eventBus().rxRequest(mysqlDelete.name(), "{\"username\":\"billybob\",\"password\":\"password\"}");
+      })
+      .map(ar -> {
+        LOGGER.debug("Test.mysqlDelete received reply: " + ar.body());
+        return ar;
+      })
+      .subscribe(f -> {
+          LOGGER.debug("Success");
+          context.completeNow();
+        },
+        err -> {
+          LOGGER.debug("Error: " + err.getMessage());
+          context.failNow(err);
+        });
+  }
+*/
+
   @Test
   void forgotPassword(Vertx vertx, VertxTestContext context) throws Throwable {
     vertx.rxDeployVerticle(new MysqlVerticle())
@@ -91,7 +132,7 @@ public class TestMysql {
   void retrieveGameList(Vertx vertx, VertxTestContext context) throws Throwable {
     vertx.rxDeployVerticle(new MysqlVerticle())
       .subscribe(e -> {
-          vertx.eventBus().rxRequest(mysqlGameList.name(), "basic")
+          vertx.eventBus().rxRequest(mysqlGameList.name(), "score")
             .subscribe(ar -> {
                 if (ar.body() != null) {
                   LOGGER.debug("TestMysql.retrieveGameList received reply : " + ar.body());

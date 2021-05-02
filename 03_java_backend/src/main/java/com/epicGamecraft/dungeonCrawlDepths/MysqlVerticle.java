@@ -36,7 +36,7 @@ public class MysqlVerticle extends AbstractVerticle {
 
   @Override
   public Completable rxStart() {
-    LOGGER.debug("MysqlVerticle is listening to: " + mysqlQuery.name());
+    LOGGER.debug("MysqlVerticle is listening for queries.");
     final EventBus eb = vertx.eventBus();
     eb.consumer(mysqlQuery.name(), this::handleQuery);
     eb.consumer(mysqlInsert.name(), this::handleInsert);
@@ -104,21 +104,24 @@ public class MysqlVerticle extends AbstractVerticle {
   private void handleInsert(Message<String> message) {
     LOGGER.debug("MysqlVerticle.handleInsert received message: " + message.body());
     final MySQLPool client = context.get(ContextKey.mysqlConnection.name());
-    final JsonObject json = new JsonObject(message.body());
-    final int id = json.getInteger("id");
-    final String username = json.getString("username");
-    final String password = json.getString("password").hashCode() + "";
-    final String email = json.getString("email");
-    client
-      .preparedQuery("INSERT INTO player VALUES (?,?,?,?)")
-      .execute(Tuple.of(id, username, password, email), ar -> {
-        if (ar.succeeded()) {
-          message.reply("Successfully inserted record for: " + username);
-        } else {
-          LOGGER.debug("Failure: " + ar.cause().getMessage());
-          message.fail(500, "invalid query");
-        }
-      });
+    try {
+      final JsonObject json = new JsonObject(message.body());
+      final int id = json.getInteger("id");
+      final String username = json.getString("username");
+      final String password = json.getString("password").hashCode() + "";
+      final String email = json.getString("email");
+      client
+        .preparedQuery("INSERT INTO player VALUES (?,?,?,?)")
+        .execute(Tuple.of(id, username, password, email), ar -> {
+          if (ar.succeeded()) {
+            message.reply("Successfully inserted record for: " + username);
+          } else {
+            message.fail(500, "invalid insert statement" + ar.cause().getMessage());
+          }
+        });
+    } catch (Exception e){
+      message.fail(500, "invalid insert statement");
+    }
   }
 
   private void handleForgotPass(Message<String> message) {
@@ -191,10 +194,13 @@ public class MysqlVerticle extends AbstractVerticle {
   private void handleGameList(Message<String> message) {
     LOGGER.debug("MysqlVerticle.handleGameList received message: " + message.body());
     final MySQLPool client = context.get(ContextKey.mysqlConnection.name());
-    String sql = "SELECT * FROM lobby";
-    if (message.body().equals("highest score")) {
-      sql = "SELECT * FROM lobby ORDER BY score";
+    String sql = "";
+    if (message.body().equals("basic")) {
+      sql = "SELECT * FROM lobby";
+    } else {
+      sql = "SELECT * FROM lobby ORDER BY " + message.body();
     }
+    LOGGER.debug("Sending sql statement: " + sql);
     client
       .query(sql)
       .execute(ar -> {
@@ -203,7 +209,10 @@ public class MysqlVerticle extends AbstractVerticle {
           System.out.println("rows returned: " + rows.size());
           if (rows.size() != 0) {
             for (Row row : rows) {
-              message.reply(row.getInteger(0) + " " + row.getString(1) + " " + row.getString(2) + " " + row.getInteger(3) + " " + row.getLocalTime(4) + " " + row.getLocalDateTime(5) + " " + row.getString(6) + " " + row.getString(7) + " " + row.getInteger(8));
+              message.reply(row.getInteger(0) + " " + row.getString(1)
+                + " " + row.getString(2) + " " + row.getInteger(3)
+                + " " + row.getLocalTime(4) + " " + row.getLocalDateTime(5)
+                + " " + row.getString(6) + " " + row.getString(7) + " " + row.getInteger(8));
             }
           } else {
             message.reply("No results to show.");

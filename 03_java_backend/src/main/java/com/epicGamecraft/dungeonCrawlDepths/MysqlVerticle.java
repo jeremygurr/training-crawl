@@ -1,7 +1,6 @@
 package com.epicGamecraft.dungeonCrawlDepths;
 
 import io.reactivex.Completable;
-import io.reactivex.disposables.Disposable;
 import io.vertx.core.json.JsonObject;
 import io.vertx.mysqlclient.MySQLConnectOptions;
 import io.vertx.reactivex.core.AbstractVerticle;
@@ -12,19 +11,10 @@ import io.vertx.reactivex.sqlclient.Row;
 import io.vertx.reactivex.sqlclient.RowSet;
 import io.vertx.reactivex.sqlclient.Tuple;
 import io.vertx.sqlclient.PoolOptions;
-import org.jooq.*;
-import org.jooq.*;
-import org.jooq.*;
-import org.jooq.*;
-import org.jooq.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.jooq.impl.DSL.*;
-
 import java.io.IOException;
-import java.sql.Connection;
-import java.util.Arrays;
 import java.util.Properties;
 
 import static com.epicGamecraft.dungeonCrawlDepths.BusEvent.*;

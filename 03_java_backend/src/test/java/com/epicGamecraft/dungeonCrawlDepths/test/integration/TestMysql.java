@@ -24,29 +24,21 @@ public class TestMysql {
   void crudMysql(Vertx vertx, VertxTestContext context) throws Throwable {
     vertx.rxDeployVerticle(new MysqlVerticle())
       .flatMap(deployId -> {
+          LOGGER.debug("Deployed MysqlVerticle. Deployment Id = " + deployId);
           LOGGER.debug("Making request to mysqlInsert");
           return vertx.eventBus().rxRequest(mysqlInsert.name(), "{\"id\":0,\"username\":\"billybob\",\"password\":\"password\",\"email\":\"som@gmail.com\"}");
         }
       )
-      .map(ar -> {
-        LOGGER.debug("Test.mysqlInsert received reply: " + ar.body());
-        return ar;
-      })
       .flatMap(ar -> {
+        LOGGER.debug("Test.mysqlInsert received reply: " + ar.body());
         return vertx.eventBus().rxRequest(mysqlQuery.name(), "{\"username\":\"billybob\",\"password\":\"password\"}");
       })
-      .map(ar -> {
+      .flatMap(ar -> {
         LOGGER.debug("Test.mysqlQuery received reply: " + ar.body());
-        return ar;
-      })
-      .flatMap(deployId -> {
         return vertx.eventBus().rxRequest(mysqlResetPass.name(), "{\"username\":\"billybob\",\"email\":\"bob@gmail.com\",\"password\":\"newPassword\"}");
       })
-      .map(ar -> {
+      .flatMap(ar -> {
         LOGGER.debug("Test.mysqlResetPass received reply: " + ar.body());
-        return ar;
-      })
-      .flatMap(deployId -> {
         return vertx.eventBus().rxRequest(mysqlDelete.name(), "{\"username\":\"billybob\",\"password\":\"password\"}");
       })
       .map(ar -> {

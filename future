@@ -3,7 +3,7 @@ create api server
       make first test
   03: make login function
   make connect to game / create game function
-  
+
 creatures / players have same energy pool flow, heat, smell and sound generation
   line up model
     split spirits from creatures
@@ -112,10 +112,6 @@ receiving major / critical damage will have different effects
     dulled (senses are reduced in effectiveness)
     these statuses are removed as healing energy enters this interna, which is absorbed by the
       status before increasing the actual pool
-generate stores
-? general help
-  another section at the bottom for 3 lines of menus / messages
-  scratch space
 examine pools
   use scratch space
   data model 
@@ -405,14 +401,6 @@ planes
     oblivion (nothing)
       can't travel here without dying (no spirit either)
       anything sent here is lost forever
-always starts with
-  scroll of permanence
-  scroll of time (10 turns of stopped time)
-  scroll of blinking
-  scroll of remove curse
-  scroll of identify
-  experience potion
-  red, orange, yellow, green food
 starting equipment, selected at beginning
   maybe not: nothing to start with
   philanthropist: pile of gold
@@ -423,22 +411,6 @@ starting equipment, selected at beginning
   artificer: start with gems
   alchemist: start with potions
   scribe: start with scrolls
-guardians
-  can invoke help from guardians
-  but can only choose one guardian at a time
-  guardians give gifts, and can protect the player in various ways, but don't give abilities like disciplines
-  guardians can be found at shrines
-  guardians
-    emery: gives a random energy boost periodically
-      level 1: half every 100 turns
-    sensei: randomly double growth point gain
-      gifts of books
-    al: randomly gifts with one of the potions the player has
-    slip: randomly gifts with one of the scrolls the player has
-    ares: gifts of weapons
-    pete: gifts of armor
-    wanda: gifts of wands
-    midas: gifts of gold
 disciplines (from books)
   abilities are paid with one particular interna
     hp
@@ -514,9 +486,6 @@ altars
     legendary
       chosen energy awakening
       large growth points
-fountains
-  random effect, but it's consistent, and lasts 3-10 times
-  may be any potion effect except for experience potions
 multiple species
   change species through polymorph potions
     normally they are temporary, but there are special scrolls that can make them permanent
@@ -1049,7 +1018,6 @@ species
       other:
         size = large
 
-
 info
 energy management
   hunger / display hunger
@@ -1520,43 +1488,134 @@ money
     5 levels = 2.4
     10 levels = 6.2
 
+experience potions
+  add one level to the player
+    which gives them 3 primary attribute points to spend, which when spent automatically gives secondary points etc
+  fully charge hp, mp, sp
+  cures temporary debuffs
+  receives one per level
+
+attribute / skill tree
+  physical
+    strength
+    dexterity
+  mental
+    intelligence
+    integrity
+  spiritual
+    virtue
+    passion
+
+throwing
+  items can be thrown, but they don't go to the ground, but instead remain where they were with a cooldown before they can be used again
+    they can be moved to a different place while in cooldown
+  same applies to weapons with projectiles
+    projectiles don't have a seperate item each, but instead have a quiver or bag of those projectiles
+    once projectiles are fired, they go to a cooldown before they can be fired again
+  some weapons are also projectiles themselves, in which case they become inactive until their cooldown completes when thrown
+    spear / trident
+    boulder
+    javelins are quivered
+    tomahawks are quivered
+  some throwables are special and don't disappear when thrown, but end up on ground
+    other characters may be thrown
+    scenery items can be thrown (boulders, altars, statues)
+    trees become logs when uprooted. Logs are like boulders that remain
+  heavier items can displace lighter items
+  actors can be pushed into lava pools if a heavier item is thrown
+
+if a flying creature is hit physically, and it's flight comes from a physical mechanism, that flight may be temporarily disabled
+  same with a magic attack for flight that is maintained magically
+
+pushing / charging
+  a heavier creature can push a lighter creature around, possibly into water or lava pools, or into pits or traps
+    but lighter creature has a chance to dodge also, which could result in heavier creature falling down instead
+
+passing
+  a creature can pass another non-hostile creature by swapping places with it
+
 inventory
   no actual inventory without a bag, only equippable slots
     high degress of flexibility
       can hold any kind of item in each hand, although can't use a weapon then
       some equipment carries other equip (belts can carry potions or swords)
-  can carry one bag, expanding inventory (fairly rare)
-    bags:
-      small: has 4 item spaces (should scale with size of player, 1 for tiny, 2 for small, 4 for medium, 8 for large, 16 for huge)
-        reduces maneuverability and speed
-      medium: has 12 item spaces (3 for tiny, 6 for small, 12 for medium, 24 for large, 48 for huge)
-        reduces maneuverability and speed
-      spacial ring: takes a ring slot, can hold a random number of items (1-256, weighted to lower numbers, powers of 2)
-        50% chance: 1
-        25% chance: 2
-        12% chance: 4
-        6% chance: 8
-        3% chance: 16
-        1.5% chance: 32
-        0.7% chance: 64
-        0.3% chance: 128
-        0.3% chance: 256
-  belt carries potions 4-12 or scrolls
-    can also carry up to two swords
+  slots
+    hat: helmet
+    face: glasses, mask
+    neck / amulet:
+    chest:
+    cloak:
+    back 1: backpacks, shield, quiver, bow
+    back 2:
+    arms:
+    hands:
+    wrist / bracelet 1:
+    wrist / bracelet 2:
+    both grips: (can assign the same item to both hands, to reduce stamina or magic cost, and increase strength)
+      some items must be placed here: bows, slings
+    grip 1:
+    grip 2:
+    finger / ring 1:
+    finger / ring 2:
+    hips 1:
+    hips 2:
+    legs:
+    feet:
+  can carry bags, expanding inventory (fairly rare)
+    hip bag: 3 small items (scales with player size)
+      reduces maneuverability and speed
+    small backpack: has 6 item spaces (should scale with size of player, 2 for tiny, 4 for small, 6 for medium, 9 for large, 12 for huge)
+      reduces maneuverability and speed
+    large backpack: has 20 item spaces (10 for tiny, 15 for small, 20 for medium, 30 for large, 40 for huge)
+      reduces maneuverability and speed
+    space ring: takes a ring slot, can hold a random number of items (1-256, weighted to lower numbers, powers of 2)
+      all items take one spot regardless of size
+      taking items out or putting them in will consume mp based on size of ring, independent of size of item
+        for a 8 item ring, it will require 8 mp to add or remove an item. 
+      50% chance: 1
+      25% chance: 2
+      12% chance: 4
+      6% chance: 8
+      3% chance: 16
+      1.5% chance: 32
+      0.7% chance: 64
+      0.3% chance: 128
+      0.3% chance: 256
+    space bracelet: same as space ring, except space starts at 4 instead of 1
+    cart: can carry unlimited items of space
+      when attached, it makes player 1/2 speed, and costs sp, but will follow player around
+      the more items the cart holds, the more strength it requires to move
+      sp cost = items / strength
+    belt carries potions 4-12 or scrolls (any small items, includes wands)
+      can also carry up to two swords
+    pants usually have 2 small item spaces available
+    cloaks can have 4-8 small OR medium item spaces
   no stash
   no items on floor
     items are made available just after leaving a floor
       player chooses which to pick up / equip, and what to leave behind, which perishes forever
       each floor exit reveals it's own set of items
+      always one experience potion if one hasn't already been picked up from this floor
     what about treasure rooms?
       treasure chest is a special fixed location item that allows the player to pick up items
         one time use
   carrying food?
-    very limited, often must eat on the spot
+    very limited, often must be eaten on the spot
     food deteriorates (different rates for different foods)
       fresh (1 time unit): full benefit
       stale (2 time units): half benefit
       rotten (4 time units): poisonous, quarter benefit
+
+food
+  linear gradation:
+    0%   food = 100% form repair,   0% energy production
+    100% food =   0% form repair, 100% energy production
+
+baseline decay
+  different for different species
+  human: 
+    1% of max energy drain
+    1% of max form drain
 
 age:
   affects different species differently
@@ -1568,14 +1627,30 @@ age:
   levels
     junior (4 levels)
       20-80% of attribute capacity
+      smaller max
+      faster regen
     middle (4 levels)
       100% base attributes
     senior (4 levels)
       80-20% physical attributes
       120-180% mental and spirit attributes
+  potions can temporarily adjust
 
-health regen
-  normally quite slow, although spells and potions and resting can accelerate
+regen
+  health regen
+    normally quite slow, although spells and potions and resting can accelerate
+  sp regen
+    medium speed
+  mp regen
+    fast
+
+different way to break down prime health stats:
+  pe: physical energy
+  pf: physical form
+  me: mental energy
+  mf: mental form
+  se: spirit energy
+  sf: spirit form
 
 guardians
   prodigy <- 50% aging resistance
@@ -1584,9 +1659,11 @@ guardians
     takes 50% of all experience gain (exp potions have a 50% chance of success)
     reduces maximum damage between turns to 1/3 instead of 1/2
     fatal blows have a 50% chance of failing
-  equipment <- 50% money
-    takes 50% of all money (all generated money is reduced before appearing), including interest
+  equipment master <- 50% equip integrity (decay resistance)
     allows similar equipment to be merged together, combining the best attributes of both
+    equip decays at twice the rate
+  jeweler <- 50% money and 50% treasure
+    can wear 8 rings and 3 amulets
   robust body <- 50% potion success
     poison and disease immune, including rotten food
   <- 50% scroll success
@@ -1596,13 +1673,33 @@ guardians
   <- 50% energy absorption
   ageless <- 50% stamina charge rate
     food doesn't spoil either
-  <- 50% mana charge rate
+  knowledge <- 50% mana charge rate
+    when entering a new area, will reveal important features (strong monsters, treasure chests)
+    give automatic map of entire floor each time
+    can give info about monsters
   energy armor <- 50% healing rate (including potions and self healing and spells)
     damage takes from mana, then stamina, then health
+  formless <- random top level attribute allocation when levelling up
+    unified hp, sp, mp. Regen is average of the 3
+  fortified <- rapid age regression (twice normal speed in reverse)
+    all defenses are 50% stronger
+  chaos <- remove max damage cap
+    good and bad things randomly happen to the player
+    good will outweigh the bad in the long term, but player must survive to get there
+      3x chance of good vs bad
+    50% chance to be saved from a fatal blow
+    chance of being removed from a dangerous area if health is low
+    can give an item, but may be cursed
+    can make monsters appear if situation is too easy for too long
+    can buff monsters that are too easy
+    can debuff monsters that are tough
+  hp after killing monster <- 
+  <- harder monsters
 
 pets
   loyalty increases when favors are given
     and tested against challenge / hunger
+  can be given commands
 
 start with
   food
@@ -1611,8 +1708,173 @@ start with
   healing potion
   teleport scroll
   rusty dagger
-  small belt (3 slots)
-  small bag
+  small belt (4 slots for small items)
+  hip bag (can fit a medium item or 3 small)
 
 no story or randomized evolving story
+
+first floor doesn't contain items or exp potion
+  must survive to the second floor for that
+
+moving to a new floor restores energy, but doesn't heal
+
+weapons
+  sword
+    auto attack if enemy attack is dodged
+    can deflect sword or polearm attacks
+    cutting or piercing damage
+    faster attacks than the other weapon types
+  polearm
+    reaches one space further
+    cutting or piercing based on weapon
+    spears can be accurately thrown
+  axe
+    attacks all adjacent enemies
+    cutting damage
+  mace
+    bashing damage
+    armor has 50% effectiveness against bashing damage compared with cutting or piercing
+    slower than other weapons, so is easier to dodge
+    heavier so higher damage than other weapons
+  unarmed or claw
+    bashing damage
+    faster and more accurate than other weapons
+    generally lower damage
+
+sleeping and meditating
+  can be done anywhere but may be interrupted if monsters remain in floor
+  will advance time
+
+temporary or movable or one time use floor items
+  boulder
+  tree
+  chests
+    once empty will disappear
+    player can come back later to it from different floors
+
+fixtures (disappear after player leaves floor)
+  fountains
+    can drink or bathe in it or store into vials
+    fountain dries up after bathing in it
+    unlimited, but dries up after player leaves floor
+    pf / max pf
+    pe / max pe
+    mf / max mf
+    me / max me
+    sf / max sf
+    se / max se
+    str+5x20 / orc
+    dex+5x20 / elf
+    int+5x20 / gnome
+  portal
+  statue
+    miner
+    farmer
+    fisher
+    transporter
+    fighter
+    requires a gem of any type or quality, but effect is according to the gem
+  shrine
+  altar
+    can sacrifice an item for a blessing
+  forge
+    can combine items to mix the best attributes of each
+  magic lamp
+    can make a wish
+  mine
+    gold
+    gem
+    iron
+  forest
+    can forage for various items
+  pond
+    can fish
+  field
+    can plant a seed to yield a number of food items one time
+    can repeat planting seeds
+  orchard
+    can plant a tree seed which regularly produces fruit
+  bank
+    can take a loan or invest money
+  treasure chest
+    holds a reward item
+  store
+
+does gold take a slot?
+  no, special spot for it
+  nothing stacks
+
+base rune language
+  needs to combine power of programming with simplicity of a magic mythology
+  start with a simple temperature run on a space to increase temp of that space
+    how is it created
+    how is it altered
+    how is it protected
+    how can it be conditionally triggered
+  different resistance for ally vs enemy
+    depending on if item has spirit or not in it, that spirit may resist change
+  some properties have a heirarchy of stages, where going up is twice as difficult as going down
+  within a stage each form has a different order cost
+  all operations need to have balance
+    temporary are much cheaper because they balance future with present of same entity
+    permanent must balance two different present entities
+  subject properties
+    existence: no <- yes
+    size: tiny <- small <- medium <- large <- huge
+    domain: simple mineral <- complex mineral <- simple organic <- complex organic <- simple life <- medium life <- advanced life <- sentient life
+    class: specific to domain
+    L3 props:
+    L2 props:
+    L1 props:
+      heat: zero <- higher
+  simple mineral
+    water
+    air
+    oxygen
+    copper
+    iron
+    lead
+    gold
+    acid
+    rock
+    glass
+  complex mineral
+    weapon
+    tool
+    armor
+    gems
+  simple organic
+    sugar water
+    plastic
+  complex organic
+    enzymes
+  simple life
+    bacteria
+    virus
+  medium life
+    plant
+  advanced life
+    animal
+  sentient life
+    human
+    elf
+
+foundation mastery scroll
+  only original foundation will have one
+  will create a new foundation that the player can start with
+    preserves
+      species
+      hard mutations
+      guardians
+      age
+      discipline (book is kept)
+    loses
+      level
+      skills
+      items
+      gold
+
+can backtrack one floor, but not two
+  items and fixtures remain
+  upstairs won't exist for second floor up
 

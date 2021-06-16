@@ -163,37 +163,6 @@ example spell masteries
   weapon smith
   armor smith
   hunter
-farming
-  hoe
-    can be used to plant something into the ground
-  shovel
-    can be used to dig something up to put into inventory
-  seeds are placed on ground and grow if the required energy is available
-  base foods can be eaten or seeds extracted from
-  farming skills determine how many seeds you can extract
-  some monsters can breed
-    if sufficient food energy is available
-    most monsters feed off of one kind of energy and produce another
-mining / fishing / foraging
-  can find gem stones and gold
-  should be fairly difficult
-  but not tedious
-    mine / fish / forage large regions of the map at once
-      based on skill, from 2x2 -> whole level
-  need to use skills to find evidence of minerals
-  differences
-    mining can only be done once, but returns more valuable objects (gems and money)
-      requires pickaxe
-        can create shallow and deep pits, and can break rocks
-    fishing can be done repeatedly, depending on the energy that exists in pools of water
-      requires fishing pole
-      colored fish provide the color + blue
-      harvesting early gives you supplies more quickly, but less
-    harvesting/foraging is more complex, since it yields ingredients that can be combined to provide more powerful foods or potions
-      does not require an item, although an item is needed to plant things that weren't already there
-      can be done repeatedly
-      depends on what's growing in the area
-      harvesting early gives you supplies more quickly, but less
 quick travel
   auto-explore
   auto-attack
@@ -605,35 +574,6 @@ potions
   stat altering: temporary effect
   mutations: temporary effect
   species altering: temporary effect
-  experience
-    no levels, only xp which can be spent
-      1 xp can be used to increase one:
-        core attribute +1
-        pool capacity by 10%
-        pool regen by 10% (if awakened)
-        skill +1
-    one per floor
-    all experience comes from this
-    all give the same amount of experience, based on experience growth rate of current species: 
-      humans: 12 xp
-      orc: 10 xp
-      elf: 8 xp
-      demigod: 4 xp
-      other: 10 xp
-    full restoration of all interna pools (hp, sp, mp, wp)
-item durability:
-  when it's used, it reduces durability
-  impossible to add durability
-  when item is destroyed, stones are lost
-  but you can slow down decay with runes or skill
-  typical durability loss is 1 per usage
-  consumables, books don't have durability
-  only armor, weapons, and wands have durability
-  if players armor is hit, one piece of armor has it's duration reduced randomly
-  average durability is 1000
-    low durability is 200
-    high durability is 5000
-  when durability is gone, item has a 1/10 chance of breaking
 books
   can provide study disciplines
   or can boost skill aptitudes
@@ -819,17 +759,19 @@ species
     human
       strong: 
         experience 
-        sp
+        sh, se
         awaken a new spectra pool every 10 levels, max of 2 pools
     elf
       strong:
+        ages more slowly
         dex
         int
         smell sensitivity
         spirit sensitivity
-        mp
+        mh, me
         immediate core awakening
         awaken a new spectra pool every 15 levels, max of 4 pools
+        get more food from plants
       weak:
         str
         experience gain
@@ -837,16 +779,18 @@ species
     orc
       strong:
         str
-        hp
+        ph, pe
         pain resistance
         awaken a new spectra pool every 5 levels, max of 1 pool
       weak:
+        ages more quickly
         int
         can't eat fruit
     dwarf
       strong:
+        ages more slowly
         str
-        sp
+        pe
         night vision
         magic resistance
         awaken a new spectra pool every 20 levels, max of 2 pools
@@ -994,8 +938,11 @@ species
         9 lives
         unarmed combat
         4 rings
-      other:
+        fast
+      weak:
         can't use weapons
+        can't use much armor
+      other:
     fairy
       strong:
         fly
@@ -1628,7 +1575,7 @@ age:
     junior (4 levels)
       20-80% of attribute capacity
       smaller max
-      faster regen
+      faster energy regen and form regen
     middle (4 levels)
       100% base attributes
     senior (4 levels)
@@ -1636,21 +1583,13 @@ age:
       120-180% mental and spirit attributes
   potions can temporarily adjust
 
-regen
-  health regen
-    normally quite slow, although spells and potions and resting can accelerate
-  sp regen
-    medium speed
-  mp regen
-    fast
-
 different way to break down prime health stats:
-  pe: physical energy
-  pf: physical form
-  me: mental energy
-  mf: mental form
-  se: spirit energy
-  sf: spirit form
+  ep: physical energy (regen quick) (stamina)
+  hp: physical health (regen slow)
+  em: mental energy (regen medium) (mana)
+  hm: mental health (regen medium)
+  es: spirit energy (regen slow) (willpower)
+  hs: spirit health (regen quick)
 
 guardians
   prodigy <- 50% aging resistance
@@ -1705,7 +1644,6 @@ start with
   food
   survival guardian
   dog
-  healing potion
   teleport scroll
   rusty dagger
   small belt (4 slots for small items)
@@ -1717,6 +1655,7 @@ first floor doesn't contain items or exp potion
   must survive to the second floor for that
 
 moving to a new floor restores energy, but doesn't heal
+  maybe not, fleeing to another floor when exhausted is risky and should be
 
 weapons
   sword
@@ -1745,18 +1684,12 @@ sleeping and meditating
   can be done anywhere but may be interrupted if monsters remain in floor
   will advance time
 
-temporary or movable or one time use floor items
-  boulder
-  tree
-  chests
-    once empty will disappear
-    player can come back later to it from different floors
-
 fixtures (disappear after player leaves floor)
-  fountains
+  some should cost money, some should not (one time use)
+  fountains (no cost) (could be bad)
     can drink or bathe in it or store into vials
     fountain dries up after bathing in it
-    unlimited, but dries up after player leaves floor
+    unlimited use
     pf / max pf
     pe / max pe
     mf / max mf
@@ -1766,39 +1699,43 @@ fixtures (disappear after player leaves floor)
     str+5x20 / orc
     dex+5x20 / elf
     int+5x20 / gnome
-  portal
-  statue
+  portal (unlimited use)
+  statue (unlimited use, as long as gem can power it)
     miner
     farmer
     fisher
     transporter
     fighter
     requires a gem of any type or quality, but effect is according to the gem
-  shrine
-  altar
+      will run until gem's energy runs out
+  shrine (unlimited use)
+  altar (unlimited use)
     can sacrifice an item for a blessing
-  forge
+  forge (costs money)
     can combine items to mix the best attributes of each
-  magic lamp
-    can make a wish
-  mine
+    can improve items
+  magic mirror (one time use)
+    can duplicate one item
+  magic lamp (one time use)
+    can make a wish for a new item
+  mine (costs money)
     gold
     gem
     iron
-  forest
+  forest (costs age)
     can forage for various items
-  pond
+  pond (costs age)
     can fish
-  field
+  field (costs money)
     can plant a seed to yield a number of food items one time
     can repeat planting seeds
-  orchard
+  orchard (costs money)
     can plant a tree seed which regularly produces fruit
-  bank
+  bank (costs money, or debt)
     can take a loan or invest money
-  treasure chest
+  treasure chest (one time)
     holds a reward item
-  store
+  store (costs money)
 
 does gold take a slot?
   no, special spot for it
@@ -1818,9 +1755,23 @@ base rune language
   all operations need to have balance
     temporary are much cheaper because they balance future with present of same entity
     permanent must balance two different present entities
+  each change has activation energy and sustain energy
   subject properties
     existence: no <- yes
-    size: tiny <- small <- medium <- large <- huge
+    size: 0 <- 12
+      0             1kg
+      1             2kg
+      2             4kg
+      3     1ft     8kg
+      4     2ft     16kg
+      5     3ft     32kg
+      6     4ft     64kg
+      7     6ft     128kg
+      8     9ft     256kg
+      9     12ft    512kg
+      10    18ft    1024kg
+      11    24ft    2048kg
+      12    32ft    4096kg
     domain: simple mineral <- complex mineral <- simple organic <- complex organic <- simple life <- medium life <- advanced life <- sentient life
     class: specific to domain
     L3 props:
@@ -1866,15 +1817,51 @@ foundation mastery scroll
       species
       hard mutations
       guardians
-      age?
       discipline (book is kept)
+      affinities
     loses
-      level
+      experience
       skills
       items
       gold
+      age
+  upgraded foundation mastery scroll can also keep:
+    items, skills, experience, age, gold
+  maybe just give everything from the beginning
+    that way even if they find an awesome item, or a lot of gold, they can create a foundation for it
 
 can backtrack one floor, but not two
   items and fixtures remain
   upstairs won't exist for second floor up
 
+qualities of items
+  poor: 10 units of durabilty (10 uses before expired)
+  fair: 100
+  good: 1000
+  high: 10,000
+  exceptional: 100,000
+  immortal: 1,000,000
+  a forge can improve the quality of an item, but not the durability, thus a poor durability 6/10 item becomes 
+    a fair durability 60/100, prolonging it's life, but in proportion to where it was
+  even gems have a quality
+
+gems
+  quality / durability
+  size: 
+    tiny: stores 100 energy
+    small: 1000
+    medium: 10,000
+    large: 100,000
+    huge: 1,000,000
+  type: 
+    diamond
+    ruby
+    emerald
+    topaz
+    sapphire
+    opal
+    obsidian
+
+no identification
+  not fun enough to be worth it
+  rarely will a potion or fountain or scroll be unknown

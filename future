@@ -1714,6 +1714,7 @@ fixtures (disappear after player leaves floor)
   forge (costs money)
     can combine items to mix the best attributes of each
     can improve items
+    can improve item quality
   magic mirror (one time use)
     can duplicate one item
   magic lamp (one time use)
@@ -1736,6 +1737,14 @@ fixtures (disappear after player leaves floor)
   treasure chest (one time)
     holds a reward item
   store (costs money)
+
+fixtures vs scrolls and potions and wands
+  fixtures can be used repeatedly, but have a cost each time
+  scrolls don't cost anything, but only work one time, and can affect things outside of player
+  potions can be used a certain number of times, but have no other cost, but only affect player
+  wands can be charged for a cost
+    possible costs: exp, pe, ph, me, mh, se, sh, time
+    max charges: 9
 
 does gold take a slot?
   no, special spot for it
@@ -1810,7 +1819,7 @@ base rune language
     human
     elf
 
-foundation mastery scroll
+reincarnation scroll
   only original foundation will have one
   will create a new foundation that the player can start with
     preserves
@@ -1819,31 +1828,29 @@ foundation mastery scroll
       guardians
       discipline (book is kept)
       affinities
-    loses
-      experience
       skills
       items
       gold
       age
-  upgraded foundation mastery scroll can also keep:
-    items, skills, experience, age, gold
-  maybe just give everything from the beginning
-    that way even if they find an awesome item, or a lot of gold, they can create a foundation for it
+    loses
+      experience
 
 can backtrack one floor, but not two
   items and fixtures remain
   upstairs won't exist for second floor up
 
 qualities of items
-  poor: 10 units of durabilty (10 uses before expired)
-  fair: 100
-  good: 1000
-  high: 10,000
-  exceptional: 100,000
-  immortal: 1,000,000
+  fragile: 1-2 units of durabilty (0%, only special items have this)
+  poor: 10 units of durabilty (10 uses before expired) (10%)
+  fair: 100 (40%)
+  good: 1000 (40%)
+  high: 10,000 (8%)
+  exceptional: 100,000 (1.9%)
+  immortal: 1,000,000 (0.1%)
   a forge can improve the quality of an item, but not the durability, thus a poor durability 6/10 item becomes 
     a fair durability 60/100, prolonging it's life, but in proportion to where it was
   even gems have a quality
+  acid slimes will more rapidly reduce durability 10x
 
 gems
   quality / durability
@@ -1865,3 +1872,16 @@ gems
 no identification
   not fun enough to be worth it
   rarely will a potion or fountain or scroll be unknown
+    1/4 chance of an unidentified item being cursed
+
+no selling
+  but you can barter an item when buying
+    adding an item to the exchange when buying will reduce the price, but won't ever give extra money back
+
+hazards
+  acid rain
+    a fixed area that drains durability of exposed items
+  lava pool
+    high temperature transfer with high heat capacity
+  blizzard
+

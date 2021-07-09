@@ -1705,8 +1705,7 @@ fixtures
     a large cluster of statues are on this floor
   some should cost money, some should not (one time use)
   fountains (no cost) (could be bad)
-    can drink or bathe in it or store into vials
-    fountain dries up after bathing in it
+    can drink or store into vials
     unlimited use
     pf / max pf
     pe / max pe
@@ -1734,6 +1733,8 @@ fixtures
     can combine items to mix the best attributes of each
     can improve items
     can improve item quality
+  enchantment circle (costs ?)
+    can add or remove one enchantment
   magic mirror (one time use)
     can duplicate one item
   magic lamp or wishing well (one time use)
@@ -1916,6 +1917,9 @@ qualities of items
     a fair durability 60/100, prolonging it's life, but in proportion to where it was
   even gems have a quality
   acid slimes will more rapidly reduce durability 10x
+  enchantment reduces durability of items
+    you can layer as many enchantments onto an item as you want, but each will reduce base durability one level
+    so a good quality sword enchanted with 2 bonuses becomes a poor quality sword, which can only be used a max of 10 times
 
 gems
   quality / durability

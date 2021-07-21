@@ -51,3 +51,4 @@ build
 **/infobases/**
 
 **/tags
+config.properties

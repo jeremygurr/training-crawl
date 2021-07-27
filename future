@@ -1438,9 +1438,15 @@ money
 experience potions
   add one level to the player
     which gives them 3 primary attribute points to spend, which when spent automatically gives secondary points etc
-  fully charge hp, mp, sp
+  applies regen
   cures temporary debuffs
   receives one per level
+  advances age
+
+going to a new floor
+  pick up floor items
+  get new exp potion
+  applies regen
 
 attribute / skill tree
   physical
@@ -1663,10 +1669,52 @@ no story or randomized evolving story
 
 first floor doesn't contain items or exp potion
   must survive to the second floor for that
+  not needed, getting items only applies to floor transitions anyway
 
 moving to a new floor restores energy, but doesn't heal
   maybe not, fleeing to another floor when exhausted is risky and should be
 
+exp potion different than time advancing potion
+  one of each per floor?
+  no, regen happens while eating
+    but then you get full?
+  eat in addition to time potions
+    although time potions make you more hungry
+
+level up potions
+  one per floor
+  level up
+  fills energy and health
+
+time potions
+  one per floor
+  applies regeneration
+  makes you more hungry
+  advances age
+
+eating
+  species have different nutrition values from different food types
+  makes you less hungry
+  applies regeneration
+
+potions can be applied to weapons or arrows
+
+special scrolls
+  reverse scroll
+    level up potion becomes level down
+    time potion becomes reverse time potion
+    poison becomes regen
+    exp becomes lose exp
+  amp scroll
+
+creator mode
+  rune editor
+  search
+
+spirit mechanics
+  spirit needs to be able to weave runes
+  spirit intrinsic sense can only perceive runes, not anything visible, etc
+ 
 weapons
   sword
     auto attack if enemy attack is dodged
@@ -1689,10 +1737,6 @@ weapons
     bashing damage
     faster and more accurate than other weapons
     generally lower damage
-
-sleeping and meditating
-  only happens when advancing to a new floor
-  amount of energy gained is based on regen levels
 
 fixtures
   typically 1 per level, but:
@@ -1900,6 +1944,10 @@ reincarnation scroll
       age
     loses
       experience
+  inverse of this?
+    instead of saving everything but experience, saves nothing but experience
+  amp of this?
+    saves experience and others
 
 can backtrack one floor, but not two
   items and fixtures remain
@@ -1964,4 +2012,42 @@ study (discipline)
   whatever books are being carried automatically are studied
   exp gains also boost skills in books being studied
   books can have attribute requirements
+
+example rune space
+  player.1.location.n.ne.occupant
+    player.1.location = zzz
+    zzz.n = zzy
+    zzy.ne = zzx
+    zzx.occupant = zzw
+  key/object/player.1/prop/inventory
+  value/sword
+  value/key
+  value/shield
+  key/...
+  zzz.class = ...
+    classes list relators which go with that object
+    .parents
+    .props required props
+      can specify default
+  prop.relator = ...
+    points to relator which connects one or more props
+    .one list of props which can only point to one object
+    .many list of props which may point to zero or more objects
+  need to record
+    resistance to all change
+      exists by default, can't be changed
+    resistance to enemy change
+      can be added with a key
+    observation resistance
+      10 steps easier than changing
+    key to unlock
+      complexity of key can make it harder to unlock
+
+store runespace snapshots, separated by diff lists
+  but if we store full game logic in the runespace, then this is too much info to be snapshotted, will need to use hashed trees instead
+  we could pull core game logic out of runespace, since we don't really want to change that anyway?
+    core game logic still different than game state, so snapshots are possible still? snapshots may be faster
+  putting game logic into save state also has the benefit of preserving a version of the game within the save game itself, making them more resilient
+
+
 

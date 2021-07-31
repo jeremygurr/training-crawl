@@ -13,7 +13,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.net.Authenticator;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import static com.epicGamecraft.dungeonCrawlDepths.BusEvent.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(VertxExtension.class)
 public class TestCrawlInit {
@@ -153,6 +162,31 @@ public class TestCrawlInit {
         err -> {
         context.failNow(err);
         });
+  }
+
+  @Test   // Source: https://examples.javacodegeeks.com/core-java/java-11-standardized-http-client-api-example/
+  public void httpPostTest() throws IOException, InterruptedException {
+    HttpClient client = HttpClient.newHttpClient();
+    HttpRequest request = HttpRequest.newBuilder()
+      .uri(URI.create("http://localhost:8080/api/student"))
+      .timeout(Duration.ofSeconds(15))
+      .header("Content-Type", "application/json")
+      .POST(HttpRequest.BodyPublishers.ofString("name=betsy&email=betsy@mail.com&dob=1992-08-06"))  // HttpRequest.BodyPublishers.ofFile(Paths.get("file.json")) This is how to get from a file instead of string.
+      .build();
+    HttpResponse response = client.send(request, HttpResponse.BodyHandlers.discarding());
+    assertTrue(response.statusCode() == 201, "Status Code is not Created");
+  }
+
+
+  @Test
+  public void httpGetTest() {
+    HttpClient client = HttpClient.newBuilder()
+      .version(HttpClient.Version.HTTP_2)
+      .followRedirects(HttpClient.Redirect.NORMAL)
+      .connectTimeout(Duration.ofSeconds(10))
+//      .proxy(ProxySelector.of(new InetSocketAddress("www-proxy.com", 8080)))
+      .authenticator(Authenticator.getDefault())
+      .build();
   }
 
 }

@@ -23,7 +23,7 @@ import java.util.Properties;
 public class CouchbaseVerticle extends AbstractVerticle {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CouchbaseVerticle.class);
-
+  private final JsonObject empty = JsonObject.create();
 
   @Override
   public Completable rxStart() {   //this line had "throws exception" in it before, ask if I need to implement that in some rx form.
@@ -46,7 +46,6 @@ public class CouchbaseVerticle extends AbstractVerticle {
     return Completable.complete();
   }
 
-  final JsonObject empty = JsonObject.create();
 
   private void handleQuery(Message<String> message) {
     LOGGER.debug("couchbaseVerticle.handleQuery received message: " + message.body());
@@ -86,7 +85,6 @@ public class CouchbaseVerticle extends AbstractVerticle {
     final String username = json.getString("username");
     final String email = json.getString("email");
     final String hashword = json.getString("password").hashCode() + "";
-
     final JsonObject user = JsonObject.create();
     user.put("name", username);
     user.put("email", email);

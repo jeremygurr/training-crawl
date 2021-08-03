@@ -1,39 +1,31 @@
 package com.epicGamecraft.dungeonCrawlDepths;
 
-import static com.epicGamecraft.dungeonCrawlDepths.UserResult.*;
-import static com.epicGamecraft.dungeonCrawlDepths.BusEvent.*;
+import io.reactivex.Completable;
+import io.reactivex.Single;
+import io.reactivex.annotations.Nullable;
+import io.vertx.core.json.JsonObject;
+import io.vertx.reactivex.core.AbstractVerticle;
+import io.vertx.reactivex.core.MultiMap;
+import io.vertx.reactivex.core.eventbus.EventBus;
+import io.vertx.reactivex.core.http.HttpServer;
+import io.vertx.reactivex.core.http.HttpServerRequest;
+import io.vertx.reactivex.core.http.HttpServerResponse;
+import io.vertx.reactivex.ext.web.Router;
+import io.vertx.reactivex.ext.web.RoutingContext;
+import io.vertx.reactivex.ext.web.Session;
+import io.vertx.reactivex.ext.web.handler.BodyHandler;
+import io.vertx.reactivex.ext.web.handler.SessionHandler;
+import io.vertx.reactivex.ext.web.sstore.LocalSessionStore;
+import io.vertx.reactivex.ext.web.sstore.SessionStore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-
-import io.vertx.reactivex.ext.web.Cookie;
-import io.vertx.reactivex.ext.web.handler.CookieHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import io.vertx.reactivex.core.Vertx.*;
-import io.reactivex.*;
-import io.reactivex.annotations.Nullable;
-import io.reactivex.disposables.*;
-import io.reactivex.observers.*;
-import io.reactivex.schedulers.*;
-import io.vertx.core.json.JsonObject;
-import io.vertx.reactivex.*;
-import io.vertx.reactivex.core.*;
-import io.vertx.reactivex.core.http.*;
-import io.vertx.reactivex.ext.web.*;
-import io.vertx.reactivex.ext.web.handler.BodyHandler;
-import io.vertx.reactivex.ext.web.handler.SessionHandler;
-import io.vertx.reactivex.ext.web.sstore.LocalSessionStore;
-import io.vertx.reactivex.ext.web.sstore.SessionStore;
-import io.vertx.reactivex.core.buffer.*;
-import io.vertx.reactivex.core.eventbus.EventBus;
 
 public class HttpServerVerticle extends AbstractVerticle {
 
@@ -111,9 +103,9 @@ public class HttpServerVerticle extends AbstractVerticle {
       Session session = context.session();
       String username = session.get(SessionKey.username.name());
       if (username != null && path.equals("/static/login.html")) {
-          // TODO: Figure out how to make || path.equals("/static/jscrawl.html") work here.
-          WebUtils.redirect(response, "/static/jscrawl.html");
-          return;
+        // TODO: Figure out how to make || path.equals("/static/jscrawl.html") work here.
+        WebUtils.redirect(response, "/static/jscrawl.html");
+        return;
       }
       writeStaticHtml(response, path);
     } catch (Exception e) {
@@ -159,19 +151,19 @@ public class HttpServerVerticle extends AbstractVerticle {
             final String redirect = json.getString("redirect");
             LOGGER.debug("HttpServer Verticle Received reply: " + e.body());
 
-            if (message != null) {
+            if (redirect.equals("login.html")) {
+/* TODO: Figure out what this was supposed to do
               String html = WebUtils.generateHtml("/home/jaredgurr/training-crawl/03_java_backend/src/main/resources/static/login.html", message);
               response.write(html);
-              // writeStaticHtml(response, "/static/login.html");
+              writeStaticHtml(response, "/static/login.html");
               LOGGER.debug("message =" + message);
               LOGGER.debug("html = " + html);
+*/
             } else if (redirect.equals("jscrawl.html")) {
               session.put(SessionKey.username.name(), object.getString("username"));
               LOGGER.debug("session equals: " + session.data());
-              WebUtils.redirect(response, "/static/" + redirect);
-            } else {
-              WebUtils.redirect(response, "/static/" + redirect);
             }
+            WebUtils.redirect(response, "/static/" + redirect);
           },
           err -> {
             LOGGER.debug("Failed login : " + err.getMessage());
@@ -184,4 +176,5 @@ public class HttpServerVerticle extends AbstractVerticle {
       LOGGER.error(e.getMessage(), e);
     }
   }
+
 }

@@ -96,17 +96,17 @@ public class MysqlVerticle extends AbstractVerticle {
     final MySQLPool client = context.get(ContextKey.mysqlConnection.name());
     try {
       final JsonObject json = new JsonObject(message.body());
-      final int id = json.getInteger("id");
       final String username = json.getString("username");
       final String password = json.getString("password").hashCode() + "";
       final String email = json.getString("email");
       client
         .preparedQuery("INSERT INTO player VALUES (?,?,?,?)")
-        .execute(Tuple.of(id, username, password, email), ar -> {
+        .execute(Tuple.of(0, username, password, email), ar -> {
           if (ar.succeeded()) {
-            message.reply("Successfully inserted record for: " + username);
+            LOGGER.debug("Successfully inserted record for: " + username);
+            message.reply(null);
           } else {
-            message.fail(500, "invalid insert statement" + ar.cause().getMessage());
+            message.fail(500, "invalid insert statement " + ar.cause().getMessage());
           }
         });
     } catch (Exception e){

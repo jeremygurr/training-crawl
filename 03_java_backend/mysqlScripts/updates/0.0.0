@@ -52,4 +52,3 @@ BEGIN
    SELECT * FROM lobby;
 end //
 DELIMITER ;
-

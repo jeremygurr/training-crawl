@@ -1,3 +1,4 @@
+# Start couchbase container before running this.
 docker exec couchbase /opt/couchbase/bin/couchbase-cli cluster-init --cluster-username Administrator --cluster-password password
 docker exec couchbase /opt/couchbase/bin/couchbase-cli bucket-create --cluster 127.0.0.1:8091 --username Administrator --password password --bucket depths --bucket-type couchbase --bucket-ramsize 6024 --durability-min-level persistToMajority --enable-flush 0
 

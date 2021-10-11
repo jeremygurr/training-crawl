@@ -35,7 +35,7 @@ fi
 docker run --rm -p 127.0.0.1:3306:3306/tcp \
   -v $training_crawl_data:/var/lib/mysql \
   -v $training_crawl_repo/mysqlScripts:/mysqlScripts \
-  --name mysql \
-  -e MYSQL_ROOT_PASSWORD=password \
+  --name mariadb \
+  -e MYSQL_ROOT_PASSWORD=$pass \
   -d mariadb:10.5.4
 

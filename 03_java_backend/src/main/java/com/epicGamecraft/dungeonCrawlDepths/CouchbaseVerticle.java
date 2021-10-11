@@ -1,24 +1,18 @@
 package com.epicGamecraft.dungeonCrawlDepths;
 
-import static com.epicGamecraft.dungeonCrawlDepths.BusEvent.*;
-
-import com.couchbase.client.java.kv.GetResult;
+import com.couchbase.client.java.ReactiveCluster;
+import com.couchbase.client.java.json.JsonObject;
+import io.reactivex.rxjava3.core.Completable;
+import io.vertx.rxjava3.core.AbstractVerticle;
+import io.vertx.rxjava3.core.eventbus.EventBus;
+import io.vertx.rxjava3.core.eventbus.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.reactivex.*;
-import io.vertx.reactivex.core.*;
-import io.vertx.reactivex.core.eventbus.EventBus;
-import io.vertx.reactivex.core.eventbus.Message;
-
-import com.couchbase.client.java.*;
-import com.couchbase.client.java.query.ReactiveQueryResult;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-import com.couchbase.client.java.json.JsonObject;
-
 import java.io.IOException;
 import java.util.Properties;
+
+import static com.epicGamecraft.dungeonCrawlDepths.BusEvent.*;
 
 public class CouchbaseVerticle extends AbstractVerticle {
 

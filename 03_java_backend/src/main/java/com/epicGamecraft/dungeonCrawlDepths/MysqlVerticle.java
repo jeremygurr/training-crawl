@@ -1,15 +1,15 @@
 package com.epicGamecraft.dungeonCrawlDepths;
 
-import io.reactivex.Completable;
+import io.reactivex.rxjava3.core.Completable;
 import io.vertx.core.json.JsonObject;
 import io.vertx.mysqlclient.MySQLConnectOptions;
-import io.vertx.reactivex.core.AbstractVerticle;
-import io.vertx.reactivex.core.eventbus.EventBus;
-import io.vertx.reactivex.core.eventbus.Message;
-import io.vertx.reactivex.mysqlclient.MySQLPool;
-import io.vertx.reactivex.sqlclient.Row;
-import io.vertx.reactivex.sqlclient.RowSet;
-import io.vertx.reactivex.sqlclient.Tuple;
+import io.vertx.rxjava3.core.AbstractVerticle;
+import io.vertx.rxjava3.core.eventbus.EventBus;
+import io.vertx.rxjava3.core.eventbus.Message;
+import io.vertx.rxjava3.mysqlclient.MySQLPool;
+import io.vertx.rxjava3.sqlclient.Row;
+import io.vertx.rxjava3.sqlclient.RowSet;
+import io.vertx.rxjava3.sqlclient.Tuple;
 import io.vertx.sqlclient.PoolOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +28,7 @@ public class MysqlVerticle extends AbstractVerticle {
   public Completable rxStart() {
     LOGGER.debug("MysqlVerticle is listening for queries.");
     final EventBus eb = vertx.eventBus();
-    eb.consumer(mysqlQuery.name(), this::handleQuery);
+    eb.consumer(mysqlQuery.name(), this::findUser);
     eb.consumer(mysqlInsert.name(), this::handleInsert);
     eb.consumer(mysqlPass.name(), this::handleForgotPass);
     eb.consumer(mysqlResetPass.name(), this::handleResetPass);
@@ -59,22 +59,18 @@ public class MysqlVerticle extends AbstractVerticle {
     return Completable.complete();
   }
 
-  private void handleQuery(Message<String> message) {
+  private void findUser(Message<String> message) {
     LOGGER.debug("MysqlVerticle.handleQuery received message: " + message.body());
     final MySQLPool client = context.get(ContextKey.mysqlConnection.name());
     final JsonObject json = new JsonObject(message.body());
     final String username = json.getString("username");
     final String password = json.getString("password").hashCode() + "";
-/*
-    DSLContext create = DSL.using((Connection) client, SQLDialect.MYSQL);
-    Result<Record> result = create.select().from("user").fetch();
-*/
-
     client
       .preparedQuery("SELECT * FROM player WHERE username=? AND hashword=?")
-      .execute(Tuple.of(username, password), ar -> {
-        if (ar.succeeded()) {
-          RowSet<Row> rows = ar.result();
+      .execute(Tuple.of(username, password))
+      .subscribe(ar -> {
+        if (ar.size() > 0) {
+          RowSet<Row> rows = ar.value();
           LOGGER.debug("Got " + rows.size() + " rows ");
           if (rows.size() != 0) {
             for (Row row : rows) {
@@ -84,10 +80,10 @@ public class MysqlVerticle extends AbstractVerticle {
             message.reply("zero results for that username and password.");
             //Need to make sure if this happens, the code must let user retry login.
           }
-        } else {
-          LOGGER.debug("Failure: " + ar.cause().getMessage());
-          message.reply("invalid query");
         }
+      }, throwable -> {
+        LOGGER.debug("Failure: " + throwable.getCause().getMessage());
+        message.reply("invalid query");
       });
   }
 
@@ -101,15 +97,15 @@ public class MysqlVerticle extends AbstractVerticle {
       final String email = json.getString("email");
       client
         .preparedQuery("INSERT INTO player VALUES (?,?,?,?)")
-        .execute(Tuple.of(0, username, password, email), ar -> {
-          if (ar.succeeded()) {
+        .execute(Tuple.of(0, username, password, email))
+        .subscribe(ar -> {
             LOGGER.debug("Successfully inserted record for: " + username);
             message.reply(null);
-          } else {
-            message.fail(500, "invalid insert statement " + ar.cause().getMessage());
-          }
-        });
-    } catch (Exception e){
+          },
+          throwable -> {
+            message.fail(500, "invalid insert statement " + throwable.getMessage());
+          });
+    } catch (Exception e) {
       message.fail(500, "invalid insert statement");
     }
   }
@@ -122,22 +118,21 @@ public class MysqlVerticle extends AbstractVerticle {
     final String email = json.getString("email");
     client
       .preparedQuery("SELECT * FROM player WHERE username=? AND email=?")
-      .execute(Tuple.of(username, email), ar -> {
-        if (ar.succeeded()) {
-          //send email to user account with password reset option.
-          RowSet<Row> rows = ar.result();
-          LOGGER.debug("Got " + rows.size() + " rows ");
-          if (rows.size() != 0) {
-            for (Row row : rows) {
-              message.reply(row.getInteger(0) + " " + row.getString(1) + " " + row.getInteger(2) + " " + row.getString(3));
-            }
-          } else {
-            message.reply("zero results for that username and email.");
+      .execute(Tuple.of(username, email))
+      .subscribe(ar -> {
+        //send email to user account with password reset option.
+        RowSet<Row> rows = ar.value();
+        LOGGER.debug("Got " + rows.size() + " rows ");
+        if (rows.size() != 0) {
+          for (Row row : rows) {
+            message.reply(row.getInteger(0) + " " + row.getString(1) + " " + row.getInteger(2) + " " + row.getString(3));
           }
         } else {
-          LOGGER.debug("Failure: " + ar.cause().getMessage());
-          message.reply("invalid query");
+          message.reply("zero results for that username and email.");
         }
+      }, throwable -> {
+        LOGGER.debug("Failure: " + throwable.getCause().getMessage());
+        message.reply("invalid query");
       });
   }
 
@@ -150,16 +145,15 @@ public class MysqlVerticle extends AbstractVerticle {
     final int hashword = json.getString("password").hashCode();
     client
       .preparedQuery("UPDATE player SET hashword=? WHERE username=? AND email=?")
-      .execute(Tuple.of(hashword, username, email), ar -> {
-        if (ar.succeeded()) {
-          //Send result to javascript to output text to the page with AJAX, and also to give link to
-          // login page so user can attempt to login with their new password.
-          message.reply("successfully updated password to: " + hashword + " for " + username);
-        } else {
-          // This only happens as a result of failure to connect to mysql container.
-          LOGGER.debug("Failure: " + ar.cause().getMessage());
-          message.reply("invalid query");
-        }
+      .execute(Tuple.of(hashword, username, email))
+      .subscribe(ar -> {
+        //Send result to javascript to output text to the page with AJAX, and also to give link to
+        // login page so user can attempt to login with their new password.
+        message.reply("successfully updated password to: " + hashword + " for " + username);
+      }, throwable -> {
+        // This only happens as a result of failure to connect to mysql container.
+        LOGGER.debug("Failure: " + throwable.getCause().getMessage());
+        message.reply("invalid query");
       });
   }
 
@@ -171,13 +165,11 @@ public class MysqlVerticle extends AbstractVerticle {
     final String password = json.getString("password").hashCode() + "";
     client
       .preparedQuery("DELETE FROM player WHERE username=? AND hashword=?")
-      .execute(Tuple.of(username, password), ar -> {
-        if (ar.succeeded()) {
-          message.reply("Successfully deleted record for: " + username);
-        } else {
-          LOGGER.debug("Failure: " + ar.cause().getMessage());
-          message.reply("invalid query");
-        }
+      .execute(Tuple.of(username, password)).subscribe(ar -> {
+        message.reply("Successfully deleted record for: " + username);
+      }, throwable -> {
+        LOGGER.debug("Failure: " + throwable.getCause().getMessage());
+        message.reply("invalid query");
       });
   }
 
@@ -193,24 +185,23 @@ public class MysqlVerticle extends AbstractVerticle {
     LOGGER.debug("Sending sql statement: " + sql);
     client
       .query(sql)
-      .execute(ar -> {
-        if (ar.succeeded()) {
-          RowSet<Row> rows = ar.result();
+      .execute()
+      .subscribe(ar -> {
+        if (ar.value().size() != 0) {
+          RowSet<Row> rows = ar.value();
           System.out.println("rows returned: " + rows.size());
-          if (rows.size() != 0) {
-            for (Row row : rows) {
-              message.reply(row.getInteger(0) + " " + row.getString(1)
-                + " " + row.getString(2) + " " + row.getInteger(3)
-                + " " + row.getLocalTime(4) + " " + row.getLocalDateTime(5)
-                + " " + row.getString(6) + " " + row.getString(7) + " " + row.getInteger(8));
-            }
-          } else {
-            message.reply("No results to show.");
+          for (Row row : rows) {
+            message.reply(row.getInteger(0) + " " + row.getString(1)
+              + " " + row.getString(2) + " " + row.getInteger(3)
+              + " " + row.getLocalTime(4) + " " + row.getLocalDateTime(5)
+              + " " + row.getString(6) + " " + row.getString(7) + " " + row.getInteger(8));
           }
         } else {
-          LOGGER.debug("Failure: " + ar.cause().getMessage());
-          message.reply("invalid query");
+          message.reply("No results to show.");
         }
+      }, throwable -> {
+        LOGGER.debug("Failure: " + throwable.getCause().getMessage());
+        message.reply("invalid query");
       });
   }
 

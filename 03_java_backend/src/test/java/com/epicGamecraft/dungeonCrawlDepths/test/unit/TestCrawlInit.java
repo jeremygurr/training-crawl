@@ -7,7 +7,8 @@ import com.epicGamecraft.dungeonCrawlDepths.UserVerticle;
 import io.vertx.core.json.JsonObject;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
-import io.vertx.reactivex.core.Vertx;
+import io.vertx.rxjava3.core.Vertx;
+//import io.vertx.core.Vertx;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
@@ -30,7 +31,7 @@ public class TestCrawlInit {
 
   @Test
   void verticle_deployed(Vertx vertx, VertxTestContext context) throws Throwable {
-    vertx.deployVerticle(new HttpServerVerticle(), context.succeeding(id -> context.completeNow()));
+    vertx.deployVerticle(new HttpServerVerticle());
     context.completeNow();
   }
 

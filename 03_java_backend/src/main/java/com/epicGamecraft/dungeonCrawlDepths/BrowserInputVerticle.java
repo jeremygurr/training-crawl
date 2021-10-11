@@ -1,31 +1,12 @@
 package com.epicGamecraft.dungeonCrawlDepths;
 
-import static com.epicGamecraft.dungeonCrawlDepths.BusEvent.*;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.stream.Collectors;
-
+import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Promise;
+import io.vertx.core.eventbus.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.vertx.codegen.annotations.Nullable;
-import io.vertx.core.AbstractVerticle;
-import io.vertx.core.Promise;
-import io.vertx.core.eventbus.DeliveryOptions;
-import io.vertx.core.eventbus.Message;
-import io.vertx.core.http.HttpServer;
-import io.vertx.core.http.HttpServerRequest;
-import io.vertx.core.http.HttpServerResponse;
-import io.vertx.core.json.JsonObject;
-import io.vertx.ext.bridge.PermittedOptions;
-import io.vertx.ext.web.Router;
-import io.vertx.ext.web.RoutingContext;
-import io.vertx.ext.web.handler.sockjs.BridgeOptions;
-import io.vertx.ext.web.handler.sockjs.SockJSHandler;
+import static com.epicGamecraft.dungeonCrawlDepths.BusEvent.browserInput;
 
 public class BrowserInputVerticle extends AbstractVerticle {
 

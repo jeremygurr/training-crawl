@@ -38,7 +38,26 @@ docker stop mysql
 
 == Development Environment Setup
 
-You will want to make sure all tests run correctly before you begin developing so that you know which tests work. However,
+Before you start development each day, you'll always want to do git pull from the various remotes of other teammates to make sure
+you don't develop a branch separate from everyone else making things in different directions. In order for git pull to work, you need to add each
+teammates remote repos:
+```
+git remote add jared https://github.com/jgurr4/training-crawl.git
+git remote add jeremy https://github.com/jeremygurr/training-crawl.git
+etc...
+```
+
+List all remotes you currently have:
+```
+git remote -v
+```
+
+Pull from teammates remotes:
+```
+git pull teammateName main
+```
+
+Next you will want to make sure all tests run correctly before you begin developing so that you know which tests work. However,
 some of these tests rely on a mysql container to already be running and have specific tables
 and databases setup in the correct structure for the tests to work. So always startup mysql container before you run the tests.
 Follow these steps below to get the environment for mysql setup correctly:

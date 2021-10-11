@@ -4,11 +4,15 @@ import com.epicGamecraft.dungeonCrawlDepths.CouchbaseVerticle;
 import com.epicGamecraft.dungeonCrawlDepths.MysqlVerticle;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
-import io.vertx.rxjava3.core.Vertx;
+import io.vertx.reactivex.core.Vertx;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 import static com.epicGamecraft.dungeonCrawlDepths.BusEvent.*;
 
@@ -18,7 +22,7 @@ public class TestMysql {
   private static final Logger LOGGER = LoggerFactory.getLogger(TestMysql.class);
 
   @Test
-  void crudMysql(Vertx vertx, VertxTestContext context) {
+  void crudMysql(Vertx vertx, VertxTestContext context) throws Throwable {
 
     vertx.rxDeployVerticle(new MysqlVerticle())
       .flatMap(deployId -> {
@@ -53,8 +57,53 @@ public class TestMysql {
         });
   }
 
+/*
+  @Test   //This is currently broken. Need to find a way to allow the program to continue running even after the failure.
+  void crudMysqlFail(Vertx vertx, VertxTestContext context) throws Throwable {
+    vertx.rxDeployVerticle(new MysqlVerticle())
+      .flatMap(deployId -> {
+          LOGGER.debug("Making request to mysqlInsert");
+          return vertx.eventBus().rxRequest(mysqlInsert.name(), "");
+        }
+      )
+      .map(ar -> {
+        LOGGER.debug("Test.mysqlInsert received reply: " + ar.body());
+        return ar;
+      })
+      .flatMap(ar -> {
+        return vertx.eventBus().rxRequest(mysqlQuery.name(), "{\"username\":\"billybob\",\"password\":\"password\"}");
+      })
+      .map(ar -> {
+        LOGGER.debug("Test.mysqlQuery received reply: " + ar.body());
+        return ar;
+      })
+      .flatMap(deployId -> {
+        return vertx.eventBus().rxRequest(mysqlResetPass.name(), "{\"username\":\"billybob\",\"email\":\"bob@gmail.com\",\"password\":\"newPassword\"}");
+      })
+      .map(ar -> {
+        LOGGER.debug("Test.mysqlResetPass received reply: " + ar.body());
+        return ar;
+      })
+      .flatMap(deployId -> {
+        return vertx.eventBus().rxRequest(mysqlDelete.name(), "{\"username\":\"billybob\",\"password\":\"password\"}");
+      })
+      .map(ar -> {
+        LOGGER.debug("Test.mysqlDelete received reply: " + ar.body());
+        return ar;
+      })
+      .subscribe(f -> {
+          LOGGER.debug("Success");
+          context.completeNow();
+        },
+        err -> {
+          LOGGER.debug("Error: " + err.getMessage());
+          context.failNow(err);
+        });
+  }
+*/
+
   @Test
-  void forgotPassword(Vertx vertx, VertxTestContext context) {
+  void forgotPassword(Vertx vertx, VertxTestContext context) throws Throwable {
 
     vertx.rxDeployVerticle(new MysqlVerticle())
       .subscribe(e -> {
@@ -75,7 +124,7 @@ public class TestMysql {
   }
 
   @Test
-  void retrieveGameList(Vertx vertx, VertxTestContext context) {
+  void retrieveGameList(Vertx vertx, VertxTestContext context) throws Throwable {
 
     vertx.rxDeployVerticle(new MysqlVerticle())
       .subscribe(e -> {
@@ -103,7 +152,7 @@ public class TestMysql {
   //TODO: Make this auto-run couchbase container.
   //FIXME: Make it query and insert for something besides login.
   @Test
-  void queryCouchbase(Vertx vertx, VertxTestContext context) {
+  void queryCouchbase(Vertx vertx, VertxTestContext context) throws Throwable {
 
     vertx.rxDeployVerticle(new CouchbaseVerticle())
       .subscribe(e -> {
@@ -124,7 +173,7 @@ public class TestMysql {
   }
 
   @Test
-  void insertCouchbase(Vertx vertx, VertxTestContext context) {
+  void insertCouchbase(Vertx vertx, VertxTestContext context) throws Throwable {
 
     vertx.rxDeployVerticle(new CouchbaseVerticle())
       .subscribe(e -> {

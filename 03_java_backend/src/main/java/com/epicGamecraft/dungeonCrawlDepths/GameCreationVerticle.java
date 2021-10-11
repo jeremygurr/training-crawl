@@ -1,8 +1,8 @@
 package com.epicGamecraft.dungeonCrawlDepths;
 
-import io.reactivex.rxjava3.core.Completable;
-import io.vertx.rxjava3.core.AbstractVerticle;
-import io.vertx.rxjava3.core.eventbus.Message;
+import io.reactivex.Completable;
+import io.vertx.reactivex.core.AbstractVerticle;
+import io.vertx.reactivex.core.eventbus.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

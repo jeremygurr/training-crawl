@@ -15,7 +15,13 @@ html {
   background: #56cc45;
 }
 
-form {
+p {
+  position: absolute;
+  left: 41%;
+  top: 30%;
+}
+
+form, div {
   width: 299px;
   position: absolute;
   left: 50%;

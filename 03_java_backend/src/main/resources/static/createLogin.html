@@ -7,20 +7,21 @@
 </head>
 <body>
   <h1>Register</h1>
-  <form method="post" action="/bus/createUser" spellcheck="false">
+  <p id="response"></p>
+  <div spellcheck="false">
 	Username:
-	<input type="text" name="username" required></input>
+	<input type="text" id="username" name="username" required></input>
 	<pre></pre>
 	Email address:
-	<input type="text" name="email" required></input>
+	<input type="text" id="email" name="email" required></input>
 	<pre></pre>
 	Password:
-	<input type="password" name="password" required></input>
+	<input type="password" id="password" name="password" required></input>
 	<pre></pre>
-	<input type="submit" class="reg"></input>
-  </form>
+	<input id="submit" type="submit" class="reg"></input>
+  </div>
 </body>
 </html>
 
-<!-- <form method="get" action="/account/create?username=jared" spellcheck="false"> 
+<!-- <form method="get" action="/account/create?username=jared" spellcheck="false">
  -->

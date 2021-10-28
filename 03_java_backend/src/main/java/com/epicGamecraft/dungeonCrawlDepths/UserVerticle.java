@@ -19,33 +19,27 @@ public class UserVerticle extends AbstractVerticle {
   @Override
   public Completable rxStart() {
     vertx.eventBus().consumer(userLogin.name(), this::handleUserLogin);
-    vertx.eventBus().consumer(createUser.name(), this::userCreateHandler);
+    vertx.eventBus().consumer(createUser.name(), this::createUserAccount);
     vertx.eventBus().consumer(forgotPassword.name(), this::userPassResHandler);
     return Completable.complete();
   }
 
-  //new code for mysql:
   private void handleUserLogin(Message<String> message) {
     LOGGER.debug("UserVerticle.handleUserLogin received message: " + message.body());
     final JsonObject jsonReply = new JsonObject();
     vertx.eventBus().rxRequest(mysqlQuery.name(), message.body())
       .subscribe(e -> {
           if (e.body() != null) {
-            //This means user did correct username and password.
             LOGGER.debug("User Verticle received reply: " + e.body());
             jsonReply.put(redirect.name(), "jscrawl.html");
           } else {
-            //This means user input wrong username or password.
             LOGGER.debug("Invalid Login");
             jsonReply.put(redirect.name(), "login.html");
             jsonReply.put(response.name(), "Invalid Login");
-            //add a message to http verticle to notify user login information was incorrect.
-            // (Perhaps add that as part of a json object message reply.)
           }
           message.reply(jsonReply);
         },
         err -> {
-          //This means the eventbus failed to communicate properly with the CouchbaseVerticle or vice versa.
           LOGGER.debug("UserVerticle Error communicating with CouchbaseVerticle: " + err.getMessage());
           jsonReply.put(redirect.name(), "serverError.html");
           message.reply(jsonReply);
@@ -53,29 +47,23 @@ public class UserVerticle extends AbstractVerticle {
       );
   }
 
-  private void userCreateHandler(Message<String> message) {
+  private void createUserAccount(Message<String> message) {
     LOGGER.debug("UserVerticle.userCreateHandler received message: " + message.body());
     final JsonObject jsonReply = new JsonObject();
     vertx.eventBus().rxRequest(mysqlInsert.name(), message.body())
       .subscribe(e -> {
           if (e.body() == null) {
-            //This means that user account has successfully been created.
             LOGGER.debug("User Verticle has found no record of that user, so user has been created.");
             jsonReply.put(redirect.name(), "login.html");
             jsonReply.put(response.name(), "Your account was successfully created.");
-            //Also add a message that lets them know it was successfully created.
-            //And add a method that lets user click 'redirect to login page' if they want to login right then.
           } else {
-            // This means that the couchbase query failed because user already exists.
             LOGGER.debug("Mysql Verticle failed to create new user : " + e.body());
             jsonReply.put(redirect.name(), "createLogin.html");
             jsonReply.put(response.name(), "An account with that information already exists.");
-            //Send message to user that says a user with that information already exists.
           }
           message.reply(jsonReply);
         },
         err -> {
-          //This means the eventbus failed to communicate properly with the CouchbaseVerticle or vice versa.
           LOGGER.debug("User Verticle Error communicating with MySQLVerticle : " + err.getMessage());
           jsonReply.put(redirect.name(), "serverError.html");
           message.reply(jsonReply);
@@ -92,7 +80,6 @@ public class UserVerticle extends AbstractVerticle {
             jsonReply.put(redirect.name(), "forgotPassword.html");
             jsonReply.put(response.name(), "Username or email was incorrect.");
           } else {
-            //This means username and email was correct and an email will be sent to user to reset password.
             LOGGER.debug("Received object: " + e.body());
             jsonReply.put(redirect.name(), "sentPassResEmail.html");
           }
@@ -106,63 +93,3 @@ public class UserVerticle extends AbstractVerticle {
   }
 
 }
-
-  /* old Couchbase user microservices
-    private void userCreateHandler(Message<String> message) {
-      LOGGER.debug("UserVerticle.userCreateHandler received message: " + message.body());
-      final JsonObject jsonReply = new JsonObject();
-      vertx.eventBus().rxRequest(couchbaseInsert.name(), message.body())
-        .subscribe(e -> {
-            if (e.body() == null) {
-              //This means that user account has successfully been created.
-              LOGGER.debug("User Verticle has found no record of that user, so user has been created.");
-              jsonReply.put(redirect.name(), "login.html");
-              jsonReply.put(response.name(), "Your account was successfully created.");
-              //Also add a message that lets them know it was successfully created.
-              //And add a method that lets user click 'redirect to login page' if they want to login right then.
-            } else {
-              // This means that the couchbase query failed because user already exists.
-              LOGGER.debug("Couchbase Verticle failed to create new user : " + e.body());
-              jsonReply.put(redirect.name(), "createLogin.html");
-              jsonReply.put(response.name(), "An account with that information already exists.");
-              //Send message to user that says a user with that information already exists.
-            }
-            message.reply(jsonReply);
-          },
-          err -> {
-            //This means the eventbus failed to communicate properly with the CouchbaseVerticle or vice versa.
-            LOGGER.debug("User Verticle Error communicating with CouchbaseVerticle : " + err.getMessage());
-            jsonReply.put(redirect.name(), "serverError.html");
-            message.reply(jsonReply);
-          });
-    }
-
-  private void handleUserLogin(Message<String> message) {
-    LOGGER.debug("UserVerticle.handleUserLogin received message: " + message.body());
-    final JsonObject jsonReply = new JsonObject();
-    vertx.eventBus().rxRequest(couchbaseQuery.name(), message.body())
-      .subscribe(e -> {
-          if (e.body() != null) {
-            //This means user did correct username and password.
-            LOGGER.debug("User Verticle received reply: " + e.body());
-            jsonReply.put(redirect.name(), "jscrawl.html");
-          } else {
-            //This means user input wrong username or password.
-            LOGGER.debug("Invalid Login");
-            jsonReply.put(redirect.name(), "login.html");
-            jsonReply.put(response.name(), "Invalid Login");
-            //add a message to http verticle to notify user login information was incorrect.
-            // (Perhaps add that as part of a json object message reply.)
-          }
-          message.reply(jsonReply);
-        },
-        err -> {
-          //This means the eventbus failed to communicate properly with the CouchbaseVerticle or vice versa.
-          LOGGER.debug("UserVerticle Error communicating with CouchbaseVerticle : " + err.getMessage());
-          jsonReply.put(redirect.name(), "serverError.html");
-          message.reply(jsonReply);
-        }
-      );
-  }
-   */
-

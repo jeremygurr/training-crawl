@@ -65,11 +65,6 @@ public class MysqlVerticle extends AbstractVerticle {
     final JsonObject json = new JsonObject(message.body());
     final String username = json.getString("username");
     final String password = json.getString("password").hashCode() + "";
-/*
-    DSLContext create = DSL.using((Connection) client, SQLDialect.MYSQL);
-    Result<Record> result = create.select().from("user").fetch();
-*/
-
     client
       .preparedQuery("SELECT * FROM player WHERE username=? AND hashword=?")
       .execute(Tuple.of(username, password), ar -> {
@@ -82,7 +77,7 @@ public class MysqlVerticle extends AbstractVerticle {
             }
           } else {
             message.reply("zero results for that username and password.");
-            //Need to make sure if this happens, the code must let user retry login.
+            //TODO: Need to make sure if this happens, the code must let user retry login.
           }
         } else {
           LOGGER.debug("Failure: " + ar.cause().getMessage());

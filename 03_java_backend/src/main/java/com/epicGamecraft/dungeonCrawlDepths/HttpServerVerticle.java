@@ -104,8 +104,7 @@ public class HttpServerVerticle extends AbstractVerticle {
     try {
       Session session = context.session();
       String username = session.get(SessionKey.username.name());
-      if (username != null && path.equals("/static/login.html")) {
-        // TODO: Figure out how to make || path.equals("/static/jscrawl.html") work here.
+      if (username != null && path.equals("/static/login.html") || username != null && path.equals("/static/jscrawl.html")) {
         WebUtils.redirect(response, "/static/jscrawl.html");
         return;
       }
@@ -133,19 +132,10 @@ public class HttpServerVerticle extends AbstractVerticle {
       final String busAddress = absoluteURI.replaceAll("^.*/bus/", "");
       LOGGER.debug("busAddress=" + busAddress);
       Session session = context.session();
-
-      //This puts the params from http headers into json object.
       JsonObject object = new JsonObject();
       for (Map.Entry<String, String> entry : params.entries()) {
         object.put(entry.getKey(), entry.getValue());
       }
-
-/*    //This adds the session variables(if there are any) to the same Json object so they all will be
-      // sent in a message below to user verticle.
-      for (Map.Entry<String, Object> entry : session.data().entrySet()) {
-        object.put(entry.getKey(), entry.getValue());
-      } */
-
       eb.rxRequest(busAddress, object.encode())
         .subscribe(e -> {
             final JsonObject json = JsonObject.mapFrom(e.body());
@@ -154,7 +144,8 @@ public class HttpServerVerticle extends AbstractVerticle {
             LOGGER.debug("HttpServer Verticle Received reply: " + e.body());
 
             if (redirect.equals("login.html")) {
-/* TODO: Figure out what this was supposed to do
+              // redirect to login page.
+/* TODO: Figure out why this isn't working.
               String html = WebUtils.generateHtml("/home/jaredgurr/training-crawl/03_java_backend/src/main/resources/static/login.html", message);
               response.write(html);
               writeStaticHtml(response, "/static/login.html");

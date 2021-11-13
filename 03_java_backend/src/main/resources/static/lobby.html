@@ -1,10 +1,50 @@
+<!--
+ source for page: https://www.taniarascia.com/getting-started-with-react/
+ babel is used to allow es6+ functions in older browsers.
+-->
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Lobby</title>
-</head>
-<body>
+  <meta charset="utf-8" />
 
+  <title>Crawl Lobby</title>
+  <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+</head>
+
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+  class Lobby extends React.Component {
+    render() {
+      return (
+        <div>
+          <h2>~Welcome to Dungeon Crawl Depths!~</h2>
+          <Header />
+        </div>
+        )
+      }
+    }
+
+  function Header() {
+    function handleLogin() {
+      let uname = document.getElementById('uname').getAttribute('value');
+      let pass = document.getElementById('pass').getAttribute('value');
+      console.log('you logged in!' + uname + ' ' + pass)
+    }
+
+      return (
+        <div>
+          <input id='uname' placeholder='username'></input>
+          <input id='pass' placeholder='password'></input>
+          <button onClick={handleLogin}>login</button>
+        </div>
+      )
+  }
+
+  ReactDOM.render(<Lobby />, document.getElementById('root'))
+</script>
 </body>
 </html>

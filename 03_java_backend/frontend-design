@@ -1,0 +1,12 @@
+Frontend Design of Crawl:
+
+Lobby/login page components:
+	-> cookie checker. If user cookie exist, auto-login.
+	-> Header
+	  -> left-side header: Welcome to Crawl! + icon
+	  -> Right-side header default: login username+password | register
+	  	-> After login right-side header becomes: Change email | change password | logout
+			-> When click change email opens modal with email, username and new email inputs.
+			-> When click change password it opens modal with username password and new password inputs.
+			-> When click logout erases cookies and goes back to default right-side header.
+	-> Table with filter buttons which contains all current users and their scores and level of dungeon etc...

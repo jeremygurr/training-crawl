@@ -17,34 +17,45 @@
 <div id="root"></div>
 
 <script type="text/babel">
-  class Lobby extends React.Component {
-    render() {
-      return (
-        <div>
-          <h2>~Welcome to Dungeon Crawl Depths!~</h2>
-          <Header />
-        </div>
-        )
-      }
-    }
+import ReactDOM from "react-dom";
+import React from "react";
+import { useState } from "react";
+import { useRef } from "react";
+//NOTE: Imports only work with node.js so these will break the page unless you are using
+//npm + node.js
 
-  function Header() {
-    function handleLogin() {
-      let uname = document.getElementById('uname').getAttribute('value');
-      let pass = document.getElementById('pass').getAttribute('value');
-      console.log('you logged in!' + uname + ' ' + pass)
-    }
-
-      return (
-        <div>
-          <input id='uname' placeholder='username'></input>
-          <input id='pass' placeholder='password'></input>
-          <button onClick={handleLogin}>login</button>
-        </div>
+class Lobby extends React.Component {
+  render() {
+    return (
+      <div>
+        <h2>~Welcome to Dungeon Crawl Depths!~</h2>
+        <Header />
+      </div>
       )
+    }
   }
 
-  ReactDOM.render(<Lobby />, document.getElementById('root'))
+function Header() {
+  const unameInputRef = useRef();
+  const passInputRef = useRef();
+  return (
+    <div>
+      <form onSubmit={handleLogin}>
+        <input id='uname' placeholder='username' ref={unameInputRef}></input>
+        <input id='pass' placeholder='password' ref={passInputRef}></input>
+        <button onClick={handleLogin}>login</button>
+      </form>
+    </div>
+  )
+
+  function handleLogin(event) {
+    event.preventDefault();  // javascript function that prevents html form from refreshing page.
+    const enteredUname = unameInputRef.current.value;
+    const enteredPass = passInputRef.current.value;
+    console.log('you logged in!' + ' ' + enteredUname + ' ' + enteredPass)
+  }
+}
+ReactDOM.render(<Lobby />, document.getElementById('root'))
 </script>
 </body>
 </html>

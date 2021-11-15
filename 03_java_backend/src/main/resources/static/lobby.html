@@ -6,8 +6,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-
   <title>Crawl Lobby</title>
+  <link rel="stylesheet" href="lobby.css">
   <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
@@ -17,44 +17,60 @@
 <div id="root"></div>
 
 <script type="text/babel">
-import ReactDOM from "react-dom";
-import React from "react";
-import { useState } from "react";
-import { useRef } from "react";
-//NOTE: Imports only work with node.js so these will break the page unless you are using
-//npm + node.js
 
 class Lobby extends React.Component {
+  render () {
+    return (
+      <Header />
+    )
+  }
+}
+
+class Header extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      uname: '',
+      pass: ''
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    if(event.target.id == "uname") {
+      this.setState({
+        uname: event.target.value
+      });
+    } else {
+      this.setState({
+        pass: event.target.value
+      });
+    }
+  }
+
+  handleSubmit(event) {
+    console.log('A name was submitted: ' + this.state.uname + ' ' + this.state.pass);
+    event.preventDefault();
+  }
+
   render() {
     return (
-      <div>
+      <div id="header">
         <h2>~Welcome to Dungeon Crawl Depths!~</h2>
-        <Header />
+        <div>
+      <form onSubmit={this.handleSubmit}>
+        <input id='uname' placeholder='username' value={this.state.uname} onChange={this.handleChange} />
+        <input id='pass' placeholder='password' value={this.state.pass} onChange={this.handleChange} />
+        <input type="submit" value="Submit" />
+      </form>
+    </div>
       </div>
       )
     }
   }
 
-function Header() {
-  const unameInputRef = useRef();
-  const passInputRef = useRef();
-  return (
-    <div>
-      <form onSubmit={handleLogin}>
-        <input id='uname' placeholder='username' ref={unameInputRef}></input>
-        <input id='pass' placeholder='password' ref={passInputRef}></input>
-        <button onClick={handleLogin}>login</button>
-      </form>
-    </div>
-  )
-
-  function handleLogin(event) {
-    event.preventDefault();  // javascript function that prevents html form from refreshing page.
-    const enteredUname = unameInputRef.current.value;
-    const enteredPass = passInputRef.current.value;
-    console.log('you logged in!' + ' ' + enteredUname + ' ' + enteredPass)
-  }
-}
 ReactDOM.render(<Lobby />, document.getElementById('root'))
 </script>
 </body>

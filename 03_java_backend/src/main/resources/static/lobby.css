@@ -1,6 +1,55 @@
+/*The purpose of these css variables is so I can add multiple @media queries and if I need to change the measurement
+ unit this is the only place I will have to look to change it. Just make sure any time I use a measurement unit I must
+ add it to this list with descriptive name.*/
+:root {
+  --tiny-font: .5rem;
+  --small-font: 1rem;
+  --normal-font: 2rem;
+  --small-margin: .5rem;
+  --normal-margin: 1rem;
+  --large-margin: 5rem;
+  --extra-large-margin: 10rem;
+  --quarter-width: 25rem;
+  --half-width: 45rem;
+  --full-width: 100%;
+  /* Colors: */
+  --bg-color: black;
+  --fg-color: white;
+  --font-color: white;
+}
+
+@media screen only and (min-width: 990) {
+  #header { width: 100vw;}
+  #loginForm { float: none; }
+}
+
+html, body {
+  font-size: var(--small-font);
+  background-color: var(--bg-color);
+  color: var(--font-color);
+}
+
 #header {
+  width: var(--full-width);
+}
+
+#loginForm {
+  float: right;
+}
+
+#welcome {
+  float: left;
+  margin-top: 0;
+  padding-top: 0;
+  font-size: var(--normal-font);
+}
+
+#saves {
   position: absolute;
-  top: 1vw;
-  left: 1vw;
-  background-color: black;
+  top: var(--large-margin);
+}
+
+#table {
+  position: absolute;
+  top: var(--extra-large-margin);
 }

@@ -1929,29 +1929,28 @@ base rune language
     human
     elf
 
-reincarnation scroll
-  only original foundation will have one
+foundation scroll
+  only original foundation will have one (can rarely find one)
   will create a new foundation that the player can start with
-    preserves
-      species
-      hard mutations
-      guardians
-      discipline (book is kept)
-      affinities
-      skills
-      items
-      gold
-      age
-    loses
-      experience
+  can choose one thing to save:
+    species
+    hard mutations
+    guardians
+    profession
+    discipline (book is kept)
+    one skill
+    one item
+    gold
+    age
   inverse of this?
-    instead of saving everything but experience, saves nothing but experience
+    choose a foundation to load into present character (doesn't reset exp or anything else)
   amp of this?
-    saves experience and others
+    choose two things to save
 
 can backtrack one floor, but not two
   items and fixtures remain
   upstairs won't exist for second floor up
+  not sure about this
 
 qualities of items
   fragile: 1-2 units of durabilty (0%, only special items have this)
@@ -2049,5 +2048,13 @@ store runespace snapshots, separated by diff lists
     core game logic still different than game state, so snapshots are possible still? snapshots may be faster
   putting game logic into save state also has the benefit of preserving a version of the game within the save game itself, making them more resilient
 
+rune refs, rune ops
+  some runes combine properties on top of stack
+  unary ops immediately take top of stack and modify
+  binary ops take two items on top of stack and combine
+  higher intelligence allows for more runes in a structure
+  trigger runes are starting points, and have a direction?
+  redirection runes can change flow direction, or even split the flow
+  
 
-
+  

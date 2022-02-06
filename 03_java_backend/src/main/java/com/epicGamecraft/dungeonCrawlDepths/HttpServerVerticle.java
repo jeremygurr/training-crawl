@@ -33,7 +33,7 @@ public class HttpServerVerticle extends AbstractVerticle {
 
   @Override
   public Completable rxStart() {
-    LOGGER.info("Http Verticle is starting. Make sure Couchbase/Mysql containers are running.");
+    LOGGER.info("Http Verticle is starting. ");
     HttpServer server = vertx.createHttpServer();
 
     Router router = Router.router(vertx);
